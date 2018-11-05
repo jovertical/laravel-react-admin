@@ -20,8 +20,9 @@
     </head>
 
     <body>
-        <div id="root">
-            <h1>Helper Solutions Backoffice</h1>
-        </div>
+        <div id="root"></div>
+
+        <script src="{{ _asset('js/vendor.js') }}"></script>
+        <script src="{{ _asset('js/app.js') }}"></script>
     </body>
 </html>
