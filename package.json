@@ -9,9 +9,9 @@
         "production": "cross-env NODE_ENV=production node_modules/.bin/webpack --no-progress --hide-modules --colors"
     },
     "devDependencies": {
-        "@babel/core": "^7.1.2",
+        "@babel/core": "^7.1.6",
         "@babel/plugin-proposal-class-properties": "^7.1.0",
-        "@babel/preset-env": "^7.1.0",
+        "@babel/preset-env": "^7.1.6",
         "@babel/preset-react": "^7.0.0",
         "babel-loader": "^8.0.4",
         "browser-sync": "^2.26.3",
@@ -19,9 +19,9 @@
         "clean-webpack-plugin": "^0.1.19",
         "cross-env": "^5.2.0",
         "css-loader": "^1.0.0",
-        "eslint": "^5.7.0",
+        "eslint": "^5.9.0",
         "eslint-plugin-react": "^7.11.1",
-        "event-hooks-webpack-plugin": "^2.1.0",
+        "event-hooks-webpack-plugin": "^2.1.1",
         "file-loader": "^2.0.0",
         "imagemin": "^6.0.0",
         "imagemin-gifsicle": "^5.2.0",
@@ -33,7 +33,7 @@
         "node-notifier": "^5.3.0",
         "style-loader": "^0.23.1",
         "url-loader": "^1.1.2",
-        "webpack": "^4.21.0",
+        "webpack": "^4.25.1",
         "webpack-clean-obsolete-chunks": "^0.4.0",
         "webpack-cli": "^3.1.2"
     },
@@ -41,8 +41,8 @@
         "axios": "^0.18.0",
         "lodash": "^4.17.11",
         "moment": "^2.0.0",
-        "react": "^16.5.2",
-        "react-dom": "^16.5.2",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3",
         "react-router-dom": "^4.3.1"
     }
 }
