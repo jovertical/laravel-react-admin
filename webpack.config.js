@@ -29,12 +29,23 @@ module.exports = {
         '__backoffice/app': path.join(SRC_DIR, '__backoffice/app.js'),
         '__backoffice/vendor': [
             'moment', 'lodash', 'axios',
-            'react', 'react-dom', 'react-router-dom'
+            'react', 'react-dom', 'react-router-dom',
         ]
     },
 
     module: {
         rules: [
+            {
+                test: /\.s(a|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+
+                    'css-loader',
+
+                    'sass-loader',
+                ]
+            },
+
             {
                 test: /\.(js|jsx)$/,
                 exclude: '/node_modules/',
@@ -82,7 +93,7 @@ module.exports = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].bundle.[contenthash].css',
+            filename: 'css/[name].bundle.[chunkhash].css',
         }),
 
         new CleanWebpackPlugin(['css', 'js', 'img', 'fonts'], {

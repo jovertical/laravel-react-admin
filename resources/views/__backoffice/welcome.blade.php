@@ -6,6 +6,9 @@
 
         <title>{{ config('app.name') }}</title>
 
+        <link rel="stylesheet" href="{{ _asset('css/__backoffice/vendor.css') }}">
+        <link rel="stylesheet" href="{{ _asset('css/__backoffice/app.css') }}">
+
         <style>
             html, body {
                 height: 100%;
