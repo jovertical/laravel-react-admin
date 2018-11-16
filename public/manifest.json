@@ -1,4 +1,4 @@
 {
-  "js/app.js": "js/app.bundle.420913d89d99ecad549a.js",
-  "js/vendor.js": "js/vendor.bundle.a8792925470a6f11f77d.js"
+  "js/__backoffice/app.js": "js/__backoffice/app.bundle.a65de739f1b3d1b12c49.js",
+  "js/__backoffice/vendor.js": "js/__backoffice/vendor.bundle.d8e87d13686c639cd754.js"
 }

@@ -22,7 +22,7 @@
     <body>
         <div id="root"></div>
 
-        <script src="{{ _asset('js/vendor.js') }}"></script>
-        <script src="{{ _asset('js/app.js') }}"></script>
+        <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
+        <script src="{{ _asset('js/__backoffice/app.js') }}"></script>
     </body>
 </html>

@@ -26,7 +26,11 @@ module.exports = {
     mode: process.env.NODE_ENV,
 
     entry: {
-        app: path.join(SRC_DIR, 'app.js'),
+        '__backoffice/app': path.join(SRC_DIR, '__backoffice/app.js'),
+        '__backoffice/vendor': [
+            'moment', 'lodash', 'axios',
+            'react', 'react-dom', 'react-router-dom'
+        ]
     },
 
     module: {
@@ -133,15 +137,6 @@ module.exports = {
 
     optimization: {
         minimize: inProduction,
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendor',
-                    chunks: 'all'
-                }
-            }
-        }
     },
 
     node: {
@@ -159,4 +154,4 @@ if (! inProduction) {
             notify: false,
         })
     );
-};
+}
