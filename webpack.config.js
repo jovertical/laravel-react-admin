@@ -26,15 +26,25 @@ module.exports = {
     mode: process.env.NODE_ENV,
 
     entry: {
-        '__backoffice/app': path.join(SRC_DIR, '__backoffice/app.js'),
+        '__backoffice/app': path.join(SRC_DIR, '__backoffice/index.js'),
         '__backoffice/vendor': [
             'moment', 'lodash', 'axios',
             'react', 'react-dom', 'react-router-dom',
+            'react-md', 'react-md/dist/react-md.blue-deep_orange.min.css'
         ]
     },
 
     module: {
         rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+
+                    'css-loader',
+                ]
+            },
+
             {
                 test: /\.s(a|c)ss$/,
                 use: [
@@ -93,7 +103,7 @@ module.exports = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].bundle.[chunkhash].css',
+            filename: 'css/[name].bundle.[contenthash].css',
         }),
 
         new CleanWebpackPlugin(['css', 'js', 'img', 'fonts'], {
