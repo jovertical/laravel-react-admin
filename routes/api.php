@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
+    Route::namespace('Auth')->name('auth.')->group(function () {
+        Route::post('signin', 'SessionsController@signin')->name('signin');
+
+        Route::middleware('auth:api')->group(function () {
+            Route::post('signout', 'SessionsController@signout')->name('signout');
+            Route::post('refresh', 'SessionsController@refresh')->name('refresh');
+            Route::post('user', 'SessionsController@user')->name('user');
+        });
+    });
 });
