@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/su', function () {
+Route::get('/', function () {
     return view('__backoffice.welcome');
 });

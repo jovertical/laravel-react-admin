@@ -8,18 +8,6 @@
 
         <link rel="stylesheet" href="{{ _asset('css/__backoffice/vendor.css') }}">
         <link rel="stylesheet" href="{{ _asset('css/__backoffice/app.css') }}">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-        </style>
     </head>
 
     <body>

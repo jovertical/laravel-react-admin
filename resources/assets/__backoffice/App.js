@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
+
+import Navigator from './core/Navigator';
 
 class App extends Component {
-    render () {
+    state = {
+        loading: false
+    }
+
+    render() {
         return (
-            <h1>Helper Solutions Inc.</h1>
+            <Router>
+                <Navigator {...this.state} />
+            </Router>
         );
     }
 }
