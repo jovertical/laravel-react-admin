@@ -2,26 +2,6 @@ import React, { PureComponent } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { NavigationDrawer, FontIcon, ListItem } from 'react-md';
 
-import './MasterTemplate.scss';
-
-const navItems = [
-    {
-        label: 'Dashboard',
-        to: '/',
-        icon: 'dashboard'
-    },
-
-    {
-        label: 'Superusers',
-        to: '/superusers',
-        icon: 'group'
-    }
-];
-
-const styles = {
-    content: { minHeight: 'auto' },
-};
-
 class MasterTemplate extends PureComponent {
     constructor(props) {
         super(props);
@@ -46,6 +26,7 @@ class MasterTemplate extends PureComponent {
             <Route path={to} exact={exact}>
                 {({ match }) => {
                     let leftIcon;
+
                     if (icon) {
                         leftIcon = <FontIcon>{icon}</FontIcon>;
                     }
@@ -72,14 +53,32 @@ class MasterTemplate extends PureComponent {
                 contentId="main-demo-content"
                 contentStyle={styles.content}
                 contentClassName="md-grid"
-                navItems={navItems.map(navItem => <NavItemLink {...navItem} key={navItem.to} />)}
+                navItems={navItems.map(navItem => (
+                    <NavItemLink {...navItem} key={navItem.to} />
+                ))}
             >
-                <div>
-                    {this.props.children}
-                </div>
+                <div>{this.props.children}</div>
             </NavigationDrawer>
         );
     }
 }
+
+const navItems = [
+    {
+        label: 'Dashboard',
+        to: '/',
+        icon: 'dashboard',
+    },
+
+    {
+        label: 'Superusers',
+        to: '/superusers',
+        icon: 'group',
+    },
+];
+
+const styles = {
+    content: { minHeight: 'auto' },
+};
 
 export default MasterTemplate;

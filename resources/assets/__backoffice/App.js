@@ -5,8 +5,8 @@ import Navigator from './core/Navigator';
 
 class App extends Component {
     state = {
-        loading: false
-    }
+        loading: false,
+    };
 
     render() {
         return (

@@ -5,7 +5,7 @@ class Index extends Component {
     render() {
         return (
             <Master {...this.props}>
-                <h2>Superusers List</h2>
+                Superusers List
             </Master>
         );
     }
