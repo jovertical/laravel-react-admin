@@ -12,7 +12,7 @@
 */
 
 Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
-    Route::namespace('Auth')->name('auth.')->group(function () {
+    Route::namespace('Auth')->name('auth.')->prefix('auth')->group(function () {
         Route::post('signin', 'SessionsController@signin')->name('signin');
 
         Route::middleware('auth:api')->group(function () {
