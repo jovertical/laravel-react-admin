@@ -1,0 +1,53 @@
+.AT-Container,
+.AT-Content {
+    margin: 0;
+    padding: 0;
+}
+
+.AT-Content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AT-Form {
+    width: 35rem;
+    padding: 0;
+}
+
+.AT-Form-Title {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.AT-Form-Group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.AT-Form-Group-Item {
+    width: 100% !important;
+}
+
+.AT-Form-Footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.AT-Form-Footer-Item {
+    text-align: right;
+}
+
+@media only screen and (min-width: 768px) {
+    .AT-Container,
+    .AT-Content {
+        height: 100vh;
+    }
+
+    .AT-Form {
+        padding: 1.5rem;
+    }
+}
