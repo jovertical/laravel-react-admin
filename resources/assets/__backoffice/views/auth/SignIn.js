@@ -11,7 +11,7 @@ class SignIn extends Component {
                 <div className="AT-Form-Group md-grid">
                     <div className="AT-Form-Group-Item md-cell">
                         <TextField
-                            id="floating-center-title"
+                            id="username"
                             label="Username or Email"
                             lineDirection="center"
                         />
@@ -21,8 +21,8 @@ class SignIn extends Component {
                 <div className="AT-Form-Group md-grid">
                     <div className="AT-Form-Group-Item md-cell">
                         <TextField
+                            id="password"
                             type="password"
-                            id="floating-center-title"
                             label="Password"
                             lineDirection="center"
                         />

@@ -7,16 +7,19 @@ export default [
     {
         path: '/signin',
         component: Auth.SignIn,
+        auth: false,
     },
 
     {
         path: '/',
         component: Dashboard,
+        auth: true,
     },
 
     {
         path: '/superusers',
         component: Superusers.Index,
+        auth: true,
     },
 
     {
