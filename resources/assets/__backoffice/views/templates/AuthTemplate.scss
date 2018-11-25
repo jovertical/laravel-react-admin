@@ -10,9 +10,14 @@
     align-items: center;
 }
 
-.AT-Form {
-    width: 35rem;
+.AT-Content-Wrapper {
+    width: 32rem;
     padding: 0;
+}
+
+.AT-Progress {
+    margin: 0 !important;
+    min-height: 0.3rem;
 }
 
 .AT-Form-Title {

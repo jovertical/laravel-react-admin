@@ -6,13 +6,15 @@ import AuthTemplate from '../templates/AuthTemplate';
 
 class SignIn extends Component {
     state = {
-        loading: true,
+        loading: false,
         username: '',
         password: '',
         errors: {},
     };
 
     signinSubmitHandler = event => {
+        event.preventDefault();
+
         this.setState({ loading: true });
 
         axios
@@ -36,66 +38,67 @@ class SignIn extends Component {
 
     render() {
         return (
-            <AuthTemplate title="Sign in" subtitle="with your Account">
-                <div className="AT-Form-Group md-grid">
-                    <div className="AT-Form-Group-Item md-cell">
-                        <TextField
-                            id="username"
-                            label="Username or Email"
-                            lineDirection="center"
-                            value={this.state.username}
-                            onChange={value =>
-                                this.setState({ username: value })
-                            }
-                            error={_.has(this.state.errors, 'username')}
-                            errorText={
-                                _.has(this.state.errors, 'username')
-                                    ? this.state.errors.username[0]
-                                    : ''
-                            }
-                        />
-                    </div>
-                </div>
-
-                <div className="AT-Form-Group md-grid">
-                    <div className="AT-Form-Group-Item md-cell">
-                        <TextField
-                            id="password"
-                            type="password"
-                            label="Password"
-                            lineDirection="center"
-                            value={this.state.password}
-                            onChange={value =>
-                                this.setState({ password: value })
-                            }
-                            error={_.has(this.state.errors, 'password')}
-                            errorText={
-                                _.has(this.state.errors, 'password')
-                                    ? this.state.errors.password[0]
-                                    : ''
-                            }
-                        />
+            <AuthTemplate
+                title="Sign in"
+                subtitle="with your Account"
+                loading={this.state.loading}
+            >
+                <form onSubmit={this.signinSubmitHandler}>
+                    <div className="AT-Form-Group md-grid">
+                        <div className="AT-Form-Group-Item md-cell">
+                            <TextField
+                                id="username"
+                                label="Username or Email"
+                                lineDirection="center"
+                                value={this.state.username}
+                                onChange={value =>
+                                    this.setState({ username: value })
+                                }
+                                error={_.has(this.state.errors, 'username')}
+                                errorText={
+                                    _.has(this.state.errors, 'username')
+                                        ? this.state.errors.username[0]
+                                        : ''
+                                }
+                            />
+                        </div>
                     </div>
 
-                    <div className="AT-Form-Group-Item md-cell">
-                        <Link to="#">Forgot Password?</Link>
-                    </div>
-                </div>
+                    <div className="AT-Form-Group md-grid">
+                        <div className="AT-Form-Group-Item md-cell">
+                            <TextField
+                                id="password"
+                                type="password"
+                                label="Password"
+                                lineDirection="center"
+                                value={this.state.password}
+                                onChange={value =>
+                                    this.setState({ password: value })
+                                }
+                                error={_.has(this.state.errors, 'password')}
+                                errorText={
+                                    _.has(this.state.errors, 'password')
+                                        ? this.state.errors.password[0]
+                                        : ''
+                                }
+                            />
+                        </div>
 
-                <div className="AT-Form-Footer md-grid">
-                    <div />
-
-                    <div className="AT-Form-Footer-Item md-cell">
-                        <Button
-                            flat
-                            primary
-                            swapTheming
-                            onClick={this.signinSubmitHandler}
-                        >
-                            Sign In
-                        </Button>
+                        <div className="AT-Form-Group-Item md-cell">
+                            <Link to="#">Forgot Password?</Link>
+                        </div>
                     </div>
-                </div>
+
+                    <div className="AT-Form-Footer md-grid">
+                        <div />
+
+                        <div className="AT-Form-Footer-Item md-cell">
+                            <Button type="submit" flat primary swapTheming>
+                                Sign In
+                            </Button>
+                        </div>
+                    </div>
+                </form>
             </AuthTemplate>
         );
     }

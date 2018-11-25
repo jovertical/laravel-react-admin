@@ -1,20 +1,30 @@
 import React from 'react';
-import { Card, CardTitle } from 'react-md';
+import { Card, CardTitle, LinearProgress } from 'react-md';
 
 import './AuthTemplate.scss';
 
 const AuthTemplate = props => (
     <div className="AT-Container">
         <div className="AT-Content">
-            <Card className="AT-Form">
-                <CardTitle
-                    className="AT-Form-Title"
-                    title={props.title}
-                    subtitle={props.subtitle}
-                />
+            <div className="AT-Content-Wrapper">
+                <span>
+                    {props.loading ? (
+                        <LinearProgress className="AT-Progress" />
+                    ) : (
+                        ''
+                    )}
+                </span>
 
-                {props.children}
-            </Card>
+                <Card className="AT-Form">
+                    <CardTitle
+                        className="AT-Form-Title"
+                        title={props.title}
+                        subtitle={props.subtitle}
+                    />
+
+                    {props.children}
+                </Card>
+            </div>
         </div>
     </div>
 );
