@@ -19,4 +19,18 @@ export default class Helper {
             return 'Hello!';
         }
     }
+
+    /**
+     * @param {array} routes
+     * @param {string} name
+     */
+    static route(routes, name) {
+        const i = _.findIndex(routes, { name });
+
+        if (i < 0) {
+            throw new Error('Cannot find route.');
+        }
+
+        return routes[i].path;
+    }
 }
