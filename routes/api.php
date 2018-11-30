@@ -22,4 +22,6 @@ Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
             Route::post('user', 'SessionsController@user')->name('user');
         });
     });
+
+    Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
 });

@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Link, Route } from 'react-router-dom';
-import { NavigationDrawer, FontIcon, ListItem } from 'react-md';
+import { NavigationDrawer, FontIcon, ListItem, Card } from 'react-md';
+
+import './MasterTemplate.scss';
+import Loading from '../../ui/Loading';
 
 class MasterTemplate extends PureComponent {
     constructor(props) {
@@ -57,7 +60,11 @@ class MasterTemplate extends PureComponent {
                     <NavItemLink {...navItem} key={navItem.to} />
                 ))}
             >
-                <div>{this.props.children}</div>
+                {this.props.loading ? (
+                    <Loading />
+                ) : (
+                    <Card className="MT-Content">{this.props.children}</Card>
+                )}
             </NavigationDrawer>
         );
     }
