@@ -12,6 +12,20 @@ class SignIn extends Component {
         errors: {},
     };
 
+    inputChangeHandler = (value, input) => {
+        this.setState(prevState => {
+            const filteredErrors = _.pick(
+                prevState.errors,
+                _.keys(prevState.errors).filter(field => field !== input),
+            );
+
+            return {
+                [input]: value,
+                errors: filteredErrors,
+            };
+        });
+    };
+
     signinSubmitHandler = event => {
         event.preventDefault();
 
@@ -52,7 +66,7 @@ class SignIn extends Component {
                                 lineDirection="center"
                                 value={this.state.username}
                                 onChange={value =>
-                                    this.setState({ username: value })
+                                    this.inputChangeHandler(value, 'username')
                                 }
                                 error={_.has(this.state.errors, 'username')}
                                 errorText={
@@ -73,7 +87,7 @@ class SignIn extends Component {
                                 lineDirection="center"
                                 value={this.state.password}
                                 onChange={value =>
-                                    this.setState({ password: value })
+                                    this.inputChangeHandler(value, 'password')
                                 }
                                 error={_.has(this.state.errors, 'password')}
                                 errorText={
