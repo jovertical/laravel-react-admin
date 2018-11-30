@@ -28,38 +28,33 @@ module.exports = {
     entry: {
         '__backoffice/app': path.join(SRC_DIR, '__backoffice/index.js'),
         '__backoffice/vendor': [
-            'moment', 'lodash', 'axios',
-            'react', 'react-dom', 'react-router-dom',
-            'react-md', 'react-md/dist/react-md.blue-deep_orange.min.css'
-        ]
+            'moment',
+            'lodash',
+            'axios',
+            'react',
+            'react-dom',
+            'react-router-dom',
+            'react-md',
+            'react-md/dist/react-md.blue-deep_orange.min.css',
+        ],
     },
 
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-
-                    'css-loader',
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
 
             {
                 test: /\.s(a|c)ss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-
-                    'css-loader',
-
-                    'sass-loader',
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
             },
 
             {
                 test: /\.(js|jsx)$/,
                 exclude: '/node_modules/',
-                use: 'babel-loader'
+                use: 'babel-loader',
             },
 
             {
@@ -68,10 +63,10 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'fonts/[name].[hash].[ext]'
-                        }
-                    }
-                ]
+                            name: '/fonts/[name].[hash].[ext]',
+                        },
+                    },
+                ],
             },
 
             {
@@ -81,8 +76,8 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             name: '/img/[name].[hash].[ext]',
-                            fallback: 'file-loader'
-                        }
+                            fallback: 'file-loader',
+                        },
                     },
 
                     {
@@ -93,12 +88,12 @@ module.exports = {
                                 require('imagemin-pngquant')(),
                                 require('imagemin-gifsicle')(),
                                 require('imagemin-svgo')(),
-                            ]
-                        }
-                    }
-                ]
-            }
-        ]
+                            ],
+                        },
+                    },
+                ],
+            },
+        ],
     },
 
     plugins: [
@@ -110,12 +105,12 @@ module.exports = {
             root: DIST_DIR,
             exclude: [],
             verbose: true,
-            dry: false
+            dry: false,
         }),
 
         new CleanObsoleteChunks({
             verbose: true,
-            deep: true
+            deep: true,
         }),
 
         new EventHooksPlugin({
@@ -124,9 +119,10 @@ module.exports = {
                 let { errors } = stats.toJson();
 
                 notifier.notify({
-                    title: errors.length > 0 ? 'Build Failed' : 'Build Successful',
+                    title:
+                        errors.length > 0 ? 'Build Failed' : 'Build Successful',
                     message: `Completed in ${time}ms`,
-                    icon: path.resolve(__dirname, './public/img/logo-white.png'),
+                    icon: null,
                     sound: true,
                     wait: true,
                 });
@@ -138,13 +134,13 @@ module.exports = {
                     let key = `${name.substring(0, name.indexOf('.'))}.${ext}`;
 
                     Object.assign(manifest, {
-                        [key]: name
+                        [key]: name,
                     });
                 });
 
                 fs.writeFileSync(
                     path.resolve(DIST_DIR, './manifest.json'),
-                    JSON.stringify(manifest, null, 2)
+                    JSON.stringify(manifest, null, 2),
                 );
             },
         }),
@@ -162,17 +158,17 @@ module.exports = {
 
     node: {
         __filename: true,
-        __dirname: true
-    }
+        __dirname: true,
+    },
 };
 
-if (! inProduction) {
+if (!inProduction) {
     module.exports.plugins.push(
         new BrowserSyncPlugin({
             host: 'localhost',
             proxy: 'http://hsbo.test',
             open: true,
             notify: false,
-        })
+        }),
     );
 }
