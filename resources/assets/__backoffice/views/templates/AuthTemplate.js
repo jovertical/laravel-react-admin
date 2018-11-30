@@ -9,7 +9,10 @@ const AuthTemplate = props => (
             <div className="AT-Content-Wrapper">
                 <span>
                     {props.loading ? (
-                        <LinearProgress className="AT-Progress" />
+                        <LinearProgress
+                            id="AT-Progress"
+                            className="AT-Progress"
+                        />
                     ) : (
                         ''
                     )}
