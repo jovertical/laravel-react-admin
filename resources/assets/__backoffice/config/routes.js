@@ -5,28 +5,28 @@ import NotFound from '../views/errors/NotFound';
 
 export default [
     {
-        name: 'auth.signin',
+        name: 'backoffice.auth.signin',
         path: '/signin',
         component: Auth.SignIn,
         auth: false,
     },
 
     {
-        name: 'dashboard',
+        name: 'backoffice.dashboard',
         path: '/',
         component: Dashboard,
         auth: true,
     },
 
     {
-        name: 'superusers.index',
+        name: 'backoffice.superusers.index',
         path: '/superusers',
         component: Superusers.Index,
         auth: true,
     },
 
     {
-        name: 'errors.not-found',
+        name: 'backoffice.errors.not-found',
         component: NotFound,
     },
 ];

@@ -2,28 +2,29 @@ import React, { PureComponent } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { NavigationDrawer, FontIcon, ListItem, Card } from 'react-md';
 
-import './MasterTemplate.scss';
+import APP from '../../config/app';
 import Loading from '../../ui/Loading';
+import './MasterTemplate.scss';
 
 class MasterTemplate extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = { title: this.getCurrentTitle(props) };
+        this.state = { pageTitle: this.getPageTitle(props) };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ title: this.getCurrentTitle(nextProps) });
+        this.setState({ pageTitle: this.getPageTitle(nextProps) });
     }
 
-    getCurrentTitle = ({ location: { pathname } }) => {
+    getPageTitle = ({ location: { pathname } }) => {
         const i = _.findIndex(navItems, navItem => navItem.to === pathname);
 
         return navItems[i].label;
     };
 
     render() {
-        const { title } = this.state;
+        const { pageTitle } = this.state;
 
         const NavItemLink = ({ label, to, icon = '', exact = true }) => (
             <Route path={to} exact={exact}>
@@ -49,13 +50,13 @@ class MasterTemplate extends PureComponent {
 
         return (
             <NavigationDrawer
-                toolbarTitle={title}
+                drawerTitle={APP.name}
+                toolbarTitle={pageTitle}
                 mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY_MINI}
                 tabletDrawerType={NavigationDrawer.DrawerTypes.PERSISTENT_MINI}
-                desktopDrawerType={NavigationDrawer.DrawerTypes.PERSISTENT_MINI}
-                contentId="main-demo-content"
-                contentStyle={styles.content}
-                contentClassName="md-grid"
+                desktopDrawerType={NavigationDrawer.DrawerTypes.FULL_HEIGHT}
+                contentId="MT-Content"
+                contentClassName="MT-Content md-grid"
                 navItems={navItems.map(navItem => (
                     <NavItemLink {...navItem} key={navItem.to} />
                 ))}
@@ -83,9 +84,5 @@ const navItems = [
         icon: 'group',
     },
 ];
-
-const styles = {
-    content: { minHeight: 'auto' },
-};
 
 export default MasterTemplate;

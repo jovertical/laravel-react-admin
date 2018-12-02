@@ -21,7 +21,7 @@ const Navigator = props => {
                                         <Redirect
                                             to={h.route(
                                                 props.routes,
-                                                'auth.signin',
+                                                'backoffice.auth.signin',
                                             )}
                                         />
                                     );
@@ -34,7 +34,7 @@ const Navigator = props => {
                                         <Redirect
                                             to={h.route(
                                                 props.routes,
-                                                'dashboard',
+                                                'backoffice.dashboard',
                                             )}
                                         />
                                     );

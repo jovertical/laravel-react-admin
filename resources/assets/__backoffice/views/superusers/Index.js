@@ -15,39 +15,24 @@ class Index extends Component {
     state = {
         loading: false,
         columnHeaders: ['Name', 'Gender', 'Birthdate', 'Address', 'Email'],
-        pagination: {
-            data: [],
-            total: 0,
-            perPage: 10,
-            page: 1,
-        },
+        pagination: {},
     };
 
     paginationChangedHandler = async (from, perPage, page) => {
         this.setState({ loading: true });
 
-        await this.fetchUsers();
+        await this.fetchUsers({ perPage, page });
 
-        this.setState(prevState => {
-            return {
-                loading: false,
-                pagination: {
-                    ...prevState.pagination,
-                    from,
-                    perPage,
-                    page,
-                },
-            };
-        });
+        this.setState({ loading: false });
     };
 
-    async fetchUsers() {
+    async fetchUsers(params = {}) {
         try {
             const response = await axios.get('/api/users', {
                 params: {
                     type: 'superuser',
-                    perPage: this.state.pagination.perPage,
-                    page: this.state.pagination.page,
+                    perPage: _.has(params, 'perPage') ? params.perPage : null,
+                    page: _.has(params, 'page') ? params.page : null,
                 },
             });
 
@@ -102,11 +87,13 @@ class Index extends Component {
                         <TablePagination
                             rows={pagination.total}
                             onPagination={this.paginationChangedHandler}
-                            page={pagination.page}
-                            rowsPerPage={pagination.perPage}
+                            page={parseInt(pagination.current_page)}
+                            rowsPerPage={parseInt(pagination.per_page)}
                         />
                     </DataTable>
-                ) : null}
+                ) : (
+                    <Loading />
+                )}
             </MasterTemplate>
         );
     }
