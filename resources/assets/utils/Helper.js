@@ -1,3 +1,5 @@
+import BACKOFFICE_ROUTES from '../__backoffice/config/routes';
+
 export default class Helper {
     /**
      * Make a time-based greeting message.
@@ -21,16 +23,15 @@ export default class Helper {
     }
 
     /**
-     * @param {array} routes
      * @param {string} name
      */
-    static route(routes, name) {
-        const i = _.findIndex(routes, { name });
+    static route(name) {
+        const i = _.findIndex({ ...BACKOFFICE_ROUTES }, { name });
 
         if (i < 0) {
             throw new Error('Cannot find route.');
         }
 
-        return routes[i].path;
+        return ROUTES[i].path;
     }
 }

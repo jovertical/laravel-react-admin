@@ -71,7 +71,7 @@ class App extends Component {
 
         return (
             <Router>
-                <Navigator {...this.state} routes={routes} />
+                <Navigator pageProps={{ ...this.state, routes }} />
             </Router>
         );
     }

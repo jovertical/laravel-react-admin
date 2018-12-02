@@ -2,11 +2,11 @@ import React from 'react';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 const Navigator = props => {
-    const { authenticated } = props;
+    const { authenticated, routes } = props.pageProps;
 
     return (
         <Switch>
-            {props.routes.map((route, i) => {
+            {routes.map((route, i) => {
                 const View = route.component;
 
                 return (
@@ -20,7 +20,6 @@ const Navigator = props => {
                                     return (
                                         <Redirect
                                             to={h.route(
-                                                props.routes,
                                                 'backoffice.auth.signin',
                                             )}
                                         />
@@ -32,10 +31,7 @@ const Navigator = props => {
                                 if (authenticated) {
                                     return (
                                         <Redirect
-                                            to={h.route(
-                                                props.routes,
-                                                'backoffice.dashboard',
-                                            )}
+                                            to={h.route('backoffice.dashboard')}
                                         />
                                     );
                                 }

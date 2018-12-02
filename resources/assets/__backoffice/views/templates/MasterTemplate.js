@@ -61,7 +61,7 @@ class MasterTemplate extends PureComponent {
                     <NavItemLink {...navItem} key={navItem.to} />
                 ))}
             >
-                {this.props.loading ? (
+                {this.props.pageProps.loading ? (
                     <Loading />
                 ) : (
                     <Card className="MT-Content">{this.props.children}</Card>

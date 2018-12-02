@@ -3,11 +3,7 @@ import MasterTemplate from './templates/MasterTemplate';
 
 class Dashboard extends Component {
     render() {
-        return (
-            <MasterTemplate {...this.props}>
-                Dashboard
-            </MasterTemplate>
-        );
+        return <MasterTemplate {...this.props}>Dashboard</MasterTemplate>;
     }
 }
 
