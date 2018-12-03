@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { NavigationDrawer, FontIcon, ListItem, Card } from 'react-md';
 
-import APP from '../../config/app';
+import APP from '../../../config/app';
 import Loading from '../../ui/Loading';
 import './MasterTemplate.scss';
 

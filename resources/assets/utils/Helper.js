@@ -1,4 +1,4 @@
-import BACKOFFICE_ROUTES from '../__backoffice/config/routes';
+import ROUTES from '../config/routes';
 
 export default class Helper {
     /**
@@ -26,7 +26,7 @@ export default class Helper {
      * @param {string} name
      */
     static route(name) {
-        const i = _.findIndex({ ...BACKOFFICE_ROUTES }, { name });
+        const i = _.findIndex(ROUTES, { name });
 
         if (i < 0) {
             throw new Error('Cannot find route.');

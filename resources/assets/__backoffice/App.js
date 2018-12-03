@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
 import Loading from './ui/Loading';
-import Navigator from '../core/Navigator';
-import routes from './config/routes';
+import Navigator from './core/Navigator';
+import ROUTES from './routes';
 
 class App extends Component {
     state = {
@@ -71,7 +71,7 @@ class App extends Component {
 
         return (
             <Router>
-                <Navigator pageProps={{ ...this.state, routes }} />
+                <Navigator pageProps={{ ...this.state, routes: ROUTES }} />
             </Router>
         );
     }
