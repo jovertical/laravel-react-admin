@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardTitle, LinearProgress } from 'react-md';
 
 import './AuthTemplate.scss';
@@ -22,7 +23,7 @@ const AuthTemplate = props => (
                     <CardTitle
                         className="AT-Form-Title"
                         title={props.title}
-                        subtitle={props.subtitle}
+                        subtitle={props.subTitle}
                     />
 
                     {props.children}
@@ -31,5 +32,11 @@ const AuthTemplate = props => (
         </div>
     </div>
 );
+
+AuthTemplate.propTypes = {
+    loading: PropTypes.bool,
+    title: PropTypes.string,
+    subTitle: PropTypes.string,
+};
 
 export default AuthTemplate;

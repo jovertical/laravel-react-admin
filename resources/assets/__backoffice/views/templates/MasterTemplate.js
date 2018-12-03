@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 import { NavigationDrawer, FontIcon, ListItem, Card } from 'react-md';
 
@@ -84,5 +85,9 @@ const navItems = [
         icon: 'group',
     },
 ];
+
+MasterTemplate.propTypes = {
+    pageProps: PropTypes.object,
+};
 
 export default MasterTemplate;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 const Navigator = props => {
@@ -44,6 +45,10 @@ const Navigator = props => {
             })}
         </Switch>
     );
+};
+
+Navigator.propTypes = {
+    pageProps: PropTypes.object,
 };
 
 export default withRouter(Navigator);

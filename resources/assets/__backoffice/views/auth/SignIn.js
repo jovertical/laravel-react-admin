@@ -54,7 +54,7 @@ class SignIn extends Component {
         return (
             <AuthTemplate
                 title="Sign in"
-                subtitle="with your Account"
+                subTitle="with your Account"
                 loading={this.state.loading}
             >
                 <form onSubmit={this.signinSubmitHandler}>
