@@ -36,4 +36,14 @@ class UsersController extends Controller
         return User::where('type', $request->input('type'))
             ->paginate($request->input('perPage') ?? 10);
     }
+
+    public function restore(Request $request, $userId)
+    {
+        $user = User::withTrashed()->where('id', $userId)->first();
+        $user->deleted_at = null;
+        $user->update();
+
+        return User::where('type', $request->input('type'))
+            ->paginate($request->input('perPage') ?? 10);
+    }
 }

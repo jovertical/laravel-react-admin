@@ -24,4 +24,5 @@ Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
     });
 
     Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
+    Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
 });

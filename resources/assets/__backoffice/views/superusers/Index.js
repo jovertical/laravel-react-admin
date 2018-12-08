@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     FontIcon,
     MenuButtonColumn,
+    Snackbar,
     DataTable,
     TableHeader,
     TableBody,
@@ -24,6 +25,7 @@ class Index extends Component {
             title: '',
             content: '',
         },
+        toasts: [],
     };
 
     deleteUserModalConfirmedHandler = async () => {
@@ -54,6 +56,52 @@ class Index extends Component {
                             visible: false,
                         },
                         pagination: response.data,
+                        toasts: [
+                            {
+                                text: 'Resource deleted.',
+                                action: 'Undo',
+                                autohide: true,
+                                clicked: this.deletedUserUndoHandler,
+                            },
+                            ...prevState.toasts,
+                        ],
+                    };
+                });
+            }
+        } catch (error) {}
+    };
+
+    deletedUserUndoHandler = async () => {
+        this.setState({ loading: true });
+
+        try {
+            const response = await axios.patch(
+                `/api/users/${this.state.activeResourceId}/restore`,
+                {
+                    type: 'superuser',
+                    perPage: _.has(this.state.pagination, 'per_page')
+                        ? this.state.pagination.per_page
+                        : 10,
+                    page: _.has(this.state.pagination, 'current_page')
+                        ? this.state.pagination.current_page
+                        : 1,
+                },
+            );
+
+            if (response.status === 200) {
+                this.setState(prevState => {
+                    return {
+                        loading: false,
+                        pagination: response.data,
+                        toasts: [
+                            {
+                                text: 'Resource recovered.',
+                                action: 'Dismiss',
+                                autohide: true,
+                                clicked: () => {},
+                            },
+                            ...prevState.toasts,
+                        ],
                     };
                 });
             }
@@ -66,7 +114,8 @@ class Index extends Component {
             modalDialog: {
                 visible: true,
                 title: 'You are deleting a resource.',
-                content: 'This action is irreversible! Continue?',
+                content:
+                    'If not undone, this action will be irreversible! Continue?',
             },
         });
     };
@@ -80,6 +129,8 @@ class Index extends Component {
     };
 
     fetchUsers = async (params = {}) => {
+        this.setState({ loading: true });
+
         try {
             const response = await axios.get('/api/users', {
                 params: {
@@ -90,21 +141,17 @@ class Index extends Component {
             });
 
             if (response.status === 200) {
-                this.setState({ pagination: response.data });
+                this.setState({ loading: false, pagination: response.data });
             }
         } catch (error) {}
     };
 
     async componentWillMount() {
-        this.setState({ loading: true });
-
         await this.fetchUsers();
-
-        this.setState({ loading: false });
     }
 
     render() {
-        const { pagination, modalDialog } = this.state;
+        const { pagination, modalDialog, toasts } = this.state;
         const { data } = pagination;
 
         return (
@@ -170,6 +217,25 @@ class Index extends Component {
                 >
                     {modalDialog.content}
                 </ModalDialog>
+
+                {toasts.length > 0 ? (
+                    <Snackbar
+                        id="Action-Feedback"
+                        toasts={toasts}
+                        autohide={toasts[0].autohide}
+                        autohideTimeout={5000}
+                        onClick={toasts[0].clicked}
+                        onDismiss={() =>
+                            this.setState(prevState => {
+                                const [, ...toasts] = prevState.toasts;
+
+                                return {
+                                    toasts,
+                                };
+                            })
+                        }
+                    />
+                ) : null}
             </div>
         );
     }
