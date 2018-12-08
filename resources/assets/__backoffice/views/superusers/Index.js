@@ -17,12 +17,13 @@ import MasterTemplate from '../templates/MasterTemplate';
 class Index extends Component {
     state = {
         loading: false,
-        columnHeaders: ['Name', 'Email', 'Gender', 'Birthdate', 'Address', ''],
         pagination: {},
         activeResourceId: 0,
-        modalDialogVisible: false,
-        modalDialogTitle: '',
-        modalDialogContent: '',
+        modalDialog: {
+            visible: false,
+            title: '',
+            content: '',
+        },
     };
 
     deleteUserModalConfirmedHandler = async () => {
@@ -45,10 +46,15 @@ class Index extends Component {
             );
 
             if (response.status === 200) {
-                this.setState({
-                    loading: false,
-                    modalDialogVisible: false,
-                    pagination: response.data,
+                this.setState(prevState => {
+                    return {
+                        loading: false,
+                        modalDialog: {
+                            ...prevState.modalDialog,
+                            visible: false,
+                        },
+                        pagination: response.data,
+                    };
                 });
             }
         } catch (error) {}
@@ -57,9 +63,11 @@ class Index extends Component {
     deleteUserClickedHandler = id => {
         this.setState({
             activeResourceId: id,
-            modalDialogVisible: true,
-            modalDialogTitle: 'You are deleting a resource.',
-            modalDialogContent: 'This action is irreversible! Continue?',
+            modalDialog: {
+                visible: true,
+                title: 'You are deleting a resource.',
+                content: 'This action is irreversible! Continue?',
+            },
         });
     };
 
@@ -96,12 +104,7 @@ class Index extends Component {
     }
 
     render() {
-        const {
-            pagination,
-            modalDialogVisible,
-            modalDialogTitle,
-            modalDialogContent,
-        } = this.state;
+        const { pagination, modalDialog } = this.state;
         const { data } = pagination;
 
         return (
@@ -111,13 +114,9 @@ class Index extends Component {
                         <DataTable baseId="users">
                             <TableHeader>
                                 <TableRow selectable={false}>
-                                    {this.state.columnHeaders.map(
-                                        (header, i) => (
-                                            <TableColumn key={i}>
-                                                {header}
-                                            </TableColumn>
-                                        ),
-                                    )}
+                                    <TableColumn grow>Name</TableColumn>
+                                    <TableColumn>Email</TableColumn>
+                                    <TableColumn />
                                 </TableRow>
                             </TableHeader>
 
@@ -129,20 +128,6 @@ class Index extends Component {
                                         }`}</TableColumn>
 
                                         <TableColumn>{user.email}</TableColumn>
-
-                                        <TableColumn>
-                                            {!_.isEmpty(user.gender)
-                                                ? _.startCase(user.gender)
-                                                : null}
-                                        </TableColumn>
-
-                                        <TableColumn>
-                                            {user.birthdate}
-                                        </TableColumn>
-
-                                        <TableColumn>
-                                            {user.address}
-                                        </TableColumn>
 
                                         <ActionMenu
                                             id={user.id}
@@ -169,14 +154,21 @@ class Index extends Component {
                 </MasterTemplate>
 
                 <ModalDialog
-                    title={modalDialogTitle}
-                    visible={modalDialogVisible}
+                    title={modalDialog.title}
+                    visible={modalDialog.visible}
                     confirmAction={this.deleteUserModalConfirmedHandler}
                     cancelAction={() =>
-                        this.setState({ modalDialogVisible: false })
+                        this.setState(prevState => {
+                            return {
+                                modalDialog: {
+                                    ...prevState.modalDialog,
+                                    visible: false,
+                                },
+                            };
+                        })
                     }
                 >
-                    {modalDialogContent}
+                    {modalDialog.content}
                 </ModalDialog>
             </div>
         );
@@ -224,7 +216,13 @@ const ActionMenu = props => {
     });
 
     return (
-        <MenuButtonColumn id={props.id} icon menuItems={mappedActions}>
+        <MenuButtonColumn
+            id={props.id}
+            style={{ ...props.style, maxWidth: '1rem' }}
+            icon
+            menuItems={mappedActions}
+            listClassName="tables__with-menus__kebab-list"
+        >
             <FontIcon>more_vert</FontIcon>
         </MenuButtonColumn>
     );
