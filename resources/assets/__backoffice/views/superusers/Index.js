@@ -3,6 +3,9 @@ import {
     FontIcon,
     MenuButtonColumn,
     Snackbar,
+    Avatar,
+    IconSeparator,
+    AccessibleFakeButton,
     DataTable,
     TableHeader,
     TableBody,
@@ -143,7 +146,21 @@ class Index extends Component {
             if (response.status === 200) {
                 this.setState({ loading: false, pagination: response.data });
             }
-        } catch (error) {}
+        } catch ({ response }) {
+            this.setState(prevState => {
+                return {
+                    toasts: [
+                        {
+                            text: response.statusText,
+                            action: 'Retry',
+                            autohide: true,
+                            clicked: this.fetchUsers,
+                        },
+                        ...prevState.toasts,
+                    ],
+                };
+            });
+        }
     };
 
     async componentWillMount() {
@@ -170,9 +187,26 @@ class Index extends Component {
                             <TableBody>
                                 {data.map(user => (
                                     <TableRow key={user.id} selectable={false}>
-                                        <TableColumn>{`${user.firstname} ${
-                                            user.lastname
-                                        }`}</TableColumn>
+                                        <TableColumn>
+                                            <AccessibleFakeButton
+                                                component={IconSeparator}
+                                                iconBefore
+                                                label={
+                                                    <span>
+                                                        {`${user.firstname} ${
+                                                            user.lastname
+                                                        }`}
+                                                    </span>
+                                                }
+                                            >
+                                                <Avatar random>
+                                                    {user.firstname.substring(
+                                                        0,
+                                                        1,
+                                                    )}
+                                                </Avatar>
+                                            </AccessibleFakeButton>
+                                        </TableColumn>
 
                                         <TableColumn>{user.email}</TableColumn>
 
