@@ -146,7 +146,14 @@ class Index extends Component {
     };
 
     paginationChangedHandler = async (from, perPage, page) => {
-        await this.fetchUsers({ perPage, page });
+        const { by, type } = this.state.sorting;
+
+        await this.fetchUsers({
+            sortBy: by,
+            sortType: type,
+            perPage,
+            page,
+        });
     };
 
     fetchUsers = async (params = {}) => {
