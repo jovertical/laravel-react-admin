@@ -10,8 +10,7 @@ class UsersController extends Controller
 {
     public function index(Request $request)
     {
-        return User::where('type', $request->input('type'))
-            ->paginate($request->input('perPage') ?? 10);
+        return $this->paginatedQuery($request);
     }
 
     public function store(Request $request)
@@ -33,8 +32,7 @@ class UsersController extends Controller
     {
         $user->delete();
 
-        return User::where('type', $request->input('type'))
-            ->paginate($request->input('perPage') ?? 10);
+        return $this->paginatedQuery($request);
     }
 
     public function restore(Request $request, $userId)
@@ -43,7 +41,16 @@ class UsersController extends Controller
         $user->deleted_at = null;
         $user->update();
 
+        return $this->paginatedQuery($request);
+    }
+
+    protected function paginatedQuery(Request $request)
+    {
         return User::where('type', $request->input('type'))
+            ->orderBy(
+                $request->input('sortBy') ?? 'firstname',
+                $request->input('sortType') ?? 'ASC'
+            )
             ->paginate($request->input('perPage') ?? 10);
     }
 }

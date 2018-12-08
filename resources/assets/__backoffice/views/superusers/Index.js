@@ -22,6 +22,10 @@ class Index extends Component {
     state = {
         loading: false,
         pagination: {},
+        sorting: {
+            by: 'firstname',
+            type: 'ASC',
+        },
         activeResourceId: 0,
         modalDialog: {
             visible: false,
@@ -35,17 +39,18 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
+            const { by, type } = this.state.sorting;
+            const { per_page, current_page } = this.state.pagination;
+
             const response = await axios.delete(
                 `/api/users/${this.state.activeResourceId}`,
                 {
                     params: {
                         type: 'superuser',
-                        perPage: _.has(this.state.pagination, 'per_page')
-                            ? this.state.pagination.per_page
-                            : 10,
-                        page: _.has(this.state.pagination, 'current_page')
-                            ? this.state.pagination.current_page
-                            : 1,
+                        sortBy: by,
+                        sortType: type,
+                        perPage: per_page,
+                        page: current_page,
                     },
                 },
             );
@@ -78,16 +83,17 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
+            const { by, type } = this.state.sorting;
+            const { per_page, current_page } = this.state.pagination;
+
             const response = await axios.patch(
                 `/api/users/${this.state.activeResourceId}/restore`,
                 {
                     type: 'superuser',
-                    perPage: _.has(this.state.pagination, 'per_page')
-                        ? this.state.pagination.per_page
-                        : 10,
-                    page: _.has(this.state.pagination, 'current_page')
-                        ? this.state.pagination.current_page
-                        : 1,
+                    sortBy: by,
+                    sortType: type,
+                    perPage: per_page,
+                    page: current_page,
                 },
             );
 
@@ -123,28 +129,53 @@ class Index extends Component {
         });
     };
 
+    columnSortingToggledHandler = async column => {
+        let { type } = this.state.sorting;
+        const { per_page, current_page } = this.state.pagination;
+
+        if (column === this.state.sorting.by) {
+            type = type === 'ASC' ? 'DESC' : 'ASC';
+        }
+
+        await this.fetchUsers({
+            perPage: per_page,
+            page: current_page,
+            sortBy: column,
+            sortType: type,
+        });
+    };
+
     paginationChangedHandler = async (from, perPage, page) => {
-        this.setState({ loading: true });
-
         await this.fetchUsers({ perPage, page });
-
-        this.setState({ loading: false });
     };
 
     fetchUsers = async (params = {}) => {
         this.setState({ loading: true });
 
         try {
+            const { perPage, page, sortBy, sortType } = params;
+
             const response = await axios.get('/api/users', {
                 params: {
                     type: 'superuser',
-                    perPage: _.has(params, 'perPage') ? params.perPage : null,
-                    page: _.has(params, 'page') ? params.page : null,
+                    perPage,
+                    page,
+                    sortBy,
+                    sortType,
                 },
             });
 
             if (response.status === 200) {
-                this.setState({ loading: false, pagination: response.data });
+                this.setState({
+                    loading: false,
+                    pagination: response.data,
+                    sorting: {
+                        by: _.isNil(sortBy) ? this.state.sorting.by : sortBy,
+                        type: _.isNil(sortType)
+                            ? this.state.sorting.type
+                            : sortType,
+                    },
+                });
             }
         } catch ({ response }) {
             this.setState(prevState => {
@@ -168,7 +199,7 @@ class Index extends Component {
     }
 
     render() {
-        const { pagination, modalDialog, toasts } = this.state;
+        const { pagination, sorting, modalDialog, toasts } = this.state;
         const { data } = pagination;
 
         return (
@@ -178,8 +209,36 @@ class Index extends Component {
                         <DataTable baseId="users">
                             <TableHeader>
                                 <TableRow selectable={false}>
-                                    <TableColumn grow>Name</TableColumn>
-                                    <TableColumn>Email</TableColumn>
+                                    <TableColumn
+                                        grow
+                                        sorted={
+                                            this.state.sorting.type ===
+                                                'DESC' &&
+                                            this.state.sorting.by ===
+                                                'firstname'
+                                        }
+                                        onClick={() =>
+                                            this.columnSortingToggledHandler(
+                                                'firstname',
+                                            )
+                                        }
+                                    >
+                                        Name
+                                    </TableColumn>
+                                    <TableColumn
+                                        sorted={
+                                            this.state.sorting.type ===
+                                                'DESC' &&
+                                            this.state.sorting.by === 'email'
+                                        }
+                                        onClick={() =>
+                                            this.columnSortingToggledHandler(
+                                                'email',
+                                            )
+                                        }
+                                    >
+                                        Email
+                                    </TableColumn>
                                     <TableColumn />
                                 </TableRow>
                             </TableHeader>
