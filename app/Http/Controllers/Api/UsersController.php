@@ -31,6 +31,9 @@ class UsersController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        return $user;
+        $user->delete();
+
+        return User::where('type', $request->input('type'))
+            ->paginate($request->input('perPage') ?? 10);
     }
 }
