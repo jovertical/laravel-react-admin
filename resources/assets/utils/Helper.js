@@ -34,4 +34,39 @@ export default class Helper {
 
         return ROUTES[i].path;
     }
+
+    /**
+     * ? Generate a query param object from a URL query string.
+     * @param {string} queryString
+     * @return {object}
+     */
+    static generateQueryParams(queryString) {
+        return _.chain(queryString)
+            .replace('?', '')
+            .split('&')
+            .map(_.partial(_.split, _, '=', 2))
+            .fromPairs()
+            .value();
+    }
+
+    /**
+     * ? Generate a URL query string.
+     * @param {object} params
+     * @return {string}
+     */
+    static generateQueryString(queryParams) {
+        var paramString = '?';
+
+        for (let param in queryParams) {
+            if (_.has(queryParams, param)) {
+                let value = _.isUndefined(queryParams[param])
+                    ? ''
+                    : queryParams[param];
+
+                paramString += `${param}=${value}&`;
+            }
+        }
+
+        return paramString;
+    }
 }

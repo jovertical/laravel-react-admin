@@ -45,7 +45,7 @@ class Index extends Component {
                 type: 'error',
                 label: 'Delete',
                 name: 'delete',
-                onClick: () => this.deleteUserClickedHandler(),
+                onClick: id => this.deleteUserClickedHandler(id),
             },
         ],
     };
@@ -158,6 +158,8 @@ class Index extends Component {
             sortBy: column,
             sortType: type,
         });
+
+        this.updateQueryString();
     };
 
     paginationChangedHandler = async (from, perPage, page) => {
@@ -169,7 +171,22 @@ class Index extends Component {
             perPage,
             page,
         });
+
+        this.updateQueryString();
     };
+
+    updateQueryString() {
+        const { pagination, sorting } = this.state;
+        const { history, location } = this.props;
+        const queryString = h.generateQueryString({
+            perPage: pagination.per_page,
+            page: pagination.current_page,
+            sortBy: sorting.by,
+            sortType: sorting.type,
+        });
+
+        history.push(`${location.pathname}${queryString}`);
+    }
 
     fetchUsers = async (params = {}) => {
         this.setState({ loading: true });
@@ -217,7 +234,12 @@ class Index extends Component {
     };
 
     async componentWillMount() {
-        await this.fetchUsers();
+        const { location } = this.props;
+        const queryParams = _.has(location, 'search')
+            ? h.generateQueryParams(location.search)
+            : {};
+
+        await this.fetchUsers(queryParams);
     }
 
     render() {
