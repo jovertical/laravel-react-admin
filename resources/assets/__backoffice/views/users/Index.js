@@ -236,9 +236,10 @@ class Index extends Component {
             if (response.status === 200) {
                 this.setState({
                     loading: false,
-                    selectedRows: _.isString(selectedRows)
-                        ? selectedRows.split(',').map(val => parseInt(val))
-                        : [],
+                    selectedRows:
+                        selectedRows.toString().length > 0
+                            ? selectedRows.split(',').map(val => parseInt(val))
+                            : [],
                     pagination: response.data,
                     sorting: {
                         by: _.isNil(sortBy) ? this.state.sorting.by : sortBy,
@@ -400,7 +401,13 @@ class Index extends Component {
                                                         </span>
                                                     }
                                                 >
-                                                    <Avatar random>
+                                                    <Avatar
+                                                        suffix={h.generateColor(
+                                                            user.id
+                                                                .toString()
+                                                                .slice(-1),
+                                                        )}
+                                                    >
                                                         {user.firstname.substring(
                                                             0,
                                                             1,
