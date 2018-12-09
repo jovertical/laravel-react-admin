@@ -1,6 +1,6 @@
 import Auth from './views/auth/Auth';
 import Dashboard from './views/Dashboard';
-import Superusers from './views/superusers/Superusers';
+import Users from './views/users/Users';
 import NotFound from './views/errors/NotFound';
 
 export default [
@@ -19,9 +19,9 @@ export default [
     },
 
     {
-        name: 'backoffice.superusers.index',
-        path: '/superusers',
-        component: Superusers.Index,
+        name: 'backoffice.users.index',
+        path: '/users',
+        component: Users.Index,
         auth: true,
     },
 

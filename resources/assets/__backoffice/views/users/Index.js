@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import {
+    Button,
     Snackbar,
     Avatar,
     IconSeparator,
     AccessibleFakeButton,
+    Card,
+    TableCardHeader,
     DataTable,
     TableHeader,
     TableBody,
@@ -20,6 +23,7 @@ import MasterTemplate from '../templates/MasterTemplate';
 class Index extends Component {
     state = {
         loading: false,
+        selectedRows: [],
         pagination: {},
         sorting: {
             by: 'firstname',
@@ -61,7 +65,6 @@ class Index extends Component {
                 `/api/users/${this.state.activeResourceId}`,
                 {
                     params: {
-                        type: 'superuser',
                         sortBy: by,
                         sortType: type,
                         perPage: per_page,
@@ -104,7 +107,6 @@ class Index extends Component {
             const response = await axios.patch(
                 `/api/users/${this.state.activeResourceId}/restore`,
                 {
-                    type: 'superuser',
                     sortBy: by,
                     sortType: type,
                     perPage: per_page,
@@ -144,6 +146,33 @@ class Index extends Component {
         });
     };
 
+    rowSelectionToggledHandler = async row => {
+        await this.setState(({ selectedRows }) => {
+            if (row === 0) {
+                const { pagination } = this.state;
+
+                return {
+                    selectedRows:
+                        selectedRows.length !== parseInt(pagination.per_page)
+                            ? _.map(pagination.data, 'id')
+                            : [],
+                };
+            }
+
+            if (_.indexOf(selectedRows, row) < 0) {
+                selectedRows = [...selectedRows, row];
+            } else {
+                selectedRows = _.remove(selectedRows, value => value !== row);
+            }
+
+            return {
+                selectedRows,
+            };
+        });
+
+        this.updateQueryString();
+    };
+
     columnSortingToggledHandler = async column => {
         let { type } = this.state.sorting;
         const { per_page, current_page } = this.state.pagination;
@@ -176,13 +205,14 @@ class Index extends Component {
     };
 
     updateQueryString() {
-        const { pagination, sorting } = this.state;
+        const { selectedRows, pagination, sorting } = this.state;
         const { history, location } = this.props;
         const queryString = h.generateQueryString({
             perPage: pagination.per_page,
             page: pagination.current_page,
             sortBy: sorting.by,
             sortType: sorting.type,
+            selectedRows: selectedRows.join(','),
         });
 
         history.push(`${location.pathname}${queryString}`);
@@ -192,11 +222,10 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
-            const { perPage, page, sortBy, sortType } = params;
+            const { selectedRows, perPage, page, sortBy, sortType } = params;
 
             const response = await axios.get('/api/users', {
                 params: {
-                    type: 'superuser',
                     perPage,
                     page,
                     sortBy,
@@ -207,6 +236,10 @@ class Index extends Component {
             if (response.status === 200) {
                 this.setState({
                     loading: false,
+                    selectedRows:
+                        selectedRows.length > 0
+                            ? selectedRows.split(',').map(val => parseInt(val))
+                            : [],
                     pagination: response.data,
                     sorting: {
                         by: _.isNil(sortBy) ? this.state.sorting.by : sortBy,
@@ -243,94 +276,165 @@ class Index extends Component {
     }
 
     render() {
-        const { pagination, modalDialog, toasts, actions } = this.state;
+        const {
+            pagination,
+            selectedRows,
+            sorting,
+            modalDialog,
+            toasts,
+            actions,
+        } = this.state;
         const { data } = pagination;
 
         return (
             <div>
                 <MasterTemplate {...this.props}>
-                    {!this.state.loading ? (
-                        <DataTable baseId="users">
-                            <TableHeader>
-                                <TableRow selectable={false}>
-                                    <TableColumn
-                                        grow
-                                        sorted={
-                                            this.state.sorting.type ===
-                                                'DESC' &&
-                                            this.state.sorting.by ===
-                                                'firstname'
-                                        }
-                                        onClick={() =>
-                                            this.columnSortingToggledHandler(
-                                                'firstname',
-                                            )
-                                        }
-                                    >
-                                        Name
-                                    </TableColumn>
-                                    <TableColumn
-                                        sorted={
-                                            this.state.sorting.type ===
-                                                'DESC' &&
-                                            this.state.sorting.by === 'email'
-                                        }
-                                        onClick={() =>
-                                            this.columnSortingToggledHandler(
-                                                'email',
-                                            )
-                                        }
-                                    >
-                                        Email
-                                    </TableColumn>
-                                    <TableColumn />
-                                </TableRow>
-                            </TableHeader>
+                    <Card className="MT-Content">
+                        <TableCardHeader
+                            title="List of Users"
+                            visible={selectedRows.length > 0}
+                            contextualTitle={`${selectedRows.length} item${
+                                selectedRows.length > 1 ? 's' : ''
+                            } selected`}
+                            actions={[
+                                <Button
+                                    icon
+                                    key="delete"
+                                    onClick={() => console.log('deleting')}
+                                    tooltipLabel="Delete selected rows"
+                                    tooltipDelay={300}
+                                    tooltipPosition="left"
+                                >
+                                    delete
+                                </Button>,
+                            ]}
+                        />
 
-                            <TableBody>
-                                {data.map(user => (
-                                    <TableRow key={user.id} selectable={false}>
-                                        <TableColumn>
-                                            <AccessibleFakeButton
-                                                component={IconSeparator}
-                                                iconBefore
-                                                label={
-                                                    <span>
-                                                        {`${user.firstname} ${
-                                                            user.lastname
-                                                        }`}
-                                                    </span>
-                                                }
-                                            >
-                                                <Avatar random>
-                                                    {user.firstname.substring(
-                                                        0,
-                                                        1,
-                                                    )}
-                                                </Avatar>
-                                            </AccessibleFakeButton>
+                        {!this.state.loading ? (
+                            <DataTable baseId="users">
+                                <TableHeader>
+                                    <TableRow
+                                        selectable
+                                        selected={
+                                            selectedRows.length ===
+                                            parseInt(pagination.data.length)
+                                        }
+                                        onCheckboxClick={() =>
+                                            this.rowSelectionToggledHandler(0)
+                                        }
+                                    >
+                                        <TableColumn
+                                            grow
+                                            sorted={
+                                                sorting.type === 'DESC' &&
+                                                sorting.by === 'firstname'
+                                            }
+                                            onClick={() =>
+                                                this.columnSortingToggledHandler(
+                                                    'firstname',
+                                                )
+                                            }
+                                        >
+                                            Name
                                         </TableColumn>
 
-                                        <TableColumn>{user.email}</TableColumn>
+                                        <TableColumn
+                                            sorted={
+                                                sorting.type === 'DESC' &&
+                                                sorting.by === 'email'
+                                            }
+                                            onClick={() =>
+                                                this.columnSortingToggledHandler(
+                                                    'email',
+                                                )
+                                            }
+                                        >
+                                            Email
+                                        </TableColumn>
 
-                                        <ActionMenu
-                                            resourceId={user.id}
-                                            actions={actions}
-                                        />
+                                        <TableColumn
+                                            sorted={
+                                                sorting.type === 'DESC' &&
+                                                sorting.by === 'type'
+                                            }
+                                            onClick={() =>
+                                                this.columnSortingToggledHandler(
+                                                    'type',
+                                                )
+                                            }
+                                        >
+                                            Type
+                                        </TableColumn>
+
+                                        <TableColumn />
                                     </TableRow>
-                                ))}
-                            </TableBody>
+                                </TableHeader>
 
-                            <TablePagination
-                                rows={pagination.total}
-                                onPagination={this.paginationChangedHandler}
-                                page={parseInt(pagination.current_page)}
-                                rowsPerPage={parseInt(pagination.per_page)}
-                            />
-                        </DataTable>
-                    ) : (
-                        <Loading />
-                    )}
+                                <TableBody>
+                                    {data.map(user => (
+                                        <TableRow
+                                            key={user.id}
+                                            selectable
+                                            selected={
+                                                _.indexOf(
+                                                    selectedRows,
+                                                    parseInt(user.id),
+                                                ) >= 0
+                                            }
+                                            onCheckboxClick={() =>
+                                                this.rowSelectionToggledHandler(
+                                                    user.id,
+                                                )
+                                            }
+                                        >
+                                            <TableColumn>
+                                                <AccessibleFakeButton
+                                                    component={IconSeparator}
+                                                    iconBefore
+                                                    label={
+                                                        <span>
+                                                            {`${
+                                                                user.firstname
+                                                            } ${user.lastname}`}
+                                                        </span>
+                                                    }
+                                                >
+                                                    <Avatar random>
+                                                        {user.firstname.substring(
+                                                            0,
+                                                            1,
+                                                        )}
+                                                    </Avatar>
+                                                </AccessibleFakeButton>
+                                            </TableColumn>
+
+                                            <TableColumn>
+                                                {user.email}
+                                            </TableColumn>
+
+                                            <TableColumn>
+                                                {_.startCase(user.type)}
+                                            </TableColumn>
+
+                                            <ActionMenu
+                                                resourceId={user.id}
+                                                actions={actions}
+                                            />
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+
+                                <TablePagination
+                                    rows={pagination.total}
+                                    onPagination={this.paginationChangedHandler}
+                                    page={parseInt(pagination.current_page)}
+                                    rowsPerPage={parseInt(pagination.per_page)}
+                                />
+                            </DataTable>
+                        ) : (
+                            <Loading />
+                        )}
+                    </Card>
                 </MasterTemplate>
 
                 {modalDialog.visible ? (

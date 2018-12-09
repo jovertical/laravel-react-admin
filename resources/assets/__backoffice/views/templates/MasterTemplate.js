@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route } from 'react-router-dom';
-import { NavigationDrawer, FontIcon, ListItem, Card } from 'react-md';
+import { NavigationDrawer, FontIcon, ListItem } from 'react-md';
 
 import APP from '../../../config/app';
 import Loading from '../../ui/Loading';
@@ -65,7 +65,7 @@ class MasterTemplate extends PureComponent {
                 {this.props.pageProps.loading ? (
                     <Loading />
                 ) : (
-                    <Card className="MT-Content">{this.props.children}</Card>
+                    <div>{this.props.children}</div>
                 )}
             </NavigationDrawer>
         );
@@ -80,8 +80,8 @@ const navItems = [
     },
 
     {
-        label: 'Superusers',
-        to: '/superusers',
+        label: 'Users',
+        to: '/users',
         icon: 'group',
     },
 ];

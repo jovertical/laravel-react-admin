@@ -41,7 +41,7 @@ const ActionMenu = props => {
 };
 
 ActionMenu.propTypes = {
-    actions: PropTypes.array,
+    actions: PropTypes.array.isRequired,
     style: PropTypes.object,
 };
 

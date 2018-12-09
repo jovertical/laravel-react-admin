@@ -46,11 +46,15 @@ class UsersController extends Controller
 
     protected function paginatedQuery(Request $request)
     {
-        return User::where('type', $request->input('type'))
-            ->orderBy(
+        $users = User::orderBy(
                 $request->input('sortBy') ?? 'firstname',
                 $request->input('sortType') ?? 'ASC'
-            )
-            ->paginate($request->input('perPage') ?? 10);
+            );
+
+        if ($request->input('type')) {
+            $users->where('type', $request->input('type'));
+        }
+
+        return $users->paginate($request->input('perPage') ?? 10);
     }
 }

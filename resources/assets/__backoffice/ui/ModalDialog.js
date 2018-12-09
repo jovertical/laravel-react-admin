@@ -31,9 +31,9 @@ const ModalDialog = props => {
 };
 
 ModalDialog.propTypes = {
-    visible: PropTypes.bool,
-    title: PropTypes.string,
-    actions: PropTypes.array,
+    visible: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    actions: PropTypes.array.isRequired,
     children: PropTypes.any,
 };
 
