@@ -290,7 +290,7 @@ class Index extends Component {
 
         return (
             <div>
-                <MasterTemplate {...this.props}>
+                <MasterTemplate {...this.props} pageTitle="Users">
                     <Card className="MT-Content">
                         <TableCardHeader
                             title="List of Users"
@@ -405,7 +405,7 @@ class Index extends Component {
                                                         suffix={h.generateColor(
                                                             user.id
                                                                 .toString()
-                                                                .slice(-1),
+                                                                .slice(1),
                                                         )}
                                                     >
                                                         {user.firstname.substring(
