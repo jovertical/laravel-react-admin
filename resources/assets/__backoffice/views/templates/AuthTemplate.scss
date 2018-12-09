@@ -26,6 +26,17 @@
     text-align: center;
 }
 
+.AT-Form-Logo-Wrapper {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.AT-Form-Logo {
+    width: 12rem;
+    height: 6rem;
+}
+
 .AT-Form-Group {
     display: flex;
     flex-direction: column;
