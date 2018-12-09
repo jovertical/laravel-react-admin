@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {
-    FontIcon,
-    MenuButtonColumn,
     Snackbar,
     Avatar,
     IconSeparator,
@@ -16,6 +14,7 @@ import {
 
 import Loading from '../../ui/Loading';
 import ModalDialog from '../../ui/ModalDialog';
+import ActionMenu from '../../ui/ActionMenu';
 import MasterTemplate from '../templates/MasterTemplate';
 
 class Index extends Component {
@@ -33,6 +32,22 @@ class Index extends Component {
             content: '',
         },
         toasts: [],
+        actions: [
+            {
+                icon: 'info',
+                label: 'More Info',
+                name: 'show',
+                onClick: () => console.log('Showing...'),
+            },
+            { divider: true },
+            {
+                icon: 'delete',
+                type: 'error',
+                label: 'Delete',
+                name: 'delete',
+                onClick: () => this.deleteUserClickedHandler(),
+            },
+        ],
     };
 
     deleteUserModalConfirmedHandler = async () => {
@@ -206,7 +221,7 @@ class Index extends Component {
     }
 
     render() {
-        const { pagination, sorting, modalDialog, toasts } = this.state;
+        const { pagination, modalDialog, toasts, actions } = this.state;
         const { data } = pagination;
 
         return (
@@ -277,12 +292,8 @@ class Index extends Component {
                                         <TableColumn>{user.email}</TableColumn>
 
                                         <ActionMenu
-                                            id={user.id}
-                                            delete={() =>
-                                                this.deleteUserClickedHandler(
-                                                    user.id,
-                                                )
-                                            }
+                                            resourceId={user.id}
+                                            actions={actions}
                                         />
                                     </TableRow>
                                 ))}
@@ -300,23 +311,25 @@ class Index extends Component {
                     )}
                 </MasterTemplate>
 
-                <ModalDialog
-                    title={modalDialog.title}
-                    visible={modalDialog.visible}
-                    confirmAction={this.deleteUserModalConfirmedHandler}
-                    cancelAction={() =>
-                        this.setState(prevState => {
-                            return {
-                                modalDialog: {
-                                    ...prevState.modalDialog,
-                                    visible: false,
-                                },
-                            };
-                        })
-                    }
-                >
-                    {modalDialog.content}
-                </ModalDialog>
+                {modalDialog.visible ? (
+                    <ModalDialog
+                        title={modalDialog.title}
+                        visible
+                        confirmAction={this.deleteUserModalConfirmedHandler}
+                        cancelAction={() =>
+                            this.setState(prevState => {
+                                return {
+                                    modalDialog: {
+                                        ...prevState.modalDialog,
+                                        visible: false,
+                                    },
+                                };
+                            })
+                        }
+                    >
+                        {modalDialog.content}
+                    </ModalDialog>
+                ) : null}
 
                 {toasts.length > 0 ? (
                     <Snackbar
@@ -340,58 +353,5 @@ class Index extends Component {
         );
     }
 }
-
-const actions = [
-    {
-        leftIcon: <FontIcon className="Action-Menu-Icon">info</FontIcon>,
-        primaryText: <span>More Info</span>,
-        name: 'show',
-    },
-    { divider: true },
-    {
-        leftIcon: (
-            <FontIcon className="Action-Menu-Icon md-text--error">
-                delete
-            </FontIcon>
-        ),
-        primaryText: <span className="md-text--error">Delete</span>,
-        name: 'delete',
-    },
-];
-
-const ActionMenu = props => {
-    const mappedActions = actions.map(action => {
-        let onClickAction;
-
-        switch (action.name) {
-            case 'show':
-                onClickAction = () => console.log(`Showing: ${props.id}`);
-
-                break;
-
-            case 'delete':
-                onClickAction = props.delete;
-
-                break;
-        }
-
-        return {
-            ...action,
-            onClick: onClickAction,
-        };
-    });
-
-    return (
-        <MenuButtonColumn
-            id={props.id}
-            style={{ ...props.style, maxWidth: '1rem' }}
-            icon
-            menuItems={mappedActions}
-            listClassName="tables__with-menus__kebab-list"
-        >
-            <FontIcon>more_vert</FontIcon>
-        </MenuButtonColumn>
-    );
-};
 
 export default Index;
