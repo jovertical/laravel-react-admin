@@ -236,10 +236,9 @@ class Index extends Component {
             if (response.status === 200) {
                 this.setState({
                     loading: false,
-                    selectedRows:
-                        selectedRows.length > 0
-                            ? selectedRows.split(',').map(val => parseInt(val))
-                            : [],
+                    selectedRows: _.isString(selectedRows)
+                        ? selectedRows.split(',').map(val => parseInt(val))
+                        : [],
                     pagination: response.data,
                     sorting: {
                         by: _.isNil(sortBy) ? this.state.sorting.by : sortBy,
@@ -254,7 +253,9 @@ class Index extends Component {
                 return {
                     toasts: [
                         {
-                            text: response.statusText,
+                            text: _.has(response, 'statusText')
+                                ? response.statusText
+                                : 'Error fetching data',
                             action: 'Retry',
                             autohide: true,
                             clicked: this.fetchUsers,
