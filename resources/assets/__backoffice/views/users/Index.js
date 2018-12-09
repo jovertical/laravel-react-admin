@@ -237,7 +237,7 @@ class Index extends Component {
                 this.setState({
                     loading: false,
                     selectedRows:
-                        selectedRows.toString().length > 0
+                        selectedRows > 0
                             ? selectedRows.split(',').map(val => parseInt(val))
                             : [],
                     pagination: response.data,

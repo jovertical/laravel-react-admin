@@ -4,6 +4,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import Loading from './ui/Loading';
 import Navigator from './core/Navigator';
 import ROUTES from './routes';
+import './App.scss';
 
 class App extends Component {
     state = {
@@ -66,7 +67,11 @@ class App extends Component {
 
     render() {
         if (this.state.loading) {
-            return <Loading />;
+            return (
+                <div className="App-Wrapper">
+                    <Loading />
+                </div>
+            );
         }
 
         return (

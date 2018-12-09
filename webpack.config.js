@@ -122,7 +122,10 @@ module.exports = {
                     title:
                         errors.length > 0 ? 'Build Failed' : 'Build Successful',
                     message: `Completed in ${time}ms`,
-                    icon: null,
+                    icon: path.resolve(
+                        __dirname,
+                        './resources/assets/assets/img/logo-1.png',
+                    ),
                     sound: true,
                     wait: true,
                 });
