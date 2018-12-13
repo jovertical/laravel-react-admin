@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavigationDrawer } from 'react-md';
 
-import APP from '../../../config/app';
-import Loading from '../../ui/Loading';
-import NavItemLink from '../../ui/NavItemLink';
+import { APP } from '../../../config';
+import { Loading, NavItemLink } from '../../ui';
 import './MasterTemplate.scss';
 
 const MasterTemplate = props => {

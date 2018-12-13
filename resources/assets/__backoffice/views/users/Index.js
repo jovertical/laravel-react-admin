@@ -15,10 +15,8 @@ import {
     TablePagination,
 } from 'react-md';
 
-import Loading from '../../ui/Loading';
-import ModalDialog from '../../ui/ModalDialog';
-import ActionMenu from '../../ui/ActionMenu';
-import MasterTemplate from '../templates/MasterTemplate';
+import { ActionMenu, Loading, Modal } from '../../ui';
+import { Templates } from '../';
 
 class Index extends Component {
     state = {
@@ -30,7 +28,7 @@ class Index extends Component {
             type: 'ASC',
         },
         activeResourceId: 0,
-        modalDialog: {
+        modal: {
             visible: false,
             title: '',
             content: '',
@@ -77,8 +75,8 @@ class Index extends Component {
                 this.setState(prevState => {
                     return {
                         loading: false,
-                        modalDialog: {
-                            ...prevState.modalDialog,
+                        modal: {
+                            ...prevState.modal,
                             visible: false,
                         },
                         pagination: response.data,
@@ -137,7 +135,7 @@ class Index extends Component {
     deleteUserClickedHandler = id => {
         this.setState({
             activeResourceId: id,
-            modalDialog: {
+            modal: {
                 visible: true,
                 title: 'You are deleting a resource.',
                 content:
@@ -282,7 +280,7 @@ class Index extends Component {
             pagination,
             selectedRows,
             sorting,
-            modalDialog,
+            modal,
             toasts,
             actions,
         } = this.state;
@@ -290,7 +288,7 @@ class Index extends Component {
 
         return (
             <div>
-                <MasterTemplate {...this.props} pageTitle="Users">
+                <Templates.Master {...this.props} pageTitle="Users">
                     <Card className="MT-Content">
                         <TableCardHeader
                             title="List of Users"
@@ -443,26 +441,26 @@ class Index extends Component {
                             <Loading />
                         )}
                     </Card>
-                </MasterTemplate>
+                </Templates.Master>
 
-                {modalDialog.visible ? (
-                    <ModalDialog
-                        title={modalDialog.title}
+                {modal.visible ? (
+                    <Modal.Confirm
+                        title={modal.title}
                         visible
                         confirmAction={this.deleteUserModalConfirmedHandler}
                         cancelAction={() =>
                             this.setState(prevState => {
                                 return {
-                                    modalDialog: {
-                                        ...prevState.modalDialog,
+                                    modal: {
+                                        ...prevState.modal,
                                         visible: false,
                                     },
                                 };
                             })
                         }
                     >
-                        {modalDialog.content}
-                    </ModalDialog>
+                        {modal.content}
+                    </Modal.Confirm>
                 ) : null}
 
                 {toasts.length > 0 ? (

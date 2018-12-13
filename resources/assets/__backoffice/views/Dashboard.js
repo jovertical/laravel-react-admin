@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import MasterTemplate from './templates/MasterTemplate';
+import { Templates } from './';
 
 class Dashboard extends Component {
     render() {
         return (
-            <MasterTemplate {...this.props} pageTitle="Dashboard">
+            <Templates.Master {...this.props} pageTitle="Dashboard">
                 Dashboard
-            </MasterTemplate>
+            </Templates.Master>
         );
     }
 }

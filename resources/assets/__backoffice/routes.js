@@ -1,7 +1,4 @@
-import Auth from './views/auth/Auth';
-import Dashboard from './views/Dashboard';
-import Users from './views/users/Users';
-import NotFound from './views/errors/NotFound';
+import { Auth, Dashboard, Users, Errors } from './views';
 
 export default [
     {
@@ -27,6 +24,6 @@ export default [
 
     {
         name: 'backoffice.errors.not-found',
-        component: NotFound,
+        component: Errors.NotFound,
     },
 ];

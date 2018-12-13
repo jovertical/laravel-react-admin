@@ -1,10 +1,11 @@
 import React from 'react';
-import ErrorTemplate from '../templates/ErrorTemplate';
+
+import { Templates } from '../';
 
 const NotFound = () => (
-    <ErrorTemplate>
+    <Templates.Error>
         <h1>Whooops! We couldn't find what you're looking for :(</h1>
-    </ErrorTemplate>
+    </Templates.Error>
 );
 
 export default NotFound;

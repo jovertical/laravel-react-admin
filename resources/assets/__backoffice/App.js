@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
-import Loading from './ui/Loading';
-import Navigator from './core/Navigator';
+import { Loading } from './ui';
+import { Navigator } from './core';
 import ROUTES from './routes';
 import './App.scss';
 

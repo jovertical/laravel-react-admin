@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { TextField, Button } from 'react-md';
 
-import AuthTemplate from '../templates/AuthTemplate';
+import { Templates } from '../';
 
 class SignIn extends Component {
     state = {
@@ -52,7 +52,7 @@ class SignIn extends Component {
 
     render() {
         return (
-            <AuthTemplate
+            <Templates.Auth
                 title="Sign in"
                 subTitle="with your Account"
                 loading={this.state.loading}
@@ -113,7 +113,7 @@ class SignIn extends Component {
                         </div>
                     </div>
                 </form>
-            </AuthTemplate>
+            </Templates.Auth>
         );
     }
 }
