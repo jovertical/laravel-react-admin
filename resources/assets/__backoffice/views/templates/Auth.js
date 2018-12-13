@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardTitle, LinearProgress } from 'react-md';
 
-import './AuthTemplate.scss';
+import './Auth.scss';
 import logo from '../../../assets/img/logo-2.png';
 
-const AuthTemplate = props => (
+const Auth = props => (
     <div className="AT-Container">
         <div className="AT-Content">
             <div className="AT-Content-Wrapper">
@@ -38,10 +38,10 @@ const AuthTemplate = props => (
     </div>
 );
 
-AuthTemplate.propTypes = {
+Auth.propTypes = {
     loading: PropTypes.bool,
     title: PropTypes.string,
     subTitle: PropTypes.string,
 };
 
-export default AuthTemplate;
+export default Auth;

@@ -1,6 +1,6 @@
-import AuthTemplate from './templates/AuthTemplate';
-import ErrorTemplate from './templates/ErrorTemplate';
-import MasterTemplate from './templates/MasterTemplate';
+import AuthTemplate from './templates/Auth';
+import ErrorTemplate from './templates/Error';
+import MasterTemplate from './templates/Master';
 
 import AuthSignin from './auth/SignIn';
 import Dashboard from './Dashboard';

@@ -1,10 +1,10 @@
 import React from 'react';
-import './ErrorTemplate.scss';
+import './Error.scss';
 
-const ErrorTemplate = props => (
+const Error = props => (
     <div className="ET-Container">
         <div className="ET-Content">{props.children}</div>
     </div>
 );
 
-export default ErrorTemplate;
+export default Error;

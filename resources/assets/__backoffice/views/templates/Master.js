@@ -4,9 +4,9 @@ import { NavigationDrawer } from 'react-md';
 
 import { APP } from '../../../config';
 import { Loading, NavItemLink } from '../../ui';
-import './MasterTemplate.scss';
+import './Master.scss';
 
-const MasterTemplate = props => {
+const Master = props => {
     const navItems = [
         {
             label: 'Dashboard',
@@ -41,9 +41,9 @@ const MasterTemplate = props => {
     );
 };
 
-MasterTemplate.propTypes = {
+Master.propTypes = {
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
 };
 
-export default MasterTemplate;
+export default Master;
