@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationDrawer } from 'react-md';
+import { NavigationDrawer, MenuButton, Button } from 'react-md';
 
 import { _toNavItem } from '../../../utils/Navigation';
 import { APP } from '../../../config';
@@ -36,9 +36,8 @@ const Master = props => {
     return (
         <NavigationDrawer
             drawerTitle={APP.name}
-            toolbarTitle={pageTitle}
-            mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY_MINI}
-            tabletDrawerType={NavigationDrawer.DrawerTypes.PERSISTENT_MINI}
+            mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
+            tabletDrawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
             desktopDrawerType={NavigationDrawer.DrawerTypes.FULL_HEIGHT}
             contentId="MT-Content"
             contentClassName="MT-Content md-grid"
@@ -49,6 +48,22 @@ const Master = props => {
 
                 return <NavItemLink {...route} />;
             })}
+            toolbarTitle={pageTitle}
+            toolbarActions={
+                <div>
+                    <Button id="TA-Notifications" icon>
+                        notifications
+                    </Button>
+
+                    <MenuButton
+                        id="TA-Account"
+                        icon
+                        menuItems={['Profile', 'Sign out']}
+                    >
+                        more_vert
+                    </MenuButton>
+                </div>
+            }
         >
             {pageProps.loading ? <Loading /> : <div>{props.children}</div>}
         </NavigationDrawer>
