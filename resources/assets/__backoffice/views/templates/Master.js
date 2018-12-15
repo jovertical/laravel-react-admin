@@ -2,25 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavigationDrawer } from 'react-md';
 
+import { _toNavItem } from '../../../utils/Navigation';
 import { APP } from '../../../config';
 import { Loading, NavItemLink } from '../../ui';
 import './Master.scss';
 
+const navigationRoutes = [
+    {
+        label: 'Dashboard',
+        to: '/',
+        icon: 'home',
+    },
+
+    {
+        label: 'Resources',
+        to: 'resources',
+        icon: 'widgets',
+        routes: [
+            {
+                key: 'users',
+                label: 'Users',
+                to: '/resources/users',
+            },
+        ],
+    },
+];
+
+const navItems = navigationRoutes.map(route => _toNavItem(route));
+
 const Master = props => {
-    const navItems = [
-        {
-            label: 'Dashboard',
-            to: '/',
-            icon: 'dashboard',
-        },
-
-        {
-            label: 'Users',
-            to: '/users',
-            icon: 'group',
-        },
-    ];
-
     const { pageTitle, pageProps } = props;
 
     return (
@@ -32,9 +42,13 @@ const Master = props => {
             desktopDrawerType={NavigationDrawer.DrawerTypes.FULL_HEIGHT}
             contentId="MT-Content"
             contentClassName="MT-Content md-grid"
-            navItems={navItems.map(navItem => (
-                <NavItemLink {...navItem} key={navItem.to} />
-            ))}
+            navItems={navItems.map(({ divider, subheader, ...route }) => {
+                if (divider || subheader) {
+                    return { divider, subheader, ...route };
+                }
+
+                return <NavItemLink {...route} />;
+            })}
         >
             {pageProps.loading ? <Loading /> : <div>{props.children}</div>}
         </NavigationDrawer>

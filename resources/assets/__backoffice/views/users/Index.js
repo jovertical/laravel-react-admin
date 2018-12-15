@@ -15,6 +15,8 @@ import {
     TablePagination,
 } from 'react-md';
 
+import { _color } from '../../../utils/Random';
+import { _queryParams, _queryString } from '../../../utils/URL';
 import { ActionMenu, Loading, Modal } from '../../ui';
 import { Templates } from '../';
 
@@ -205,7 +207,7 @@ class Index extends Component {
     updateQueryString() {
         const { selectedRows, pagination, sorting } = this.state;
         const { history, location } = this.props;
-        const queryString = h.generateQueryString({
+        const queryString = _queryString({
             perPage: pagination.per_page,
             page: pagination.current_page,
             sortBy: sorting.by,
@@ -269,7 +271,7 @@ class Index extends Component {
     async componentWillMount() {
         const { location } = this.props;
         const queryParams = _.has(location, 'search')
-            ? h.generateQueryParams(location.search)
+            ? _queryParams(location.search)
             : {};
 
         await this.fetchUsers(queryParams);
@@ -400,7 +402,7 @@ class Index extends Component {
                                                     }
                                                 >
                                                     <Avatar
-                                                        suffix={h.generateColor(
+                                                        suffix={_color(
                                                             user.id
                                                                 .toString()
                                                                 .slice(1),

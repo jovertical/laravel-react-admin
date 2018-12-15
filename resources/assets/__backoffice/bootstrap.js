@@ -2,8 +2,6 @@ import lodash from 'lodash';
 import axios from 'axios';
 import moment from 'moment';
 
-import { Helper } from '../utils';
-
 /**
  * We registered lodash so that we don't have to import it all the time.
  */
@@ -30,8 +28,3 @@ if (token) {
  * We registered moment.js so that we don't have to import it all the time.
  */
 window.moment = moment;
-
-/**
- * We registered our custom Helpers so that we don't have to import it all the time.
- */
-window.h = Helper;

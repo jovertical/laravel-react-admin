@@ -17,7 +17,7 @@ export default [
 
     {
         name: 'backoffice.users.index',
-        path: '/users',
+        path: '/resources/users',
         component: Users.Index,
         auth: true,
     },
