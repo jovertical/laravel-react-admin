@@ -18,30 +18,21 @@ class App extends Component {
      * Fetch the Authentication Token.
      */
     fetchAuthToken = async () => {
-        this.setState({ loading: true });
-
         try {
             const response = await axios.post('/api/auth/token', {
                 uid: window.localStorage.getItem('uid'),
             });
 
             if (response.status === 200) {
-                this.setState({
-                    loading: false,
-                    authToken: response.data,
-                });
+                this.setState({ authToken: response.data });
             }
-        } catch (error) {
-            this.setState({ loading: false });
-        }
+        } catch (error) {}
     };
 
     /**
      * Fetch the authenticated user.
      */
     fetchAuthUser = async () => {
-        this.setState({ loading: true });
-
         try {
             const response = await axios.post(
                 '/api/auth/user',
@@ -55,14 +46,11 @@ class App extends Component {
 
             if (response.status === 200) {
                 this.setState({
-                    loading: false,
                     authenticated: true,
                     user: response.data,
                 });
             }
-        } catch (error) {
-            this.setState({ loading: false });
-        }
+        } catch (error) {}
     };
 
     /**
@@ -96,15 +84,19 @@ class App extends Component {
     };
 
     async componentWillMount() {
+        this.setState({ loading: true });
+
         await this.fetchAuthToken();
 
-        if (!_.isEmpty(this.state.authToken)) {
-            await this.fetchAuthUser();
-        }
+        await this.fetchAuthUser();
+
+        this.setState({ loading: false });
     }
 
     render() {
-        if (this.state.loading) {
+        const { loading } = this.state;
+
+        if (loading) {
             return (
                 <div className="App-Wrapper">
                     <Loading />
@@ -118,7 +110,7 @@ class App extends Component {
                     pageProps={{
                         ...this.state,
                         routes: ROUTES,
-                        signoutHandler: this.signoutHandler,
+                        // signoutHandler: this.signoutHandler,
                     }}
                 />
             </Router>
