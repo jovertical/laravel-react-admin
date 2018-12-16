@@ -1,5 +1,6 @@
 .MT-Content {
     margin: 1.5rem;
+    min-height: 75vh;
 }
 
 .MT-Toolbar--Actions .--Account-Menu-Items {
@@ -17,7 +18,6 @@
 
 @media only screen and (max-width: 768px) {
     .MT-Content {
-        min-height: 75vh;
         margin: 0.25rem;
     }
 }

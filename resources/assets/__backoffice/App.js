@@ -17,22 +17,31 @@ class App extends Component {
     /**
      * Fetch the Authentication Token.
      */
-    async fetchAuthToken() {
+    fetchAuthToken = async () => {
+        this.setState({ loading: true });
+
         try {
             const response = await axios.post('/api/auth/token', {
                 uid: window.localStorage.getItem('uid'),
             });
 
             if (response.status === 200) {
-                this.setState({ authToken: response.data });
+                this.setState({
+                    loading: false,
+                    authToken: response.data,
+                });
             }
-        } catch (error) {}
-    }
+        } catch (error) {
+            this.setState({ loading: false });
+        }
+    };
 
     /**
      * Fetch the authenticated user.
      */
-    async fetchAuthUser() {
+    fetchAuthUser = async () => {
+        this.setState({ loading: true });
+
         try {
             const response = await axios.post(
                 '/api/auth/user',
@@ -46,23 +55,52 @@ class App extends Component {
 
             if (response.status === 200) {
                 this.setState({
+                    loading: false,
                     authenticated: true,
                     user: response.data,
                 });
             }
-        } catch (error) {}
-    }
+        } catch (error) {
+            this.setState({ loading: false });
+        }
+    };
 
-    async componentWillMount() {
+    /**
+     * Sign out user.
+     */
+    signoutHandler = async () => {
         this.setState({ loading: true });
 
+        try {
+            const response = await axios.post(
+                '/api/auth/signout',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.state.authToken}`,
+                    },
+                },
+            );
+
+            if (response.status === 200) {
+                // remove uid stored in localStorage.
+                await localStorage.removeItem('uid');
+
+                this.setState({
+                    loading: false,
+                    authenticated: false,
+                    user: {},
+                });
+            }
+        } catch (error) {}
+    };
+
+    async componentWillMount() {
         await this.fetchAuthToken();
 
         if (!_.isEmpty(this.state.authToken)) {
             await this.fetchAuthUser();
         }
-
-        this.setState({ loading: false });
     }
 
     render() {
@@ -76,7 +114,13 @@ class App extends Component {
 
         return (
             <Router>
-                <Navigator pageProps={{ ...this.state, routes: ROUTES }} />
+                <Navigator
+                    pageProps={{
+                        ...this.state,
+                        routes: ROUTES,
+                        signoutHandler: this.signoutHandler,
+                    }}
+                />
             </Router>
         );
     }

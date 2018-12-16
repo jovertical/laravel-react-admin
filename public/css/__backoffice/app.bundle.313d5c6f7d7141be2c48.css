@@ -68,7 +68,8 @@
   justify-content: center; }
 
 .MT-Content {
-  margin: 1.5rem; }
+  margin: 1.5rem;
+  min-height: 75vh; }
 
 .MT-Toolbar--Actions .\--Account-Menu-Items {
   width: 16rem; }
@@ -82,7 +83,6 @@
 
 @media only screen and (max-width: 768px) {
   .MT-Content {
-    min-height: 75vh;
     margin: 0.25rem; } }
 
 .App-Wrapper {

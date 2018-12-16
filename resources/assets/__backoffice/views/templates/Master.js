@@ -39,7 +39,7 @@ const navItems = navigationRoutes.map(route => _toNavItem(route));
 
 const Master = props => {
     const { pageTitle, pageProps } = props;
-    const { user } = pageProps;
+    const { user, signoutHandler } = pageProps;
 
     return (
         <NavigationDrawer
@@ -97,7 +97,7 @@ const Master = props => {
                             {
                                 leftIcon: <FontIcon>exit_to_app</FontIcon>,
                                 primaryText: 'Sign out',
-                                onClick: () => alert('signing you out!'),
+                                onClick: signoutHandler,
                             },
                         ]}
                         listClassName="--Account-Menu-Items"
