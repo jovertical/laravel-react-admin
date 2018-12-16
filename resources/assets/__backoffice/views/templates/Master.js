@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavigationDrawer, MenuButton, Button } from 'react-md';
+import {
+    Avatar,
+    Button,
+    FontIcon,
+    MenuButton,
+    NavigationDrawer,
+} from 'react-md';
 
+import { _color } from '../../../utils/Random';
 import { _toNavItem } from '../../../utils/Navigation';
 import { APP } from '../../../config';
 import { Loading, NavItemLink } from '../../ui';
@@ -32,6 +39,7 @@ const navItems = navigationRoutes.map(route => _toNavItem(route));
 
 const Master = props => {
     const { pageTitle, pageProps } = props;
+    const { user } = pageProps;
 
     return (
         <NavigationDrawer
@@ -50,20 +58,55 @@ const Master = props => {
             })}
             toolbarTitle={pageTitle}
             toolbarActions={
-                <div>
-                    <Button id="TA-Notifications" icon>
+                <div className="MT-Toolbar--Actions">
+                    <Button id="--Notifications" className="--Action" icon>
                         notifications
                     </Button>
 
                     <MenuButton
-                        id="TA-Account"
+                        id="--Account"
+                        className="--Action"
                         icon
-                        menuItems={['Profile', 'Sign out']}
+                        adjusted="false"
+                        simplifiedMenu={false}
+                        anchor={{
+                            x: 'left',
+                            y: 'overlap',
+                        }}
+                        menuItems={[
+                            {
+                                leftIcon: (
+                                    <Avatar
+                                        suffix={_color(
+                                            user.id.toString().slice(1),
+                                        )}
+                                        className="--Avatar-Circle"
+                                    >
+                                        {user.firstname.substring(0, 1)}
+                                    </Avatar>
+                                ),
+                                primaryText: `${user.firstname} ${
+                                    user.lastname
+                                }`,
+                                secondaryText: user.email,
+                                className: '--Profile',
+                                onClick: () =>
+                                    alert(`Hello ${user.firstname}!`),
+                            },
+
+                            {
+                                leftIcon: <FontIcon>exit_to_app</FontIcon>,
+                                primaryText: 'Sign out',
+                                onClick: () => alert('signing you out!'),
+                            },
+                        ]}
+                        listClassName="--Account-Menu-Items"
                     >
                         more_vert
                     </MenuButton>
                 </div>
             }
+            toolbarClassName="MT-Toolbar"
         >
             {pageProps.loading ? <Loading /> : <div>{props.children}</div>}
         </NavigationDrawer>

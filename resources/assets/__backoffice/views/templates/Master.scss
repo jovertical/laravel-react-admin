@@ -1,10 +1,23 @@
 .MT-Content {
-    min-height: 75vh;
-    margin: 0.25rem;
+    margin: 1.5rem;
 }
 
-@media only screen and (min-width: 768px) {
+.MT-Toolbar--Actions .--Account-Menu-Items {
+    width: 16rem;
+}
+
+.MT-Toolbar--Actions .--Account-Menu-Items .--Profile {
+    background-color: #eeeeee;
+    margin: -0.3rem 0rem 0.5rem 0rem;
+}
+
+.MT-Toolbar--Actions .--Account-Menu-Items .--Profile .--Avatar-Circle {
+    margin: -0.75rem -1.5rem 0rem 0rem;
+}
+
+@media only screen and (max-width: 768px) {
     .MT-Content {
-        margin: 1.5rem;
+        min-height: 75vh;
+        margin: 0.25rem;
     }
 }
