@@ -110,7 +110,7 @@ class App extends Component {
                     pageProps={{
                         ...this.state,
                         routes: ROUTES,
-                        // signoutHandler: this.signoutHandler,
+                        signoutHandler: this.signoutHandler,
                     }}
                 />
             </Router>
