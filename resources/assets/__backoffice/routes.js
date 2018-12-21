@@ -1,4 +1,4 @@
-import { Auth, Dashboard, Users, Errors } from './views';
+import { Auth, Home, Users, Errors } from './views';
 
 export default [
     {
@@ -9,9 +9,9 @@ export default [
     },
 
     {
-        name: 'backoffice.dashboard',
+        name: 'backoffice.home',
         path: '/',
-        component: Dashboard,
+        component: Home,
         auth: true,
     },
 

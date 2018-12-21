@@ -58,12 +58,16 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
+            const { authToken } = this.props.pageProps;
             const { by, type } = this.state.sorting;
             const { per_page, current_page } = this.state.pagination;
 
             const response = await axios.delete(
                 `/api/users/${this.state.activeResourceId}`,
                 {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
                     params: {
                         sortBy: by,
                         sortType: type,
@@ -101,16 +105,23 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
+            const { authToken } = this.props.pageProps;
             const { by, type } = this.state.sorting;
             const { per_page, current_page } = this.state.pagination;
 
             const response = await axios.patch(
                 `/api/users/${this.state.activeResourceId}/restore`,
+                {},
                 {
-                    sortBy: by,
-                    sortType: type,
-                    perPage: per_page,
-                    page: current_page,
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                    params: {
+                        sortBy: by,
+                        sortType: type,
+                        perPage: per_page,
+                        page: current_page,
+                    },
                 },
             );
 

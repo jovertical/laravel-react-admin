@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { _route } from '../../utils/Navigation';
+import { _route } from '../utils/Navigation';
 
 const Navigator = props => {
-    const { authenticated, routes } = props.pageProps;
+    const { authenticated, environment, routes } = props.pageProps;
 
     return (
         <Switch>
@@ -23,7 +23,7 @@ const Navigator = props => {
                                     return (
                                         <Redirect
                                             to={_route(
-                                                'backoffice.auth.signin',
+                                                `${environment}.auth.signin`,
                                             )}
                                         />
                                     );
@@ -34,7 +34,7 @@ const Navigator = props => {
                                 if (authenticated) {
                                     return (
                                         <Redirect
-                                            to={_route('backoffice.dashboard')}
+                                            to={_route(`${environment}.home`)}
                                         />
                                     );
                                 }

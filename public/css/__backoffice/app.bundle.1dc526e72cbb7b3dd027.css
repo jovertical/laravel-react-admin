@@ -1,8 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
-.Action-Menu-Icon {
-  margin-right: -2rem; }
-
 .AT-Container,
 .AT-Content {
   margin: 0;
@@ -66,6 +63,9 @@
   display: flex;
   align-items: center;
   justify-content: center; }
+
+.Action-Menu-Icon {
+  margin-right: -2rem; }
 
 .MT-Content {
   margin: 1.5rem;

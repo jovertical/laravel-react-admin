@@ -3,7 +3,7 @@ import ErrorTemplate from './templates/Error';
 import MasterTemplate from './templates/Master';
 
 import AuthSignin from './auth/SignIn';
-import Dashboard from './Dashboard';
+import Home from './Home';
 import ErrorNotFound from './errors/NotFound';
 import UserIndex from './users/Index';
 
@@ -25,4 +25,4 @@ export const Users = {
     Index: UserIndex,
 };
 
-export { Dashboard };
+export { Home };

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
+import { Navigator } from '../core';
 import { Loading } from './ui';
-import { Navigator } from './core';
 import ROUTES from './routes';
 import './App.scss';
 
@@ -109,6 +109,7 @@ class App extends Component {
                 <Navigator
                     pageProps={{
                         ...this.state,
+                        environment: 'backoffice',
                         routes: ROUTES,
                         signoutHandler: this.signoutHandler,
                     }}

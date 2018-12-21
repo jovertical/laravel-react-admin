@@ -33,7 +33,7 @@ const Confirm = props => {
 Confirm.propTypes = {
     visible: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    actions: PropTypes.array.isRequired,
+    actions: PropTypes.array,
     children: PropTypes.any,
 };
 
