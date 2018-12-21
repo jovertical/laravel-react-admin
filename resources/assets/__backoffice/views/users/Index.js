@@ -222,9 +222,13 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
+            const { authToken } = this.props.pageProps;
             const { selectedRows, perPage, page, sortBy, sortType } = params;
 
             const response = await axios.get('/api/users', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
                 params: {
                     perPage,
                     page,

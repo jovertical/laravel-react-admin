@@ -11,7 +11,7 @@
 |
 */
 
-Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
+Route::namespace('Api')->name('api.')->group(function () {
     Route::namespace('Auth')->name('auth.')->prefix('auth')->group(function () {
         Route::post('signin', 'SessionsController@signin')->name('signin');
         Route::post('token', 'SessionsController@token')->name('token');
@@ -23,6 +23,8 @@ Route::namespace('Api')->name('api.')->middleware('api')->group(function () {
         });
     });
 
-    Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
-    Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
+    Route::middleware('auth:api')->group(function () {
+        Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
+        Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
+    });
 });
