@@ -48,7 +48,8 @@
 .AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; }
+  justify-content: space-between;
+  padding: 0 !important; }
 
 .AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer > .\--Item {
   margin-left: 0 !important;
@@ -58,7 +59,7 @@
   .AT > .\--Content {
     height: 100vh; }
   .AT > .\--Content > .\--Wrapper > .\--Form-Wrapper {
-    padding: 1.5rem; } }
+    padding: 2rem; } }
 
 .ET-Container,
 .ET-Content {
