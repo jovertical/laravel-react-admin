@@ -1,3 +1,4 @@
+import serviceWorker from './serviceWorker';
 import Navigator from './Navigator';
 
-export { Navigator };
+export { serviceWorker, Navigator };

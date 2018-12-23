@@ -37,6 +37,7 @@ module.exports = {
             'react-md',
             'react-md/dist/react-md.blue-deep_orange.min.css',
         ],
+        sw: path.join(SRC_DIR, 'core/serviceWorker.js'),
     },
 
     module: {
@@ -101,10 +102,10 @@ module.exports = {
             filename: 'css/[name].bundle.[contenthash].css',
         }),
 
-        new CleanWebpackPlugin(['css', 'js', 'img', 'fonts'], {
+        new CleanWebpackPlugin(['css/*', 'js/*', 'img/*', 'fonts/*'], {
             root: DIST_DIR,
             exclude: [],
-            verbose: true,
+            verbose: false,
             dry: false,
         }),
 

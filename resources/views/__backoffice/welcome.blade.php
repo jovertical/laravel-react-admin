@@ -15,6 +15,9 @@
         <meta property="og:url" content="{{ config('app.url') }}">
         <meta property="og:image" content="">
 
+        <meta name="sw-filepath" content="{{ _asset('js/sw.js') }}">
+        <meta name="assets" content="{{ file_get_contents(public_path('assets.json')) }}">
+
         <!-- Title -->
         <title>{{ config('app.name') }}</title>
 
@@ -25,8 +28,8 @@
         <link rel="shortcut icon" href="/favicon.ico">
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="{{ _asset('css/__backoffice/vendor.css') }}">
-        <link rel="stylesheet" href="{{ _asset('css/__backoffice/app.css') }}">
+        <link rel="stylesheet" href="{{ _asset('css/__backoffice/vendor.css') }}" defer>
+        <link rel="stylesheet" href="{{ _asset('css/__backoffice/app.css') }}" defer>
 
         <style>
             html, body {
@@ -80,7 +83,7 @@
             document.getElementById('initial-content').style.display = 'block';
         </script>
 
-        <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
-        <script src="{{ _asset('js/__backoffice/app.js') }}"></script>
+        <script src="{{ _asset('js/__backoffice/vendor.js') }}" defer></script>
+        <script src="{{ _asset('js/__backoffice/app.js') }}" defer></script>
     </body>
 </html>
