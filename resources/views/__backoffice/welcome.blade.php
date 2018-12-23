@@ -44,15 +44,11 @@
                 align-items: center;
             }
 
-            .initial-content {
+            #initial-content {
                 display: none;
                 background-color: #0000008a;
             }
         </style>
-
-        <script>
-            document.getElementById('initial-content').style.display = 'block';
-        </script>
     </head>
 
     <body>
@@ -64,7 +60,7 @@
             </div>
         </noscript>
 
-        <div id="initial-content" class="full-height flex-center initial-content">
+        <div id="initial-content" class="full-height flex-center">
             <!--
                 Temporary content shown on page load,
                 this is a convenient way to make the visitors of the site
@@ -82,5 +78,9 @@
         <!-- Scripts -->
         <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
         <script src="{{ _asset('js/__backoffice/app.js') }}"></script>
+
+        <script>
+            document.getElementById('initial-content').style.display = 'block';
+        </script>
     </body>
 </html>
