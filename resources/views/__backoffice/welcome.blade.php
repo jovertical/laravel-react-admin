@@ -5,9 +5,15 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
-
-        <!-- CSRF Token -->
+        <meta name="description" content="{{ config('app.description') }}">
+        <meta name="theme-color" content="#2196f3">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <meta property="og:site_name" content="{{ config('app.name') }}">
+        <meta property="og:title" content="{{ config('app.name') }}">
+        <meta property="og:description" content="{{ config('app.description') }}">
+        <meta property="og:url" content="{{ config('app.url') }}">
+        <meta property="og:image" content="">
 
         <!-- Title -->
         <title>{{ config('app.name') }}</title>

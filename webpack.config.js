@@ -130,20 +130,20 @@ module.exports = {
                     wait: true,
                 });
 
-                let manifest = {};
+                let assets = {};
 
                 stats.toJson().assets.forEach(({ name }) => {
                     let ext = name.split('.').reverse()[0];
                     let key = `${name.substring(0, name.indexOf('.'))}.${ext}`;
 
-                    Object.assign(manifest, {
+                    Object.assign(assets, {
                         [key]: name,
                     });
                 });
 
                 fs.writeFileSync(
-                    path.resolve(DIST_DIR, './manifest.json'),
-                    JSON.stringify(manifest, null, 2),
+                    path.resolve(DIST_DIR, './assets.json'),
+                    JSON.stringify(assets, null, 2),
                 );
             },
         }),
