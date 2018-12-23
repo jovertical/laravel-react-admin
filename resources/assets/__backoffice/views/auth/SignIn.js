@@ -57,9 +57,9 @@ class SignIn extends Component {
                 subTitle="with your Account"
                 loading={this.state.loading}
             >
-                <form onSubmit={this.signinSubmitHandler}>
-                    <div className="AT-Form-Group md-grid">
-                        <div className="AT-Form-Group-Item md-cell">
+                <form onSubmit={this.signinSubmitHandler} className="--Form">
+                    <div className="--Form-Group md-grid">
+                        <div className="--Item md-cell">
                             <TextField
                                 id="username"
                                 label="Username or Email"
@@ -78,8 +78,8 @@ class SignIn extends Component {
                         </div>
                     </div>
 
-                    <div className="AT-Form-Group md-grid">
-                        <div className="AT-Form-Group-Item md-cell">
+                    <div className="--Form-Group md-grid">
+                        <div className="--Item md-cell">
                             <TextField
                                 id="password"
                                 type="password"
@@ -98,15 +98,15 @@ class SignIn extends Component {
                             />
                         </div>
 
-                        <div className="AT-Form-Group-Item md-cell">
+                        <div className="--Item md-cell">
                             <Link to="#">Forgot Password?</Link>
                         </div>
                     </div>
 
-                    <div className="AT-Form-Footer md-grid">
+                    <div className="--Footer md-grid">
                         <div />
 
-                        <div className="AT-Form-Footer-Item md-cell">
+                        <div className="--Item md-cell">
                             <Button type="submit" flat primary swapTheming>
                                 Sign In
                             </Button>

@@ -6,27 +6,27 @@ import './Auth.scss';
 import logo from '../../../assets/img/logo-2.png';
 
 const Auth = props => (
-    <div className="AT-Container">
-        <div className="AT-Content">
-            <div className="AT-Content-Wrapper">
-                <span>
-                    {props.loading ? (
+    <div className="AT">
+        <div className="--Content">
+            <div className="--Wrapper">
+                {props.loading ? (
+                    <span className="--Progress-Wrapper">
                         <LinearProgress
-                            id="AT-Progress"
-                            className="AT-Progress"
+                            id="--Progress"
+                            className="--Progress"
                         />
-                    ) : (
-                        ''
-                    )}
-                </span>
+                    </span>
+                ) : (
+                    ''
+                )}
 
-                <Card className="AT-Form">
-                    <div className="AT-Form-Logo-Wrapper">
-                        <img src={logo} className="AT-Form-Logo" />
+                <Card className="--Form-Wrapper">
+                    <div className="--Logo-Wrapper">
+                        <img src={logo} className="--Logo" />
                     </div>
 
                     <CardTitle
-                        className="AT-Form-Title"
+                        className="--Title"
                         title={props.title}
                         subtitle={props.subTitle}
                     />

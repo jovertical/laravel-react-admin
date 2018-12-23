@@ -1,58 +1,63 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
-.AT-Container,
-.AT-Content {
+.AT,
+.AT > .\--Content {
   margin: 0;
   padding: 0; }
 
-.AT-Content {
+.AT > .\--Content {
   display: flex;
   justify-content: center;
   align-items: center; }
 
-.AT-Content-Wrapper {
+.AT > .\--Content > .\--Wrapper {
   width: 32rem;
   padding: 0; }
 
-.AT-Progress {
+.AT > .\--Content > .\--Wrapper > .\--Progress-Wrapper > .\--Progress {
   margin: 0 !important;
-  min-height: 0.3rem; }
+  min-height: 0.5rem;
+  border-top-right-radius: 100%;
+  border-top-left-radius: 100%; }
 
-.AT-Form-Title {
+.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Logo-Wrapper,
+.\--Title {
   display: flex;
   justify-content: center;
   text-align: center; }
 
-.AT-Form-Logo-Wrapper {
-  display: flex;
-  justify-content: center;
-  text-align: center; }
-
-.AT-Form-Logo {
+.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Logo-Wrapper > .\--Logo {
   width: 12rem;
   height: 6rem; }
 
-.AT-Form-Group {
+.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Form-Group {
   display: flex;
   flex-direction: column;
   justify-content: space-between; }
 
-.AT-Form-Group-Item {
-  width: 100% !important; }
+.AT
+> .\--Content
+.\--Wrapper
+> .\--Form-Wrapper
+> .\--Form
+> .\--Form-Group
+> .\--Item {
+  width: 100% !important;
+  margin-left: 0 !important; }
 
-.AT-Form-Footer {
+.AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between; }
 
-.AT-Form-Footer-Item {
+.AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer > .\--Item {
+  margin-left: 0 !important;
   text-align: right; }
 
 @media only screen and (min-width: 768px) {
-  .AT-Container,
-  .AT-Content {
+  .AT > .\--Content {
     height: 100vh; }
-  .AT-Form {
+  .AT > .\--Content > .\--Wrapper > .\--Form-Wrapper {
     padding: 1.5rem; } }
 
 .ET-Container,
