@@ -76,11 +76,11 @@
         </div>
 
         <!-- Scripts -->
-        <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
-        <script src="{{ _asset('js/__backoffice/app.js') }}"></script>
-
         <script>
             document.getElementById('initial-content').style.display = 'block';
         </script>
+
+        <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
+        <script src="{{ _asset('js/__backoffice/app.js') }}"></script>
     </body>
 </html>
