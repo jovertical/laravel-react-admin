@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, CardTitle, LinearProgress } from 'react-md';
 
 import './Auth.scss';
-import logo from '../../../assets/img/logo-2.png';
+import logo from '../../../assets/img/logos/2.png';
 
 const Auth = props => (
     <div className="AT">

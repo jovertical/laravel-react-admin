@@ -18,6 +18,9 @@
         <!-- Title -->
         <title>{{ config('app.name') }}</title>
 
+        <!-- Manifest -->
+        <link rel="manifest" href="/manifest.json">
+
         <!-- Icon -->
         <link rel="shortcut icon" href="/favicon.ico">
 
