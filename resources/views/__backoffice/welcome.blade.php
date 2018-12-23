@@ -27,15 +27,57 @@
         <!-- Stylesheets -->
         <link rel="stylesheet" href="{{ _asset('css/__backoffice/vendor.css') }}">
         <link rel="stylesheet" href="{{ _asset('css/__backoffice/app.css') }}">
+
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .full-height {
+                height: 100vh;
+            }
+
+            .flex-center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .initial-content {
+                display: none;
+                background-color: #0000008a;
+            }
+        </style>
+
+        <script>
+            document.getElementById('initial-content').style.display = 'block';
+        </script>
     </head>
 
     <body>
         <noscript>
-            You need JavaScript enabled to run this app.
+            <div class="full-height flex-center">
+                <h1 class="noscript-message">
+                    You need JavaScript enabled to run this app.
+                </h1>
+            </div>
         </noscript>
 
-        <!-- Root Node -->
-        <div id="root"></div>
+        <div id="initial-content" class="full-height flex-center initial-content">
+            <!--
+                Temporary content shown on page load,
+                this is a convenient way to make the visitors of the site
+                feel that they have reached the site.
+            -->
+        </div>
+
+        <div id="root">
+            <!--
+                This is the root node that acts as the wrapper where
+                the application will render the elements
+            -->
+        </div>
 
         <!-- Scripts -->
         <script src="{{ _asset('js/__backoffice/vendor.js') }}"></script>
