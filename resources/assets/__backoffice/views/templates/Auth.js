@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, CardTitle, LinearProgress } from 'react-md';
 
 import './Auth.scss';
-import logo from '../../../assets/img/logos/2.png';
+import logo from '../../../assets/img/logos/2/960x540.png';
 
 const Auth = props => (
     <div className="AT">
@@ -22,7 +22,7 @@ const Auth = props => (
 
                 <Card className="--Form-Wrapper">
                     <div className="--Logo-Wrapper">
-                        <img src={logo} className="--Logo" />
+                        <img src={logo} alt="company-logo" className="--Logo" />
                     </div>
 
                     <CardTitle
