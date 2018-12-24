@@ -89,18 +89,10 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
-            const { by, type } = this.state.sorting;
-            const { per_page, current_page } = this.state.pagination;
-
             const response = await axios.delete(
                 `/api/users/${this.state.activeResourceId}`,
                 {
-                    params: {
-                        sortBy: by,
-                        sortType: type,
-                        perPage: per_page,
-                        page: current_page,
-                    },
+                    params: this.getDefaultQueryParams(this.state),
                 },
             );
 
@@ -139,19 +131,11 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
-            const { by, type } = this.state.sorting;
-            const { per_page, current_page } = this.state.pagination;
-
             const response = await axios.patch(
                 `/api/users/${this.state.activeResourceId}/restore`,
                 {},
                 {
-                    params: {
-                        sortBy: by,
-                        sortType: type,
-                        perPage: per_page,
-                        page: current_page,
-                    },
+                    params: this.getDefaultQueryParams(this.state),
                 },
             );
 
@@ -198,10 +182,97 @@ class Index extends Component {
         });
     };
 
+    /**
+     * Event listener that is triggered when a confirm button from a
+     * delete modal (triggered when the delete selected rows action
+     * from the TableCardHeader is clicked).
+     * This should send an API request to delete the resources.
+     *
+     * @return {undefined}
+     */
     deleteUsersModalConfirmedHandler = async selectedRows => {
         this.setState({ loading: true });
 
         try {
+            const response = await axios.delete(
+                `/api/users/${[...selectedRows].join(',')}/multiple`,
+                {
+                    params: this.getDefaultQueryParams(this.state),
+                },
+            );
+
+            if (response.status === 200) {
+                this.setState(prevState => {
+                    return {
+                        loading: false,
+                        selectedRows: [],
+                        modal: {
+                            ...prevState.modal,
+                            visible: false,
+                        },
+                        pagination: response.data,
+                        toasts: [
+                            {
+                                text: `${
+                                    prevState.selectedRows.length
+                                } resource${
+                                    prevState.selectedRows.length > 1 ? 's' : ''
+                                } deleted.`,
+                                action: 'Undo',
+                                autohide: true,
+                                clicked: () =>
+                                    this.deletedUsersUndoHandler(
+                                        prevState.selectedRows,
+                                    ),
+                            },
+                            ...prevState.toasts,
+                        ],
+                    };
+                });
+            }
+
+            this.updateQueryString();
+        } catch (error) {}
+    };
+
+    /**
+     * Event listener that is triggered when a dismiss button from a
+     * Snackbar is clicked. This should send an API request to restore
+     * the deleted resources.
+     *
+     * @return {undefined}
+     */
+    deletedUsersUndoHandler = async selectedRows => {
+        this.setState({ loading: true });
+
+        try {
+            const response = await axios.patch(
+                `/api/users/${[...selectedRows].join(',')}/restore/multiple`,
+                {},
+                {
+                    params: this.getDefaultQueryParams(this.state),
+                },
+            );
+
+            if (response.status === 200) {
+                this.setState(prevState => {
+                    return {
+                        loading: false,
+                        pagination: response.data,
+                        toasts: [
+                            {
+                                text: `${selectedRows.length} resource${
+                                    selectedRows.length > 1 ? 's' : ''
+                                } recovered.`,
+                                action: 'Dismiss',
+                                autohide: true,
+                                clicked: () => {},
+                            },
+                            ...prevState.toasts,
+                        ],
+                    };
+                });
+            }
         } catch (error) {}
     };
 
@@ -302,10 +373,29 @@ class Index extends Component {
             page: pagination.current_page,
             sortBy: sorting.by,
             sortType: sorting.type,
-            selectedRows: selectedRows.join(','),
+            selectedRows: [...selectedRows].join(','),
         });
 
         history.push(`${location.pathname}${queryString}`);
+    }
+
+    /**
+     * This will provide the default sorting & pagination parameters from state.
+     *
+     * @param {object}
+     *
+     * @return {object}
+     */
+    getDefaultQueryParams(prevState) {
+        const { by, type } = prevState.sorting;
+        const { per_page, current_page } = prevState.pagination;
+
+        return {
+            sortBy: by,
+            sortType: type,
+            perPage: per_page,
+            page: current_page,
+        };
     }
 
     /**
