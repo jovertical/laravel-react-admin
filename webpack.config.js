@@ -19,7 +19,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
  */
 const inProduction = process.env.NODE_ENV === 'production';
 const PUBLIC_DIR = path.resolve(__dirname, './public');
-const SRC_DIR = path.resolve(__dirname, './resources/assets');
+const SRC_DIR = path.resolve(__dirname, './resources/frontend');
 const DIST_DIR = path.resolve(__dirname, './public');
 
 module.exports = {
