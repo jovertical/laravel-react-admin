@@ -6,7 +6,7 @@ export function _register(serviceWorkerFile) {
         if (serviceWorkerFile) {
             navigator.serviceWorker
                 .register(`/${serviceWorkerFile}`)
-                .then(() => console.log('Service Worker Registered'))
+                .then()
                 .catch(error => console.error(error));
         }
     }
