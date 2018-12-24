@@ -23,12 +23,12 @@ class SessionsController extends Controller
     public function signin(Request $request) : JsonResponse
     {
         $request->validate([
-            'username' => 'required|exists:users',
+            'username' => "required|exists:users,{$this->identifier($request)}",
             'password' => 'required'
         ]);
 
         if ($token = $this->attempt($request)) {
-            return $this->respondWithToken($token);
+            return $this->respondWithUserId($token);
         }
 
         throw ValidationException::withMessages([
@@ -66,24 +66,34 @@ class SessionsController extends Controller
      */
     protected function attempt(Request $request) : ?string
     {
-        $username = filter_var(
-            $request->input('username'), FILTER_VALIDATE_EMAIL
-        ) ? 'email' : 'username';
-
         return $this->guard()->attempt([
-            $username => $request->input('username'),
+            $this->identifier($request) => $request->input('username'),
             'password' => $request->input('password'),
         ]);
     }
 
     /**
-     * Get the token array structure.
+     * Get the identifier for the user.
+     *
+     * @param Illuminate\Http\Request
+     *
+     * @return string
+     */
+    protected function identifier(Request $request) : string
+    {
+        return filter_var(
+            $request->input('username'), FILTER_VALIDATE_EMAIL
+        ) ? 'email' : 'username';
+    }
+
+    /**
+     * Get the authenticated user's Id.
      *
      * @param  string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token) : JsonResponse
+    protected function respondWithUserId($token) : JsonResponse
     {
         $userId = JWTAuth::setToken($token)->toUser()->id;
         $authToken = [
