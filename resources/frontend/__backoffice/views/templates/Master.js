@@ -47,8 +47,9 @@ const Master = props => {
             mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
             tabletDrawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
             desktopDrawerType={NavigationDrawer.DrawerTypes.FULL_HEIGHT}
-            contentId="MT-Content"
-            contentClassName="MT-Content md-grid"
+            className="MT"
+            contentId="--Content"
+            contentClassName="--Content md-grid"
             navItems={navItems.map(({ divider, subheader, ...route }) => {
                 if (divider || subheader) {
                     return { divider, subheader, ...route };
@@ -56,9 +57,9 @@ const Master = props => {
 
                 return <NavItemLink {...route} />;
             })}
-            toolbarTitle={pageTitle}
+            toolbarClassName="--Toolbar"
             toolbarActions={
-                <div className="MT-Toolbar--Actions">
+                <div className="--Actions">
                     <Button id="--Notifications" className="--Action" icon>
                         notifications
                     </Button>
@@ -106,9 +107,14 @@ const Master = props => {
                     </MenuButton>
                 </div>
             }
-            toolbarClassName="MT-Toolbar"
+            toolbarTitle={pageTitle}
+            toolbarTitleClassName="--Title"
         >
-            {pageProps.loading ? <Loading /> : <div>{props.children}</div>}
+            {pageProps.loading ? (
+                <Loading />
+            ) : (
+                <div className="--Wrapper">{props.children}</div>
+            )}
         </NavigationDrawer>
     );
 };

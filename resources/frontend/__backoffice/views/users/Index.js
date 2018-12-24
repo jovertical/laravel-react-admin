@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import {
+    Grid,
+    Cell,
+    TextField,
+    SelectField,
     Button,
     Snackbar,
     Avatar,
@@ -19,6 +23,7 @@ import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { ActionMenu, Loading, Modal } from '../../ui';
 import { Templates } from '../';
+import './Index.scss';
 
 class Index extends Component {
     state = {
@@ -477,9 +482,9 @@ class Index extends Component {
         return (
             <div>
                 <Templates.Master {...this.props} pageTitle="Users">
-                    <Card className="MT-Content">
+                    <Card className="--Card">
                         <TableCardHeader
-                            title="List of Users"
+                            className="--Header"
                             visible={selectedRows.length > 0}
                             contextualTitle={`${selectedRows.length} item${
                                 selectedRows.length > 1 ? 's' : ''
@@ -500,7 +505,82 @@ class Index extends Component {
                                     delete
                                 </Button>,
                             ]}
-                        />
+                        >
+                            <Grid className="--Actions">
+                                <Cell
+                                    className="--Action"
+                                    phoneSize={10}
+                                    desktopSize={2}
+                                    desktopOffset={2}
+                                >
+                                    <TextField
+                                        id="fullname"
+                                        className="w-100"
+                                        label="Name"
+                                        placeholder="Enter name"
+                                    />
+                                </Cell>
+
+                                <Cell
+                                    className="--Action"
+                                    phoneSize={10}
+                                    desktopSize={1}
+                                >
+                                    <SelectField
+                                        id="type"
+                                        className="w-100"
+                                        label="Type"
+                                        placeholder="Select type"
+                                        menuItems={[
+                                            {
+                                                label: 'All',
+                                                value: 'all',
+                                            },
+
+                                            {
+                                                label: 'Superuser',
+                                                value: 'superuser',
+                                            },
+
+                                            {
+                                                label: 'User',
+                                                value: 'user',
+                                            },
+                                        ]}
+                                        defaultValue="all"
+                                    />
+                                </Cell>
+
+                                <Cell
+                                    className="--Action --Filters"
+                                    phoneSize={10}
+                                    desktopSize={3}
+                                >
+                                    <Button flat iconChildren="search" primary>
+                                        Filter
+                                    </Button>
+
+                                    <Button flat iconChildren="refresh">
+                                        Reset
+                                    </Button>
+                                </Cell>
+
+                                <Cell
+                                    className="--Action --Primary"
+                                    phoneSize={10}
+                                    desktopSize={3}
+                                    desktopOffset={1}
+                                >
+                                    <Button flat iconChildren="cloud_upload">
+                                        Import
+                                    </Button>
+
+                                    <Button flat iconChildren="add" primary>
+                                        Create
+                                    </Button>
+                                </Cell>
+                            </Grid>
+                        </TableCardHeader>
 
                         {!this.state.loading ? (
                             <DataTable baseId="users">

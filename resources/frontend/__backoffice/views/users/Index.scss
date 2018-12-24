@@ -1,0 +1,27 @@
+.--Card {
+    min-height: 75vh;
+}
+
+.--Card > .--Header > .--Actions {
+    width: 100%;
+}
+
+.--Card > .--Header > .--Actions > .--Action.--Filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.--Card > .--Header > .--Actions > .--Action.--Primary {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+    .--Card > .--Header {
+        height: 30rem;
+    }
+}

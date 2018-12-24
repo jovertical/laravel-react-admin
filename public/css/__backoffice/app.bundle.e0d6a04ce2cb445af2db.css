@@ -73,26 +73,66 @@
 .Action-Menu-Icon {
   margin-right: -2rem; }
 
-.MT-Content {
-  margin: 1.5rem;
-  min-height: 75vh; }
+.MT > .\--Content > .\--Wrapper {
+  margin: 1.5rem; }
 
-.MT-Toolbar--Actions .\--Account-Menu-Items {
+.MT > .\--Toolbar > div > .\--Actions > #\--Account > .\--Account-Menu-Items {
   width: 16rem; }
 
-.MT-Toolbar--Actions .\--Account-Menu-Items .\--Profile {
+.MT
+> .\--Toolbar
+> div
+> .\--Actions
+> #\--Account
+> .\--Account-Menu-Items
+> .\--Profile {
   background-color: #eeeeee;
   margin: -0.3rem 0rem 0.5rem 0rem; }
 
-.MT-Toolbar--Actions .\--Account-Menu-Items .\--Profile .\--Avatar-Circle {
+.MT
+> .\--Toolbar
+> div
+> .\--Actions
+> #\--Account
+> .\--Account-Menu-Items
+> .\--Profile
+.\--Avatar-Circle {
   margin: -0.75rem -1.5rem 0rem 0rem; }
 
 @media only screen and (max-width: 768px) {
-  .MT-Content {
+  .MT > .\--Content > .\--Wrapper {
     margin: 0.25rem; }
-  .MT-Toolbar--Actions .\--Account-Menu-Items .\--Profile {
+  .MT
+> .\--Toolbar
+> div
+> .\--Actions
+> #\--Account
+> .\--Account-Menu-Items
+> .\--Profile {
     background-color: #eeeeee;
     margin: -0.6rem 0rem 0.5rem 0rem; } }
+
+.\--Card {
+  min-height: 75vh; }
+
+.\--Card > .\--Header > .\--Actions {
+  width: 100%; }
+
+.\--Card > .\--Header > .\--Actions > .\--Action.\--Filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center; }
+
+.\--Card > .\--Header > .\--Actions > .\--Action.\--Primary {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center; }
+
+@media only screen and (max-width: 768px) {
+  .\--Card > .\--Header {
+    height: 30rem; } }
 
 .App-Wrapper {
   display: flex;
@@ -3920,4 +3960,16 @@ svg.md-icon {
 a {
   text-decoration: none;
   color: #2196f3; }
+
+.w-100 {
+  width: 100%; }
+
+.w-75 {
+  width: 75%; }
+
+.w-50 {
+  width: 50%; }
+
+.w-25 {
+  width: 25%; }
 
