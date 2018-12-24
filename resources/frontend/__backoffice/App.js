@@ -24,6 +24,13 @@ class App extends Component {
             });
 
             if (response.status === 200) {
+                // We will set a default Authorization header, this will
+                // eliminate the need to include the Authorization header
+                // for almost every AJAX requests.
+                window.axios.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${response.data}`;
+
                 this.setState({ authToken: response.data });
             }
         } catch (error) {}
@@ -34,15 +41,7 @@ class App extends Component {
      */
     fetchAuthUser = async () => {
         try {
-            const response = await axios.post(
-                '/api/auth/user',
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${this.state.authToken}`,
-                    },
-                },
-            );
+            const response = await axios.post('/api/auth/user');
 
             if (response.status === 200) {
                 this.setState({
@@ -60,15 +59,7 @@ class App extends Component {
         this.setState({ loading: true });
 
         try {
-            const response = await axios.post(
-                '/api/auth/signout',
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${this.state.authToken}`,
-                    },
-                },
-            );
+            const response = await axios.post('/api/auth/signout');
 
             if (response.status === 200) {
                 // remove uid stored in localStorage.

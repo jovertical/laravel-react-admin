@@ -34,6 +34,7 @@ class Index extends Component {
             visible: false,
             title: '',
             content: '',
+            confirmAction: null,
         },
         toasts: [],
         actions: [
@@ -43,7 +44,9 @@ class Index extends Component {
                 name: 'show',
                 onClick: () => console.log('Showing...'),
             },
+
             { divider: true },
+
             {
                 icon: 'delete',
                 type: 'error',
@@ -54,20 +57,44 @@ class Index extends Component {
         ],
     };
 
+    /**
+     * Event listener that is triggered when a delete action from
+     * an ActionMenu is clicked. This should trigger a modal confirmation.
+     *
+     * @param {number} id
+     *
+     * @return {undefined}
+     */
+    deleteUserClickedHandler = id => {
+        this.setState({
+            activeResourceId: id,
+            modal: {
+                visible: true,
+                title: 'You are deleting a resource.',
+                content:
+                    'If not undone, this action will be irreversible! Continue?',
+                confirmAction: this.deleteUserModalConfirmedHandler,
+            },
+        });
+    };
+
+    /**
+     * Event listener that is triggered when a confirm button from a
+     * delete modal (triggered by delete button from an Action Menu) is clicked.
+     * This should send an API request to delete the resource.
+     *
+     * @return {undefined}
+     */
     deleteUserModalConfirmedHandler = async () => {
         this.setState({ loading: true });
 
         try {
-            const { authToken } = this.props.pageProps;
             const { by, type } = this.state.sorting;
             const { per_page, current_page } = this.state.pagination;
 
             const response = await axios.delete(
                 `/api/users/${this.state.activeResourceId}`,
                 {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
                     params: {
                         sortBy: by,
                         sortType: type,
@@ -101,11 +128,17 @@ class Index extends Component {
         } catch (error) {}
     };
 
+    /**
+     * Event listener that is triggered when a dismiss button from a
+     * Snackbar is clicked. This should send an API request to restore
+     * the deleted resource.
+     *
+     * @return {undefined}
+     */
     deletedUserUndoHandler = async () => {
         this.setState({ loading: true });
 
         try {
-            const { authToken } = this.props.pageProps;
             const { by, type } = this.state.sorting;
             const { per_page, current_page } = this.state.pagination;
 
@@ -113,9 +146,6 @@ class Index extends Component {
                 `/api/users/${this.state.activeResourceId}/restore`,
                 {},
                 {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
                     params: {
                         sortBy: by,
                         sortType: type,
@@ -145,18 +175,44 @@ class Index extends Component {
         } catch (error) {}
     };
 
-    deleteUserClickedHandler = id => {
+    /**
+     * Event listener that is triggered when the delete selected rows action
+     * from the TableCardHeader is clicked. This should trigger a modal confirmation.
+     *
+     * @param {array} selectedRows
+     *
+     * @return {undefined}
+     */
+    deleteUsersClickedHandler = selectedRows => {
         this.setState({
-            activeResourceId: id,
             modal: {
                 visible: true,
-                title: 'You are deleting a resource.',
+                title: `You are deleting ${selectedRows.length} resource${
+                    selectedRows.length > 1 ? 's' : ''
+                }.`,
                 content:
                     'If not undone, this action will be irreversible! Continue?',
+                confirmAction: () =>
+                    this.deleteUsersModalConfirmedHandler(selectedRows),
             },
         });
     };
 
+    deleteUsersModalConfirmedHandler = async selectedRows => {
+        this.setState({ loading: true });
+
+        try {
+        } catch (error) {}
+    };
+
+    /**
+     * Event listener that is triggered when a TableRow checkbox is clicked.
+     * This should update the state & also update the queryString.
+     *
+     * @param {number} row
+     *
+     * @return {undefined}
+     */
     rowSelectionToggledHandler = async row => {
         await this.setState(({ selectedRows }) => {
             if (row === 0) {
@@ -184,6 +240,14 @@ class Index extends Component {
         this.updateQueryString();
     };
 
+    /**
+     * Event listener that is triggered when a sortable TableColumn is clicked.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {string} column
+     *
+     * @return {undefined}
+     */
     columnSortingToggledHandler = async column => {
         let { type } = this.state.sorting;
         const { per_page, current_page } = this.state.pagination;
@@ -202,6 +266,16 @@ class Index extends Component {
         this.updateQueryString();
     };
 
+    /**
+     * Event listener that is triggered when the TablePagination controls is clicked.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {number} from
+     * @param {number} perPage
+     * @param {number} page
+     *
+     * @return {undefined}
+     */
     paginationChangedHandler = async (from, perPage, page) => {
         const { by, type } = this.state.sorting;
 
@@ -215,6 +289,11 @@ class Index extends Component {
         this.updateQueryString();
     };
 
+    /**
+     * This will update the URL query string via history API.
+     *
+     * @return {undefined}
+     */
     updateQueryString() {
         const { selectedRows, pagination, sorting } = this.state;
         const { history, location } = this.props;
@@ -229,17 +308,19 @@ class Index extends Component {
         history.push(`${location.pathname}${queryString}`);
     }
 
+    /**
+     * This should send an API request to fetch all resource.
+     *
+     * @param {object} params
+     * @return {undefined}
+     */
     fetchUsers = async (params = {}) => {
         this.setState({ loading: true });
 
         try {
-            const { authToken } = this.props.pageProps;
             const { selectedRows, perPage, page, sortBy, sortType } = params;
 
             const response = await axios.get('/api/users', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
                 params: {
                     perPage,
                     page,
@@ -317,7 +398,11 @@ class Index extends Component {
                                 <Button
                                     icon
                                     key="delete"
-                                    onClick={() => console.log('deleting')}
+                                    onClick={() =>
+                                        this.deleteUsersClickedHandler(
+                                            selectedRows,
+                                        )
+                                    }
                                     tooltipLabel="Delete selected rows"
                                     tooltipDelay={300}
                                     tooltipPosition="left"
@@ -464,7 +549,7 @@ class Index extends Component {
                     <Modal.Confirm
                         title={modal.title}
                         visible
-                        confirmAction={this.deleteUserModalConfirmedHandler}
+                        confirmAction={modal.confirmAction}
                         cancelAction={() =>
                             this.setState(prevState => {
                                 return {
@@ -491,9 +576,7 @@ class Index extends Component {
                             this.setState(prevState => {
                                 const [, ...toasts] = prevState.toasts;
 
-                                return {
-                                    toasts,
-                                };
+                                return { toasts };
                             })
                         }
                     />
