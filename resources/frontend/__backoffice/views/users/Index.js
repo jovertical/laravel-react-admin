@@ -490,20 +490,22 @@ class Index extends Component {
                                 selectedRows.length > 1 ? 's' : ''
                             } selected`}
                             actions={[
-                                <Button
-                                    icon
-                                    key="delete"
-                                    onClick={() =>
-                                        this.deleteUsersClickedHandler(
-                                            selectedRows,
-                                        )
-                                    }
-                                    tooltipLabel="Delete selected rows"
-                                    tooltipDelay={300}
-                                    tooltipPosition="left"
-                                >
-                                    delete
-                                </Button>,
+                                <div className="--Actions">
+                                    <Button
+                                        icon
+                                        key="delete"
+                                        onClick={() =>
+                                            this.deleteUsersClickedHandler(
+                                                selectedRows,
+                                            )
+                                        }
+                                        tooltipLabel="Delete selected rows"
+                                        tooltipDelay={300}
+                                        tooltipPosition="left"
+                                    >
+                                        delete
+                                    </Button>
+                                </div>,
                             ]}
                         >
                             <Grid className="--Actions">

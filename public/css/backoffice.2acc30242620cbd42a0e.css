@@ -130,9 +130,19 @@
   justify-content: flex-end;
   align-items: center; }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .\--Card > .\--Header {
-    height: 30rem; } }
+    height: 30rem; }
+  .\--Card > .\--Header > .md-card-title--contextual {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end; }
+  .\--Card > .\--Header > .md-card-title--contextual > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem; } }
 
 .App-Wrapper {
   display: flex;
