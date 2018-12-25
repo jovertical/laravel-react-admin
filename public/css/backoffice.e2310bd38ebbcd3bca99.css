@@ -131,6 +131,8 @@
   align-items: center; }
 
 @media (max-width: 768px) {
+  .\--Card {
+    min-height: 50rem; }
   .\--Card > .\--Header {
     height: 30rem; }
   .\--Card > .\--Header > .md-card-title--contextual {

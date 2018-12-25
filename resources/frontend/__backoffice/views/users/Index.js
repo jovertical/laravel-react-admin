@@ -34,6 +34,10 @@ class Index extends Component {
             by: 'firstname',
             type: 'ASC',
         },
+        filters: {
+            name: '',
+            type: 'all',
+        },
         activeResourceId: 0,
         modal: {
             visible: false,
@@ -325,18 +329,21 @@ class Index extends Component {
      * @return {undefined}
      */
     columnSortingToggledHandler = async column => {
-        let { type } = this.state.sorting;
+        let { sortType, sortBy } = this.state.sorting;
         const { per_page, current_page } = this.state.pagination;
+        const { name, type } = this.state.filters;
 
-        if (column === this.state.sorting.by) {
-            type = type === 'ASC' ? 'DESC' : 'ASC';
+        if (column === sortBy) {
+            sortType = sortType === 'ASC' ? 'DESC' : 'ASC';
         }
 
         await this.fetchUsers({
             perPage: per_page,
             page: current_page,
             sortBy: column,
-            sortType: type,
+            sortType,
+            name,
+            type,
         });
 
         this.updateQueryString();
@@ -353,13 +360,56 @@ class Index extends Component {
      * @return {undefined}
      */
     paginationChangedHandler = async (from, perPage, page) => {
-        const { by, type } = this.state.sorting;
+        const { sortBy, sortType } = this.state.sorting;
+        const { name, type } = this.state.filters;
 
         await this.fetchUsers({
-            sortBy: by,
-            sortType: type,
+            sortBy,
+            sortType,
             perPage,
             page,
+            name,
+            type,
+        });
+
+        this.updateQueryString();
+    };
+
+    /**
+     * Event listener that is triggered when the filter button is clicked.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @return {undefined}
+     */
+    filterButtonClickedHandler = async () => {
+        this.setState({ loading: true });
+
+        const { name, type } = this.state.filters;
+
+        await this.fetchUsers({
+            ...this.getDefaultQueryParams(this.state),
+            page: 1,
+            name,
+            type,
+        });
+
+        this.updateQueryString();
+    };
+
+    /**
+     * Event listener that is triggered when the reset filter button is clicked.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @return {undefined}
+     */
+    resetFilterButtonClickedHandler = async () => {
+        this.setState({ loading: true });
+
+        await this.fetchUsers({
+            ...this.getDefaultQueryParams(this.state),
+            page: 1,
+            name: '',
+            type: 'all',
         });
 
         this.updateQueryString();
@@ -371,14 +421,16 @@ class Index extends Component {
      * @return {undefined}
      */
     updateQueryString() {
-        const { selectedRows, pagination, sorting } = this.state;
+        const { selectedRows, pagination, sorting, filters } = this.state;
         const { history, location } = this.props;
         const queryString = _queryString({
+            selectedRows: [...selectedRows].join(','),
             perPage: pagination.per_page,
             page: pagination.current_page,
-            sortBy: sorting.by,
-            sortType: sorting.type,
-            selectedRows: [...selectedRows].join(','),
+            sortBy: sorting.sortBy,
+            sortType: sorting.sortType,
+            name: filters.name,
+            type: filters.type,
         });
 
         history.push(`${location.pathname}${queryString}`);
@@ -392,14 +444,17 @@ class Index extends Component {
      * @return {object}
      */
     getDefaultQueryParams(prevState) {
-        const { by, type } = prevState.sorting;
+        const { sortBy, sortType } = prevState.sorting;
         const { per_page, current_page } = prevState.pagination;
+        const { name, type } = prevState.filters;
 
         return {
-            sortBy: by,
-            sortType: type,
+            sortBy,
+            sortType,
             perPage: per_page,
             page: current_page,
+            name,
+            type,
         };
     }
 
@@ -413,14 +468,24 @@ class Index extends Component {
         this.setState({ loading: true });
 
         try {
-            const { selectedRows, perPage, page, sortBy, sortType } = params;
+            const {
+                selectedRows,
+                perPage,
+                page,
+                sortBy,
+                sortType,
+                name,
+                type,
+            } = params;
 
             const response = await axios.get('/api/users', {
                 params: {
-                    perPage,
-                    page,
                     sortBy,
                     sortType,
+                    perPage,
+                    page,
+                    name,
+                    type,
                 },
             });
 
@@ -433,10 +498,16 @@ class Index extends Component {
                             : [],
                     pagination: response.data,
                     sorting: {
-                        by: _.isNil(sortBy) ? this.state.sorting.by : sortBy,
-                        type: _.isNil(sortType)
-                            ? this.state.sorting.type
+                        sortBy: _.isNil(sortBy)
+                            ? this.state.sorting.sortBy
+                            : sortBy,
+                        sortType: _.isNil(sortType)
+                            ? this.state.sorting.sortType
                             : sortType,
+                    },
+                    filters: {
+                        name,
+                        type,
                     },
                 });
             }
@@ -471,8 +542,9 @@ class Index extends Component {
     render() {
         const {
             pagination,
-            selectedRows,
+            filters,
             sorting,
+            selectedRows,
             modal,
             toasts,
             actions,
@@ -516,10 +588,21 @@ class Index extends Component {
                                     desktopOffset={2}
                                 >
                                     <TextField
-                                        id="fullname"
+                                        id="name"
                                         className="w-100"
                                         label="Name"
                                         placeholder="Enter name"
+                                        value={filters.name}
+                                        onChange={value =>
+                                            this.setState(prevState => {
+                                                return {
+                                                    filters: {
+                                                        ...prevState.filters,
+                                                        name: value,
+                                                    },
+                                                };
+                                            })
+                                        }
                                     />
                                 </Cell>
 
@@ -550,6 +633,17 @@ class Index extends Component {
                                             },
                                         ]}
                                         defaultValue="all"
+                                        value={filters.type}
+                                        onChange={value =>
+                                            this.setState(prevState => {
+                                                return {
+                                                    filters: {
+                                                        ...prevState.filters,
+                                                        type: value,
+                                                    },
+                                                };
+                                            })
+                                        }
                                     />
                                 </Cell>
 
@@ -558,11 +652,24 @@ class Index extends Component {
                                     phoneSize={10}
                                     desktopSize={3}
                                 >
-                                    <Button flat iconChildren="search" primary>
+                                    <Button
+                                        flat
+                                        iconChildren="search"
+                                        primary
+                                        onClick={
+                                            this.filterButtonClickedHandler
+                                        }
+                                    >
                                         Filter
                                     </Button>
 
-                                    <Button flat iconChildren="refresh">
+                                    <Button
+                                        flat
+                                        iconChildren="refresh"
+                                        onClick={
+                                            this.resetFilterButtonClickedHandler
+                                        }
+                                    >
                                         Reset
                                     </Button>
                                 </Cell>
@@ -600,8 +707,8 @@ class Index extends Component {
                                         <TableColumn
                                             grow
                                             sorted={
-                                                sorting.type === 'DESC' &&
-                                                sorting.by === 'firstname'
+                                                sorting.sortType === 'DESC' &&
+                                                sorting.sortBy === 'firstname'
                                             }
                                             onClick={() =>
                                                 this.columnSortingToggledHandler(
@@ -614,8 +721,8 @@ class Index extends Component {
 
                                         <TableColumn
                                             sorted={
-                                                sorting.type === 'DESC' &&
-                                                sorting.by === 'email'
+                                                sorting.sortType === 'DESC' &&
+                                                sorting.sortBy === 'email'
                                             }
                                             onClick={() =>
                                                 this.columnSortingToggledHandler(
@@ -628,8 +735,8 @@ class Index extends Component {
 
                                         <TableColumn
                                             sorted={
-                                                sorting.type === 'DESC' &&
-                                                sorting.by === 'type'
+                                                sorting.sortType === 'DESC' &&
+                                                sorting.sortBy === 'type'
                                             }
                                             onClick={() =>
                                                 this.columnSortingToggledHandler(

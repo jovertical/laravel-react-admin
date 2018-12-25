@@ -145,8 +145,14 @@ class UsersController extends Controller
                 $request->input('sortType') ?? 'ASC'
             );
 
-        if ($request->input('type')) {
-            $users->where('type', $request->input('type'));
+        if ($type = $request->input('type')) {
+            if ($type !== 'all') {
+                $users->where('type', $request->input('type'));
+            }
+        }
+
+        if ($name = $request->input('name')) {
+            $users->where('name', 'like', "%{$name}%");
         }
 
         return $users->paginate($request->input('perPage') ?? 10);
