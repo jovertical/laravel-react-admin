@@ -14,11 +14,20 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
-    return [
-        'firstname' => $faker->name,
-        'lastname' => $faker->name,
+    $gender = $faker->randomElements(['female', 'male'])[0];
 
-        'type' => 'superuser',
+    return [
+        'firstname' => ($firstName = (
+            $gender === 'female' ? $faker->firstNameFemale : $faker->firstNameMale
+        )),
+        'middlename' => ($middleName = $faker->lastName),
+        'lastname' => ($lastName = $faker->lastName),
+        'gender' => $gender,
+        'birthdate' => $faker->dateTimeThisCentury->format('Y-m-d'),
+        'address' => $faker->address,
+
+        'type' => $faker->randomElements(['superuser', 'user'])[0],
+        'name' => "{$firstName} {$middleName} {$lastName}",
         'username' => $faker->userName,
         'email' => $faker->unique()->safeEmail,
         'password' => bcrypt('secret'),
