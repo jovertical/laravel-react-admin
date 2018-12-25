@@ -23,6 +23,20 @@ export default [
     },
 
     {
+        name: 'backoffice.users.create',
+        path: '/resources/users/create',
+        component: Users.Create,
+        auth: true,
+    },
+
+    {
+        name: 'backoffice.users.edit',
+        path: '/resources/users/:id/edit',
+        component: Users.Edit,
+        auth: true,
+    },
+
+    {
         name: 'backoffice.errors.not-found',
         component: Errors.NotFound,
     },

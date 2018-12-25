@@ -19,6 +19,7 @@ import {
     TablePagination,
 } from 'react-md';
 
+import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { ActionMenu, Loading, Modal } from '../../ui';
@@ -48,10 +49,15 @@ class Index extends Component {
         toasts: [],
         actions: [
             {
-                icon: 'info',
-                label: 'More Info',
-                name: 'show',
-                onClick: () => console.log('Showing...'),
+                icon: 'edit',
+                label: 'Edit',
+                name: 'edit',
+                onClick: id =>
+                    this.props.history.push(
+                        _route('backoffice.users.edit', {
+                            id,
+                        }),
+                    ),
             },
 
             { divider: true },
@@ -506,8 +512,8 @@ class Index extends Component {
                             : sortType,
                     },
                     filters: {
-                        name,
-                        type,
+                        name: _.isNil(name) ? '' : name,
+                        type: _.isNil(type) ? 'all' : type,
                     },
                 });
             }
@@ -540,6 +546,7 @@ class Index extends Component {
     }
 
     render() {
+        const { history } = this.props;
         const {
             pagination,
             filters,
@@ -684,7 +691,18 @@ class Index extends Component {
                                         Import
                                     </Button>
 
-                                    <Button flat iconChildren="add" primary>
+                                    <Button
+                                        flat
+                                        iconChildren="add"
+                                        primary
+                                        onClick={() =>
+                                            history.push(
+                                                _route(
+                                                    'backoffice.users.create',
+                                                ),
+                                            )
+                                        }
+                                    >
                                         Create
                                     </Button>
                                 </Cell>
