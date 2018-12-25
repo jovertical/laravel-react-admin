@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { _register as registerServiceWorker } from '../utils/ServiceWorker';
 import App from './App';
+import 'react-md/dist/react-md.blue-deep_orange.min.css';
 import './style.scss';
 
 if (document.getElementById('initial-content')) {

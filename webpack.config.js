@@ -1,12 +1,12 @@
 /**
- * * Generic
+ * Generic
  */
 const path = require('path');
 const fs = require('fs');
 const notifier = require('node-notifier');
 
 /**
- * * Plugins.
+ * Plugins.
  */
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -15,7 +15,7 @@ const EventHooksPlugin = require('event-hooks-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 /**
- * * Globals
+ * Globals
  */
 const inProduction = process.env.NODE_ENV === 'production';
 const PUBLIC_DIR = path.resolve(__dirname, './public');
@@ -26,17 +26,8 @@ module.exports = {
     mode: process.env.NODE_ENV,
 
     entry: {
-        '__backoffice/app': path.join(SRC_DIR, '__backoffice/index.js'),
-        '__backoffice/vendor': [
-            'moment',
-            'lodash',
-            'axios',
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-md',
-            'react-md/dist/react-md.blue-deep_orange.min.css',
-        ],
+        backoffice: path.join(SRC_DIR, '__backoffice/index.js'),
+        frontend: path.join(SRC_DIR, '__frontend/index.js'),
         sw: path.join(SRC_DIR, 'core/serviceWorker.js'),
     },
 
@@ -99,7 +90,7 @@ module.exports = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].bundle.[contenthash].css',
+            filename: 'css/[name].[contenthash].css',
         }),
 
         new CleanWebpackPlugin(['css/*', 'js/*', 'img/*', 'fonts/*'], {
@@ -116,8 +107,7 @@ module.exports = {
 
         new EventHooksPlugin({
             done: stats => {
-                let { time } = stats.toJson();
-                let { errors } = stats.toJson();
+                const { time, errors, assets } = stats.toJson();
 
                 notifier.notify({
                     title:
@@ -128,20 +118,20 @@ module.exports = {
                     wait: true,
                 });
 
-                let assets = {};
+                let assetCollection = {};
 
-                stats.toJson().assets.forEach(({ name }) => {
+                assets.forEach(({ name }) => {
                     let ext = name.split('.').reverse()[0];
                     let key = `${name.substring(0, name.indexOf('.'))}.${ext}`;
 
-                    Object.assign(assets, {
+                    Object.assign(assetCollection, {
                         [key]: name,
                     });
                 });
 
                 fs.writeFileSync(
                     path.resolve(DIST_DIR, './assets.json'),
-                    JSON.stringify(assets, null, 2),
+                    JSON.stringify(assetCollection, null, 2),
                 );
             },
         }),
@@ -150,11 +140,22 @@ module.exports = {
     output: {
         path: DIST_DIR,
         publicPath: PUBLIC_DIR,
-        filename: 'js/[name].bundle.[contenthash].js',
+        filename: 'js/[name].[contenthash].js',
     },
 
     optimization: {
         minimize: inProduction,
+        splitChunks: {
+            automaticNameDelimiter: '-',
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor',
+                    chunks: 'all',
+                    enforce: true,
+                },
+            },
+        },
     },
 
     node: {

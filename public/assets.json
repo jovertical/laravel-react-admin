@@ -1,7 +1,8 @@
 {
-  "css/__backoffice/app.css": "css/__backoffice/app.bundle.e0d6a04ce2cb445af2db.css",
-  "css/__backoffice/vendor.css": "css/__backoffice/vendor.bundle.6bf9414a0ce0ec57a54a.css",
-  "js/__backoffice/app.js": "js/__backoffice/app.bundle.5a6e8debbdcc653d4e77.js",
-  "js/__backoffice/vendor.js": "js/__backoffice/vendor.bundle.8de0add90326cddfa3b3.js",
-  "js/sw.js": "js/sw.bundle.2710403adba24385ce44.js"
+  "css/backoffice.css": "css/backoffice.66e37ff014d084df4c94.css",
+  "css/vendor.css": "css/vendor.6bf9414a0ce0ec57a54a.css",
+  "js/backoffice.js": "js/backoffice.840823ae0ec727bcfbd6.js",
+  "js/frontend.js": "js/frontend.3a2fa22afdcfcbc9c25f.js",
+  "js/sw.js": "js/sw.fd7e2be009f9ebcac6e1.js",
+  "js/vendor.js": "js/vendor.07d3603c0971eec6c92a.js"
 }
