@@ -22,6 +22,6 @@
     ##Force SSL
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
-    RewriteCond %{HTTP_HOST} ^hsbo.herokuapp.com
-    RewriteRule ^https://hsbo.herokuapp.com [L,R=301]
+	RewriteCond %{HTTP_HOST} ^hsbo.herokuapp.com
+	RewriteRule ^(.*)$ https://hsbo.herokuapp.com/$1 [R,L]
 </IfModule>
