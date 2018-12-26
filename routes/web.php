@@ -12,7 +12,5 @@
 */
 
 Route::get('/', function () {
-    dd($_SERVER);
-
     return view('__backoffice.welcome');
 });
