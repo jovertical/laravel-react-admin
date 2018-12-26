@@ -20,6 +20,10 @@ class CreateUsersTable extends Migration
             $table->string('username')->nullable();
             $table->string('email');
             $table->string('password')->nullable();
+            $table->rememberToken();
+            $table->text('auth_token')->nullable();
+            $table->timestamp('verified_at')->nullable();
+            $table->timestamp('last_signin')->nullable();
 
             $table->string('firstname')->nullable();
             $table->string('middlename')->nullable();
@@ -39,7 +43,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->rememberToken();
         });
     }
 

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 
 class SessionsController extends Controller
@@ -47,14 +48,9 @@ class SessionsController extends Controller
      */
     public function token(Request $request) : JsonResponse
     {
-        $authToken = DB::table('auth_tokens')->where([
-            'user_id' => $request->input('uid')
-        ])
-            ->latest()
-            ->first()
-            ->token ?? null;
-
-        return response()->json($authToken);
+        return response()->json(
+            optional(User::find($request->input('uid')))->auth_token
+        );
     }
 
     /**
@@ -91,42 +87,31 @@ class SessionsController extends Controller
      *
      * @param  string $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return Illuminate\Http\JsonResponse
      */
     protected function respondWithUserId($token) : JsonResponse
     {
-        $userId = JWTAuth::setToken($token)->toUser()->id;
-        $authToken = [
-            'token' => $token,
-            'type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60,
-        ];
+        $user = JWTAuth::setToken($token)->toUser();
 
-        $this->storeAuthToken($authToken, $userId);
+        $this->saveAuthToken($token, $user);
 
-        return response()->json($userId);
+        return response()->json($user->id);
     }
 
     /**
-     * Store Auth Token.
+     * Save Auth Token.
      *
-     * @param array $token
-     * @param int $userId
+     * @param string $token
+     * @param App\User $user
      *
      * @return bool
      */
-    protected function storeAuthToken(array $token, int $userId) : bool
+    protected function saveAuthToken(string $token, User $user) : bool
     {
-        DB::table('auth_tokens')->where('user_id', $userId)->delete();
+        $user->auth_token = $token;
+        $user->last_signin = now();
 
-        return DB::table('auth_tokens')->insert([
-            'user_id' => $userId,
-            'token' => $token['token'],
-            'type' => $token['type'],
-            'expires_in' => $token['expires_in'],
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        return $user->update();
     }
 
     /**
@@ -146,7 +131,7 @@ class SessionsController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithUserId($this->guard()->refresh());
     }
 
     /**
