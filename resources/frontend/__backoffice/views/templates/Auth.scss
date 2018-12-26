@@ -2,6 +2,9 @@
 .AT > .--Content {
     margin: 0;
     padding: 0;
+}
+
+.AT > .--Content {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,6 +73,9 @@
 
         > .--Footer.--With-Error {
             margin-top: 5rem;
+            .--Item {
+                text-align: right;
+            }
         }
     }
 }

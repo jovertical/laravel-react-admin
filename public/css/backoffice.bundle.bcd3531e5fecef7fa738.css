@@ -3,11 +3,12 @@
 .AT,
 .AT > .\--Content {
   margin: 0;
-  padding: 0;
+  padding: 0; }
+
+.AT > .\--Content {
   display: flex;
   justify-content: center;
   align-items: center; }
-  .AT .\--Wrapper,
   .AT > .\--Content .\--Wrapper {
     width: 32rem;
     padding: 0; }
@@ -78,6 +79,18 @@
 > .\--Content-Wrapper
 > .\--Content > .\--Footer.\--With-Error {
   margin-top: 5rem; }
+  .AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content > .\--Form > .\--Footer.\--With-Error .\--Item, .AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content > .\--Footer.\--With-Error .\--Item {
+    text-align: right; }
 
 .AT
 > .\--Content
