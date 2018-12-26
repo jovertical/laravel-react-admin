@@ -2,17 +2,14 @@
 .AT > .--Content {
     margin: 0;
     padding: 0;
-}
-
-.AT > .--Content {
     display: flex;
     justify-content: center;
     align-items: center;
-}
 
-.AT > .--Content > .--Wrapper {
-    width: 32rem;
-    padding: 0;
+    .--Wrapper {
+        width: 32rem;
+        padding: 0;
+    }
 }
 
 .AT > .--Content > .--Wrapper > .--Progress-Wrapper > .--Progress {
@@ -22,43 +19,70 @@
     border-top-left-radius: 100%;
 }
 
-.AT > .--Content > .--Wrapper > .--Form-Wrapper > .--Logo-Wrapper,
-.--Title {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-}
+.AT > .--Content > .--Wrapper > .--Form-Wrapper {
+    & {
+        > .--Content-Wrapper > .--Title,
+        > .--Logo-Wrapper {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
 
-.AT > .--Content > .--Wrapper > .--Form-Wrapper > .--Logo-Wrapper > .--Logo {
-    width: 12rem;
-    height: 6rem;
-}
-
-.AT > .--Content > .--Wrapper > .--Form-Wrapper > .--Form > .--Form-Group {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+        > .--Logo-Wrapper > .--Logo {
+            width: 12rem;
+            height: 6rem;
+        }
+    }
 }
 
 .AT
     > .--Content
-    .--Wrapper
+    > .--Wrapper
     > .--Form-Wrapper
+    > .--Content-Wrapper
+    > .--Content
     > .--Form
-    > .--Form-Group
-    > .--Item {
-    width: 100% !important;
-    margin-left: 0 !important;
-}
-
-.AT > .--Content .--Wrapper > .--Form-Wrapper > .--Form > .--Footer {
+    > .--Form-Group {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 0 !important;
+
+    .--Item {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
 }
 
-.AT > .--Content .--Wrapper > .--Form-Wrapper > .--Form > .--Footer > .--Item {
+.AT
+    > .--Content
+    > .--Wrapper
+    > .--Form-Wrapper
+    > .--Content-Wrapper
+    > .--Content {
+    > .--Form,
+    & {
+        > .--Footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 0 !important;
+        }
+
+        > .--Footer.--With-Error {
+            margin-top: 5rem;
+        }
+    }
+}
+
+.AT
+    > .--Content
+    > .--Wrapper
+    > .--Form-Wrapper
+    > .--Content-Wrapper
+    > .--Content
+    > .--Form
+    > .--Footer
+    > .--Item {
     margin-left: 0 !important;
     text-align: right;
 }
@@ -70,5 +94,6 @@
 
     .AT > .--Content > .--Wrapper > .--Form-Wrapper {
         padding: 2rem;
+        min-height: 75vh;
     }
 }

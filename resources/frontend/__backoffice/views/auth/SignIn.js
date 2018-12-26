@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { TextField, Button } from 'react-md';
+import { Grid, Cell, TextField, Button } from 'react-md';
 
 import { Templates } from '../';
 
@@ -10,6 +10,7 @@ class SignIn extends Component {
         username: '',
         password: '',
         errors: {},
+        message: {},
     };
 
     /**
@@ -65,76 +66,106 @@ class SignIn extends Component {
                 window.location.reload();
             }
         } catch (error) {
-            const { errors } = error.response.data;
+            if (error.response) {
+                const { errors } = error.response.data;
 
-            this.setState({ loading: false, errors });
+                this.setState({ loading: false, errors });
+            } else {
+                this.setState({
+                    loading: false,
+                    message: {
+                        type: 'error',
+                        title: 'Something went wrong',
+                        body: (
+                            <h4>
+                                Oops? Something went wrong here.
+                                <br /> Please try again.
+                            </h4>
+                        ),
+                    },
+                });
+            }
         }
     };
 
     render() {
+        const { loading, username, password, errors, message } = this.state;
+
         return (
-            <Templates.Auth
-                title="Sign in"
-                subTitle="with your Account"
-                loading={this.state.loading}
-            >
-                <form onSubmit={this.signinSubmitHandler} className="--Form">
-                    <div className="--Form-Group md-grid">
-                        <div className="--Item md-cell">
-                            <TextField
-                                id="username"
-                                label="Username or Email"
-                                lineDirection="center"
-                                value={this.state.username}
-                                onChange={value =>
-                                    this.inputChangeHandler(value, 'username')
-                                }
-                                error={_.has(this.state.errors, 'username')}
-                                errorText={
-                                    _.has(this.state.errors, 'username')
-                                        ? this.state.errors.username[0]
-                                        : ''
-                                }
-                            />
-                        </div>
-                    </div>
+            <div>
+                <Templates.Auth
+                    title="Sign in"
+                    subTitle="with your Account"
+                    loading={loading}
+                    message={message}
+                >
+                    <form
+                        onSubmit={this.signinSubmitHandler}
+                        className="--Form"
+                    >
+                        <Grid className="--Form-Group">
+                            <Cell className="--Item">
+                                <TextField
+                                    id="username"
+                                    label="Username or Email"
+                                    lineDirection="center"
+                                    value={username}
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'username',
+                                        )
+                                    }
+                                    error={_.has(errors, 'username')}
+                                    errorText={
+                                        _.has(errors, 'username')
+                                            ? errors.username[0]
+                                            : ''
+                                    }
+                                />
+                            </Cell>
+                        </Grid>
 
-                    <div className="--Form-Group md-grid">
-                        <div className="--Item md-cell">
-                            <TextField
-                                id="password"
-                                type="password"
-                                label="Password"
-                                lineDirection="center"
-                                value={this.state.password}
-                                onChange={value =>
-                                    this.inputChangeHandler(value, 'password')
-                                }
-                                error={_.has(this.state.errors, 'password')}
-                                errorText={
-                                    _.has(this.state.errors, 'password')
-                                        ? this.state.errors.password[0]
-                                        : ''
-                                }
-                            />
-                        </div>
+                        <Grid className="--Form-Group">
+                            <Cell className="--Item">
+                                <TextField
+                                    id="password"
+                                    type="password"
+                                    label="Password"
+                                    lineDirection="center"
+                                    value={password}
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'password',
+                                        )
+                                    }
+                                    error={_.has(errors, 'password')}
+                                    errorText={
+                                        _.has(errors, 'password')
+                                            ? errors.password[0]
+                                            : ''
+                                    }
+                                />
+                            </Cell>
 
-                        <div className="--Item md-cell">
-                            <Link to="#">Forgot Password?</Link>
-                        </div>
-                    </div>
+                            <Cell className="--Item">
+                                <Link to="#">Forgot Password?</Link>
+                            </Cell>
+                        </Grid>
 
-                    <div className="--Footer md-grid">
-                        <div />
+                        <Grid className="--Footer">
+                            <Cell />
 
-                        <div className="--Item md-cell">
-                            <Button type="submit" flat primary swapTheming>
-                                Sign In
-                            </Button>
-                        </div>
-                    </div>
-                </form>
-            </Templates.Auth>
+                            <Cell className="--Item">
+                                <Button type="submit" flat primary swapTheming>
+                                    Sign In
+                                </Button>
+                            </Cell>
+                        </Grid>
+                    </form>
+                </Templates.Auth>
+            </div>
         );
     }
 }

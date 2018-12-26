@@ -3,16 +3,14 @@
 .AT,
 .AT > .\--Content {
   margin: 0;
-  padding: 0; }
-
-.AT > .\--Content {
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center; }
-
-.AT > .\--Content > .\--Wrapper {
-  width: 32rem;
-  padding: 0; }
+  .AT .\--Wrapper,
+  .AT > .\--Content .\--Wrapper {
+    width: 32rem;
+    padding: 0; }
 
 .AT > .\--Content > .\--Wrapper > .\--Progress-Wrapper > .\--Progress {
   margin: 0 !important;
@@ -20,8 +18,8 @@
   border-top-right-radius: 100%;
   border-top-left-radius: 100%; }
 
-.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Logo-Wrapper,
-.\--Title {
+.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Content-Wrapper > .\--Title,
+.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Logo-Wrapper {
   display: flex;
   justify-content: center;
   text-align: center; }
@@ -30,28 +28,66 @@
   width: 12rem;
   height: 6rem; }
 
-.AT > .\--Content > .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Form-Group {
+.AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content
+> .\--Form
+> .\--Form-Group {
   display: flex;
   flex-direction: column;
   justify-content: space-between; }
+  .AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content
+> .\--Form
+> .\--Form-Group .\--Item {
+    width: 100% !important;
+    margin-left: 0 !important; }
 
 .AT
 > .\--Content
-.\--Wrapper
+> .\--Wrapper
 > .\--Form-Wrapper
-> .\--Form
-> .\--Form-Group
-> .\--Item {
-  width: 100% !important;
-  margin-left: 0 !important; }
-
-.AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer {
+> .\--Content-Wrapper
+> .\--Content > .\--Form > .\--Footer, .AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content > .\--Footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0 !important; }
 
-.AT > .\--Content .\--Wrapper > .\--Form-Wrapper > .\--Form > .\--Footer > .\--Item {
+.AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content > .\--Form > .\--Footer.\--With-Error, .AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content > .\--Footer.\--With-Error {
+  margin-top: 5rem; }
+
+.AT
+> .\--Content
+> .\--Wrapper
+> .\--Form-Wrapper
+> .\--Content-Wrapper
+> .\--Content
+> .\--Form
+> .\--Footer
+> .\--Item {
   margin-left: 0 !important;
   text-align: right; }
 
@@ -59,7 +95,8 @@
   .AT > .\--Content {
     height: 100vh; }
   .AT > .\--Content > .\--Wrapper > .\--Form-Wrapper {
-    padding: 2rem; } }
+    padding: 2rem;
+    min-height: 75vh; } }
 
 .ET-Container,
 .ET-Content {
@@ -4008,4 +4045,7 @@ a {
 
 .bg-info {
   background-color: #1976d2 !important; }
+
+.text-center {
+  text-align: center !important; }
 

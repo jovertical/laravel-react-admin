@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardTitle, LinearProgress } from 'react-md';
+import { Grid, Cell, Button, Card, CardTitle, LinearProgress } from 'react-md';
 
 import './Auth.scss';
 import logo from '../../../assets/img/logos/2/960x540.png';
@@ -25,13 +25,48 @@ const Auth = props => (
                         <img src={logo} alt="company-logo" className="--Logo" />
                     </div>
 
-                    <CardTitle
-                        className="--Title"
-                        title={props.title}
-                        subtitle={props.subTitle}
-                    />
+                    {_.isEmpty(props.message) ? (
+                        <div className="--Content-Wrapper">
+                            <CardTitle
+                                className="--Title"
+                                title={props.title}
+                                subtitle={props.subTitle}
+                            />
 
-                    {props.children}
+                            <div className="--Content">{props.children}</div>
+                        </div>
+                    ) : (
+                        <div className="--Content-Wrapper">
+                            <CardTitle
+                                className="--Title"
+                                title={props.message.title}
+                            />
+
+                            <div className="--Content">
+                                <div className="text-center">
+                                    {props.message.body}
+                                </div>
+
+                                <Grid className="--Footer --With-Error">
+                                    <Cell />
+
+                                    <Cell className="--Item">
+                                        <Button
+                                            type="button"
+                                            flat
+                                            primary
+                                            swapTheming
+                                            onClick={() =>
+                                                window.location.reload()
+                                            }
+                                        >
+                                            Next
+                                        </Button>
+                                    </Cell>
+                                </Grid>
+                            </div>
+                        </div>
+                    )}
                 </Card>
             </div>
         </div>
