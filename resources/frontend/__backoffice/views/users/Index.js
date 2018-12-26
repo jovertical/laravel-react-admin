@@ -653,7 +653,6 @@ class Index extends Component {
                                         }
                                     />
                                 </Cell>
-
                                 <Cell
                                     className="--Action --Filters"
                                     phoneSize={10}

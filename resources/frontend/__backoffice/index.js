@@ -5,15 +5,14 @@ import ReactDOM from 'react-dom';
 
 import { _register as registerServiceWorker } from '../utils/ServiceWorker';
 import App from './App';
-import 'react-md/dist/react-md.blue-deep_orange.min.css';
 import './style.scss';
 
-if (document.getElementById('initial-content')) {
-    document.getElementById('initial-content').outerHTML = '';
+if (document.querySelector('#initial-content')) {
+    document.querySelector('#initial-content').outerHTML = '';
 }
 
-if (document.getElementById('root')) {
-    ReactDOM.render(<App />, document.getElementById('root'));
+if (document.querySelector('#root')) {
+    ReactDOM.render(<App />, document.querySelector('#root'));
 }
 
 const swFilepath = document.querySelector('meta[name=sw-filepath]');

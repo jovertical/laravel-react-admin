@@ -3985,3 +3985,27 @@ a {
 .w-25 {
   width: 25%; }
 
+.text-success {
+  color: #388e3c !important; }
+
+.text-warning {
+  color: #fbc02d !important; }
+
+.text-error {
+  color: #b00020 !important; }
+
+.text-info {
+  color: #1976d2 !important; }
+
+.bg-success {
+  background-color: #388e3c !important; }
+
+.bg-warning {
+  background-color: #fbc02d !important; }
+
+.bg-error {
+  background-color: #b00020 !important; }
+
+.bg-info {
+  background-color: #1976d2 !important; }
+
