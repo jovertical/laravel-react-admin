@@ -20,6 +20,6 @@
     RewriteRule ^ index.php [L]
 
     RewriteCond %{HTTPS} !=on
-	RewriteCond %{HTTP_HOST} hsbo.test
+	RewriteCond %{HTTP_HOST} hsbo.herokuapp.com
 	RewriteRule ^(.*)$ https://hsbo.herokuapp.com/$1 [R,L]
 </IfModule>
