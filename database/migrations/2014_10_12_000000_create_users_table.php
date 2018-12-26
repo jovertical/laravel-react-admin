@@ -17,13 +17,13 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->enum('type', ['superuser', 'user']);
             $table->string('name');
-            $table->string('username');
+            $table->string('username')->nullable();
             $table->string('email');
             $table->string('password')->nullable();
 
-            $table->string('firstname');
+            $table->string('firstname')->nullable();
             $table->string('middlename')->nullable();
-            $table->string('lastname');
+            $table->string('lastname')->nullable();
             $table->enum('gender', ['male', 'female', ''])->nullable();
             $table->date('birthdate', 'Y-m-d')->nullable();
             $table->text('address')->nullable();
