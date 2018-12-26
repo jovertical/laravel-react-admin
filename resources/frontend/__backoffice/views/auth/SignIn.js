@@ -12,6 +12,15 @@ class SignIn extends Component {
         errors: {},
     };
 
+    /**
+     * Event listener that is triggered when an input has changed.
+     * This may clear existing errors that is previously attached to the input.
+     *
+     * @param {string} value
+     * @param {string} input
+     *
+     * @return {undefined}
+     */
     inputChangeHandler = (value, input) => {
         this.setState(prevState => {
             const filteredErrors = _.pick(
@@ -26,28 +35,40 @@ class SignIn extends Component {
         });
     };
 
-    signinSubmitHandler = event => {
+    /**
+     * Event listener that is triggered when the sign in form is submitted.
+     * This should send an API request to request for authentication.
+     * Reload if authenticated.
+     *
+     * @param {object} event
+     *
+     * @return {undefined}
+     */
+    signinSubmitHandler = async event => {
         event.preventDefault();
 
         this.setState({ loading: true });
 
-        axios
-            .post('/api/auth/signin', {
-                username: this.state.username,
-                password: this.state.password,
-            })
-            .then(response => {
+        try {
+            const { username, password } = this.state;
+
+            const response = await axios.post('/api/auth/signin', {
+                username,
+                password,
+            });
+
+            if (response.status === 200) {
                 window.localStorage.setItem('uid', response.data);
 
-                this.setState({ errors: {}, loading: false });
+                this.setState({ loading: false, errors: {} });
 
                 window.location.reload();
-            })
-            .catch(({ response }) => {
-                const { errors } = response.data;
+            }
+        } catch (error) {
+            const { errors } = error.response.data;
 
-                this.setState({ errors, loading: false });
-            });
+            this.setState({ loading: false, errors });
+        }
     };
 
     render() {
