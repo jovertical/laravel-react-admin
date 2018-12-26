@@ -32,3 +32,35 @@ a {
 .w-25 {
     width: 25%;
 }
+
+.text-success {
+    color: $success-color !important;
+}
+
+.text-warning {
+    color: $warning-color !important;
+}
+
+.text-error {
+    color: $error-color !important;
+}
+
+.text-info {
+    color: $info-color !important;
+}
+
+.bg-success {
+    background-color: $success-color !important;
+}
+
+.bg-warning {
+    background-color: $warning-color !important;
+}
+
+.bg-error {
+    background-color: $error-color !important;
+}
+
+.bg-info {
+    background-color: $info-color !important;
+}
