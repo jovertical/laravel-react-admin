@@ -27,7 +27,6 @@ module.exports = {
 
     entry: {
         backoffice: path.join(SRC_DIR, '__backoffice/index.js'),
-        frontend: path.join(SRC_DIR, '__frontend/index.js'),
         sw: path.join(SRC_DIR, 'core/serviceWorker.js'),
     },
 
@@ -90,7 +89,7 @@ module.exports = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css',
+            filename: 'css/[name].bundle.[contenthash].css',
         }),
 
         new CleanWebpackPlugin(['css/*', 'js/*', 'img/*', 'fonts/*'], {
@@ -140,7 +139,7 @@ module.exports = {
     output: {
         path: DIST_DIR,
         publicPath: PUBLIC_DIR,
-        filename: 'js/[name].[contenthash].js',
+        filename: 'js/[name].bundle.[contenthash].js',
     },
 
     optimization: {
