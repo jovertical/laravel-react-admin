@@ -4,6 +4,17 @@ Helper Solutions Backoffice (HSBO) is a scaffolding project that comes with auth
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org/)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
+## Features
+
+- Single Page App
+- Stateless Authentication System
+- Datatables uses server-side pagination, sorting & filtering
+- CRUD - Undo common actions such as deleting data.
+
+## Preview
+
+You can check out the [live preview](https://hsbo.herokuapp.com)
+
 ## Quick Start
 
 1. Clone the repo `git clone https://github.com/JovertTheDeveloper/hsbo.git`
