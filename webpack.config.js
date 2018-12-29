@@ -11,6 +11,7 @@ const notifier = require('node-notifier');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const EventHooksPlugin = require('event-hooks-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
@@ -27,7 +28,6 @@ module.exports = {
 
     entry: {
         backoffice: path.join(SRC_DIR, '__backoffice/index.js'),
-        sw: path.join(SRC_DIR, 'core/serviceWorker.js'),
     },
 
     module: {
@@ -102,6 +102,33 @@ module.exports = {
         new CleanObsoleteChunks({
             verbose: true,
             deep: true,
+        }),
+
+        new SWPrecacheWebpackPlugin({
+            cacheId: 'hsbo',
+            filepath: './public/js/service-worker.js',
+            staticFileGlobs: [
+                'public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}',
+            ],
+            minify: true,
+            stripPrefix: 'public/',
+            handleFetch: true,
+            dynamicUrlToDependencies: {
+                '/': ['resources/views/__backoffice/welcome.blade.php'],
+            },
+            staticFileGlobsIgnorePatterns: [
+                /\.map$/,
+                /assets\.json$/,
+                /manifest\.json$/,
+                /service-worker\.js$/,
+            ],
+            runtimeCaching: [
+                {
+                    urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+                    handler: 'cacheFirst',
+                },
+            ],
+            importScripts: [],
         }),
 
         new EventHooksPlugin({

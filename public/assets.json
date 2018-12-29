@@ -1,6 +1,5 @@
 {
   "css/backoffice.css": "css/backoffice.bundle.bcd3531e5fecef7fa738.css",
-  "js/backoffice.js": "js/backoffice.bundle.83feebc2f19ec6f69126.js",
-  "js/sw.js": "js/sw.bundle.b106c03c52218802aad1.js",
-  "js/vendor.js": "js/vendor.bundle.2722eaa0bef5dc4bdfff.js"
+  "js/backoffice.js": "js/backoffice.bundle.a0c43b0d8cdce1c8b31b.js",
+  "js/vendor.js": "js/vendor.bundle.c57fa9608ede4e8b59ef.js"
 }

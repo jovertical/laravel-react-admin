@@ -35,6 +35,7 @@
         "node-sass": "^4.10.0",
         "sass-loader": "^7.1.0",
         "style-loader": "^0.23.1",
+        "sw-precache-webpack-plugin": "^0.11.5",
         "url-loader": "^1.1.2",
         "webpack": "^4.27.1",
         "webpack-clean-obsolete-chunks": "^0.4.0",

@@ -16,6 +16,8 @@ class App extends Component {
 
     /**
      * Fetch the Authentication Token.
+     *
+     * @return {undefined}
      */
     fetchAuthToken = async () => {
         try {
@@ -38,6 +40,8 @@ class App extends Component {
 
     /**
      * Fetch the authenticated user.
+     *
+     * @return {undefined}
      */
     fetchAuthUser = async () => {
         try {
@@ -54,6 +58,8 @@ class App extends Component {
 
     /**
      * Sign out user.
+     *
+     * @return {undefined}
      */
     signoutHandler = async () => {
         this.setState({ loading: true });
