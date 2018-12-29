@@ -6,8 +6,8 @@ export function _register(serviceWorkerFile) {
         if (serviceWorkerFile) {
             navigator.serviceWorker
                 .register(`${serviceWorkerFile}`)
-                .then(() => {})
-                .catch(error => {});
+                .then()
+                .catch();
         }
     }
 }
