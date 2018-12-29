@@ -15,7 +15,7 @@
         <meta property="og:url" content="{{ config('app.url') }}">
         <meta property="og:image" content="">
 
-        <meta name="sw-filepath" content="/js/service-worker.js">
+        <meta name="sw-filepath" content="/service-worker.js">
 
         <!-- Title -->
         <title>{{ config('app.name') }}</title>

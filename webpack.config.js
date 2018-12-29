@@ -106,7 +106,7 @@ module.exports = {
 
         new SWPrecacheWebpackPlugin({
             cacheId: 'hsbo',
-            filepath: './public/js/service-worker.js',
+            filename: 'service-worker.js',
             staticFileGlobs: [
                 'public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}',
             ],
