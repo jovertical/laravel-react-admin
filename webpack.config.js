@@ -104,33 +104,6 @@ module.exports = {
             deep: true,
         }),
 
-        new SWPrecacheWebpackPlugin({
-            cacheId: 'hsbo',
-            filename: 'service-worker.js',
-            staticFileGlobs: [
-                'public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}',
-            ],
-            minify: true,
-            stripPrefix: 'public/',
-            handleFetch: true,
-            dynamicUrlToDependencies: {
-                '/': ['resources/views/__backoffice/welcome.blade.php'],
-            },
-            staticFileGlobsIgnorePatterns: [
-                /\.map$/,
-                /assets\.json$/,
-                /manifest\.json$/,
-                /service-worker\.js$/,
-            ],
-            runtimeCaching: [
-                {
-                    urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
-                    handler: 'cacheFirst',
-                },
-            ],
-            importScripts: [],
-        }),
-
         new EventHooksPlugin({
             done: stats => {
                 const { time, errors, assets } = stats.toJson();
@@ -197,6 +170,37 @@ if (!inProduction) {
             proxy: 'http://hsbo.test',
             open: true,
             notify: false,
+        }),
+    );
+}
+
+if (inProduction) {
+    module.exports.plugins.push(
+        new SWPrecacheWebpackPlugin({
+            cacheId: 'hsbo',
+            filename: 'service-worker.js',
+            staticFileGlobs: [
+                'public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}',
+            ],
+            minify: true,
+            stripPrefix: 'public/',
+            handleFetch: true,
+            dynamicUrlToDependencies: {
+                '/': ['resources/views/__backoffice/welcome.blade.php'],
+            },
+            staticFileGlobsIgnorePatterns: [
+                /\.map$/,
+                /assets\.json$/,
+                /manifest\.json$/,
+                /service-worker\.js$/,
+            ],
+            runtimeCaching: [
+                {
+                    urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+                    handler: 'cacheFirst',
+                },
+            ],
+            importScripts: [],
         }),
     );
 }

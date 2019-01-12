@@ -15,7 +15,9 @@
         <meta property="og:url" content="{{ config('app.url') }}">
         <meta property="og:image" content="">
 
-        <meta name="sw-filepath" content="/service-worker.js">
+        @if (config('app.env') === 'production')
+            <meta name="sw-filepath" content="/service-worker.js">
+        @endif
 
         <!-- Title -->
         <title>{{ config('app.name') }}</title>
