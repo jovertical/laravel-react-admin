@@ -24,13 +24,13 @@ const navigationRoutes = [
 
     {
         label: 'Resources',
-        to: 'resources',
+        to: 'r',
         icon: 'widgets',
         routes: [
             {
                 key: 'users',
                 label: 'Users',
-                to: '/resources/users',
+                to: '/r/users',
             },
         ],
     },
@@ -107,16 +107,15 @@ const Master = props => {
             toolbarTitle={
                 <Autocomplete
                     id="search"
-                    className="--Search"
-                    listClassName="toolbar-search__list"
+                    className=" --Search"
                     placeholder="Search"
                     block
                     leftIcon={<FontIcon>search</FontIcon>}
-                    dataLabel="label"
+                    dataLabel="primaryText"
                     dataValue="value"
-                    data={[]}
+                    data={props.pageProps.searchData}
                     filter={null}
-                    onChange={value => console.log(value)}
+                    onChange={pageProps.searchChangedHandler}
                     onAutocomplete={value => console.log(value)}
                 />
             }

@@ -1,4 +1,4 @@
-import { Auth, Home, Users, Errors } from './views';
+import { Auth, Home, Users, Errors } from '../views';
 
 export default [
     {
@@ -17,21 +17,21 @@ export default [
 
     {
         name: 'backoffice.users.index',
-        path: '/resources/users',
+        path: '/r/users',
         component: Users.Index,
         auth: true,
     },
 
     {
         name: 'backoffice.users.create',
-        path: '/resources/users/create',
+        path: '/r/users/create',
         component: Users.Create,
         auth: true,
     },
 
     {
         name: 'backoffice.users.edit',
-        path: '/resources/users/:id/edit',
+        path: '/r/users/:id/edit',
         component: Users.Edit,
         auth: true,
     },

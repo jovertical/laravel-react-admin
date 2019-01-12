@@ -3,7 +3,7 @@ import { HashRouter as Router } from 'react-router-dom';
 
 import { Navigator } from '../core';
 import { Loading } from './ui';
-import ROUTES from './routes';
+import { ROUTES, SEARCH } from './constants';
 import './App.scss';
 
 class App extends Component {
@@ -12,6 +12,44 @@ class App extends Component {
         authToken: null,
         authenticated: false,
         user: {},
+        searchTerm: '',
+        searchData: SEARCH,
+    };
+
+    /**
+     * Event listener that is triggered when the value of the search box
+     * has been changed.
+     *
+     * @param {string} value
+     *
+     * @return {undefined}
+     */
+    searchChangedHandler = value => {
+        this.setState({ searchTerm: value });
+    };
+
+    /**
+     * Sign out user.
+     *
+     * @return {undefined}
+     */
+    signoutHandler = async () => {
+        this.setState({ loading: true });
+
+        try {
+            const response = await axios.post('/api/auth/signout');
+
+            if (response.status === 200) {
+                // remove uid stored in localStorage.
+                await localStorage.removeItem('uid');
+
+                this.setState({
+                    loading: false,
+                    authenticated: false,
+                    user: {},
+                });
+            }
+        } catch (error) {}
     };
 
     /**
@@ -56,30 +94,6 @@ class App extends Component {
         } catch (error) {}
     };
 
-    /**
-     * Sign out user.
-     *
-     * @return {undefined}
-     */
-    signoutHandler = async () => {
-        this.setState({ loading: true });
-
-        try {
-            const response = await axios.post('/api/auth/signout');
-
-            if (response.status === 200) {
-                // remove uid stored in localStorage.
-                await localStorage.removeItem('uid');
-
-                this.setState({
-                    loading: false,
-                    authenticated: false,
-                    user: {},
-                });
-            }
-        } catch (error) {}
-    };
-
     async componentWillMount() {
         this.setState({ loading: true });
 
@@ -108,6 +122,7 @@ class App extends Component {
                         ...this.state,
                         environment: 'backoffice',
                         routes: ROUTES,
+                        searchChangedHandler: this.searchChangedHandler,
                         signoutHandler: this.signoutHandler,
                     }}
                 />
