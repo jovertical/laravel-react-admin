@@ -2,6 +2,10 @@
     margin: 1.5rem;
 }
 
+.MT > .--Toolbar > .--Search {
+    width: 24rem;
+}
+
 .MT > .--Toolbar > div > .--Actions > #--Account > .--Account-Menu-Items {
     width: 16rem;
 }
@@ -31,6 +35,10 @@
 @media only screen and (max-width: 768px) {
     .MT > .--Content > .--Wrapper {
         margin: 0.25rem;
+    }
+
+    .MT > .--Toolbar > .--Search {
+        width: 8rem;
     }
 
     .MT

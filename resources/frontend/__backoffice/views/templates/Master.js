@@ -6,6 +6,7 @@ import {
     FontIcon,
     MenuButton,
     NavigationDrawer,
+    Autocomplete,
 } from 'react-md';
 
 import { _color } from '../../../utils/Random';
@@ -38,7 +39,7 @@ const navigationRoutes = [
 const navItems = navigationRoutes.map(route => _toNavItem(route));
 
 const Master = props => {
-    const { pageTitle, pageProps } = props;
+    const { pageProps } = props;
     const { user, signoutHandler } = pageProps;
 
     return (
@@ -70,10 +71,7 @@ const Master = props => {
                         icon
                         adjusted="false"
                         simplifiedMenu={false}
-                        anchor={{
-                            x: 'left',
-                            y: 'overlap',
-                        }}
+                        anchor={{ x: 'left', y: 'overlap' }}
                         menuItems={[
                             {
                                 leftIcon: (
@@ -94,7 +92,6 @@ const Master = props => {
                                 onClick: () =>
                                     alert(`Hello ${user.firstname}!`),
                             },
-
                             {
                                 leftIcon: <FontIcon>exit_to_app</FontIcon>,
                                 primaryText: 'Sign out',
@@ -107,7 +104,22 @@ const Master = props => {
                     </MenuButton>
                 </div>
             }
-            toolbarTitle={pageTitle}
+            toolbarTitle={
+                <Autocomplete
+                    id="search"
+                    className="--Search"
+                    listClassName="toolbar-search__list"
+                    placeholder="Search"
+                    block
+                    leftIcon={<FontIcon>search</FontIcon>}
+                    dataLabel="label"
+                    dataValue="value"
+                    data={[]}
+                    filter={null}
+                    onChange={value => console.log(value)}
+                    onAutocomplete={value => console.log(value)}
+                />
+            }
             toolbarTitleClassName="--Title"
         >
             {pageProps.loading ? (
