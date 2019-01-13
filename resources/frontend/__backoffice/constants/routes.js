@@ -1,4 +1,5 @@
 import * as Views from '../views';
+
 export const ROUTES = [
     {
         name: 'backoffice.auth.signin',

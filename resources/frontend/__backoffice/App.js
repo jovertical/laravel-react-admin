@@ -13,7 +13,7 @@ class App extends Component {
         authenticated: false,
         user: {},
         searchTerm: '',
-        searchData: SEARCH,
+        searchData: [],
     };
 
     /**
@@ -25,7 +25,13 @@ class App extends Component {
      * @return {undefined}
      */
     searchChangedHandler = value => {
-        this.setState({ searchTerm: value });
+        const searchData = SEARCH.filter(item => {
+            return (
+                item.primaryText.toLowerCase().indexOf(value.toLowerCase()) > -1
+            );
+        });
+
+        this.setState({ searchTerm: value, searchData });
     };
 
     /**
