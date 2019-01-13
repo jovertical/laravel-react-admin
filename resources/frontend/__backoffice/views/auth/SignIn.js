@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button } from 'react-md';
 
-import { Templates } from '../';
+import { AuthTemplate } from '../';
 
-class SignIn extends Component {
+export class SignIn extends Component {
     state = {
         loading: false,
         username: '',
@@ -93,7 +93,7 @@ class SignIn extends Component {
 
         return (
             <div>
-                <Templates.Auth
+                <AuthTemplate
                     title="Sign in"
                     subTitle="with your Account"
                     loading={loading}
@@ -164,10 +164,8 @@ class SignIn extends Component {
                             </Cell>
                         </Grid>
                     </form>
-                </Templates.Auth>
+                </AuthTemplate>
             </div>
         );
     }
 }
-
-export default SignIn;

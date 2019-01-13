@@ -1,43 +1,42 @@
-import { Auth, Home, Users, Errors } from '../views';
-
-export default [
+import * as Views from '../views';
+export const ROUTES = [
     {
         name: 'backoffice.auth.signin',
         path: '/signin',
-        component: Auth.SignIn,
+        component: Views.AuthSignin,
         auth: false,
     },
 
     {
         name: 'backoffice.home',
         path: '/',
-        component: Home,
+        component: Views.Home,
         auth: true,
     },
 
     {
         name: 'backoffice.users.index',
         path: '/r/users',
-        component: Users.Index,
+        component: Views.UserIndex,
         auth: true,
     },
 
     {
         name: 'backoffice.users.create',
         path: '/r/users/create',
-        component: Users.Create,
+        component: Views.UserCreate,
         auth: true,
     },
 
     {
         name: 'backoffice.users.edit',
         path: '/r/users/:id/edit',
-        component: Users.Edit,
+        component: Views.UserEdit,
         auth: true,
     },
 
     {
         name: 'backoffice.errors.not-found',
-        component: Errors.NotFound,
+        component: Views.ErrorNotFound,
     },
 ];

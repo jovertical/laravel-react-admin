@@ -1,3 +1,1 @@
-import Navigator from './Navigator';
-
-export { Navigator };
+export { Navigator } from './Navigator';

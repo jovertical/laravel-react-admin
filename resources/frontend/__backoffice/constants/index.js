@@ -1,4 +1,2 @@
-import ROUTES from './routes';
-import SEARCH from './search';
-
-export { ROUTES, SEARCH };
+export { ROUTES } from './routes';
+export { SEARCH } from './search';

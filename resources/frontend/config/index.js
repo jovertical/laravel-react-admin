@@ -1,4 +1,2 @@
-import APP from './app';
-import ROUTES from './routes';
-
-export { APP, ROUTES };
+export { APP } from './app';
+export { ROUTES } from './routes';

@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Templates } from '../';
+import { MasterTemplate } from '../';
 
-class Edit extends Component {
+export class Edit extends Component {
     render() {
         const { params } = this.props.match;
 
         return (
-            <Templates.Master {...this.props} pageTitle="Edit user">
+            <MasterTemplate {...this.props} pageTitle="Edit user">
                 <h1>Edit user: {params.id}</h1>
-            </Templates.Master>
+            </MasterTemplate>
         );
     }
 }
-
-export default Edit;

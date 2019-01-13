@@ -1,10 +1,4 @@
-import ActionMenu from './ActionMenu';
-import Loading from './Loading';
-import NavItemLink from './NavItemLink';
-import ModalConfirm from './modals/Confirm';
-
-export { ActionMenu, Loading, NavItemLink };
-
-export const Modal = {
-    Confirm: ModalConfirm,
-};
+export { ActionMenu } from './ActionMenu';
+export { Loading } from './Loading';
+export { NavItemLink } from './NavItemLink';
+export { Confirm as ModalConfirm } from './modals/Confirm';

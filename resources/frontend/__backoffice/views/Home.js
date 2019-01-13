@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Templates } from './';
+import { MasterTemplate } from './';
 
-class Dashboard extends Component {
+export class Home extends Component {
     render() {
         return (
-            <Templates.Master {...this.props} pageTitle="Dashboard">
+            <MasterTemplate {...this.props} pageTitle="Dashboard">
                 Dashboard
-            </Templates.Master>
+            </MasterTemplate>
         );
     }
 }
-
-export default Dashboard;

@@ -5,7 +5,7 @@ import { Grid, Cell, Button, Card, CardTitle, LinearProgress } from 'react-md';
 import './Auth.scss';
 import logo from '../../../assets/img/logos/2/960x540.png';
 
-const Auth = props => (
+export const Auth = props => (
     <div className="AT">
         <div className="--Content">
             <div className="--Wrapper">
@@ -78,5 +78,3 @@ Auth.propTypes = {
     title: PropTypes.string,
     subTitle: PropTypes.string,
 };
-
-export default Auth;

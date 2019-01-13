@@ -22,11 +22,11 @@ import {
 import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
-import { ActionMenu, Loading, Modal } from '../../ui';
-import { Templates } from '../';
+import { ActionMenu, Loading, ModalConfirm } from '../../ui';
+import { MasterTemplate } from '../';
 import './Index.scss';
 
-class Index extends Component {
+export class Index extends Component {
     state = {
         loading: false,
         selectedRows: [],
@@ -560,7 +560,7 @@ class Index extends Component {
 
         return (
             <div>
-                <Templates.Master {...this.props} pageTitle="Users">
+                <MasterTemplate {...this.props} pageTitle="Users">
                     <Card className="--Card">
                         <TableCardHeader
                             className="--Header"
@@ -839,10 +839,10 @@ class Index extends Component {
                             <Loading />
                         )}
                     </Card>
-                </Templates.Master>
+                </MasterTemplate>
 
                 {modal.visible ? (
-                    <Modal.Confirm
+                    <ModalConfirm
                         title={modal.title}
                         visible
                         confirmAction={modal.confirmAction}
@@ -858,7 +858,7 @@ class Index extends Component {
                         }
                     >
                         {modal.content}
-                    </Modal.Confirm>
+                    </ModalConfirm>
                 ) : null}
 
                 {toasts.length > 0 ? (
@@ -881,5 +881,3 @@ class Index extends Component {
         );
     }
 }
-
-export default Index;

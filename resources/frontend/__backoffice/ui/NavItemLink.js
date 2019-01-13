@@ -47,7 +47,15 @@ window.addEventListener('load', () => {
     scrollIntoView(activeItem, true);
 });
 
-const Link = ({ label, to, exact, icon, href, avatar, routes }) => (
+export const NavItemLink = ({
+    label,
+    to,
+    exact,
+    icon,
+    href,
+    avatar,
+    routes,
+}) => (
     <Route path={to} exact={exact} ref={routeRef}>
         {({ match }) => {
             let leftIcon;
@@ -69,7 +77,7 @@ const Link = ({ label, to, exact, icon, href, avatar, routes }) => (
 
             if (routes) {
                 nestedItems = routes.map(route => (
-                    <Link {...route} key={route.to || route.label} />
+                    <NavItemLink {...route} key={route.to || route.label} />
                 ));
             }
 
@@ -94,7 +102,7 @@ const Link = ({ label, to, exact, icon, href, avatar, routes }) => (
     </Route>
 );
 
-Link.propTypes = {
+NavItemLink.propTypes = {
     label: PropTypes.string.isRequired,
     to: PropTypes.string,
     exact: PropTypes.bool,
@@ -106,5 +114,3 @@ Link.propTypes = {
     }),
     routes: PropTypes.arrayOf(PropTypes.object),
 };
-
-export default Link;

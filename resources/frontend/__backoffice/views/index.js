@@ -1,33 +1,11 @@
-import AuthTemplate from './templates/Auth';
-import ErrorTemplate from './templates/Error';
-import MasterTemplate from './templates/Master';
+export { Auth as AuthTemplate } from './templates/Auth';
+export { Error as ErrorTemplate } from './templates/Error';
+export { Master as MasterTemplate } from './templates/Master';
 
-import AuthSignin from './auth/SignIn';
-import Home from './Home';
-import ErrorNotFound from './errors/NotFound';
+export { SignIn as AuthSignin } from './auth/SignIn';
+export { Home } from './Home';
+export { NotFound as ErrorNotFound } from './errors/NotFound';
 
-import UserIndex from './users/Index';
-import UserCreate from './users/Create';
-import UserEdit from './users/Edit';
-
-export const Templates = {
-    Auth: AuthTemplate,
-    Error: ErrorTemplate,
-    Master: MasterTemplate,
-};
-
-export const Auth = {
-    SignIn: AuthSignin,
-};
-
-export const Errors = {
-    NotFound: ErrorNotFound,
-};
-
-export const Users = {
-    Index: UserIndex,
-    Create: UserCreate,
-    Edit: UserEdit,
-};
-
-export { Home };
+export { Index as UserIndex } from './users/Index';
+export { Create as UserCreate } from './users/Create';
+export { Edit as UserEdit } from './users/Edit';

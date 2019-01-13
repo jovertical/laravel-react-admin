@@ -1,3 +1,3 @@
-import BACKOFFICE_ROUTES from '../__backoffice/constants/routes';
+import { ROUTES as BACKOFFICE_ROUTES } from '../__backoffice/constants/routes';
 
-export default [...BACKOFFICE_ROUTES];
+export const ROUTES = [...BACKOFFICE_ROUTES];

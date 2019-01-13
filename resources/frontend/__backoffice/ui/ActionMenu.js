@@ -4,7 +4,7 @@ import { MenuButtonColumn, FontIcon } from 'react-md';
 
 import './ActionMenu.scss';
 
-const ActionMenu = props => {
+export const ActionMenu = props => {
     const mappedActions = props.actions.map(action => {
         if (_.has(action, 'divider')) {
             return action;
@@ -44,5 +44,3 @@ ActionMenu.propTypes = {
     actions: PropTypes.array.isRequired,
     style: PropTypes.object,
 };
-
-export default ActionMenu;

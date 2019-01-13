@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DialogContainer } from 'react-md';
 
-const Confirm = props => {
+export const Confirm = props => {
     const { visible } = props;
 
     const actions = [
@@ -36,5 +36,3 @@ Confirm.propTypes = {
     actions: PropTypes.array,
     children: PropTypes.any,
 };
-
-export default Confirm;

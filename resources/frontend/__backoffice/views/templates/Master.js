@@ -38,7 +38,7 @@ const navigationRoutes = [
 
 const navItems = navigationRoutes.map(route => _toNavItem(route));
 
-const Master = props => {
+export const Master = props => {
     const { pageProps } = props;
     const { user, signoutHandler } = pageProps;
 
@@ -134,5 +134,3 @@ Master.propTypes = {
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
 };
-
-export default Master;

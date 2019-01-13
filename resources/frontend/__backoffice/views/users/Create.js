@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Card, CardTitle } from 'react-md';
-import { Templates } from '../';
+import { MasterTemplate } from '../';
 
-class Create extends Component {
+export class Create extends Component {
     render() {
         return (
-            <Templates.Master {...this.props} pageTitle="Create a user">
+            <MasterTemplate {...this.props} pageTitle="Create a user">
                 <Card className="--Card">
                     <CardTitle
                         title="Please fill up the form"
@@ -18,9 +18,7 @@ class Create extends Component {
                         }
                     />
                 </Card>
-            </Templates.Master>
+            </MasterTemplate>
         );
     }
 }
-
-export default Create;

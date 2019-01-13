@@ -1,3 +1,3 @@
 const navigations = ['Dashboard', 'Users'];
 
-export default [...navigations];
+export const SEARCH = [...navigations];
