@@ -5,6 +5,7 @@ import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { AuthTemplate } from '../';
 import './SignIn.scss';
+import { _route } from '../../../utils/Navigation';
 export class SignIn extends Component {
     state = {
         loading: false,
@@ -187,101 +188,107 @@ export class SignIn extends Component {
         } = this.state;
 
         return (
-            <div>
-                <AuthTemplate
-                    title={identified ? 'Welcome' : 'Sign in'}
-                    subTitle={
-                        identified ? (
-                            <Chip
-                                label={u}
-                                removable
-                                rotateIcon={false}
-                                className="--Username-Chip"
-                                avatar={<FontIcon>account_circle</FontIcon>}
-                                onClick={this.usernameChipClickedHandler}
-                            >
-                                expand_more
-                            </Chip>
-                        ) : (
-                            'with your Account'
-                        )
-                    }
-                    loading={loading}
-                    message={message}
-                >
-                    <form
-                        onSubmit={this.signinSubmitHandler}
-                        className="--Form"
-                    >
-                        {!identified ? (
-                            <Grid className="--Form-Group">
-                                <Cell className="--Item">
-                                    <TextField
-                                        id="username"
-                                        label="Username or Email"
-                                        lineDirection="center"
-                                        value={username}
-                                        onChange={value =>
-                                            this.inputChangeHandler(
-                                                value,
-                                                'username',
-                                            )
-                                        }
-                                        error={_.has(errors, 'username')}
-                                        errorText={
-                                            _.has(errors, 'username')
-                                                ? errors.username[0]
-                                                : ''
-                                        }
-                                    />
-                                </Cell>
-
-                                <Cell className="--Item">
-                                    <Link to="#">Forgot Email?</Link>
-                                </Cell>
-                            </Grid>
-                        ) : (
-                            <Grid className="--Form-Group">
-                                <Cell className="--Item">
-                                    <TextField
-                                        id="password"
-                                        type="password"
-                                        label="Password"
-                                        lineDirection="center"
-                                        value={password}
-                                        onChange={value =>
-                                            this.inputChangeHandler(
-                                                value,
-                                                'password',
-                                            )
-                                        }
-                                        error={_.has(errors, 'password')}
-                                        errorText={
-                                            _.has(errors, 'password')
-                                                ? errors.password[0]
-                                                : ''
-                                        }
-                                    />
-                                </Cell>
-
-                                <Cell className="--Item">
-                                    <Link to="#">Forgot Password?</Link>
-                                </Cell>
-                            </Grid>
-                        )}
-
-                        <Grid className="--Footer">
-                            <Cell />
+            <AuthTemplate
+                title={identified ? 'Welcome' : 'Sign in'}
+                subTitle={
+                    identified ? (
+                        <Chip
+                            label={u}
+                            removable
+                            rotateIcon={false}
+                            className="--Username-Chip"
+                            avatar={<FontIcon>account_circle</FontIcon>}
+                            onClick={this.usernameChipClickedHandler}
+                        >
+                            expand_more
+                        </Chip>
+                    ) : (
+                        'with your Account'
+                    )
+                }
+                loading={loading}
+                message={message}
+            >
+                <form onSubmit={this.signinSubmitHandler} className="--Form">
+                    {!identified ? (
+                        <Grid className="--Form-Group">
+                            <Cell className="--Item">
+                                <TextField
+                                    id="username"
+                                    label="Username or Email"
+                                    lineDirection="center"
+                                    value={username}
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'username',
+                                        )
+                                    }
+                                    error={_.has(errors, 'username')}
+                                    errorText={
+                                        _.has(errors, 'username')
+                                            ? errors.username[0]
+                                            : ''
+                                    }
+                                />
+                            </Cell>
 
                             <Cell className="--Item">
-                                <Button type="submit" flat primary swapTheming>
-                                    Next
-                                </Button>
+                                <Link to="#">Forgot Email?</Link>
                             </Cell>
                         </Grid>
-                    </form>
-                </AuthTemplate>
-            </div>
+                    ) : (
+                        <Grid className="--Form-Group">
+                            <Cell className="--Item">
+                                <TextField
+                                    id="password"
+                                    type="password"
+                                    label="Password"
+                                    lineDirection="center"
+                                    value={password}
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'password',
+                                        )
+                                    }
+                                    error={_.has(errors, 'password')}
+                                    errorText={
+                                        _.has(errors, 'password')
+                                            ? errors.password[0]
+                                            : ''
+                                    }
+                                />
+                            </Cell>
+
+                            <Cell className="--Item">
+                                <Link
+                                    to={{
+                                        search: _queryString({
+                                            u,
+                                        }),
+                                        pathname: _route(
+                                            'backoffice.auth.passwords.request',
+                                        ),
+                                    }}
+                                >
+                                    Forgot Password?
+                                </Link>
+                            </Cell>
+                        </Grid>
+                    )}
+
+                    <Grid className="--Footer">
+                        <Cell />
+
+                        <Cell className="--Item">
+                            <Button type="submit" flat primary swapTheming>
+                                Next
+                            </Button>
+                        </Cell>
+                    </Grid>
+                </form>
+            </AuthTemplate>
         );
     }
 }

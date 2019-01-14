@@ -68,7 +68,7 @@ export function _toNavItem(route, parents = []) {
     const key = to || label;
 
     if (to || to === '') {
-        to = `${prefix}${to}`.replace(/^\/+/g, '/');
+        to = `${prefix}${to}`;
     }
 
     return {

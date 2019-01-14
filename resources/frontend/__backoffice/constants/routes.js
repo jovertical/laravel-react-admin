@@ -9,11 +9,20 @@ export const ROUTES = [
     },
 
     {
-        name: 'backoffice.home',
-        path: '/',
-        component: Views.Home,
-        auth: true,
+        name: 'backoffice.auth.passwords.request',
+        path: '/password/request',
+        component: Views.AuthPasswordRequest,
+        auth: false,
     },
+
+    {
+        name: 'backoffice.auth.passwords.reset',
+        path: '/password/reset',
+        component: Views.AuthPasswordReset,
+        auth: false,
+    },
+
+    { name: 'backoffice.home', path: '/', component: Views.Home, auth: true },
 
     {
         name: 'backoffice.users.index',
@@ -36,8 +45,5 @@ export const ROUTES = [
         auth: true,
     },
 
-    {
-        name: 'backoffice.errors.not-found',
-        component: Views.ErrorNotFound,
-    },
+    { name: 'backoffice.errors.not-found', component: Views.ErrorNotFound },
 ];
