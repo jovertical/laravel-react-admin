@@ -22,6 +22,11 @@ Route::namespace('Api')->name('api.')->group(function () {
             Route::post('refresh', 'SessionsController@refresh')->name('refresh');
             Route::post('user', 'SessionsController@user')->name('user');
         });
+
+        Route::name('password.')->prefix('password')->group(function() {
+            Route::post('request', 'ForgotPasswordController@sendResetLinkEmail')->name('request');
+            Route::post('reset/{token}', 'ResetPasswordController@reset')->name('reset');
+        });
     });
 
     Route::middleware('auth:api')->group(function () {

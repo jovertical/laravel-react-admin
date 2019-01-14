@@ -39,7 +39,23 @@ export class PasswordRequest extends Component {
     requestPasswordSubmitHandler = async event => {
         event.preventDefault();
 
-        alert('Submitting...');
+        this.setState({ loading: true });
+
+        try {
+            const response = await axios.post('api/auth/password/request', {
+                email: this.state.email,
+            });
+
+            console.log(response);
+        } catch (error) {
+            if (error.response) {
+                const { errors } = error.response.data;
+
+                this.setState({ loading: false, errors });
+            } else {
+                throw new Error('Unknown error');
+            }
+        }
     };
 
     componentDidMount() {

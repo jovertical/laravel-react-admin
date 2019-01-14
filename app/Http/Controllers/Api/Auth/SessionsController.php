@@ -53,7 +53,7 @@ class SessionsController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'username' => [trans('auth.failed')]
+            'password' => [trans('auth.failed')]
         ]);
 
         return response()->json(['error' => 'Unauthorized'], 401);
