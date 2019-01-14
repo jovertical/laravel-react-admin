@@ -17,9 +17,9 @@ import './Master.scss';
 
 const navigationRoutes = [
     {
-        key: '/dashboard',
+        key: '/',
         label: 'Dashboard',
-        to: '/dashboard',
+        to: '/',
         icon: 'home',
     },
 
