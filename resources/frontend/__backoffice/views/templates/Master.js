@@ -42,7 +42,7 @@ const navItems = navigationRoutes.map(route => _toNavItem(route));
 
 export const Master = props => {
     const { pageProps } = props;
-    const { user, signoutHandler } = pageProps;
+    const { user, signoutHandler, lockHandler } = pageProps;
 
     return (
         <NavigationDrawer
@@ -98,6 +98,7 @@ export const Master = props => {
                             {
                                 leftIcon: <FontIcon>lock</FontIcon>,
                                 primaryText: 'Lock',
+                                onClick: () => lockHandler(user.email),
                             },
 
                             {

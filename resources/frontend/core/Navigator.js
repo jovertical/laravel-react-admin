@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { _route } from '../utils/Navigation';
+import { _queryString } from '../utils/URL';
 
 const WrappableNavigator = props => {
-    const { authenticated, environment, routes } = props.pageProps;
+    const { authenticated, u, environment, routes } = props.pageProps;
 
     return (
         <Switch>
@@ -22,9 +23,14 @@ const WrappableNavigator = props => {
                                 if (!authenticated) {
                                     return (
                                         <Redirect
-                                            to={_route(
-                                                `${environment}.auth.signin`,
-                                            )}
+                                            to={{
+                                                search: _queryString({
+                                                    u,
+                                                }),
+                                                pathname: _route(
+                                                    `${environment}.auth.signin`,
+                                                ),
+                                            }}
                                         />
                                     );
                                 }

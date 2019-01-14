@@ -168,7 +168,7 @@ export class SignIn extends Component {
 
         const queryParams = _queryParams(location.search);
 
-        if (_.has(queryParams, 'u')) {
+        if (_.has(queryParams, 'u') && queryParams.u !== '') {
             this.setState({ username: queryParams.u });
 
             await this.identify(queryParams.u);

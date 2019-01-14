@@ -76,5 +76,5 @@ export const Auth = props => (
 Auth.propTypes = {
     loading: PropTypes.bool,
     title: PropTypes.string,
-    subTitle: PropTypes.string,
+    subTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };

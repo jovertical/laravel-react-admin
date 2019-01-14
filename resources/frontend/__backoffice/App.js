@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
 import { Navigator } from '../core';
+import { _route } from '../utils/Navigation';
+import { _queryString } from '../utils/URL';
 import { Loading } from './ui';
 import { ROUTES, SEARCH } from './constants';
 import './App.scss';
@@ -11,6 +13,7 @@ class App extends Component {
         loading: false,
         authToken: null,
         authenticated: false,
+        u: '',
         user: {},
         searchTerm: '',
         searchData: [],
@@ -39,7 +42,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    signoutHandler = async () => {
+    signout = async () => {
         this.setState({ loading: true });
 
         try {
@@ -56,6 +59,30 @@ class App extends Component {
                 });
             }
         } catch (error) {}
+    };
+
+    /**
+     * Sign out the user, but retain the username.
+     *
+     * @param {string} username
+     *
+     * @return {undefined}
+     */
+    lockHandler = async username => {
+        await this.setState({
+            u: username,
+        });
+
+        await this.signout();
+    };
+
+    /**
+     * Sign out user completely.
+     *
+     * @return {undefined}
+     */
+    signoutHandler = async () => {
+        await this.signout();
     };
 
     /**
@@ -129,6 +156,7 @@ class App extends Component {
                         environment: 'backoffice',
                         routes: ROUTES,
                         searchChangedHandler: this.searchChangedHandler,
+                        lockHandler: this.lockHandler,
                         signoutHandler: this.signoutHandler,
                     }}
                 />
