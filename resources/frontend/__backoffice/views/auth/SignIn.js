@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Cell, TextField, Button } from 'react-md';
+import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { AuthTemplate } from '../';
-
+import './SignIn.scss';
 export class SignIn extends Component {
     state = {
         loading: false,
@@ -14,6 +14,15 @@ export class SignIn extends Component {
         identified: false,
         errors: {},
         message: {},
+    };
+
+    /**
+     * Event listener that is triggered when the usernameChip is clicked.
+     *
+     * @return {undefined}
+     */
+    usernameChipClickedHandler = () => {
+        this.setState({ u: '', identified: false });
     };
 
     /**
@@ -181,7 +190,22 @@ export class SignIn extends Component {
             <div>
                 <AuthTemplate
                     title={identified ? 'Welcome' : 'Sign in'}
-                    subTitle={identified ? u : 'with your Account'}
+                    subTitle={
+                        identified ? (
+                            <Chip
+                                label={u}
+                                removable
+                                rotateIcon={false}
+                                className="--Username-Chip"
+                                avatar={<FontIcon>account_circle</FontIcon>}
+                                onClick={this.usernameChipClickedHandler}
+                            >
+                                expand_more
+                            </Chip>
+                        ) : (
+                            'with your Account'
+                        )
+                    }
                     loading={loading}
                     message={message}
                 >

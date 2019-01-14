@@ -1,0 +1,27 @@
+div > h3 {
+    & {
+        > .--Username-Chip {
+            background-color: #fff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            outline-style: none;
+        }
+
+        > .--Username-Chip:hover {
+            background-color: #fff;
+            cursor: pointer;
+            > span {
+                color: #333;
+            }
+        }
+
+        > .--Username-Chip.md-chip--avatar {
+            padding-left: 0 !important;
+        }
+
+        > .--Username-Chip > i:first-child {
+            padding: 0rem 0.5rem;
+        }
+    }
+}
