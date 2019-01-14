@@ -94,6 +94,12 @@ export const Master = props => {
                                 onClick: () =>
                                     alert(`Hello ${user.firstname}!`),
                             },
+
+                            {
+                                leftIcon: <FontIcon>lock</FontIcon>,
+                                primaryText: 'Lock',
+                            },
+
                             {
                                 leftIcon: <FontIcon>exit_to_app</FontIcon>,
                                 primaryText: 'Sign out',

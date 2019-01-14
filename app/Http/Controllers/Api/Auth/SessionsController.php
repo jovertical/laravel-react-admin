@@ -15,7 +15,27 @@ use Illuminate\Validation\ValidationException;
 class SessionsController extends Controller
 {
     /**
-     * Authenticate the user and then generate the auth token.
+     * Identify if the given username exists.
+     *
+     * @param Illuminate\Http\Request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function identify(Request $request) : JsonResponse
+    {
+        $request->validate([
+            'username' => "required|exists:users,{$this->identifier($request)}",
+        ]);
+
+        return response()->json(
+            User::where(
+                $this->identifier($request), $request->input('username')
+            )->first()->email
+        );
+    }
+
+    /**
+     * Authenticate the user and then give it's userId.
      *
      * @param Illuminate\Http\Request
      *

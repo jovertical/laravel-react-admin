@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button } from 'react-md';
 
+import { _queryParams, _queryString } from '../../../utils/URL';
 import { AuthTemplate } from '../';
 
 export class SignIn extends Component {
@@ -9,6 +10,8 @@ export class SignIn extends Component {
         loading: false,
         username: '',
         password: '',
+        u: '',
+        identified: false,
         errors: {},
         message: {},
     };
@@ -37,17 +40,57 @@ export class SignIn extends Component {
     };
 
     /**
-     * Event listener that is triggered when the sign in form is submitted.
-     * This should send an API request to request for authentication.
-     * Reload if authenticated.
+     * This should send an API request to identify the user.
      *
-     * @param {object} event
+     * @param {string} username
      *
      * @return {undefined}
      */
-    signinSubmitHandler = async event => {
-        event.preventDefault();
+    identify = async (username = null) => {
+        this.setState({ loading: true });
 
+        try {
+            if (username === null) {
+                username = this.state.username;
+            }
+
+            const response = await axios.post('/api/auth/identify', {
+                username,
+            });
+
+            if (response.status === 200) {
+                const { history, location } = this.props;
+
+                this.setState({
+                    loading: false,
+                    identified: true,
+                    u: response.data,
+                });
+
+                const queryString = _queryString({
+                    u: response.data,
+                });
+
+                history.push(`${location.pathname}${queryString}`);
+            }
+        } catch (error) {
+            if (error.response) {
+                const { errors } = error.response.data;
+
+                this.setState({ loading: false, errors });
+            } else {
+                throw new Error('Unknown error');
+            }
+        }
+    };
+
+    /**
+     * This should send an API request to request for authentication.
+     * Reload if authenticated.
+     *
+     * @return {undefined}
+     */
+    signin = async () => {
         this.setState({ loading: true });
 
         try {
@@ -71,31 +114,74 @@ export class SignIn extends Component {
 
                 this.setState({ loading: false, errors });
             } else {
-                this.setState({
-                    loading: false,
-                    message: {
-                        type: 'error',
-                        title: 'Something went wrong',
-                        body: (
-                            <h4>
-                                Oops? Something went wrong here.
-                                <br /> Please try again.
-                            </h4>
-                        ),
-                    },
-                });
+                throw new Error('Unknown error');
             }
         }
     };
 
+    /**
+     * Event listener that is triggered when the sign in form is submitted.
+     *
+     * @param {object} event
+     *
+     * @return {undefined}
+     */
+    signinSubmitHandler = async event => {
+        event.preventDefault();
+
+        try {
+            const { identified } = this.state;
+
+            if (!identified) {
+                await this.identify();
+            } else {
+                await this.signin();
+            }
+        } catch (error) {
+            this.setState({
+                loading: false,
+                message: {
+                    type: 'error',
+                    title: 'Something went wrong',
+                    body: (
+                        <h4>
+                            Oops? Something went wrong here.
+                            <br /> Please try again.
+                        </h4>
+                    ),
+                },
+            });
+        }
+    };
+
+    async componentDidMount() {
+        const { location } = this.props;
+
+        const queryParams = _queryParams(location.search);
+
+        if (_.has(queryParams, 'u')) {
+            this.setState({ username: queryParams.u });
+
+            await this.identify(queryParams.u);
+        }
+    }
+
     render() {
-        const { loading, username, password, errors, message } = this.state;
+        const {
+            loading,
+            username,
+            password,
+            u,
+            identified,
+            errors,
+            message,
+        } = this.state;
 
         return (
             <div>
                 <AuthTemplate
-                    title="Sign in"
-                    subTitle="with your Account"
+                    title={identified ? 'Welcome' : 'Sign in'}
+                    subTitle={identified ? u : 'with your Account'}
                     loading={loading}
                     message={message}
                 >
@@ -103,63 +189,69 @@ export class SignIn extends Component {
                         onSubmit={this.signinSubmitHandler}
                         className="--Form"
                     >
-                        <Grid className="--Form-Group">
-                            <Cell className="--Item">
-                                <TextField
-                                    id="username"
-                                    label="Username or Email"
-                                    lineDirection="center"
-                                    value={username}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'username',
-                                        )
-                                    }
-                                    error={_.has(errors, 'username')}
-                                    errorText={
-                                        _.has(errors, 'username')
-                                            ? errors.username[0]
-                                            : ''
-                                    }
-                                />
-                            </Cell>
-                        </Grid>
+                        {!identified ? (
+                            <Grid className="--Form-Group">
+                                <Cell className="--Item">
+                                    <TextField
+                                        id="username"
+                                        label="Username or Email"
+                                        lineDirection="center"
+                                        value={username}
+                                        onChange={value =>
+                                            this.inputChangeHandler(
+                                                value,
+                                                'username',
+                                            )
+                                        }
+                                        error={_.has(errors, 'username')}
+                                        errorText={
+                                            _.has(errors, 'username')
+                                                ? errors.username[0]
+                                                : ''
+                                        }
+                                    />
+                                </Cell>
 
-                        <Grid className="--Form-Group">
-                            <Cell className="--Item">
-                                <TextField
-                                    id="password"
-                                    type="password"
-                                    label="Password"
-                                    lineDirection="center"
-                                    value={password}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'password',
-                                        )
-                                    }
-                                    error={_.has(errors, 'password')}
-                                    errorText={
-                                        _.has(errors, 'password')
-                                            ? errors.password[0]
-                                            : ''
-                                    }
-                                />
-                            </Cell>
+                                <Cell className="--Item">
+                                    <Link to="#">Forgot Email?</Link>
+                                </Cell>
+                            </Grid>
+                        ) : (
+                            <Grid className="--Form-Group">
+                                <Cell className="--Item">
+                                    <TextField
+                                        id="password"
+                                        type="password"
+                                        label="Password"
+                                        lineDirection="center"
+                                        value={password}
+                                        onChange={value =>
+                                            this.inputChangeHandler(
+                                                value,
+                                                'password',
+                                            )
+                                        }
+                                        error={_.has(errors, 'password')}
+                                        errorText={
+                                            _.has(errors, 'password')
+                                                ? errors.password[0]
+                                                : ''
+                                        }
+                                    />
+                                </Cell>
 
-                            <Cell className="--Item">
-                                <Link to="#">Forgot Password?</Link>
-                            </Cell>
-                        </Grid>
+                                <Cell className="--Item">
+                                    <Link to="#">Forgot Password?</Link>
+                                </Cell>
+                            </Grid>
+                        )}
 
                         <Grid className="--Footer">
                             <Cell />
 
                             <Cell className="--Item">
                                 <Button type="submit" flat primary swapTheming>
-                                    Sign In
+                                    Next
                                 </Button>
                             </Cell>
                         </Grid>
