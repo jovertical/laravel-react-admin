@@ -10,7 +10,7 @@ export const ROUTES = [
 
     {
         name: 'backoffice.home',
-        path: '/',
+        path: '/dashboard',
         component: Views.Home,
         auth: true,
     },

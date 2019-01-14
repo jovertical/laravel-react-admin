@@ -17,12 +17,14 @@ import './Master.scss';
 
 const navigationRoutes = [
     {
+        key: '/dashboard',
         label: 'Dashboard',
-        to: '/',
+        to: '/dashboard',
         icon: 'home',
     },
 
     {
+        key: 'r',
         label: 'Resources',
         to: 'r',
         icon: 'widgets',
@@ -116,7 +118,6 @@ export const Master = props => {
                     data={props.pageProps.searchData}
                     filter={null}
                     onChange={pageProps.searchChangedHandler}
-                    onAutocomplete={value => console.log(value)}
                 />
             }
             toolbarTitleClassName="--Title"
