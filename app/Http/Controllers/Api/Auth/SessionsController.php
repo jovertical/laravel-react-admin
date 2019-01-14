@@ -24,7 +24,7 @@ class SessionsController extends Controller
     public function identify(Request $request) : JsonResponse
     {
         $request->validate([
-            'username' => "required|exists:users,{$this->identifier($request)}",
+            'username' => "required|exists:users,{$this->identifier($request)},deleted_at,NULL",
         ]);
 
         return response()->json(
