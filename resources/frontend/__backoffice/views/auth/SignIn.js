@@ -159,6 +159,7 @@ export class SignIn extends Component {
                             <br /> Please try again.
                         </h4>
                     ),
+                    action: () => window.location.reload(),
                 },
             });
         }

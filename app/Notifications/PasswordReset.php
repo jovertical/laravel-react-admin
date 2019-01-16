@@ -11,6 +11,23 @@ class PasswordReset extends Notification
     use Queueable;
 
     /**
+     * The reset link
+     *
+     * @var string
+     */
+    protected $link;
+
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct($link)
+    {
+        $this->link = $link;
+    }
+
+    /**
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
@@ -30,8 +47,9 @@ class PasswordReset extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                    ->greeting("Hello {$notifiable->name}!")
                     ->line('You are receiving this email because we received a password reset request for your account.')
-                    ->action('Reset', url('/'))
+                    ->action('Reset', url($this->link))
                     ->line('If you did not request a password reset, no further action is required.');
     }
 

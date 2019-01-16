@@ -56,9 +56,7 @@ export const Auth = props => (
                                             flat
                                             primary
                                             swapTheming
-                                            onClick={() =>
-                                                window.location.reload()
-                                            }
+                                            onClick={props.message.action}
                                         >
                                             Next
                                         </Button>

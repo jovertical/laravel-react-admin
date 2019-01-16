@@ -7,7 +7,11 @@ import { _route } from '../../../../utils/Navigation';
 import { _queryParams } from '../../../../utils/URL';
 
 export class PasswordRequest extends Component {
-    state = { email: '', errors: {} };
+    state = {
+        email: '',
+        errors: {},
+        message: {},
+    };
 
     /**
      * Event listener that is triggered when an input has changed.
@@ -42,18 +46,51 @@ export class PasswordRequest extends Component {
         this.setState({ loading: true });
 
         try {
+            const { history } = this.props;
+            const { email } = this.state;
+            const routePostfix = _route('backoffice.auth.passwords.reset');
+
             const response = await axios.post('api/auth/password/request', {
-                email: this.state.email,
+                email,
+                routePostfix,
             });
 
-            console.log(response);
+            if (response.status === 200) {
+                this.setState({
+                    loading: false,
+                    message: {
+                        type: 'success',
+                        title: 'Link Sent',
+                        body: (
+                            <h4>
+                                Check your email to reset your account.
+                                <br /> Thank you.
+                            </h4>
+                        ),
+                        action: () => history.push(`/signin?u=${email}`),
+                    },
+                });
+            }
         } catch (error) {
             if (error.response) {
                 const { errors } = error.response.data;
 
                 this.setState({ loading: false, errors });
             } else {
-                throw new Error('Unknown error');
+                this.setState({
+                    loading: false,
+                    message: {
+                        type: 'error',
+                        title: 'Something went wrong',
+                        body: (
+                            <h4>
+                                Oops? Something went wrong here.
+                                <br /> Please try again.
+                            </h4>
+                        ),
+                        action: () => window.location.reload(),
+                    },
+                });
             }
         }
     };
@@ -65,12 +102,14 @@ export class PasswordRequest extends Component {
     }
 
     render() {
-        const { email, errors } = this.state;
+        const { loading, message, email, errors } = this.state;
 
         return (
             <AuthTemplate
                 title="Forgot Password"
                 subTitle="Enter your email and we'll send a recovery link"
+                loading={loading}
+                message={message}
             >
                 <form
                     onSubmit={this.requestPasswordSubmitHandler}

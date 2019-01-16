@@ -6,8 +6,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use App\Jobs\SendPasswordResetLink;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessPasswordResetRequest;
 
 class ForgotPasswordController extends Controller
 {
@@ -25,9 +25,35 @@ class ForgotPasswordController extends Controller
         ]);
 
         $user = User::where('email', $request->input('email'))->first();
+        $token = str_random(64);
 
-        dispatch(new SendPasswordResetLink($user));
+        if ($this->storeResetToken($user, $token)) {
+            $routePostfix = strstr(
+                $request->input('routePostfix'), ':', true
+            ).$token;
+
+            $resetLink = route('backoffice.welcome').'#'.$routePostfix;
+
+            dispatch(new ProcessPasswordResetRequest($user, $resetLink));
+        }
 
         return response()->json('Sending...');
+    }
+
+    /**
+     * Store the reset token.
+     *
+     * @param App\User
+     * @param string
+     *
+     * @return bool
+     */
+    public function storeResetToken(User $user, string $token) : bool
+    {
+        return DB::table('password_resets')->insert([
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => now()
+        ]);
     }
 }

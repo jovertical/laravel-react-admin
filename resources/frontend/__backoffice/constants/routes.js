@@ -17,7 +17,7 @@ export const ROUTES = [
 
     {
         name: 'backoffice.auth.passwords.reset',
-        path: '/password/reset',
+        path: '/password/reset/:token',
         component: Views.AuthPasswordReset,
         auth: false,
     },

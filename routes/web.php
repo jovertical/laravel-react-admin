@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('__backoffice.welcome');
+Route::name('backoffice.')->prefix('/')->group(function() {
+    Route::get('/', function () {
+        return view('__backoffice.welcome');
+    })->name('welcome');
 });
