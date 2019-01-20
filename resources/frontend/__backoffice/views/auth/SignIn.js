@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 
+import { Errors } from '../../../core';
 import { _queryParams, _queryString } from '../../../utils/URL';
+import { _route } from '../../../utils/Navigation';
 import { AuthTemplate } from '../';
 import './SignIn.scss';
-import { _route } from '../../../utils/Navigation';
+
 export class SignIn extends Component {
     state = {
         loading: false,
@@ -13,7 +15,7 @@ export class SignIn extends Component {
         password: '',
         u: '',
         identified: false,
-        errors: {},
+        errors: new Errors(),
         message: {},
     };
 
@@ -24,29 +26,6 @@ export class SignIn extends Component {
      */
     usernameChipClickedHandler = () => {
         this.setState({ u: '', identified: false });
-    };
-
-    /**
-     * Event listener that is triggered when an input has changed.
-     * This may clear existing errors that is previously attached to the input.
-     *
-     * @param {string} value
-     * @param {string} input
-     *
-     * @return {undefined}
-     */
-    inputChangeHandler = (value, input) => {
-        this.setState(prevState => {
-            const filteredErrors = _.pick(
-                prevState.errors,
-                _.keys(prevState.errors).filter(field => field !== input),
-            );
-
-            return {
-                [input]: value,
-                errors: filteredErrors,
-            };
-        });
     };
 
     /**
@@ -85,9 +64,12 @@ export class SignIn extends Component {
             }
         } catch (error) {
             if (error.response) {
-                const { errors } = error.response.data;
+                const { data } = error.response;
+                const { errors } = this.state;
 
-                this.setState({ loading: false, errors });
+                errors.record(data.errors);
+
+                this.setState({ loading: false });
             } else {
                 throw new Error('Unknown error');
             }
@@ -114,15 +96,18 @@ export class SignIn extends Component {
             if (response.status === 200) {
                 window.localStorage.setItem('uid', response.data);
 
-                this.setState({ loading: false, errors: {} });
+                this.setState({ loading: false, errors: new Errors() });
 
                 window.location.reload();
             }
         } catch (error) {
             if (error.response) {
-                const { errors } = error.response.data;
+                const { data } = error.response;
+                const { errors } = this.state;
 
-                this.setState({ loading: false, errors });
+                errors.record(data.errors);
+
+                this.setState({ loading: false });
             } else {
                 throw new Error('Unknown error');
             }
@@ -210,7 +195,11 @@ export class SignIn extends Component {
                 loading={loading}
                 message={message}
             >
-                <form onSubmit={this.signinSubmitHandler} className="--Form">
+                <form
+                    onSubmit={this.signinSubmitHandler}
+                    className="--Form"
+                    onChange={event => errors.clear(event.target.id)}
+                >
                     {!identified ? (
                         <Grid className="--Form-Group">
                             <Cell className="--Item">
@@ -219,18 +208,11 @@ export class SignIn extends Component {
                                     label="Username or Email"
                                     lineDirection="center"
                                     value={username}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'username',
-                                        )
+                                    onChange={username =>
+                                        this.setState({ username })
                                     }
-                                    error={_.has(errors, 'username')}
-                                    errorText={
-                                        _.has(errors, 'username')
-                                            ? errors.username[0]
-                                            : ''
-                                    }
+                                    error={errors.has('username')}
+                                    errorText={errors.get('username')}
                                 />
                             </Cell>
 
@@ -247,18 +229,11 @@ export class SignIn extends Component {
                                     label="Password"
                                     lineDirection="center"
                                     value={password}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'password',
-                                        )
+                                    onChange={password =>
+                                        this.setState({ password })
                                     }
-                                    error={_.has(errors, 'password')}
-                                    errorText={
-                                        _.has(errors, 'password')
-                                            ? errors.password[0]
-                                            : ''
-                                    }
+                                    error={errors.has('password')}
+                                    errorText={errors.get('password')}
                                 />
                             </Cell>
 
@@ -283,7 +258,13 @@ export class SignIn extends Component {
                         <Cell />
 
                         <Cell className="--Item">
-                            <Button type="submit" flat primary swapTheming>
+                            <Button
+                                type="submit"
+                                flat
+                                primary
+                                swapTheming
+                                disabled={errors.any()}
+                            >
                                 Next
                             </Button>
                         </Cell>

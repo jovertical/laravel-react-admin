@@ -2,35 +2,16 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button } from 'react-md';
 
-import { AuthTemplate } from '../../';
+import { Errors } from '../../../../core';
 import { _route } from '../../../../utils/Navigation';
 import { _queryParams } from '../../../../utils/URL';
+import { AuthTemplate } from '../../';
 
 export class PasswordRequest extends Component {
     state = {
         email: '',
-        errors: {},
+        errors: new Errors(),
         message: {},
-    };
-
-    /**
-     * Event listener that is triggered when an input has changed.
-     * This may clear existing errors that is previously attached to the input.
-     *
-     * @param {string} value
-     * @param {string} input
-     *
-     * @return {undefined}
-     */
-    inputChangeHandler = (value, input) => {
-        this.setState(prevState => {
-            const filteredErrors = _.pick(
-                prevState.errors,
-                _.keys(prevState.errors).filter(field => field !== input),
-            );
-
-            return { [input]: value, errors: filteredErrors };
-        });
     };
 
     /**
@@ -73,9 +54,12 @@ export class PasswordRequest extends Component {
             }
         } catch (error) {
             if (error.response) {
-                const { errors } = error.response.data;
+                const { data } = error.response;
+                const { errors } = this.state;
 
-                this.setState({ loading: false, errors });
+                errors.record(data.errors);
+
+                this.setState({ loading: false });
             } else {
                 this.setState({
                     loading: false,
@@ -114,6 +98,7 @@ export class PasswordRequest extends Component {
                 <form
                     onSubmit={this.requestPasswordSubmitHandler}
                     className="--Form"
+                    onChange={event => errors.clear(event.target.id)}
                 >
                     <Grid className="--Form-Group">
                         <Cell className="--Item">
@@ -123,15 +108,9 @@ export class PasswordRequest extends Component {
                                 label="Email"
                                 lineDirection="center"
                                 value={email}
-                                onChange={value =>
-                                    this.inputChangeHandler(value, 'email')
-                                }
-                                error={_.has(errors, 'email')}
-                                errorText={
-                                    _.has(errors, 'email')
-                                        ? errors.email[0]
-                                        : ''
-                                }
+                                onChange={email => this.setState({ email })}
+                                error={errors.has('email')}
+                                errorText={errors.get('email')}
                             />
                         </Cell>
 
@@ -154,7 +133,13 @@ export class PasswordRequest extends Component {
                         <Cell />
 
                         <Cell className="--Item">
-                            <Button type="submit" flat primary swapTheming>
+                            <Button
+                                type="submit"
+                                flat
+                                primary
+                                swapTheming
+                                disabled={errors.any()}
+                            >
                                 Send Link
                             </Button>
                         </Cell>
