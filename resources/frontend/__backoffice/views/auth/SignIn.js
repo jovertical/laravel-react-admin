@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 
-import { Errors } from '../../../core';
 import { _queryParams, _queryString } from '../../../utils/URL';
-import { _route } from '../../../utils/Navigation';
 import { AuthTemplate } from '../';
 import './SignIn.scss';
-
+import { _route } from '../../../utils/Navigation';
 export class SignIn extends Component {
     state = {
         loading: false,
@@ -15,7 +13,7 @@ export class SignIn extends Component {
         password: '',
         u: '',
         identified: false,
-        errors: new Errors(),
+        errors: {},
         message: {},
     };
 
@@ -26,6 +24,29 @@ export class SignIn extends Component {
      */
     usernameChipClickedHandler = () => {
         this.setState({ u: '', identified: false });
+    };
+
+    /**
+     * Event listener that is triggered when an input has changed.
+     * This may clear existing errors that is previously attached to the input.
+     *
+     * @param {string} value
+     * @param {string} input
+     *
+     * @return {undefined}
+     */
+    inputChangeHandler = (value, input) => {
+        this.setState(prevState => {
+            const filteredErrors = _.pick(
+                prevState.errors,
+                _.keys(prevState.errors).filter(field => field !== input),
+            );
+
+            return {
+                [input]: value,
+                errors: filteredErrors,
+            };
+        });
     };
 
     /**
@@ -64,12 +85,9 @@ export class SignIn extends Component {
             }
         } catch (error) {
             if (error.response) {
-                const { data } = error.response;
-                const { errors } = this.state;
+                const { errors } = error.response.data;
 
-                errors.record(data.errors);
-
-                this.setState({ loading: false });
+                this.setState({ loading: false, errors });
             } else {
                 throw new Error('Unknown error');
             }
@@ -96,18 +114,15 @@ export class SignIn extends Component {
             if (response.status === 200) {
                 window.localStorage.setItem('uid', response.data);
 
-                this.setState({ loading: false, errors: new Errors() });
+                this.setState({ loading: false, errors: {} });
 
                 window.location.reload();
             }
         } catch (error) {
             if (error.response) {
-                const { data } = error.response;
-                const { errors } = this.state;
+                const { errors } = error.response.data;
 
-                errors.record(data.errors);
-
-                this.setState({ loading: false });
+                this.setState({ loading: false, errors });
             } else {
                 throw new Error('Unknown error');
             }
@@ -195,11 +210,7 @@ export class SignIn extends Component {
                 loading={loading}
                 message={message}
             >
-                <form
-                    onSubmit={this.signinSubmitHandler}
-                    className="--Form"
-                    onChange={event => errors.clear(event.target.id)}
-                >
+                <form onSubmit={this.signinSubmitHandler} className="--Form">
                     {!identified ? (
                         <Grid className="--Form-Group">
                             <Cell className="--Item">
@@ -208,11 +219,18 @@ export class SignIn extends Component {
                                     label="Username or Email"
                                     lineDirection="center"
                                     value={username}
-                                    onChange={username =>
-                                        this.setState({ username })
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'username',
+                                        )
                                     }
-                                    error={errors.has('username')}
-                                    errorText={errors.get('username')}
+                                    error={_.has(errors, 'username')}
+                                    errorText={
+                                        _.has(errors, 'username')
+                                            ? errors.username[0]
+                                            : ''
+                                    }
                                 />
                             </Cell>
 
@@ -229,11 +247,18 @@ export class SignIn extends Component {
                                     label="Password"
                                     lineDirection="center"
                                     value={password}
-                                    onChange={password =>
-                                        this.setState({ password })
+                                    onChange={value =>
+                                        this.inputChangeHandler(
+                                            value,
+                                            'password',
+                                        )
                                     }
-                                    error={errors.has('password')}
-                                    errorText={errors.get('password')}
+                                    error={_.has(errors, 'password')}
+                                    errorText={
+                                        _.has(errors, 'password')
+                                            ? errors.password[0]
+                                            : ''
+                                    }
                                 />
                             </Cell>
 
@@ -263,7 +288,7 @@ export class SignIn extends Component {
                                 flat
                                 primary
                                 swapTheming
-                                disabled={errors.any()}
+                                disabled={_.keys(errors).length > 0}
                             >
                                 Next
                             </Button>
