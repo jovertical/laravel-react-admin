@@ -11,6 +11,6 @@ export { PasswordReset as AuthPasswordReset } from './auth/passwords/Reset';
 export { Home } from './Home';
 export { NotFound as ErrorNotFound } from './errors/NotFound';
 
-export { Index as UserIndex } from './users/Index';
+export { List as UserList } from './users/List';
 export { Create as UserCreate } from './users/Create';
 export { Edit as UserEdit } from './users/Edit';

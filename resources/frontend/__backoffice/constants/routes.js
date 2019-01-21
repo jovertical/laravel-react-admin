@@ -27,7 +27,7 @@ export const ROUTES = [
     {
         name: 'backoffice.users.index',
         path: '/r/users',
-        component: Views.UserIndex,
+        component: Views.UserList,
         auth: true,
     },
 

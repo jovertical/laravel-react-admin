@@ -24,9 +24,9 @@ import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { ActionMenu, Loading, ModalConfirm } from '../../ui';
 import { MasterTemplate } from '../';
-import './Index.scss';
+import './List.scss';
 
-export class Index extends Component {
+class List extends Component {
     state = {
         loading: false,
         selectedRows: [],
@@ -881,3 +881,5 @@ export class Index extends Component {
         );
     }
 }
+
+export { List };
