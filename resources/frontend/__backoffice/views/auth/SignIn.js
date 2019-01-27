@@ -3,16 +3,20 @@ import { Link } from 'react-router-dom';
 import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 
 import { _queryParams, _queryString } from '../../../utils/URL';
+import { _route } from '../../../utils/Navigation';
+import { Form } from '../../ui';
 import { AuthTemplate } from '../';
 import './SignIn.scss';
-import { _route } from '../../../utils/Navigation';
+
 export class SignIn extends Component {
     state = {
         loading: false,
-        username: '',
-        password: '',
-        u: '',
         identified: false,
+        form: {
+            username: '',
+            password: '',
+        },
+        u: '',
         errors: {},
         message: {},
     };
@@ -43,7 +47,10 @@ export class SignIn extends Component {
             );
 
             return {
-                [input]: value,
+                form: {
+                    ...prevState.form,
+                    [input]: value,
+                },
                 errors: filteredErrors,
             };
         });
@@ -61,7 +68,7 @@ export class SignIn extends Component {
 
         try {
             if (username === null) {
-                username = this.state.username;
+                username = this.state.form.username;
             }
 
             const response = await axios.post('/api/auth/identify', {
@@ -104,7 +111,7 @@ export class SignIn extends Component {
         this.setState({ loading: true });
 
         try {
-            const { username, password } = this.state;
+            const { username, password } = this.state.form;
 
             const response = await axios.post('/api/auth/signin', {
                 username,
@@ -178,15 +185,7 @@ export class SignIn extends Component {
     }
 
     render() {
-        const {
-            loading,
-            username,
-            password,
-            u,
-            identified,
-            errors,
-            message,
-        } = this.state;
+        const { loading, identified, form, u, errors, message } = this.state;
 
         return (
             <AuthTemplate
@@ -210,15 +209,16 @@ export class SignIn extends Component {
                 loading={loading}
                 message={message}
             >
-                <form onSubmit={this.signinSubmitHandler} className="--Form">
+                <Form onSubmit={this.signinSubmitHandler} className="--Form">
                     {!identified ? (
                         <Grid className="--Form-Group">
                             <Cell className="--Item">
                                 <TextField
                                     id="username"
+                                    name="username"
                                     label="Username or Email"
                                     lineDirection="center"
-                                    value={username}
+                                    value={form.username}
                                     onChange={value =>
                                         this.inputChangeHandler(
                                             value,
@@ -242,11 +242,12 @@ export class SignIn extends Component {
                         <Grid className="--Form-Group">
                             <Cell className="--Item">
                                 <TextField
-                                    id="password"
                                     type="password"
+                                    id="password"
+                                    name="username"
                                     label="Password"
                                     lineDirection="center"
-                                    value={password}
+                                    value={form.password}
                                     onChange={value =>
                                         this.inputChangeHandler(
                                             value,
@@ -294,7 +295,7 @@ export class SignIn extends Component {
                             </Button>
                         </Cell>
                     </Grid>
-                </form>
+                </Form>
             </AuthTemplate>
         );
     }
