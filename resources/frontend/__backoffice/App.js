@@ -21,7 +21,7 @@ class App extends Component {
 
     /**
      * Event listener that is triggered when the value of the search box
-     * has been changed.
+     * has been changed
      *
      * @param {string} value
      *
