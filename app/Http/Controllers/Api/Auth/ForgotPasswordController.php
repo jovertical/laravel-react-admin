@@ -28,11 +28,11 @@ class ForgotPasswordController extends Controller
         $token = str_random(64);
 
         if ($this->storeResetToken($user, $token)) {
-            $routePostfix = strstr(
-                $request->input('routePostfix'), ':', true
+            $routeSuffix = strstr(
+                $request->input('routeSuffix'), ':', true
             ).$token;
 
-            $resetLink = route('backoffice.welcome').'#'.$routePostfix;
+            $resetLink = route('backoffice.welcome').'#'.$routeSuffix;
 
             dispatch(new ProcessPasswordResetRequest($user, $resetLink));
         }

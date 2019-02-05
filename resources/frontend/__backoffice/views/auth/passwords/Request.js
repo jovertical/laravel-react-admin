@@ -1,36 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Formik, Form, withFormik } from 'formik';
+import * as Yup from 'yup';
 import { Grid, Cell, TextField, Button } from 'react-md';
 
 import { AuthTemplate } from '../../';
 import { _route } from '../../../../utils/Navigation';
 import { _queryParams } from '../../../../utils/URL';
 
-export class PasswordRequest extends Component {
+class PasswordRequest extends Component {
     state = {
+        loading: false,
         email: '',
-        errors: {},
         message: {},
-    };
-
-    /**
-     * Event listener that is triggered when an input has changed.
-     * This may clear existing errors that is previously attached to the input.
-     *
-     * @param {string} value
-     * @param {string} input
-     *
-     * @return {undefined}
-     */
-    inputChangeHandler = (value, input) => {
-        this.setState(prevState => {
-            const filteredErrors = _.pick(
-                prevState.errors,
-                _.keys(prevState.errors).filter(field => field !== input),
-            );
-
-            return { [input]: value, errors: filteredErrors };
-        });
     };
 
     /**
@@ -40,19 +22,19 @@ export class PasswordRequest extends Component {
      *
      * @return {undefined}
      */
-    requestPasswordSubmitHandler = async event => {
-        event.preventDefault();
-
-        this.setState({ loading: true });
+    handleRequestPasswordSubmit = async (values, { setSubmitting }) => {
+        setSubmitting(false);
 
         try {
+            this.setState({ loading: true });
+
             const { history } = this.props;
-            const { email } = this.state;
-            const routePostfix = _route('backoffice.auth.passwords.reset');
+            const { email } = values;
+            const routeSuffix = _route('backoffice.auth.passwords.reset');
 
             const response = await axios.post('api/auth/password/request', {
                 email,
-                routePostfix,
+                routeSuffix,
             });
 
             if (response.status === 200) {
@@ -67,16 +49,12 @@ export class PasswordRequest extends Component {
                                 <br /> Thank you.
                             </h4>
                         ),
-                        action: () => history.push(`/signin?u=${email}`),
+                        action: () => history.push(`/signin?username=${email}`),
                     },
                 });
             }
         } catch (error) {
-            if (error.response) {
-                const { errors } = error.response.data;
-
-                this.setState({ loading: false, errors });
-            } else {
+            if (!error.response) {
                 this.setState({
                     loading: false,
                     message: {
@@ -91,18 +69,28 @@ export class PasswordRequest extends Component {
                         action: () => window.location.reload(),
                     },
                 });
+
+                return;
             }
+
+            const { errors } = error.response.data;
+            const { setErrors } = this.props;
+
+            setErrors(errors);
+
+            this.setState({ loading: false });
         }
     };
 
-    componentDidMount() {
+    componentWillMount() {
         const { location } = this.props;
 
-        this.setState({ email: _queryParams(location.search).u });
+        this.setState({ email: _queryParams(location.search).username });
     }
 
     render() {
-        const { loading, message, email, errors } = this.state;
+        const { setErrors, errors: formErrors } = this.props;
+        const { loading, message, email } = this.state;
 
         return (
             <AuthTemplate
@@ -111,62 +99,91 @@ export class PasswordRequest extends Component {
                 loading={loading}
                 message={message}
             >
-                <form
-                    onSubmit={this.requestPasswordSubmitHandler}
-                    className="--Form"
+                <Formik
+                    initialValues={{
+                        email,
+                    }}
+                    onSubmit={this.handleRequestPasswordSubmit}
+                    validate={values => {
+                        setErrors({});
+                    }}
+                    validationSchema={Yup.object().shape({
+                        email: Yup.string().required(
+                            `The email field is required`,
+                        ),
+                    })}
                 >
-                    <Grid className="--Form-Group">
-                        <Cell className="--Item">
-                            <TextField
-                                id="email"
-                                type="email"
-                                label="Email"
-                                lineDirection="center"
-                                value={email}
-                                onChange={value =>
-                                    this.inputChangeHandler(value, 'email')
-                                }
-                                error={_.has(errors, 'email')}
-                                errorText={
-                                    _.has(errors, 'email')
-                                        ? errors.email[0]
-                                        : ''
-                                }
-                            />
-                        </Cell>
+                    {({ values, setFieldValue, errors, isSubmitting }) => {
+                        if (Object.keys(formErrors).length > 0) {
+                            errors = formErrors;
+                        }
 
-                        <Cell className="--Item">
-                            <Link
-                                to={_route(
-                                    'backoffice.auth.signin',
-                                    {},
-                                    {
-                                        u: email,
-                                    },
-                                )}
-                            >
-                                Sign in instead
-                            </Link>
-                        </Cell>
-                    </Grid>
+                        return (
+                            <Form className="--Form">
+                                <Grid className="--Form-Group">
+                                    <Cell className="--Item">
+                                        <TextField
+                                            id="email"
+                                            type="email"
+                                            label="Email"
+                                            lineDirection="center"
+                                            value={values.email}
+                                            onChange={field =>
+                                                setFieldValue('email', field)
+                                            }
+                                            error={errors.hasOwnProperty(
+                                                'email',
+                                            )}
+                                            errorText={
+                                                errors.hasOwnProperty(
+                                                    'email',
+                                                ) && errors.email
+                                            }
+                                        />
+                                    </Cell>
 
-                    <Grid className="--Footer">
-                        <Cell />
+                                    <Cell className="--Item">
+                                        <Link
+                                            to={_route(
+                                                'backoffice.auth.signin',
+                                                {},
+                                                {
+                                                    username: email,
+                                                },
+                                            )}
+                                        >
+                                            Sign in instead
+                                        </Link>
+                                    </Cell>
+                                </Grid>
 
-                        <Cell className="--Item">
-                            <Button
-                                type="submit"
-                                flat
-                                primary
-                                swapTheming
-                                disabled={_.keys(errors).length > 0}
-                            >
-                                Send Link
-                            </Button>
-                        </Cell>
-                    </Grid>
-                </form>
+                                <Grid className="--Footer">
+                                    <Cell />
+
+                                    <Cell className="--Item">
+                                        <Button
+                                            type="submit"
+                                            flat
+                                            primary
+                                            swapTheming
+                                            disabled={
+                                                isSubmitting ||
+                                                Object.keys(errors).length > 0
+                                            }
+                                        >
+                                            Send Link
+                                        </Button>
+                                    </Cell>
+                                </Grid>
+                            </Form>
+                        );
+                    }}
+                </Formik>
             </AuthTemplate>
         );
     }
 }
+
+const WrappedComponent = withFormik({})(PasswordRequest);
+
+export { WrappedComponent as PasswordRequest };
