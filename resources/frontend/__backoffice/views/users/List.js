@@ -22,7 +22,7 @@ import {
 import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
-import { ActionMenu, Loading, ModalConfirm } from '../../ui';
+import { ActionMenu, Loading, ModalConfirm } from '../../../ui';
 import { MasterTemplate } from '../';
 import './List.scss';
 

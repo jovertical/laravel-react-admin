@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
 import { Navigator } from '../core';
+import { BACKOFFICE_ROUTES } from '../config/routes';
 import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
-import { Loading } from './ui';
-import { ROUTES, SEARCH } from './constants';
+import { Loading } from '../ui';
 import './App.scss';
 
 class App extends Component {
@@ -28,7 +28,7 @@ class App extends Component {
      * @return {undefined}
      */
     searchChangedHandler = value => {
-        const searchData = SEARCH.filter(item => {
+        const searchData = [].filter(item => {
             return (
                 item.primaryText.toLowerCase().indexOf(value.toLowerCase()) > -1
             );
@@ -154,7 +154,7 @@ class App extends Component {
                     pageProps={{
                         ...this.state,
                         environment: 'backoffice',
-                        routes: ROUTES,
+                        routes: BACKOFFICE_ROUTES,
                         searchChangedHandler: this.searchChangedHandler,
                         lockHandler: this.lockHandler,
                         signoutHandler: this.signoutHandler,

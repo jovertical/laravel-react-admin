@@ -12,7 +12,7 @@ import {
 import { _color } from '../../../utils/Random';
 import { _toNavItem } from '../../../utils/Navigation';
 import { APP } from '../../../config';
-import { Loading, NavItemLink } from '../../ui';
+import { Loading, NavItemLink } from '../../../ui';
 import './Master.scss';
 
 const navigationRoutes = [
