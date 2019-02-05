@@ -13,7 +13,7 @@ class App extends Component {
         loading: false,
         authToken: null,
         authenticated: false,
-        u: '',
+        username: '',
         user: {},
         searchTerm: '',
         searchData: [],
@@ -70,7 +70,7 @@ class App extends Component {
      */
     lockHandler = async username => {
         await this.setState({
-            u: username,
+            username,
         });
 
         await this.signout();

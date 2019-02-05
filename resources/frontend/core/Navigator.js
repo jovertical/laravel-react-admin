@@ -6,7 +6,7 @@ import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
 
 const WrappableNavigator = props => {
-    const { authenticated, u, environment, routes } = props.pageProps;
+    const { authenticated, username, environment, routes } = props.pageProps;
 
     return (
         <Switch>
@@ -25,7 +25,7 @@ const WrappableNavigator = props => {
                                         <Redirect
                                             to={{
                                                 search: _queryString({
-                                                    u,
+                                                    username,
                                                 }),
                                                 pathname: _route(
                                                     `${environment}.auth.signin`,

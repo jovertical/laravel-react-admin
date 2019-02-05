@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Formik, Form, withFormik } from 'formik';
+import * as Yup from 'yup';
 import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
 
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { _route } from '../../../utils/Navigation';
-import { Form } from '../../ui';
 import { AuthTemplate } from '../';
 import './SignIn.scss';
 
-export class SignIn extends Component {
+class SignIn extends Component {
     state = {
         loading: false,
         identified: false,
-        form: {
-            username: '',
-            password: '',
-        },
-        u: '',
-        errors: {},
+        username: '',
         message: {},
     };
 
@@ -26,34 +22,12 @@ export class SignIn extends Component {
      *
      * @return {undefined}
      */
-    usernameChipClickedHandler = () => {
-        this.setState({ u: '', identified: false });
-    };
+    handleUsernameChipClicked = () => {
+        this.setState({ username: '', identified: false });
 
-    /**
-     * Event listener that is triggered when an input has changed.
-     * This may clear existing errors that is previously attached to the input.
-     *
-     * @param {string} value
-     * @param {string} input
-     *
-     * @return {undefined}
-     */
-    inputChangeHandler = (value, input) => {
-        this.setState(prevState => {
-            const filteredErrors = _.pick(
-                prevState.errors,
-                _.keys(prevState.errors).filter(field => field !== input),
-            );
+        const { history, location } = this.props;
 
-            return {
-                form: {
-                    ...prevState.form,
-                    [input]: value,
-                },
-                errors: filteredErrors,
-            };
-        });
+        history.push(`${location.pathname}`);
     };
 
     /**
@@ -67,10 +41,6 @@ export class SignIn extends Component {
         this.setState({ loading: true });
 
         try {
-            if (username === null) {
-                username = this.state.form.username;
-            }
-
             const response = await axios.post('/api/auth/identify', {
                 username,
             });
@@ -81,23 +51,26 @@ export class SignIn extends Component {
                 this.setState({
                     loading: false,
                     identified: true,
-                    u: response.data,
+                    username: response.data,
                 });
 
                 const queryString = _queryString({
-                    u: response.data,
+                    username: response.data,
                 });
 
                 history.push(`${location.pathname}${queryString}`);
             }
         } catch (error) {
-            if (error.response) {
-                const { errors } = error.response.data;
-
-                this.setState({ loading: false, errors });
-            } else {
+            if (!error.response) {
                 throw new Error('Unknown error');
             }
+
+            const { errors } = error.response.data;
+            const { setErrors } = this.props;
+
+            setErrors(errors);
+
+            this.setState({ loading: false });
         }
     };
 
@@ -105,13 +78,16 @@ export class SignIn extends Component {
      * This should send an API request to request for authentication.
      * Reload if authenticated.
      *
+     * @param {object} values
+     *
      * @return {undefined}
      */
-    signin = async () => {
+    signin = async values => {
         this.setState({ loading: true });
 
         try {
-            const { username, password } = this.state.form;
+            const { username } = this.state;
+            const { password } = values;
 
             const response = await axios.post('/api/auth/signin', {
                 username,
@@ -121,39 +97,42 @@ export class SignIn extends Component {
             if (response.status === 200) {
                 window.localStorage.setItem('uid', response.data);
 
-                this.setState({ loading: false, errors: {} });
+                this.setState({ loading: false });
 
                 window.location.reload();
             }
         } catch (error) {
-            if (error.response) {
-                const { errors } = error.response.data;
-
-                this.setState({ loading: false, errors });
-            } else {
+            if (!error.response) {
                 throw new Error('Unknown error');
             }
+
+            const { errors } = error.response.data;
+            const { setErrors } = this.props;
+
+            setErrors(errors);
+
+            this.setState({ loading: false });
         }
     };
 
     /**
      * Event listener that is triggered when the sign in form is submitted.
      *
-     * @param {object} event
-     *
      * @return {undefined}
      */
-    signinSubmitHandler = async event => {
-        event.preventDefault();
+    handleSigninSubmit = async (values, { setSubmitting }) => {
+        setSubmitting(false);
 
         try {
             const { identified } = this.state;
 
             if (!identified) {
-                await this.identify();
-            } else {
-                await this.signin();
+                await this.identify(values.username);
+
+                return;
             }
+
+            await this.signin(values);
         } catch (error) {
             this.setState({
                 loading: false,
@@ -177,15 +156,17 @@ export class SignIn extends Component {
 
         const queryParams = _queryParams(location.search);
 
-        if (_.has(queryParams, 'u') && queryParams.u !== '') {
-            this.setState({ username: queryParams.u });
-
-            await this.identify(queryParams.u);
+        if (
+            queryParams.hasOwnProperty('username') &&
+            queryParams.username !== ''
+        ) {
+            await this.identify(queryParams.username);
         }
     }
 
     render() {
-        const { loading, identified, form, u, errors, message } = this.state;
+        const { setErrors, errors: formErrors } = this.props;
+        const { loading, identified, username, message } = this.state;
 
         return (
             <AuthTemplate
@@ -193,12 +174,12 @@ export class SignIn extends Component {
                 subTitle={
                     identified ? (
                         <Chip
-                            label={u}
+                            label={username}
                             removable
                             rotateIcon={false}
                             className="--Username-Chip"
                             avatar={<FontIcon>account_circle</FontIcon>}
-                            onClick={this.usernameChipClickedHandler}
+                            onClick={this.handleUsernameChipClicked}
                         >
                             expand_more
                         </Chip>
@@ -209,94 +190,133 @@ export class SignIn extends Component {
                 loading={loading}
                 message={message}
             >
-                <Form onSubmit={this.signinSubmitHandler} className="--Form">
-                    {!identified ? (
-                        <Grid className="--Form-Group">
-                            <Cell className="--Item">
-                                <TextField
-                                    id="username"
-                                    name="username"
-                                    label="Username or Email"
-                                    lineDirection="center"
-                                    value={form.username}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'username',
-                                        )
-                                    }
-                                    error={_.has(errors, 'username')}
-                                    errorText={
-                                        _.has(errors, 'username')
-                                            ? errors.username[0]
-                                            : ''
-                                    }
-                                />
-                            </Cell>
+                <Formik
+                    initialValues={{
+                        username,
+                        password: '',
+                    }}
+                    onSubmit={this.handleSigninSubmit}
+                    validate={values => {
+                        setErrors({});
+                    }}
+                    validationSchema={Yup.object().shape({
+                        [!identified
+                            ? 'username'
+                            : 'password']: Yup.string().required(
+                            `The ${
+                                !identified ? 'username' : 'password'
+                            } field is required`,
+                        ),
+                    })}
+                >
+                    {({ values, setFieldValue, errors, isSubmitting }) => {
+                        if (Object.keys(formErrors).length > 0) {
+                            errors = formErrors;
+                        }
 
-                            <Cell className="--Item">
-                                <Link to="#">Forgot Email?</Link>
-                            </Cell>
-                        </Grid>
-                    ) : (
-                        <Grid className="--Form-Group">
-                            <Cell className="--Item">
-                                <TextField
-                                    type="password"
-                                    id="password"
-                                    name="username"
-                                    label="Password"
-                                    lineDirection="center"
-                                    value={form.password}
-                                    onChange={value =>
-                                        this.inputChangeHandler(
-                                            value,
-                                            'password',
-                                        )
-                                    }
-                                    error={_.has(errors, 'password')}
-                                    errorText={
-                                        _.has(errors, 'password')
-                                            ? errors.password[0]
-                                            : ''
-                                    }
-                                />
-                            </Cell>
+                        return (
+                            <Form className="--Form">
+                                {!identified ? (
+                                    <Grid className="--Form-Group">
+                                        <Cell className="--Item">
+                                            <TextField
+                                                id="username"
+                                                name="username"
+                                                label="Username or Email"
+                                                lineDirection="center"
+                                                value={values.username}
+                                                onChange={field =>
+                                                    setFieldValue(
+                                                        'username',
+                                                        field,
+                                                    )
+                                                }
+                                                error={errors.hasOwnProperty(
+                                                    'username',
+                                                )}
+                                                errorText={
+                                                    errors.hasOwnProperty(
+                                                        'username',
+                                                    ) && errors.username
+                                                }
+                                            />
+                                        </Cell>
 
-                            <Cell className="--Item">
-                                <Link
-                                    to={{
-                                        search: _queryString({
-                                            u,
-                                        }),
-                                        pathname: _route(
-                                            'backoffice.auth.passwords.request',
-                                        ),
-                                    }}
-                                >
-                                    Forgot Password?
-                                </Link>
-                            </Cell>
-                        </Grid>
-                    )}
+                                        <Cell className="--Item">
+                                            <Link to="#">Forgot Email?</Link>
+                                        </Cell>
+                                    </Grid>
+                                ) : (
+                                    <Grid className="--Form-Group">
+                                        <Cell className="--Item">
+                                            <TextField
+                                                type="password"
+                                                id="password"
+                                                name="username"
+                                                label="Password"
+                                                lineDirection="center"
+                                                value={values.password}
+                                                onChange={field =>
+                                                    setFieldValue(
+                                                        'password',
+                                                        field,
+                                                    )
+                                                }
+                                                error={errors.hasOwnProperty(
+                                                    'password',
+                                                )}
+                                                errorText={
+                                                    errors.hasOwnProperty(
+                                                        'password',
+                                                    ) && errors.password
+                                                }
+                                            />
+                                        </Cell>
 
-                    <Grid className="--Footer">
-                        <Cell />
+                                        <Cell className="--Item">
+                                            <Link
+                                                to={{
+                                                    search: _queryString({
+                                                        username: username,
+                                                    }),
+                                                    pathname: _route(
+                                                        'backoffice.auth.passwords.request',
+                                                    ),
+                                                }}
+                                            >
+                                                Forgot Password?
+                                            </Link>
+                                        </Cell>
+                                    </Grid>
+                                )}
 
-                        <Cell className="--Item">
-                            <Button
-                                type="submit"
-                                flat
-                                primary
-                                swapTheming
-                                disabled={_.keys(errors).length > 0}
-                            >
-                                Next
-                            </Button>
-                        </Cell>
-                    </Grid>
-                </Form>
+                                <Grid className="--Footer">
+                                    <Cell />
+
+                                    <Cell className="--Item">
+                                        <Button
+                                            type="submit"
+                                            flat
+                                            primary
+                                            swapTheming
+                                            disabled={
+                                                Object.keys(errors).length >
+                                                    0 || isSubmitting
+                                            }
+                                        >
+                                            Next
+                                        </Button>
+                                    </Cell>
+                                </Grid>
+                            </Form>
+                        );
+                    }}
+                </Formik>
             </AuthTemplate>
         );
     }
 }
+
+const WrappedComponent = withFormik({})(SignIn);
+
+export { WrappedComponent as SignIn };
