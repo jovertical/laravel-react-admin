@@ -82,14 +82,8 @@ class PasswordRequest extends Component {
         }
     };
 
-    componentWillMount() {
-        const { location } = this.props;
-
-        this.setState({ email: _queryParams(location.search).username });
-    }
-
     render() {
-        const { setErrors, errors: formErrors } = this.props;
+        const { location, setErrors, errors: formErrors } = this.props;
         const { loading, message, email } = this.state;
 
         return (
@@ -101,7 +95,9 @@ class PasswordRequest extends Component {
             >
                 <Formik
                     initialValues={{
-                        email,
+                        email: !email
+                            ? _queryParams(location.search).username
+                            : email,
                     }}
                     onSubmit={this.handleRequestPasswordSubmit}
                     validate={values => {
