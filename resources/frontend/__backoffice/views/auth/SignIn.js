@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, Cell, TextField, Button, Chip, FontIcon } from 'react-md';
+import { Grid, TextField, Button, Chip, Avatar } from '@material-ui/core';
+import { AccountCircle, ExpandMore } from '@material-ui/icons';
 
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { _route } from '../../../utils/Navigation';
@@ -175,14 +176,15 @@ class SignIn extends Component {
                     identified ? (
                         <Chip
                             label={username}
-                            removable
-                            rotateIcon={false}
-                            className="--Username-Chip"
-                            avatar={<FontIcon>account_circle</FontIcon>}
-                            onClick={this.handleUsernameChipClicked}
-                        >
-                            expand_more
-                        </Chip>
+                            variant="outlined"
+                            avatar={
+                                <Avatar>
+                                    <AccountCircle />
+                                </Avatar>
+                            }
+                            onDelete={this.handleUsernameChipClicked}
+                            deleteIcon={<ExpandMore />}
+                        />
                     ) : (
                         'with your Account'
                     )
@@ -209,7 +211,7 @@ class SignIn extends Component {
                         ),
                     })}
                 >
-                    {({ values, setFieldValue, errors, isSubmitting }) => {
+                    {({ values, handleChange, errors, isSubmitting }) => {
                         if (Object.keys(formErrors).length > 0) {
                             errors = formErrors;
                         }
@@ -217,63 +219,63 @@ class SignIn extends Component {
                         return (
                             <Form className="--Form">
                                 {!identified ? (
-                                    <Grid className="--Form-Group">
-                                        <Cell className="--Item">
+                                    <Grid
+                                        container
+                                        spacing={24}
+                                        className="--Form-Group"
+                                    >
+                                        <Grid item className="--Item">
                                             <TextField
                                                 id="username"
                                                 name="username"
-                                                label="Username or Email"
-                                                lineDirection="center"
+                                                label="Username"
                                                 value={values.username}
-                                                onChange={field =>
-                                                    setFieldValue(
-                                                        'username',
-                                                        field,
-                                                    )
-                                                }
+                                                onChange={handleChange}
+                                                variant="outlined"
+                                                fullWidth
                                                 error={errors.hasOwnProperty(
                                                     'username',
                                                 )}
-                                                errorText={
+                                                helperText={
                                                     errors.hasOwnProperty(
                                                         'username',
                                                     ) && errors.username
                                                 }
                                             />
-                                        </Cell>
+                                        </Grid>
 
-                                        <Cell className="--Item">
+                                        <Grid item className="--Item">
                                             <Link to="#">Forgot Email?</Link>
-                                        </Cell>
+                                        </Grid>
                                     </Grid>
                                 ) : (
-                                    <Grid className="--Form-Group">
-                                        <Cell className="--Item">
+                                    <Grid
+                                        container
+                                        spacing={24}
+                                        className="--Form-Group"
+                                    >
+                                        <Grid item className="--Item">
                                             <TextField
                                                 type="password"
                                                 id="password"
-                                                name="username"
+                                                name="password"
                                                 label="Password"
-                                                lineDirection="center"
                                                 value={values.password}
-                                                onChange={field =>
-                                                    setFieldValue(
-                                                        'password',
-                                                        field,
-                                                    )
-                                                }
+                                                onChange={handleChange}
+                                                variant="outlined"
+                                                fullWidth
                                                 error={errors.hasOwnProperty(
                                                     'password',
                                                 )}
-                                                errorText={
+                                                helperText={
                                                     errors.hasOwnProperty(
                                                         'password',
                                                     ) && errors.password
                                                 }
                                             />
-                                        </Cell>
+                                        </Grid>
 
-                                        <Cell className="--Item">
+                                        <Grid item className="--Item">
                                             <Link
                                                 to={{
                                                     search: _queryString({
@@ -286,19 +288,22 @@ class SignIn extends Component {
                                             >
                                                 Forgot Password?
                                             </Link>
-                                        </Cell>
+                                        </Grid>
                                     </Grid>
                                 )}
 
-                                <Grid className="--Footer">
-                                    <Cell />
+                                <Grid
+                                    container
+                                    spacing={24}
+                                    className="--Footer"
+                                >
+                                    <Grid item />
 
-                                    <Cell className="--Item">
+                                    <Grid item className="--Item">
                                         <Button
                                             type="submit"
-                                            flat
-                                            primary
-                                            swapTheming
+                                            variant="contained"
+                                            color="primary"
                                             disabled={
                                                 Object.keys(errors).length >
                                                     0 || isSubmitting
@@ -306,7 +311,7 @@ class SignIn extends Component {
                                         >
                                             Next
                                         </Button>
-                                    </Cell>
+                                    </Grid>
                                 </Grid>
                             </Form>
                         );

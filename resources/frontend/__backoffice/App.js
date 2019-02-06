@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
+import { CssBaseline } from '@material-ui/core';
 
 import { Navigator } from '../core';
 import { BACKOFFICE_ROUTES } from '../config/routes';
@@ -149,18 +150,22 @@ class App extends Component {
         }
 
         return (
-            <Router>
-                <Navigator
-                    pageProps={{
-                        ...this.state,
-                        environment: 'backoffice',
-                        routes: BACKOFFICE_ROUTES,
-                        searchChangedHandler: this.searchChangedHandler,
-                        lockHandler: this.lockHandler,
-                        signoutHandler: this.signoutHandler,
-                    }}
-                />
-            </Router>
+            <>
+                <CssBaseline />
+
+                <Router>
+                    <Navigator
+                        pageProps={{
+                            ...this.state,
+                            environment: 'backoffice',
+                            routes: BACKOFFICE_ROUTES,
+                            searchChangedHandler: this.searchChangedHandler,
+                            lockHandler: this.lockHandler,
+                            signoutHandler: this.signoutHandler,
+                        }}
+                    />
+                </Router>
+            </>
         );
     }
 }

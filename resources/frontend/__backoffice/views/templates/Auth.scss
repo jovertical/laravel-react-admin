@@ -24,7 +24,14 @@
 
 .AT > .--Content > .--Wrapper > .--Form-Wrapper {
     & {
-        > .--Content-Wrapper > .--Title,
+        > .--Content-Wrapper > .--Title {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2.5rem 0rem;
+        }
+
         > .--Logo-Wrapper {
             display: flex;
             justify-content: center;

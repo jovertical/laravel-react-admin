@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, Cell, TextField, Button } from 'react-md';
+import { Grid, TextField, Button } from '@material-ui/core';
 
 import { AuthTemplate } from '../../';
 import { _route } from '../../../../utils/Navigation';
@@ -109,36 +109,39 @@ class PasswordRequest extends Component {
                         ),
                     })}
                 >
-                    {({ values, setFieldValue, errors, isSubmitting }) => {
+                    {({ values, handleChange, errors, isSubmitting }) => {
                         if (Object.keys(formErrors).length > 0) {
                             errors = formErrors;
                         }
 
                         return (
                             <Form className="--Form">
-                                <Grid className="--Form-Group">
-                                    <Cell className="--Item">
+                                <Grid
+                                    container
+                                    spacing={24}
+                                    className="--Form-Group"
+                                >
+                                    <Grid item className="--Item">
                                         <TextField
                                             id="email"
                                             type="email"
                                             label="Email"
-                                            lineDirection="center"
                                             value={values.email}
-                                            onChange={field =>
-                                                setFieldValue('email', field)
-                                            }
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            fullWidth
                                             error={errors.hasOwnProperty(
                                                 'email',
                                             )}
-                                            errorText={
+                                            helperText={
                                                 errors.hasOwnProperty(
                                                     'email',
                                                 ) && errors.email
                                             }
                                         />
-                                    </Cell>
+                                    </Grid>
 
-                                    <Cell className="--Item">
+                                    <Grid item className="--Item">
                                         <Link
                                             to={_route(
                                                 'backoffice.auth.signin',
@@ -150,26 +153,29 @@ class PasswordRequest extends Component {
                                         >
                                             Sign in instead
                                         </Link>
-                                    </Cell>
+                                    </Grid>
                                 </Grid>
 
-                                <Grid className="--Footer">
-                                    <Cell />
+                                <Grid
+                                    container
+                                    spacing={24}
+                                    className="--Footer"
+                                >
+                                    <Grid item />
 
-                                    <Cell className="--Item">
+                                    <Grid item className="--Item">
                                         <Button
                                             type="submit"
-                                            flat
-                                            primary
-                                            swapTheming
+                                            variant="contained"
+                                            color="primary"
                                             disabled={
-                                                isSubmitting ||
-                                                Object.keys(errors).length > 0
+                                                Object.keys(errors).length >
+                                                    0 || isSubmitting
                                             }
                                         >
                                             Send Link
                                         </Button>
-                                    </Cell>
+                                    </Grid>
                                 </Grid>
                             </Form>
                         );

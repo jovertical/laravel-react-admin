@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Cell, Button, Card, CardTitle, LinearProgress } from 'react-md';
+import {
+    Grid,
+    Card,
+    Typography,
+    Button,
+    LinearProgress,
+} from '@material-ui/core';
 
 import './Auth.scss';
 import logo from '../../../assets/img/logos/2/960x540.png';
@@ -25,44 +31,56 @@ export const Auth = props => (
                         <img src={logo} alt="company-logo" className="--Logo" />
                     </div>
 
-                    {_.isEmpty(props.message) ? (
+                    {Object.keys(props.message).length > 0 ? (
                         <div className="--Content-Wrapper">
-                            <CardTitle
-                                className="--Title"
-                                title={props.title}
-                                subtitle={props.subTitle}
-                            />
-
-                            <div className="--Content">{props.children}</div>
-                        </div>
-                    ) : (
-                        <div className="--Content-Wrapper">
-                            <CardTitle
-                                className="--Title"
-                                title={props.message.title}
-                            />
+                            <div className="--Title">
+                                <Typography variant="h4" component="h2">
+                                    {props.message.title}
+                                </Typography>
+                            </div>
 
                             <div className="--Content">
                                 <div className="text-center">
                                     {props.message.body}
                                 </div>
 
-                                <Grid className="--Footer --With-Error">
-                                    <Cell />
+                                <Grid
+                                    container
+                                    spacing={24}
+                                    className="--Footer --With-Error"
+                                >
+                                    <Grid item />
 
-                                    <Cell className="--Item">
+                                    <Grid item className="--Item">
                                         <Button
                                             type="button"
-                                            flat
-                                            primary
-                                            swapTheming
+                                            variant="contained"
+                                            color="primary"
                                             onClick={props.message.action}
                                         >
                                             Next
                                         </Button>
-                                    </Cell>
+                                    </Grid>
                                 </Grid>
                             </div>
+                        </div>
+                    ) : (
+                        <div className="--Content-Wrapper">
+                            <div className="--Title">
+                                <Typography variant="h4" component="h2">
+                                    {props.title}
+                                </Typography>
+
+                                <Typography
+                                    variant="h6"
+                                    component="h3"
+                                    color="textSecondary"
+                                >
+                                    {props.subTitle}
+                                </Typography>
+                            </div>
+
+                            <div className="--Content">{props.children}</div>
                         </div>
                     )}
                 </Card>
