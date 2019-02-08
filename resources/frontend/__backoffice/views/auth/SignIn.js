@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, TextField, Button, Chip, Avatar } from '@material-ui/core';
+import {
+    Grid,
+    TextField,
+    Button,
+    Chip,
+    Avatar,
+    withStyles,
+} from '@material-ui/core';
 import { AccountCircle, ExpandMore } from '@material-ui/icons';
 
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { _route } from '../../../utils/Navigation';
 import { AuthTemplate } from '../';
-import './SignIn.scss';
 
 class SignIn extends Component {
     state = {
@@ -166,7 +172,7 @@ class SignIn extends Component {
     }
 
     render() {
-        const { setErrors, errors: formErrors } = this.props;
+        const { classes, setErrors, errors: formErrors } = this.props;
         const { loading, identified, username, message } = this.state;
 
         return (
@@ -217,89 +223,93 @@ class SignIn extends Component {
                         }
 
                         return (
-                            <Form className="--Form">
-                                {!identified ? (
-                                    <Grid
-                                        container
-                                        spacing={24}
-                                        className="--Form-Group"
-                                    >
-                                        <Grid item className="--Item">
-                                            <TextField
-                                                id="username"
-                                                name="username"
-                                                label="Username"
-                                                value={values.username}
-                                                onChange={handleChange}
-                                                variant="outlined"
-                                                fullWidth
-                                                error={errors.hasOwnProperty(
-                                                    'username',
-                                                )}
-                                                helperText={
-                                                    errors.hasOwnProperty(
-                                                        'username',
-                                                    ) && errors.username
-                                                }
-                                            />
-                                        </Grid>
-
-                                        <Grid item className="--Item">
-                                            <Link to="#">Forgot Email?</Link>
-                                        </Grid>
-                                    </Grid>
-                                ) : (
-                                    <Grid
-                                        container
-                                        spacing={24}
-                                        className="--Form-Group"
-                                    >
-                                        <Grid item className="--Item">
-                                            <TextField
-                                                type="password"
-                                                id="password"
-                                                name="password"
-                                                label="Password"
-                                                value={values.password}
-                                                onChange={handleChange}
-                                                variant="outlined"
-                                                fullWidth
-                                                error={errors.hasOwnProperty(
-                                                    'password',
-                                                )}
-                                                helperText={
-                                                    errors.hasOwnProperty(
-                                                        'password',
-                                                    ) && errors.password
-                                                }
-                                            />
-                                        </Grid>
-
-                                        <Grid item className="--Item">
-                                            <Link
-                                                to={{
-                                                    search: _queryString({
-                                                        username: username,
-                                                    }),
-                                                    pathname: _route(
-                                                        'backoffice.auth.passwords.request',
-                                                    ),
-                                                }}
+                            <Form>
+                                <Grid container direction="column">
+                                    {!identified ? (
+                                        <>
+                                            <Grid
+                                                item
+                                                className={classes.formGroup}
                                             >
-                                                Forgot Password?
-                                            </Link>
-                                        </Grid>
-                                    </Grid>
-                                )}
+                                                <TextField
+                                                    id="username"
+                                                    name="username"
+                                                    label="Username"
+                                                    value={values.username}
+                                                    onChange={handleChange}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    error={errors.hasOwnProperty(
+                                                        'username',
+                                                    )}
+                                                    helperText={
+                                                        errors.hasOwnProperty(
+                                                            'username',
+                                                        ) && errors.username
+                                                    }
+                                                />
+                                            </Grid>
 
-                                <Grid
-                                    container
-                                    spacing={24}
-                                    className="--Footer"
-                                >
+                                            <Grid
+                                                item
+                                                className={classes.formGroup}
+                                            >
+                                                <Link to="#">
+                                                    Forgot Email?
+                                                </Link>
+                                            </Grid>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Grid
+                                                item
+                                                className={classes.formGroup}
+                                            >
+                                                <TextField
+                                                    type="password"
+                                                    id="password"
+                                                    name="password"
+                                                    label="Password"
+                                                    value={values.password}
+                                                    onChange={handleChange}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    error={errors.hasOwnProperty(
+                                                        'password',
+                                                    )}
+                                                    helperText={
+                                                        errors.hasOwnProperty(
+                                                            'password',
+                                                        ) && errors.password
+                                                    }
+                                                />
+                                            </Grid>
+
+                                            <Grid
+                                                item
+                                                className={classes.formGroup}
+                                            >
+                                                <Link
+                                                    to={{
+                                                        search: _queryString({
+                                                            username: username,
+                                                        }),
+                                                        pathname: _route(
+                                                            'backoffice.auth.passwords.request',
+                                                        ),
+                                                    }}
+                                                >
+                                                    Forgot Password?
+                                                </Link>
+                                            </Grid>
+                                        </>
+                                    )}
+                                </Grid>
+
+                                <Grid container justify="space-between">
                                     <Grid item />
 
-                                    <Grid item className="--Item">
+                                    <Grid item className={classes.formGroup}>
                                         <Button
                                             type="submit"
                                             variant="contained"
@@ -322,6 +332,14 @@ class SignIn extends Component {
     }
 }
 
-const WrappedComponent = withFormik({})(SignIn);
+const styles = theme => ({
+    formGroup: {
+        padding: theme.spacing.unit * 2,
+        paddingTop: 0,
+    },
+});
 
-export { WrappedComponent as SignIn };
+const Styled = withStyles(styles)(SignIn);
+const WrappedForm = withFormik({})(Styled);
+
+export { WrappedForm as SignIn };

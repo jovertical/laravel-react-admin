@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, withStyles } from '@material-ui/core';
 
 import { AuthTemplate } from '../../';
 import { _route } from '../../../../utils/Navigation';
@@ -83,7 +83,7 @@ class PasswordRequest extends Component {
     };
 
     render() {
-        const { location, setErrors, errors: formErrors } = this.props;
+        const { classes, location, setErrors, errors: formErrors } = this.props;
         const { loading, message, email } = this.state;
 
         return (
@@ -115,13 +115,9 @@ class PasswordRequest extends Component {
                         }
 
                         return (
-                            <Form className="--Form">
-                                <Grid
-                                    container
-                                    spacing={24}
-                                    className="--Form-Group"
-                                >
-                                    <Grid item className="--Item">
+                            <Form>
+                                <Grid container direction="column">
+                                    <Grid item className={classes.formGroup}>
                                         <TextField
                                             id="email"
                                             type="email"
@@ -141,7 +137,7 @@ class PasswordRequest extends Component {
                                         />
                                     </Grid>
 
-                                    <Grid item className="--Item">
+                                    <Grid item className={classes.formGroup}>
                                         <Link
                                             to={_route(
                                                 'backoffice.auth.signin',
@@ -156,14 +152,10 @@ class PasswordRequest extends Component {
                                     </Grid>
                                 </Grid>
 
-                                <Grid
-                                    container
-                                    spacing={24}
-                                    className="--Footer"
-                                >
+                                <Grid container justify="space-between">
                                     <Grid item />
 
-                                    <Grid item className="--Item">
+                                    <Grid item className={classes.formGroup}>
                                         <Button
                                             type="submit"
                                             variant="contained"
@@ -186,6 +178,14 @@ class PasswordRequest extends Component {
     }
 }
 
-const WrappedComponent = withFormik({})(PasswordRequest);
+const styles = theme => ({
+    formGroup: {
+        padding: theme.spacing.unit * 2,
+        paddingTop: 0,
+    },
+});
 
-export { WrappedComponent as PasswordRequest };
+const Styled = withStyles(styles)(PasswordRequest);
+const WrappedForm = withFormik({})(Styled);
+
+export { WrappedForm as PasswordRequest };
