@@ -42,7 +42,9 @@ const Auth = props => (
                     <Grid container direction="column" justify="space-between">
                         <Grid item className={props.classes.heading}>
                             <Typography variant="h4" component="h2">
-                                {props.title}
+                                {props.message.hasOwnProperty('title')
+                                    ? props.message.title
+                                    : props.title}
                             </Typography>
 
                             <Typography
@@ -50,11 +52,30 @@ const Auth = props => (
                                 component="h3"
                                 color="textSecondary"
                             >
-                                {props.subTitle}
+                                {props.message.hasOwnProperty('body')
+                                    ? props.message.body
+                                    : props.subTitle}
                             </Typography>
                         </Grid>
 
-                        <Grid item>{props.children}</Grid>
+                        {Object.keys(props.message).length > 0 ? (
+                            <Grid container justify="space-between">
+                                <Grid item />
+
+                                <Grid item className={props.classes.formGroup}>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={props.message.action}
+                                    >
+                                        Next
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        ) : (
+                            <Grid item>{props.children}</Grid>
+                        )}
                     </Grid>
                 </Card>
             </>

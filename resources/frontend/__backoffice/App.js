@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import { CssBaseline } from '@material-ui/core';
+import { Grid, withStyles, CssBaseline } from '@material-ui/core';
 
 import { Navigator } from '../core';
 import { BACKOFFICE_ROUTES } from '../config/routes';
 import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
 import { Loading } from '../ui';
-import './App.scss';
 
 class App extends Component {
     state = {
@@ -139,13 +138,21 @@ class App extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         const { loading } = this.state;
 
         if (loading) {
             return (
-                <div className="App-Wrapper">
-                    <Loading />
-                </div>
+                <Grid
+                    container
+                    className={classes.container}
+                    justify="center"
+                    alignItems="center"
+                >
+                    <Grid item>
+                        <Loading />
+                    </Grid>
+                </Grid>
             );
         }
 
@@ -170,4 +177,10 @@ class App extends Component {
     }
 }
 
-export default App;
+const styles = theme => ({
+    container: {
+        height: '100vh',
+    },
+});
+
+export default withStyles(styles)(App);
