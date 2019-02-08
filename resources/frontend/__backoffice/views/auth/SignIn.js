@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
 import {
     Grid,
     TextField,
     Button,
+    Link,
     Chip,
     Avatar,
     withStyles,
@@ -290,14 +291,21 @@ class SignIn extends Component {
                                                 className={classes.formGroup}
                                             >
                                                 <Link
-                                                    to={{
-                                                        search: _queryString({
-                                                            username: username,
-                                                        }),
-                                                        pathname: _route(
-                                                            'backoffice.auth.passwords.request',
-                                                        ),
-                                                    }}
+                                                    component={props => (
+                                                        <RouterLink
+                                                            {...props}
+                                                            to={{
+                                                                search: _queryString(
+                                                                    {
+                                                                        username: username,
+                                                                    },
+                                                                ),
+                                                                pathname: _route(
+                                                                    'backoffice.auth.passwords.request',
+                                                                ),
+                                                            }}
+                                                        />
+                                                    )}
                                                 >
                                                     Forgot Password?
                                                 </Link>

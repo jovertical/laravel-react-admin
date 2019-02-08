@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, TextField, Button, withStyles } from '@material-ui/core';
+import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
 import { AuthTemplate } from '../../';
 import { _route } from '../../../../utils/Navigation';
@@ -139,12 +139,17 @@ class PasswordRequest extends Component {
 
                                     <Grid item className={classes.formGroup}>
                                         <Link
-                                            to={_route(
-                                                'backoffice.auth.signin',
-                                                {},
-                                                {
-                                                    username: email,
-                                                },
+                                            component={props => (
+                                                <RouterLink
+                                                    {...props}
+                                                    to={_route(
+                                                        'backoffice.auth.signin',
+                                                        {},
+                                                        {
+                                                            username: email,
+                                                        },
+                                                    )}
+                                                />
                                             )}
                                         >
                                             Sign in instead

@@ -41,7 +41,7 @@ const Auth = props => (
 
                     <Grid container direction="column" justify="space-between">
                         <Grid item className={props.classes.heading}>
-                            <Typography variant="h4" component="h2">
+                            <Typography variant="h5" component="h2">
                                 {props.message.hasOwnProperty('title')
                                     ? props.message.title
                                     : props.title}

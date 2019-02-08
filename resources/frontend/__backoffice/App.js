@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import { Grid, withStyles, CssBaseline } from '@material-ui/core';
+import {
+    Grid,
+    withStyles,
+    CssBaseline,
+    MuiThemeProvider,
+} from '@material-ui/core';
 
 import { Navigator } from '../core';
 import { BACKOFFICE_ROUTES } from '../config/routes';
 import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
 import { Loading } from '../ui';
+import { theme } from './theme';
 
 class App extends Component {
     state = {
@@ -157,7 +163,7 @@ class App extends Component {
         }
 
         return (
-            <>
+            <MuiThemeProvider theme={theme}>
                 <CssBaseline />
 
                 <Router>
@@ -172,7 +178,7 @@ class App extends Component {
                         }}
                     />
                 </Router>
-            </>
+            </MuiThemeProvider>
         );
     }
 }
