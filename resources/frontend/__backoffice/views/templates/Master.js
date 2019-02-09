@@ -4,7 +4,9 @@ import classNames from 'classnames';
 
 import {
     withStyles,
+    ClickAwayListener,
     Grid,
+    Grow,
     Drawer,
     AppBar,
     Toolbar,
@@ -13,11 +15,14 @@ import {
     Divider,
     IconButton,
     Badge,
+    Paper,
+    Popper,
     ListItem,
     ListItemIcon,
     ListItemText,
     ListSubheader,
     Menu,
+    MenuList,
     MenuItem,
 } from '@material-ui/core';
 
@@ -68,7 +73,6 @@ class Master extends Component {
         this.setState(prevState => {
             return {
                 accountMenuOpen: !prevState.accountMenuOpen,
-                accountMenuEl: event.persist(),
             };
         });
     };
@@ -84,14 +88,13 @@ class Master extends Component {
         this.setState(prevState => {
             return {
                 mobileMenuOpen: !prevState.mobileMenuOpen,
-                mobileMenuEl: event.persist(),
             };
         });
     };
 
     render() {
         const { classes, pageProps, pageTitle, children } = this.props;
-        const { user, handleSignout, handleLock } = pageProps;
+        const { width, user, handleSignout, handleLock } = pageProps;
         const {
             drawerOpened,
             accountMenuOpen,
@@ -101,73 +104,126 @@ class Master extends Component {
         } = this.state;
 
         const renderAccountMenu = (
-            <Menu
-                anchorEl={accountMenuEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            <Popper
                 open={accountMenuOpen}
-                onClose={this.handleAccountMenuToggled}
+                anchorEl={accountMenuEl}
+                className={classes.accountMenu}
+                transition
+                disablePortal
             >
-                <MenuItem onClick={() => alert(`Hello ${user.firstname}!`)}>
-                    <ListItemIcon>
-                        <AccountCircleIcon />
-                    </ListItemIcon>
+                {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                            transformOrigin:
+                                placement === 'bottom'
+                                    ? 'center top'
+                                    : 'center bottom',
+                        }}
+                    >
+                        <Paper>
+                            <ClickAwayListener
+                                onClickAway={this.handleAccountMenuToggled}
+                            >
+                                <MenuList>
+                                    <MenuItem
+                                        onClick={() =>
+                                            alert(`Hello ${user.firstname}!`)
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <AccountCircleIcon />
+                                        </ListItemIcon>
 
-                    <Typography>Profile</Typography>
-                </MenuItem>
+                                        <Typography>Profile</Typography>
+                                    </MenuItem>
 
-                <MenuItem>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <SettingsIcon />
+                                        </ListItemIcon>
 
-                    <Typography>Settings</Typography>
-                </MenuItem>
+                                        <Typography>Settings</Typography>
+                                    </MenuItem>
 
-                <Divider />
+                                    <Divider />
 
-                <MenuItem onClick={() => handleLock(user.username)}>
-                    <ListItemIcon>
-                        <LockIcon />
-                    </ListItemIcon>
+                                    <MenuItem
+                                        onClick={() =>
+                                            handleLock(user.username)
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <LockIcon />
+                                        </ListItemIcon>
 
-                    <Typography>Lock</Typography>
-                </MenuItem>
+                                        <Typography>Lock</Typography>
+                                    </MenuItem>
 
-                <MenuItem onClick={handleSignout}>
-                    <ListItemIcon>
-                        <ExitToAppIcon />
-                    </ListItemIcon>
+                                    <MenuItem onClick={handleSignout}>
+                                        <ListItemIcon>
+                                            <ExitToAppIcon />
+                                        </ListItemIcon>
 
-                    <Typography>Signout</Typography>
-                </MenuItem>
-            </Menu>
+                                        <Typography>Signout</Typography>
+                                    </MenuItem>
+                                </MenuList>
+                            </ClickAwayListener>
+                        </Paper>
+                    </Grow>
+                )}
+            </Popper>
         );
 
         const renderMobileMenu = (
-            <Menu
-                anchorEl={mobileMenuEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            <Popper
                 open={mobileMenuOpen}
-                onClose={this.handleMobileMenuToggled}
+                anchorEl={mobileMenuEl}
+                className={classes.mobileMenu}
+                transition
+                disablePortal
             >
-                <MenuItem>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    <p>Notifications</p>
-                </MenuItem>
+                {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                            transformOrigin:
+                                placement === 'bottom'
+                                    ? 'center top'
+                                    : 'center bottom',
+                        }}
+                    >
+                        <Paper>
+                            <ClickAwayListener
+                                onClickAway={this.handleMobileMenuToggled}
+                            >
+                                <MenuList>
+                                    <MenuItem>
+                                        <IconButton color="inherit">
+                                            <Badge
+                                                badgeContent={4}
+                                                color="secondary"
+                                            >
+                                                <NotificationsIcon />
+                                            </Badge>
+                                        </IconButton>
+                                        <p>Notifications</p>
+                                    </MenuItem>
 
-                <MenuItem onClick={this.handleAccountMenuToggled}>
-                    <IconButton color="inherit">
-                        <AccountCircleIcon />
-                    </IconButton>
-                    <p>Account</p>
-                </MenuItem>
-            </Menu>
+                                    <MenuItem
+                                        onClick={this.handleAccountMenuToggled}
+                                    >
+                                        <IconButton color="inherit">
+                                            <AccountCircleIcon />
+                                        </IconButton>
+                                        <p>Account</p>
+                                    </MenuItem>
+                                </MenuList>
+                            </ClickAwayListener>
+                        </Paper>
+                    </Grow>
+                )}
+            </Popper>
         );
 
         return (
@@ -244,7 +300,7 @@ class Master extends Component {
                 </Grid>
 
                 <Drawer
-                    variant="permanent"
+                    variant={width === 'lg' ? 'permanent' : 'temporary'}
                     classes={{
                         paper: classNames(
                             classes.drawerPaper,
@@ -369,6 +425,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
+        minHeight: '100vh',
     },
 
     toolbarActionsDesktop: {
@@ -387,6 +444,25 @@ const styles = theme => ({
 
     grow: {
         flex: 1,
+    },
+
+    accountMenu: {
+        position: 'fixed',
+        right: 200,
+        top: 125,
+        [theme.breakpoints.up('md')]: {
+            right: 35,
+            top: 70,
+        },
+    },
+
+    mobileMenu: {
+        position: 'fixed',
+        right: 35,
+        top: 70,
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
     },
 });
 

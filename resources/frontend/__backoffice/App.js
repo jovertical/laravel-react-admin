@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import {
     withStyles,
+    withWidth,
     CssBaseline,
     MuiThemeProvider,
     Grid,
@@ -144,7 +145,7 @@ class App extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, width } = this.props;
         const { loading } = this.state;
 
         return (
@@ -167,6 +168,7 @@ class App extends Component {
                         <Navigator
                             pageProps={{
                                 ...this.state,
+                                width,
                                 environment: 'backoffice',
                                 routes: BACKOFFICE_ROUTES,
                                 handleSearchChange: this.handleSearchChange,
@@ -187,4 +189,6 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(App);
+const Styled = withStyles(styles)(App);
+
+export default withWidth()(Styled);
