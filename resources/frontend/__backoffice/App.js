@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import {
-    Grid,
     withStyles,
     CssBaseline,
     MuiThemeProvider,
+    Grid,
+    CircularProgress,
 } from '@material-ui/core';
 
 import { Navigator } from '../core';
 import { BACKOFFICE_ROUTES } from '../config/routes';
 import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
-import { Loading } from '../ui';
 import { theme } from './theme';
 
 class App extends Component {
@@ -33,7 +33,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    searchChangedHandler = value => {
+    handleSearchChange = value => {
         const searchData = [].filter(item => {
             return (
                 item.primaryText.toLowerCase().indexOf(value.toLowerCase()) > -1
@@ -74,7 +74,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    lockHandler = async username => {
+    handleLock = async username => {
         await this.setState({
             username,
         });
@@ -87,7 +87,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    signoutHandler = async () => {
+    handleSignout = async () => {
         await this.signout();
     };
 
@@ -147,37 +147,35 @@ class App extends Component {
         const { classes } = this.props;
         const { loading } = this.state;
 
-        if (loading) {
-            return (
-                <Grid
-                    container
-                    className={classes.container}
-                    justify="center"
-                    alignItems="center"
-                >
-                    <Grid item>
-                        <Loading />
-                    </Grid>
-                </Grid>
-            );
-        }
-
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline />
 
-                <Router>
-                    <Navigator
-                        pageProps={{
-                            ...this.state,
-                            environment: 'backoffice',
-                            routes: BACKOFFICE_ROUTES,
-                            searchChangedHandler: this.searchChangedHandler,
-                            lockHandler: this.lockHandler,
-                            signoutHandler: this.signoutHandler,
-                        }}
-                    />
-                </Router>
+                {loading ? (
+                    <Grid
+                        container
+                        className={classes.container}
+                        justify="center"
+                        alignItems="center"
+                    >
+                        <Grid item>
+                            <CircularProgress color="primary" />
+                        </Grid>
+                    </Grid>
+                ) : (
+                    <Router>
+                        <Navigator
+                            pageProps={{
+                                ...this.state,
+                                environment: 'backoffice',
+                                routes: BACKOFFICE_ROUTES,
+                                handleSearchChange: this.handleSearchChange,
+                                handleLock: this.handleLock,
+                                handleSignout: this.handleSignout,
+                            }}
+                        />
+                    </Router>
+                )}
             </MuiThemeProvider>
         );
     }

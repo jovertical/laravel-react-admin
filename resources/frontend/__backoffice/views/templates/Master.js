@@ -28,14 +28,27 @@ import {
     Dashboard as DashboardIcon,
     Group as GroupIcon,
     AccountCircle as AccountCircleIcon,
+    Settings as SettingsIcon,
+    Lock as LockIcon,
+    ExitToApp as ExitToAppIcon,
+    MoreVert as MoreVertIcon,
 } from '@material-ui/icons';
 
 class Master extends Component {
     state = {
         drawerOpened: true,
         accountMenuOpen: false,
+        accountMenuEl: null,
+        mobileMenuOpen: false,
+        mobileMenuEl: null,
     };
 
+    /**
+     * Event listener  that is triggered when the side drawer open / close
+     * button is clicked.
+     *
+     * @return {undefined}
+     */
     handleDrawerToggled = () => {
         this.setState(prevState => {
             return {
@@ -44,74 +57,191 @@ class Master extends Component {
         });
     };
 
-    handleAccountMenuToggled = () => {
+    /**
+     * Event listener that is triggered when the account menu link is clicked.
+     *
+     * @param {object} event
+     *
+     * @return {undefined}
+     */
+    handleAccountMenuToggled = event => {
         this.setState(prevState => {
             return {
                 accountMenuOpen: !prevState.accountMenuOpen,
+                accountMenuEl: event.persist(),
+            };
+        });
+    };
+
+    /**
+     * Event listener that is triggered when the mobile menu button is clicked.
+     *
+     * @param {object} event
+     *
+     * @return {undefined}
+     */
+    handleMobileMenuToggled = event => {
+        this.setState(prevState => {
+            return {
+                mobileMenuOpen: !prevState.mobileMenuOpen,
+                mobileMenuEl: event.persist(),
             };
         });
     };
 
     render() {
         const { classes, pageProps, pageTitle, children } = this.props;
-        const { user, signoutHandler, lockHandler } = pageProps;
-        const { drawerOpened, accountMenuOpen } = this.state;
+        const { user, handleSignout, handleLock } = pageProps;
+        const {
+            drawerOpened,
+            accountMenuOpen,
+            accountMenuEl,
+            mobileMenuOpen,
+            mobileMenuEl,
+        } = this.state;
+
+        const renderAccountMenu = (
+            <Menu
+                anchorEl={accountMenuEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={accountMenuOpen}
+                onClose={this.handleAccountMenuToggled}
+            >
+                <MenuItem onClick={() => alert(`Hello ${user.firstname}!`)}>
+                    <ListItemIcon>
+                        <AccountCircleIcon />
+                    </ListItemIcon>
+
+                    <Typography>Profile</Typography>
+                </MenuItem>
+
+                <MenuItem>
+                    <ListItemIcon>
+                        <SettingsIcon />
+                    </ListItemIcon>
+
+                    <Typography>Settings</Typography>
+                </MenuItem>
+
+                <Divider />
+
+                <MenuItem onClick={() => handleLock(user.username)}>
+                    <ListItemIcon>
+                        <LockIcon />
+                    </ListItemIcon>
+
+                    <Typography>Lock</Typography>
+                </MenuItem>
+
+                <MenuItem onClick={handleSignout}>
+                    <ListItemIcon>
+                        <ExitToAppIcon />
+                    </ListItemIcon>
+
+                    <Typography>Signout</Typography>
+                </MenuItem>
+            </Menu>
+        );
+
+        const renderMobileMenu = (
+            <Menu
+                anchorEl={mobileMenuEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={mobileMenuOpen}
+                onClose={this.handleMobileMenuToggled}
+            >
+                <MenuItem>
+                    <IconButton color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Notifications</p>
+                </MenuItem>
+
+                <MenuItem onClick={this.handleAccountMenuToggled}>
+                    <IconButton color="inherit">
+                        <AccountCircleIcon />
+                    </IconButton>
+                    <p>Account</p>
+                </MenuItem>
+            </Menu>
+        );
 
         return (
             <Grid container>
-                <AppBar
-                    position="absolute"
-                    className={classNames(
-                        classes.appBar,
-                        drawerOpened && classes.appBarShift,
-                    )}
-                >
-                    <Toolbar
-                        disableGutters={!drawerOpened}
-                        className={classes.toolbar}
+                <Grid item>
+                    <AppBar
+                        position="absolute"
+                        className={classNames(
+                            classes.appBar,
+                            drawerOpened && classes.appBarShift,
+                        )}
                     >
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={this.handleDrawerToggled}
-                            className={classNames(
-                                classes.menuButton,
-                                drawerOpened && classes.menuButtonHidden,
-                            )}
+                        <Toolbar
+                            disableGutters={!drawerOpened}
+                            className={classes.toolbar}
                         >
-                            <MenuIcon />
-                        </IconButton>
-
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            className={classes.title}
-                        >
-                            {pageTitle}
-                        </Typography>
-
-                        <div className={classes.grow} />
-
-                        <div className={classes.toolbarActionsDesktop}>
-                            <IconButton color="inherit">
-                                <Badge badgeContent={4} color="secondary">
-                                    <NotificationsIcon />
-                                </Badge>
-                            </IconButton>
-
                             <IconButton
-                                aria-owns={accountMenuOpen && 'material-appbar'}
-                                aria-haspopup="true"
-                                onClick={this.handleAccountMenuToggled}
                                 color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerToggled}
+                                className={classNames(
+                                    classes.menuButton,
+                                    drawerOpened && classes.menuButtonHidden,
+                                )}
                             >
-                                <AccountCircleIcon />
+                                <MenuIcon />
                             </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
+
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                noWrap
+                                className={classes.title}
+                            >
+                                {pageTitle}
+                            </Typography>
+
+                            <div className={classes.grow} />
+
+                            <div className={classes.toolbarActionsDesktop}>
+                                <IconButton color="inherit">
+                                    <Badge badgeContent={4} color="secondary">
+                                        <NotificationsIcon />
+                                    </Badge>
+                                </IconButton>
+
+                                <IconButton
+                                    aria-owns={
+                                        accountMenuOpen && 'material-appbar'
+                                    }
+                                    aria-haspopup="true"
+                                    onClick={this.handleAccountMenuToggled}
+                                    color="inherit"
+                                >
+                                    <AccountCircleIcon />
+                                </IconButton>
+                            </div>
+
+                            <div className={classes.toolbarActionsMobile}>
+                                <IconButton
+                                    aria-haspopup="true"
+                                    onClick={this.handleMobileMenuToggled}
+                                    color="inherit"
+                                >
+                                    <MoreVertIcon />
+                                </IconButton>
+                            </div>
+                        </Toolbar>
+                    </AppBar>
+
+                    {renderAccountMenu}
+                    {renderMobileMenu}
+                </Grid>
 
                 <Drawer
                     variant="permanent"
@@ -239,14 +369,19 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
-        height: '100vh',
-        overflow: 'auto',
     },
 
     toolbarActionsDesktop: {
         display: 'none',
         [theme.breakpoints.up('md')]: {
             display: 'flex',
+        },
+    },
+
+    toolbarActionsMobile: {
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
         },
     },
 
