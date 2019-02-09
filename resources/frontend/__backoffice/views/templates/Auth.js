@@ -41,7 +41,7 @@ const Auth = props => (
 
                     <Grid container direction="column" justify="space-between">
                         <Grid item className={props.classes.heading}>
-                            <Typography variant="h5" component="h2">
+                            <Typography variant="h5" component="h3">
                                 {props.message.hasOwnProperty('title')
                                     ? props.message.title
                                     : props.title}
@@ -49,7 +49,7 @@ const Auth = props => (
 
                             <Typography
                                 variant="h6"
-                                component="h3"
+                                component="h4"
                                 color="textSecondary"
                             >
                                 {props.message.hasOwnProperty('body')
