@@ -21,14 +21,15 @@ import {
     ListItemIcon,
     ListItemText,
     ListSubheader,
-    Menu,
     MenuList,
     MenuItem,
+    InputBase,
 } from '@material-ui/core';
 
 import {
     ChevronLeft as ChevronLeftIcon,
     Menu as MenuIcon,
+    Search as SearchIcon,
     Notifications as NotificationsIcon,
     Dashboard as DashboardIcon,
     Group as GroupIcon,
@@ -39,9 +40,11 @@ import {
     MoreVert as MoreVertIcon,
 } from '@material-ui/icons';
 
+import { fade } from '@material-ui/core/styles/colorManipulator';
+
 class Master extends Component {
     state = {
-        drawerOpened: true,
+        drawerOpened: this.props.pageProps.width === 'lg' ? true : false,
         accountMenuOpen: false,
         accountMenuEl: null,
         mobileMenuOpen: false,
@@ -73,6 +76,7 @@ class Master extends Component {
         this.setState(prevState => {
             return {
                 accountMenuOpen: !prevState.accountMenuOpen,
+                mobileMenuOpen: false,
             };
         });
     };
@@ -252,15 +256,30 @@ class Master extends Component {
                                 <MenuIcon />
                             </IconButton>
 
-                            <Typography
-                                component="h1"
-                                variant="h6"
-                                color="inherit"
-                                noWrap
-                                className={classes.title}
-                            >
-                                {pageTitle}
-                            </Typography>
+                            {width === 'lg' && (
+                                <Typography
+                                    variant="h6"
+                                    color="inherit"
+                                    noWrap
+                                    className={classes.toolbarTitle}
+                                >
+                                    {pageTitle}
+                                </Typography>
+                            )}
+
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
+                                </div>
+
+                                <InputBase
+                                    placeholder="Search…"
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                />
+                            </div>
 
                             <div className={classes.grow} />
 
@@ -394,8 +413,8 @@ const styles = theme => ({
         display: 'none',
     },
 
-    title: {
-        flexGrow: 1,
+    toolbarTitle: {
+        marginRight: 12,
     },
 
     drawerPaper: {
@@ -417,6 +436,51 @@ const styles = theme => ({
         width: theme.spacing.unit * 7,
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing.unit * 9,
+        },
+    },
+
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing.unit,
+            width: 'auto',
+        },
+    },
+
+    searchIcon: {
+        width: theme.spacing.unit * 9,
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    inputRoot: {
+        color: 'inherit',
+        width: '100%',
+    },
+
+    inputInput: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit * 10,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: 120,
+            '&:focus': {
+                width: 200,
+            },
         },
     },
 
@@ -448,18 +512,20 @@ const styles = theme => ({
 
     accountMenu: {
         position: 'fixed',
-        right: 200,
-        top: 125,
+        zIndex: 9999,
+        right: 35,
+        top: 70,
         [theme.breakpoints.up('md')]: {
-            right: 35,
-            top: 70,
+            right: 70,
+            top: 10,
         },
     },
 
     mobileMenu: {
         position: 'fixed',
-        right: 35,
-        top: 70,
+        zIndex: 9999,
+        right: 70,
+        top: 10,
         [theme.breakpoints.up('md')]: {
             display: 'none',
         },

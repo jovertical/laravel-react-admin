@@ -127,6 +127,11 @@ const styles = theme => ({
         margin: '2.5rem 0rem',
         textAlign: 'center',
     },
+
+    formGroup: {
+        padding: theme.spacing.unit * 2,
+        paddingTop: 0,
+    },
 });
 
 const Styled = withStyles(styles)(Auth);
