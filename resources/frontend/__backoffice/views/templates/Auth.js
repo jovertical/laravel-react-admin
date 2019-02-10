@@ -58,7 +58,7 @@ const Auth = props => (
                             </Typography>
                         </Grid>
 
-                        {props.message ? (
+                        {props.message.hasOwnProperty('type') ? (
                             <Grid container justify="space-between">
                                 <Grid item />
 

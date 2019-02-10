@@ -166,8 +166,10 @@ class PasswordRequest extends Component {
                                             variant="contained"
                                             color="primary"
                                             disabled={
-                                                Object.keys(errors).length >
-                                                    0 || isSubmitting
+                                                (errors &&
+                                                    Object.keys(errors).length >
+                                                        0) ||
+                                                isSubmitting
                                             }
                                         >
                                             Send Link
