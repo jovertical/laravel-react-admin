@@ -31,14 +31,11 @@
         <!-- Icon -->
         <link rel="shortcut icon" href="/favicon.ico">
 
-        <!-- Stylesheets -->
-        <link rel="stylesheet" href="{{ _asset('css/vendor.css') }}" defer>
-        <link rel="stylesheet" href="{{ _asset('css/backoffice.css') }}" defer>
-
         <style>
             html, body {
                 margin: 0;
                 padding: 0;
+                font-family: 'Roboto'
             }
 
             .full-height {
