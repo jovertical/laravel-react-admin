@@ -590,6 +590,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
+        maxWidth: '100%',
         minHeight: '100vh',
     },
 

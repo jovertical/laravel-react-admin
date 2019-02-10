@@ -4,16 +4,25 @@ import PropTypes from 'prop-types';
 import {
     withStyles,
     Paper,
+    Tooltip,
     Table as MuiTable,
     TableHead,
     TableBody,
     TableRow,
     TableCell,
+    TableSortLabel,
 } from '@material-ui/core';
 
 class Table extends Component {
     render() {
-        const { classes, columns, data } = this.props;
+        const {
+            classes,
+            columns,
+            data,
+            sortType,
+            sortBy,
+            headerCellClicked,
+        } = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -22,7 +31,36 @@ class Table extends Component {
                         <TableHead>
                             <TableRow>
                                 {columns.map((column, key) => (
-                                    <TableCell key={key}>{column}</TableCell>
+                                    <TableCell
+                                        key={key}
+                                        onClick={() =>
+                                            column.sort &&
+                                            headerCellClicked(column.name)
+                                        }
+                                    >
+                                        {!column.sort ? (
+                                            column.name
+                                        ) : (
+                                            <Tooltip
+                                                title="Sort"
+                                                placement={
+                                                    column.numeric
+                                                        ? 'bottom-end'
+                                                        : 'bottom-start'
+                                                }
+                                                enterDelay={300}
+                                            >
+                                                <TableSortLabel
+                                                    active={
+                                                        sortBy === column.name
+                                                    }
+                                                    direction={sortType}
+                                                >
+                                                    {column.name}
+                                                </TableSortLabel>
+                                            </Tooltip>
+                                        )}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
@@ -64,6 +102,8 @@ class Table extends Component {
 Table.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
+    sortType: PropTypes.oneOf(['asc', 'desc']),
+    sortBy: PropTypes.string,
 };
 
 const styles = theme => ({

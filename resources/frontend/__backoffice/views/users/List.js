@@ -10,6 +10,27 @@ class List extends Component {
     state = {
         loading: false,
         pagination: {},
+        sorting: {
+            by: 'Name',
+            order: 'asc',
+        },
+    };
+
+    /**
+     * Event listener that is triggered when a sortable TableCell is clicked.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {string} column
+     *
+     * @return {undefined}
+     */
+    handleSorting = async (sortBy, sortType) => {
+        await this.fetchUsers({
+            sortBy,
+            sortType,
+        });
+
+        // update query string here.
     };
 
     /**
@@ -22,17 +43,25 @@ class List extends Component {
         this.setState({ loading: true });
 
         try {
+            const { sortBy, sortType } = params;
+
             const response = await axios.get('/api/users', {
-                params: {},
+                params,
             });
 
             if (response.status !== 200) {
                 return;
             }
 
-            this.setState({
-                loading: false,
-                pagination: response.data,
+            this.setState(prevState => {
+                return {
+                    loading: false,
+                    pagination: response.data,
+                    sorting: {
+                        by: sortBy ? sortBy : prevState.sorting.by,
+                        type: sortType ? sortType : prevState.sorting.type,
+                    },
+                };
             });
         } catch (error) {}
     };
@@ -42,10 +71,15 @@ class List extends Component {
     }
 
     render() {
-        const { loading, pagination } = this.state;
+        const { loading, pagination, sorting } = this.state;
         const { data: rawData } = pagination;
 
-        const columns = ['Type', 'Name', 'Email'];
+        const columns = [
+            { name: 'Type' },
+            { name: 'Name', sort: true },
+            { name: 'Email', sort: true },
+        ];
+
         const data =
             rawData &&
             rawData.map(user => {
@@ -58,7 +92,20 @@ class List extends Component {
 
         return (
             <MasterTemplate {...this.props} pageTitle="Users" loading={loading}>
-                {!loading && data && <Table data={data} columns={columns} />}
+                {!loading && data && (
+                    <Table
+                        data={data}
+                        columns={columns}
+                        sortBy={sorting.by}
+                        sortType={sorting.type}
+                        headerCellClicked={cellName =>
+                            this.handleSorting(
+                                cellName,
+                                sorting.type === 'asc' ? 'desc' : 'asc',
+                            )
+                        }
+                    />
+                )}
             </MasterTemplate>
         );
     }
