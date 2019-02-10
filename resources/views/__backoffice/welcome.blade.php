@@ -31,6 +31,7 @@
         <!-- Icon -->
         <link rel="shortcut icon" href="/favicon.ico">
 
+        <!-- Styles -->
         <style>
             html, body {
                 margin: 0;
