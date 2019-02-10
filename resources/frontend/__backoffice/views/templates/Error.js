@@ -1,8 +1,23 @@
 import React from 'react';
-import './Error.scss';
+import { withStyles, Grid } from '@material-ui/core';
 
-export const Error = props => (
-    <div className="ET-Container">
-        <div className="ET-Content">{props.children}</div>
-    </div>
+const Error = props => (
+    <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={props.classes.root}
+    >
+        <Grid item>{props.children}</Grid>
+    </Grid>
 );
+
+const styles = theme => ({
+    root: {
+        minHeight: '100vh',
+    },
+});
+
+const Styled = withStyles(styles)(Error);
+
+export { Styled as Error };

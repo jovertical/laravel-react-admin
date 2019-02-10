@@ -42,6 +42,8 @@ import {
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
+import { _route } from '../../../utils/Navigation';
+
 class Master extends Component {
     state = {
         drawerOpened: this.props.pageProps.width === 'lg' ? true : false,
@@ -97,7 +99,7 @@ class Master extends Component {
     };
 
     render() {
-        const { classes, pageProps, pageTitle, children } = this.props;
+        const { history, classes, pageProps, pageTitle, children } = this.props;
         const { width, user, handleSignout, handleLock } = pageProps;
         const {
             drawerOpened,
@@ -337,7 +339,12 @@ class Master extends Component {
                     <Divider />
 
                     <List>
-                        <ListItem button>
+                        <ListItem
+                            button
+                            onClick={() =>
+                                history.push(_route('backoffice.home'))
+                            }
+                        >
                             <ListItemIcon>
                                 <DashboardIcon />
                             </ListItemIcon>
@@ -346,7 +353,12 @@ class Master extends Component {
 
                         <ListSubheader inset>Resources</ListSubheader>
 
-                        <ListItem button>
+                        <ListItem
+                            button
+                            onClick={() =>
+                                history.push(_route('backoffice.users.index'))
+                            }
+                        >
                             <ListItemIcon>
                                 <GroupIcon />
                             </ListItemIcon>

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+
+import { CircularProgress } from '@material-ui/core';
+
 import {
     Grid,
     Cell,
@@ -22,7 +25,7 @@ import {
 import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
-import { ActionMenu, Loading, ModalConfirm } from '../../../ui';
+import { ActionMenu, ModalConfirm } from '../../../ui';
 import { MasterTemplate } from '../';
 import './List.scss';
 
@@ -836,7 +839,7 @@ class List extends Component {
                                 />
                             </DataTable>
                         ) : (
-                            <Loading />
+                            <CircularProgress color="primary" />
                         )}
                     </Card>
                 </MasterTemplate>
