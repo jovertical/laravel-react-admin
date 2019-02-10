@@ -85,8 +85,10 @@ const Auth = props => (
 
 Auth.propTypes = {
     loading: PropTypes.bool,
-    title: PropTypes.string,
-    subTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    title: PropTypes.string.isRequired,
+    subTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+        .isRequired,
+    message: PropTypes.object,
 };
 
 const styles = theme => ({
