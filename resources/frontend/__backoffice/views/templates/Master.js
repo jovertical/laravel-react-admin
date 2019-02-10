@@ -10,13 +10,14 @@ import {
     Drawer,
     AppBar,
     Toolbar,
-    List,
     Typography,
+    Tooltip,
     Divider,
     IconButton,
     Badge,
     Paper,
     Popper,
+    List,
     ListItem,
     ListItemIcon,
     ListItemText,
@@ -99,7 +100,14 @@ class Master extends Component {
     };
 
     render() {
-        const { history, classes, pageProps, pageTitle, children } = this.props;
+        const {
+            history,
+            location,
+            classes,
+            pageProps,
+            pageTitle,
+            children,
+        } = this.props;
         const { width, user, handleSignout, handleLock } = pageProps;
         const {
             drawerOpened,
@@ -246,17 +254,20 @@ class Master extends Component {
                             disableGutters={!drawerOpened}
                             className={classes.toolbar}
                         >
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerToggled}
-                                className={classNames(
-                                    classes.menuButton,
-                                    drawerOpened && classes.menuButtonHidden,
-                                )}
-                            >
-                                <MenuIcon />
-                            </IconButton>
+                            <Tooltip title="Open Drawer">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="Open drawer"
+                                    onClick={this.handleDrawerToggled}
+                                    className={classNames(
+                                        classes.menuButton,
+                                        drawerOpened &&
+                                            classes.menuButtonHidden,
+                                    )}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                            </Tooltip>
 
                             {width === 'lg' && (
                                 <Typography
@@ -286,22 +297,29 @@ class Master extends Component {
                             <div className={classes.grow} />
 
                             <div className={classes.toolbarActionsDesktop}>
-                                <IconButton color="inherit">
-                                    <Badge badgeContent={4} color="secondary">
-                                        <NotificationsIcon />
-                                    </Badge>
-                                </IconButton>
+                                <Tooltip title="Notifications">
+                                    <IconButton color="inherit">
+                                        <Badge
+                                            badgeContent={4}
+                                            color="secondary"
+                                        >
+                                            <NotificationsIcon />
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
 
-                                <IconButton
-                                    aria-owns={
-                                        accountMenuOpen && 'material-appbar'
-                                    }
-                                    aria-haspopup="true"
-                                    onClick={this.handleAccountMenuToggled}
-                                    color="inherit"
-                                >
-                                    <AccountCircleIcon />
-                                </IconButton>
+                                <Tooltip title="Account">
+                                    <IconButton
+                                        aria-owns={
+                                            accountMenuOpen && 'material-appbar'
+                                        }
+                                        aria-haspopup="true"
+                                        onClick={this.handleAccountMenuToggled}
+                                        color="inherit"
+                                    >
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </div>
 
                             <div className={classes.toolbarActionsMobile}>
@@ -331,9 +349,11 @@ class Master extends Component {
                     open={drawerOpened}
                 >
                     <div className={classes.toolbarIcon}>
-                        <IconButton onClick={this.handleDrawerToggled}>
-                            <ChevronLeftIcon />
-                        </IconButton>
+                        <Tooltip title="Close drawer">
+                            <IconButton onClick={this.handleDrawerToggled}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </Tooltip>
                     </div>
 
                     <Divider />
@@ -345,13 +365,39 @@ class Master extends Component {
                                 history.push(_route('backoffice.home'))
                             }
                         >
-                            <ListItemIcon>
-                                <DashboardIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
+                            <Tooltip title={!drawerOpened ? 'Dashboard' : ''}>
+                                <ListItemIcon>
+                                    <DashboardIcon
+                                        color={
+                                            _route('backoffice.home') ===
+                                            location.pathname
+                                                ? 'primary'
+                                                : 'inherit'
+                                        }
+                                    />
+                                </ListItemIcon>
+                            </Tooltip>
+
+                            <ListItemText
+                                primary={
+                                    <Typography
+                                        color={
+                                            _route('backoffice.home') ===
+                                            location.pathname
+                                                ? 'primary'
+                                                : 'textSecondary'
+                                        }
+                                        variant="h6"
+                                    >
+                                        Dashboard
+                                    </Typography>
+                                }
+                            />
                         </ListItem>
 
-                        <ListSubheader inset>Resources</ListSubheader>
+                        {drawerOpened && (
+                            <ListSubheader inset>Resources</ListSubheader>
+                        )}
 
                         <ListItem
                             button
@@ -359,11 +405,34 @@ class Master extends Component {
                                 history.push(_route('backoffice.users.index'))
                             }
                         >
-                            <ListItemIcon>
-                                <GroupIcon />
-                            </ListItemIcon>
+                            <Tooltip title={!drawerOpened ? 'Users' : ''}>
+                                <ListItemIcon>
+                                    <GroupIcon
+                                        color={
+                                            _route('backoffice.users.index') ===
+                                            location.pathname
+                                                ? 'primary'
+                                                : 'inherit'
+                                        }
+                                    />
+                                </ListItemIcon>
+                            </Tooltip>
 
-                            <ListItemText primary="Users" />
+                            <ListItemText
+                                primary={
+                                    <Typography
+                                        color={
+                                            _route('backoffice.users.index') ===
+                                            location.pathname
+                                                ? 'primary'
+                                                : 'textSecondary'
+                                        }
+                                        variant="h6"
+                                    >
+                                        Users
+                                    </Typography>
+                                }
+                            />
                         </ListItem>
                     </List>
                 </Drawer>

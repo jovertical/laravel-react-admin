@@ -2,30 +2,9 @@ import React, { Component } from 'react';
 
 import { CircularProgress } from '@material-ui/core';
 
-import {
-    Grid,
-    Cell,
-    TextField,
-    SelectField,
-    Button,
-    Snackbar,
-    Avatar,
-    IconSeparator,
-    AccessibleFakeButton,
-    Card,
-    TableCardHeader,
-    DataTable,
-    TableHeader,
-    TableBody,
-    TableRow,
-    TableColumn,
-    TablePagination,
-} from 'react-md';
-
 import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
-import { ActionMenu, ModalConfirm } from '../../../ui';
 import { MasterTemplate } from '../';
 import './List.scss';
 
@@ -70,7 +49,7 @@ class List extends Component {
                 type: 'error',
                 label: 'Delete',
                 name: 'delete',
-                onClick: id => this.deleteUserClickedHandler(id),
+                onClick: id => this.handleDeleteUsers(id),
             },
         ],
     };
@@ -83,7 +62,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deleteUserClickedHandler = id => {
+    handleDeleteUsers = id => {
         this.setState({
             activeResourceId: id,
             modal: {
@@ -91,7 +70,7 @@ class List extends Component {
                 title: 'You are deleting a resource.',
                 content:
                     'If not undone, this action will be irreversible! Continue?',
-                confirmAction: this.deleteUserModalConfirmedHandler,
+                confirmAction: this.handleDeleteUserModalConfirmed,
             },
         });
     };
@@ -103,7 +82,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deleteUserModalConfirmedHandler = async () => {
+    handleDeleteUserModalConfirmed = async () => {
         this.setState({ loading: true });
 
         try {
@@ -128,7 +107,7 @@ class List extends Component {
                                 text: 'Resource deleted.',
                                 action: 'Undo',
                                 autohide: true,
-                                clicked: this.deletedUserUndoHandler,
+                                clicked: this.handleDeleteUserUndo,
                             },
                             ...prevState.toasts,
                         ],
@@ -145,7 +124,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deletedUserUndoHandler = async () => {
+    handleDeleteUserUndo = async () => {
         this.setState({ loading: true });
 
         try {
@@ -185,7 +164,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deleteUsersClickedHandler = selectedRows => {
+    handleDeleteUsers = selectedRows => {
         this.setState({
             modal: {
                 visible: true,
@@ -195,7 +174,7 @@ class List extends Component {
                 content:
                     'If not undone, this action will be irreversible! Continue?',
                 confirmAction: () =>
-                    this.deleteUsersModalConfirmedHandler(selectedRows),
+                    this.handleDeleteUsersModalConfirmed(selectedRows),
             },
         });
     };
@@ -208,7 +187,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deleteUsersModalConfirmedHandler = async selectedRows => {
+    handleDeleteUsersModalConfirmed = async selectedRows => {
         this.setState({ loading: true });
 
         try {
@@ -239,7 +218,7 @@ class List extends Component {
                                 action: 'Undo',
                                 autohide: true,
                                 clicked: () =>
-                                    this.deletedUsersUndoHandler(
+                                    this.handleDeletedUsersUndo(
                                         prevState.selectedRows,
                                     ),
                             },
@@ -260,7 +239,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    deletedUsersUndoHandler = async selectedRows => {
+    handleDeletedUsersUndo = async selectedRows => {
         this.setState({ loading: true });
 
         try {
@@ -302,7 +281,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    rowSelectionToggledHandler = async row => {
+    handleRowSelectionToggled = async row => {
         await this.setState(({ selectedRows }) => {
             if (row === 0) {
                 const { pagination } = this.state;
@@ -337,7 +316,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    columnSortingToggledHandler = async column => {
+    handleColumnSortingToggled = async column => {
         let { sortType, sortBy } = this.state.sorting;
         const { per_page, current_page } = this.state.pagination;
         const { name, type } = this.state.filters;
@@ -368,7 +347,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    paginationChangedHandler = async (from, perPage, page) => {
+    handlePaginationChanged = async (from, perPage, page) => {
         const { sortBy, sortType } = this.state.sorting;
         const { name, type } = this.state.filters;
 
@@ -390,7 +369,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    filterButtonClickedHandler = async () => {
+    handleFilterButtonClicked = async () => {
         this.setState({ loading: true });
 
         const { name, type } = this.state.filters;
@@ -411,7 +390,7 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    resetFilterButtonClickedHandler = async () => {
+    handleResetButtonClicked = async () => {
         this.setState({ loading: true });
 
         await this.fetchUsers({
@@ -562,325 +541,9 @@ class List extends Component {
         const { data } = pagination;
 
         return (
-            <div>
-                <MasterTemplate {...this.props} pageTitle="Users">
-                    <Card className="--Card">
-                        <TableCardHeader
-                            className="--Header"
-                            visible={selectedRows.length > 0}
-                            contextualTitle={`${selectedRows.length} item${
-                                selectedRows.length > 1 ? 's' : ''
-                            } selected`}
-                            actions={[
-                                <div className="--Actions">
-                                    <Button
-                                        icon
-                                        key="delete"
-                                        onClick={() =>
-                                            this.deleteUsersClickedHandler(
-                                                selectedRows,
-                                            )
-                                        }
-                                        tooltipLabel="Delete selected rows"
-                                        tooltipDelay={300}
-                                        tooltipPosition="left"
-                                    >
-                                        delete
-                                    </Button>
-                                </div>,
-                            ]}
-                        >
-                            <Grid className="--Actions">
-                                <Cell
-                                    className="--Action"
-                                    phoneSize={10}
-                                    desktopSize={2}
-                                    desktopOffset={2}
-                                >
-                                    <TextField
-                                        id="name"
-                                        className="w-100"
-                                        label="Name"
-                                        placeholder="Enter name"
-                                        value={filters.name}
-                                        onChange={value =>
-                                            this.setState(prevState => {
-                                                return {
-                                                    filters: {
-                                                        ...prevState.filters,
-                                                        name: value,
-                                                    },
-                                                };
-                                            })
-                                        }
-                                    />
-                                </Cell>
-
-                                <Cell
-                                    className="--Action"
-                                    phoneSize={10}
-                                    desktopSize={1}
-                                >
-                                    <SelectField
-                                        id="type"
-                                        className="w-100"
-                                        label="Type"
-                                        placeholder="Select type"
-                                        menuItems={[
-                                            {
-                                                label: 'All',
-                                                value: 'all',
-                                            },
-
-                                            {
-                                                label: 'Superuser',
-                                                value: 'superuser',
-                                            },
-
-                                            {
-                                                label: 'User',
-                                                value: 'user',
-                                            },
-                                        ]}
-                                        defaultValue="all"
-                                        value={filters.type}
-                                        onChange={value =>
-                                            this.setState(prevState => {
-                                                return {
-                                                    filters: {
-                                                        ...prevState.filters,
-                                                        type: value,
-                                                    },
-                                                };
-                                            })
-                                        }
-                                    />
-                                </Cell>
-                                <Cell
-                                    className="--Action --Filters"
-                                    phoneSize={10}
-                                    desktopSize={3}
-                                >
-                                    <Button
-                                        flat
-                                        iconChildren="search"
-                                        primary
-                                        onClick={
-                                            this.filterButtonClickedHandler
-                                        }
-                                    >
-                                        Filter
-                                    </Button>
-
-                                    <Button
-                                        flat
-                                        iconChildren="refresh"
-                                        onClick={
-                                            this.resetFilterButtonClickedHandler
-                                        }
-                                    >
-                                        Reset
-                                    </Button>
-                                </Cell>
-
-                                <Cell
-                                    className="--Action --Primary"
-                                    phoneSize={10}
-                                    desktopSize={3}
-                                    desktopOffset={1}
-                                >
-                                    <Button flat iconChildren="cloud_upload">
-                                        Import
-                                    </Button>
-
-                                    <Button
-                                        flat
-                                        iconChildren="add"
-                                        primary
-                                        onClick={() =>
-                                            history.push(
-                                                _route(
-                                                    'backoffice.users.create',
-                                                ),
-                                            )
-                                        }
-                                    >
-                                        Create
-                                    </Button>
-                                </Cell>
-                            </Grid>
-                        </TableCardHeader>
-
-                        {!this.state.loading ? (
-                            <DataTable baseId="users">
-                                <TableHeader>
-                                    <TableRow
-                                        selectable
-                                        selected={
-                                            selectedRows.length ===
-                                            parseInt(pagination.data.length)
-                                        }
-                                        onCheckboxClick={() =>
-                                            this.rowSelectionToggledHandler(0)
-                                        }
-                                    >
-                                        <TableColumn
-                                            grow
-                                            sorted={
-                                                sorting.sortType === 'DESC' &&
-                                                sorting.sortBy === 'firstname'
-                                            }
-                                            onClick={() =>
-                                                this.columnSortingToggledHandler(
-                                                    'firstname',
-                                                )
-                                            }
-                                        >
-                                            Name
-                                        </TableColumn>
-
-                                        <TableColumn
-                                            sorted={
-                                                sorting.sortType === 'DESC' &&
-                                                sorting.sortBy === 'email'
-                                            }
-                                            onClick={() =>
-                                                this.columnSortingToggledHandler(
-                                                    'email',
-                                                )
-                                            }
-                                        >
-                                            Email
-                                        </TableColumn>
-
-                                        <TableColumn
-                                            sorted={
-                                                sorting.sortType === 'DESC' &&
-                                                sorting.sortBy === 'type'
-                                            }
-                                            onClick={() =>
-                                                this.columnSortingToggledHandler(
-                                                    'type',
-                                                )
-                                            }
-                                        >
-                                            Type
-                                        </TableColumn>
-
-                                        <TableColumn />
-                                    </TableRow>
-                                </TableHeader>
-
-                                <TableBody>
-                                    {data.map(user => (
-                                        <TableRow
-                                            key={user.id}
-                                            selectable
-                                            selected={
-                                                _.indexOf(
-                                                    selectedRows,
-                                                    parseInt(user.id),
-                                                ) >= 0
-                                            }
-                                            onCheckboxClick={() =>
-                                                this.rowSelectionToggledHandler(
-                                                    user.id,
-                                                )
-                                            }
-                                        >
-                                            <TableColumn>
-                                                <AccessibleFakeButton
-                                                    component={IconSeparator}
-                                                    iconBefore
-                                                    label={
-                                                        <span>
-                                                            {`${
-                                                                user.firstname
-                                                            } ${user.lastname}`}
-                                                        </span>
-                                                    }
-                                                >
-                                                    <Avatar
-                                                        suffix={_color(
-                                                            user.id
-                                                                .toString()
-                                                                .slice(1),
-                                                        )}
-                                                    >
-                                                        {user.firstname.substring(
-                                                            0,
-                                                            1,
-                                                        )}
-                                                    </Avatar>
-                                                </AccessibleFakeButton>
-                                            </TableColumn>
-
-                                            <TableColumn>
-                                                {user.email}
-                                            </TableColumn>
-
-                                            <TableColumn>
-                                                {_.startCase(user.type)}
-                                            </TableColumn>
-
-                                            <ActionMenu
-                                                resourceId={user.id}
-                                                actions={actions}
-                                            />
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-
-                                <TablePagination
-                                    rows={pagination.total}
-                                    onPagination={this.paginationChangedHandler}
-                                    page={parseInt(pagination.current_page)}
-                                    rowsPerPage={parseInt(pagination.per_page)}
-                                />
-                            </DataTable>
-                        ) : (
-                            <CircularProgress color="primary" />
-                        )}
-                    </Card>
-                </MasterTemplate>
-
-                {modal.visible ? (
-                    <ModalConfirm
-                        title={modal.title}
-                        visible
-                        confirmAction={modal.confirmAction}
-                        cancelAction={() =>
-                            this.setState(prevState => {
-                                return {
-                                    modal: {
-                                        ...prevState.modal,
-                                        visible: false,
-                                    },
-                                };
-                            })
-                        }
-                    >
-                        {modal.content}
-                    </ModalConfirm>
-                ) : null}
-
-                {toasts.length > 0 ? (
-                    <Snackbar
-                        id="Action-Feedback"
-                        toasts={toasts}
-                        autohide={toasts[0].autohide}
-                        autohideTimeout={5000}
-                        onClick={toasts[0].clicked}
-                        onDismiss={() =>
-                            this.setState(prevState => {
-                                const [, ...toasts] = prevState.toasts;
-
-                                return { toasts };
-                            })
-                        }
-                    />
-                ) : null}
-            </div>
+            <MasterTemplate {...this.props} pageTitle="Users">
+                <h1>Ay-Ho</h1>
+            </MasterTemplate>
         );
     }
 }
