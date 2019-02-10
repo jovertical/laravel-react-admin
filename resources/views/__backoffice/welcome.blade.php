@@ -22,6 +22,9 @@
         <!-- Title -->
         <title>{{ config('app.name') }}</title>
 
+        <!-- Font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+
         <!-- Manifest -->
         <link rel="manifest" href="/manifest.json">
 

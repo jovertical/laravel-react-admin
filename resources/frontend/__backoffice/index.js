@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 
 import { _register as registerServiceWorker } from '../utils/ServiceWorker';
 import App from './App';
-import './style.scss';
 
 if (document.querySelector('#initial-content')) {
     document.querySelector('#initial-content').outerHTML = '';

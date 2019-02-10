@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import {
     withStyles,
     ClickAwayListener,
+    CircularProgress,
     Grid,
     Grow,
     Drawer,
@@ -105,10 +106,12 @@ class Master extends Component {
             location,
             classes,
             pageProps,
+            loading,
             pageTitle,
             children,
         } = this.props;
         const { width, user, handleSignout, handleLock } = pageProps;
+
         const {
             drawerOpened,
             accountMenuOpen,
@@ -238,6 +241,19 @@ class Master extends Component {
                     </Grow>
                 )}
             </Popper>
+        );
+
+        const renderLoading = (
+            <Grid
+                container
+                className={classes.loadingContainer}
+                justify="center"
+                alignItems="center"
+            >
+                <Grid item>
+                    <CircularProgress color="primary" />
+                </Grid>
+            </Grid>
         );
 
         return (
@@ -440,7 +456,11 @@ class Master extends Component {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
 
-                    <Grid container>{children}</Grid>
+                    {loading ? (
+                        renderLoading
+                    ) : (
+                        <Grid container>{children}</Grid>
+                    )}
                 </main>
             </Grid>
         );
@@ -571,6 +591,10 @@ const styles = theme => ({
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
         minHeight: '100vh',
+    },
+
+    loadingContainer: {
+        minHeight: '100%',
     },
 
     toolbarActionsDesktop: {

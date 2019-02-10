@@ -13,6 +13,6 @@ export const theme = createMuiTheme({
 
     typography: {
         useNextVariants: true,
-        htmlFontSize: 14,
+        htmlFontSize: 16,
     },
 });
