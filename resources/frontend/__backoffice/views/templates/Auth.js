@@ -58,7 +58,7 @@ const Auth = props => (
                             </Typography>
                         </Grid>
 
-                        {Object.keys(props.message).length > 0 ? (
+                        {props.message ? (
                             <Grid container justify="space-between">
                                 <Grid item />
 

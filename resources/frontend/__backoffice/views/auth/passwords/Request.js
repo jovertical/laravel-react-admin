@@ -110,7 +110,7 @@ class PasswordRequest extends Component {
                     })}
                 >
                     {({ values, handleChange, errors, isSubmitting }) => {
-                        if (Object.keys(formErrors).length > 0) {
+                        if (formErrors && Object.keys(formErrors).length > 0) {
                             errors = formErrors;
                         }
 
