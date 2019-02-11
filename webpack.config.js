@@ -100,7 +100,10 @@ module.exports = {
 
                 assets.forEach(({ name }) => {
                     let ext = name.split('.').reverse()[0];
-                    let key = `${name.substring(0, name.indexOf('.'))}.${ext}`;
+                    let key = `${name.substring(
+                        0,
+                        name.indexOf('.bundle'),
+                    )}.${ext}`;
 
                     Object.assign(assetCollection, {
                         [key]: name,
@@ -119,18 +122,26 @@ module.exports = {
         path: DIST_DIR,
         publicPath: PUBLIC_DIR,
         filename: 'js/[name].bundle.[contenthash].js',
+        chunkFilename: 'js/[name].bundle.[contenthash].js',
     },
 
     optimization: {
         minimize: inProduction,
+        runtimeChunk: 'single',
         splitChunks: {
-            automaticNameDelimiter: '-',
+            chunks: 'all',
+            maxInitialRequests: Infinity,
+            minSize: 0,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendor',
-                    chunks: 'all',
-                    enforce: true,
+                    name(module) {
+                        const packageName = module.context.match(
+                            /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+                        )[1];
+
+                        return `vendor.${packageName.replace('@', '')}`;
+                    },
                 },
             },
         },

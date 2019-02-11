@@ -85,7 +85,12 @@
             document.getElementById('initial-content').style.display = 'block';
         </script>
 
-        <script src="{{ _asset('js/vendor.js') }}" defer></script>
+        <script src="{{ _asset('js/runtime.js') }}" defer></script>
+
+        @foreach($vendorScripts as $name => $path)
+            <script src="{{ $path }}" defer></script>
+        @endforeach
+
         <script src="{{ _asset('js/backoffice.js') }}" defer></script>
     </body>
 </html>
