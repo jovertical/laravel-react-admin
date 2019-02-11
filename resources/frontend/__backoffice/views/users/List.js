@@ -12,8 +12,52 @@ class List extends Component {
         pagination: {},
         sorting: {
             by: 'Name',
-            order: 'asc',
+            type: 'asc',
         },
+    };
+
+    /**
+     * Event listener that is triggered when a Table Component's Page is changed.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {number} page
+     *
+     * @return {undefined}
+     */
+    handlePageChange = async page => {
+        const { per_page: perPage } = this.state.pagination;
+        const { by: sortBy, type: sortType } = this.state.sorting;
+
+        await this.fetchUsers({
+            perPage,
+            page,
+            sortBy,
+            sortType,
+        });
+
+        // TODO: update query string here.
+    };
+
+    /**
+     * Event listener that is triggered when a Table Component's Per Page is changed.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {number} perPage
+     * @param {number} page
+     *
+     * @return {undefined}
+     */
+    handlePerPageChange = async (perPage, page) => {
+        const { by: sortBy, type: sortType } = this.state.sorting;
+
+        await this.fetchUsers({
+            perPage,
+            page,
+            sortBy,
+            sortType,
+        });
+
+        // TODO: update query string here.
     };
 
     /**
@@ -30,7 +74,7 @@ class List extends Component {
             sortType,
         });
 
-        // update query string here.
+        // TODO: update query string here.
     };
 
     /**
@@ -72,7 +116,12 @@ class List extends Component {
 
     render() {
         const { loading, pagination, sorting } = this.state;
-        const { data: rawData } = pagination;
+        const {
+            data: rawData,
+            total,
+            per_page: perPage,
+            current_page: page,
+        } = pagination;
 
         const columns = [
             { name: 'Type' },
@@ -95,6 +144,7 @@ class List extends Component {
                 {!loading && data && (
                     <Table
                         data={data}
+                        total={total}
                         columns={columns}
                         sortBy={sorting.by}
                         sortType={sorting.type}
@@ -104,6 +154,10 @@ class List extends Component {
                                 sorting.type === 'asc' ? 'desc' : 'asc',
                             )
                         }
+                        page={parseInt(page)}
+                        perPage={parseInt(perPage)}
+                        onChangePage={this.handlePageChange}
+                        onChangePerPage={this.handlePerPageChange}
                     />
                 )}
             </MasterTemplate>
