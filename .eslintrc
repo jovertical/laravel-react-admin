@@ -13,26 +13,13 @@
         "ecmaVersion": 2017,
         "sourceType": "module"
     },
-    "plugins": [
-        "react"
-    ],
+    "plugins": ["react"],
     "rules": {
-        "indent": [
-            "warn",
-            4
-        ],
-        "linebreak-style": [
-            "warn",
-            "unix"
-        ],
-        "quotes": [
-            "warn",
-            "single"
-        ],
-        "semi": [
-            "warn",
-            "always"
-        ],
-        "no-unused-vars": 0
+        "indent": ["warn", 4],
+        "linebreak-style": ["warn", "unix"],
+        "quotes": ["warn", "single"],
+        "semi": ["warn", "always"],
+        "no-unused-vars": 0,
+        "no-console": "off"
     }
 }
