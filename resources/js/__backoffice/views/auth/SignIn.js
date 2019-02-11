@@ -297,7 +297,7 @@ class SignIn extends Component {
                                                             to={{
                                                                 search: _queryString(
                                                                     {
-                                                                        username: username,
+                                                                        username,
                                                                     },
                                                                 ),
                                                                 pathname: _route(

@@ -34,10 +34,7 @@ export function _queryString(queryParams) {
 
     for (let param in queryParams) {
         if (queryParams && queryParams.hasOwnProperty(param)) {
-            let value =
-                typeof queryParams[param] !== 'undefined'
-                    ? ''
-                    : queryParams[param];
+            let value = !queryParams[param] ? '' : queryParams[param];
 
             paramString += `${param}=${value}&`;
         }

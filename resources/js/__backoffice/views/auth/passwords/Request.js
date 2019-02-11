@@ -6,7 +6,7 @@ import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
 import { AuthTemplate } from '../../';
 import { _route } from '../../../../utils/Navigation';
-import { _queryParams } from '../../../../utils/URL';
+import { _queryParams, _queryString } from '../../../../utils/URL';
 
 class PasswordRequest extends Component {
     state = {
@@ -82,6 +82,16 @@ class PasswordRequest extends Component {
         }
     };
 
+    componentDidMount() {
+        const { location } = this.props;
+
+        this.setState({
+            email: _queryParams(location.search).hasOwnProperty('username')
+                ? _queryParams(location.search).username
+                : '',
+        });
+    }
+
     render() {
         const { classes, location, setErrors, errors: formErrors } = this.props;
         const { loading, message, email } = this.state;
@@ -142,13 +152,14 @@ class PasswordRequest extends Component {
                                             component={props => (
                                                 <RouterLink
                                                     {...props}
-                                                    to={_route(
-                                                        'backoffice.auth.signin',
-                                                        {},
-                                                        {
+                                                    to={{
+                                                        search: _queryString({
                                                             username: email,
-                                                        },
-                                                    )}
+                                                        }),
+                                                        pathname: _route(
+                                                            'backoffice.auth.signin',
+                                                        ),
+                                                    }}
                                                 />
                                             )}
                                         >
