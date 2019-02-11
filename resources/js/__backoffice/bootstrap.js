@@ -1,11 +1,5 @@
-import lodash from 'lodash';
 import axios from 'axios';
 import moment from 'moment';
-
-/**
- * We registered lodash so that we don't have to import it all the time.
- */
-window._ = lodash;
 
 /**
  * We registered axios so that we don't have to import it all the time.

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { ROUTES } from '../config';
 import { _queryString } from '../utils/URL';
 
@@ -10,7 +9,7 @@ import { _queryString } from '../utils/URL';
  * @param {string} name
  */
 export function _route(name, segmentParams = {}, queryParams = {}) {
-    const i = _.findIndex(ROUTES, { name });
+    const i = ROUTES.findIndex(route => route.name === name);
 
     if (i < 0) {
         throw new Error('Cannot find route.');
@@ -19,9 +18,9 @@ export function _route(name, segmentParams = {}, queryParams = {}) {
     let routePath = ROUTES[i].path;
 
     // We will modify the route path if there are parameters provided.
-    if (!_.isEmpty(segmentParams)) {
-        _.values(segmentParams).forEach((value, i) => {
-            const param = _.keys(segmentParams)[i];
+    if (segmentParams && Object.values(segmentParams).length > 0) {
+        Object.values(segmentParams).forEach((value, i) => {
+            const param = Object.keys(segmentParams)[i];
 
             // Check if the param is a segment. Replace it with the provided value.
             if (routePath.indexOf(param) > -1) {
@@ -31,7 +30,7 @@ export function _route(name, segmentParams = {}, queryParams = {}) {
     }
 
     // We will append a query string if there are query parameters provided.
-    if (!_.isEmpty(queryParams)) {
+    if (segmentParams && Object.values(segmentParams).length > 0) {
         routePath = `${routePath}${_queryString(queryParams)}`;
     }
 
