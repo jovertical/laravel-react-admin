@@ -1,26 +1,19 @@
-/**
- * Generic
- */
+// Generic
 const path = require('path');
 const fs = require('fs');
 const notifier = require('node-notifier');
 
-/**
- * Plugins.
- */
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Plugins
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const EventHooksPlugin = require('event-hooks-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-/**
- * Globals
- */
+// Globals
 const inProduction = process.env.NODE_ENV === 'production';
 const PUBLIC_DIR = path.resolve(__dirname, './public');
-const SRC_DIR = path.resolve(__dirname, './resources/frontend');
+const SRC_DIR = path.resolve(__dirname, './resources/js');
 const DIST_DIR = path.resolve(__dirname, './public');
 
 module.exports = {
@@ -32,16 +25,6 @@ module.exports = {
 
     module: {
         rules: [
-            {
-                test: /\.css$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
-            },
-
-            {
-                test: /\.s(a|c)ss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-            },
-
             {
                 test: /\.(js|jsx)$/,
                 exclude: '/node_modules/',
@@ -88,10 +71,6 @@ module.exports = {
     },
 
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].bundle.[contenthash].css',
-        }),
-
         new CleanWebpackPlugin(['css/*', 'js/*', 'img/*', 'fonts/*'], {
             root: DIST_DIR,
             exclude: [],
