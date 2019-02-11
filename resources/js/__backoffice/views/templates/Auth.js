@@ -9,7 +9,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import logo from '../../../assets/img/logos/2/960x540.png';
+import logo from '../../../../png/logos/2/960x540.png';
 
 const Auth = props => (
     <Grid
