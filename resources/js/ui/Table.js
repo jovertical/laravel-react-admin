@@ -23,6 +23,81 @@ import {
     LastPage as LastPageIcon,
 } from '@material-ui/icons';
 
+const PaginationActions = props => {
+    const {
+        classes,
+        theme,
+        onChangePage,
+        count: total,
+        page,
+        rowsPerPage: perPage,
+    } = props;
+    const lastPage = Math.ceil(total / perPage) - 1;
+
+    return (
+        <div className={classes.root}>
+            <IconButton
+                onClick={event => onChangePage(event, 0)}
+                disabled={page === 0}
+                aria-label="First Page"
+            >
+                {theme.direction === 'rtl' ? (
+                    <LastPageIcon />
+                ) : (
+                    <FirstPageIcon />
+                )}
+            </IconButton>
+
+            <IconButton
+                onClick={event => onChangePage(event, page - 1)}
+                disabled={page === 0}
+                aria-label="Previous Page"
+            >
+                {theme.direction === 'rtl' ? (
+                    <KeyboardArrowRightIcon />
+                ) : (
+                    <KeyboardArrowLeftIcon />
+                )}
+            </IconButton>
+
+            <IconButton
+                onClick={event => onChangePage(event, page + 1)}
+                disabled={page >= Math.ceil(total / perPage) - 1}
+                aria-label="Next Page"
+            >
+                {theme.direction === 'rtl' ? (
+                    <KeyboardArrowLeftIcon />
+                ) : (
+                    <KeyboardArrowRightIcon />
+                )}
+            </IconButton>
+
+            <IconButton
+                onClick={event => onChangePage(event, lastPage)}
+                disabled={page >= Math.ceil(total / perPage) - 1}
+                aria-label="Last Page"
+            >
+                {theme.direction === 'rtl' ? (
+                    <FirstPageIcon />
+                ) : (
+                    <LastPageIcon />
+                )}
+            </IconButton>
+        </div>
+    );
+};
+
+const StyledPaginationActions = withStyles(
+    theme => ({
+        root: {
+            flexShrink: 0,
+            color: theme.palette.text.secondary,
+            marginLeft: theme.spacing.unit * 2.5,
+        },
+    }),
+    { withTheme: true },
+)(PaginationActions);
+
 const Table = props => {
     const {
         classes,
@@ -37,82 +112,7 @@ const Table = props => {
         onChangePage,
         onChangePerPage,
     } = props;
-    const emptyRows = perPage - Math.min(perPage, data.length - page * perPage);
-
-    const PaginationActions = props => {
-        const {
-            classes,
-            theme,
-            onChangePage,
-            count: total,
-            page,
-            rowsPerPage: perPage,
-        } = props;
-        const lastPage = Math.ceil(total / perPage);
-
-        return (
-            <div className={classes.root}>
-                <IconButton
-                    onClick={event => onChangePage(event, 1)}
-                    disabled={page === 0}
-                    aria-label="First Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <LastPageIcon />
-                    ) : (
-                        <FirstPageIcon />
-                    )}
-                </IconButton>
-
-                <IconButton
-                    onClick={event => onChangePage(event, page - 1)}
-                    disabled={page === 0}
-                    aria-label="Previous Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <KeyboardArrowRightIcon />
-                    ) : (
-                        <KeyboardArrowLeftIcon />
-                    )}
-                </IconButton>
-
-                <IconButton
-                    onClick={event => onChangePage(event, page + 2)}
-                    disabled={page >= Math.ceil(total / perPage) - 1}
-                    aria-label="Next Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <KeyboardArrowLeftIcon />
-                    ) : (
-                        <KeyboardArrowRightIcon />
-                    )}
-                </IconButton>
-
-                <IconButton
-                    onClick={event => onChangePage(event, lastPage)}
-                    disabled={page >= Math.ceil(total / perPage) - 1}
-                    aria-label="Last Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <FirstPageIcon />
-                    ) : (
-                        <LastPageIcon />
-                    )}
-                </IconButton>
-            </div>
-        );
-    };
-
-    const StyledPaginationActions = withStyles(
-        theme => ({
-            root: {
-                flexShrink: 0,
-                color: theme.palette.text.secondary,
-                marginLeft: theme.spacing.unit * 2.5,
-            },
-        }),
-        { withTheme: true },
-    )(PaginationActions);
+    const emptyRows = perPage - Math.min(perPage, total - page * perPage);
 
     return (
         <Paper className={classes.root}>
@@ -125,7 +125,7 @@ const Table = props => {
                                     key={key}
                                     onClick={() =>
                                         column.sort &&
-                                        headerCellClicked(column.name)
+                                        headerCellClicked(column.property)
                                     }
                                 >
                                     {!column.sort ? (
@@ -141,7 +141,9 @@ const Table = props => {
                                             enterDelay={300}
                                         >
                                             <TableSortLabel
-                                                active={sortBy === column.name}
+                                                active={
+                                                    sortBy === column.property
+                                                }
                                                 direction={sortType}
                                             >
                                                 {column.name}
@@ -179,7 +181,7 @@ const Table = props => {
                         ))}
 
                         {emptyRows > 0 && (
-                            <TableRow style={{ minHeight: 18 * emptyRows }}>
+                            <TableRow style={{ height: 15 * emptyRows }}>
                                 <TableCell colSpan={columns.length} />
                             </TableRow>
                         )}
@@ -191,7 +193,7 @@ const Table = props => {
                                 rowsPerPageOptions={['5', '10', '20']}
                                 colSpan={columns.length}
                                 count={total}
-                                page={page - 1}
+                                page={page}
                                 rowsPerPage={perPage}
                                 onChangePage={(event, page) =>
                                     onChangePage(page)

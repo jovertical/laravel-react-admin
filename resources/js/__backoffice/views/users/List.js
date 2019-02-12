@@ -11,7 +11,7 @@ class List extends Component {
         loading: false,
         pagination: {},
         sorting: {
-            by: 'Name',
+            by: 'name',
             type: 'asc',
         },
     };
@@ -35,7 +35,7 @@ class List extends Component {
             sortType,
         });
 
-        // TODO: update query string here.
+        this.updateQueryString();
     };
 
     /**
@@ -57,7 +57,7 @@ class List extends Component {
             sortType,
         });
 
-        // TODO: update query string here.
+        this.updateQueryString();
     };
 
     /**
@@ -74,8 +74,29 @@ class List extends Component {
             sortType,
         });
 
-        // TODO: update query string here.
+        this.updateQueryString();
     };
+
+    /**
+     * This will update the URL query string via history API.
+     *
+     * @return {undefined}
+     */
+    updateQueryString() {
+        const { history, location } = this.props;
+        const { pagination, sorting } = this.state;
+        const { current_page: page, per_page: perPage } = pagination;
+        const { by: sortBy, type: sortType } = sorting;
+
+        const queryString = _queryString({
+            page,
+            perPage,
+            sortBy,
+            sortType,
+        });
+
+        history.push(`${location.pathname}${queryString}`);
+    }
 
     /**
      * This should send an API request to fetch all resource.
@@ -111,7 +132,12 @@ class List extends Component {
     };
 
     async componentDidMount() {
-        await this.fetchUsers();
+        const { location } = this.props;
+        const queryParams = (location, 'search')
+            ? _queryParams(location.search)
+            : {};
+
+        await this.fetchUsers(queryParams);
     }
 
     render() {
@@ -124,9 +150,9 @@ class List extends Component {
         } = pagination;
 
         const columns = [
-            { name: 'Type' },
-            { name: 'Name', sort: true },
-            { name: 'Email', sort: true },
+            { name: 'Type', property: 'type' },
+            { name: 'Name', property: 'name', sort: true },
+            { name: 'Email', property: 'email', sort: true },
         ];
 
         const data =
