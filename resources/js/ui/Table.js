@@ -32,7 +32,7 @@ const PaginationActions = props => {
         page,
         rowsPerPage: perPage,
     } = props;
-    const lastPage = Math.ceil(total / perPage) - 1;
+    const lastPage = Math.ceil(total / perPage);
 
     return (
         <div className={classes.root}>
@@ -49,7 +49,7 @@ const PaginationActions = props => {
             </IconButton>
 
             <IconButton
-                onClick={event => onChangePage(event, page - 1)}
+                onClick={event => onChangePage(event, page)}
                 disabled={page === 0}
                 aria-label="Previous Page"
             >
@@ -61,8 +61,8 @@ const PaginationActions = props => {
             </IconButton>
 
             <IconButton
-                onClick={event => onChangePage(event, page + 1)}
-                disabled={page >= Math.ceil(total / perPage) - 1}
+                onClick={event => onChangePage(event, page + 2)}
+                disabled={page + 1 >= lastPage}
                 aria-label="Next Page"
             >
                 {theme.direction === 'rtl' ? (
@@ -74,7 +74,7 @@ const PaginationActions = props => {
 
             <IconButton
                 onClick={event => onChangePage(event, lastPage)}
-                disabled={page >= Math.ceil(total / perPage) - 1}
+                disabled={page + 1 >= lastPage}
                 aria-label="Last Page"
             >
                 {theme.direction === 'rtl' ? (
@@ -112,7 +112,6 @@ const Table = props => {
         onChangePage,
         onChangePerPage,
     } = props;
-    const emptyRows = perPage - Math.min(perPage, total - page * perPage);
 
     return (
         <Paper className={classes.root}>
@@ -180,8 +179,10 @@ const Table = props => {
                             </TableRow>
                         ))}
 
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 15 * emptyRows }}>
+                        {data.length > 0 && (
+                            <TableRow
+                                style={{ height: 32 * (perPage - data.length) }}
+                            >
                                 <TableCell colSpan={columns.length} />
                             </TableRow>
                         )}
@@ -193,13 +194,13 @@ const Table = props => {
                                 rowsPerPageOptions={['5', '10', '20']}
                                 colSpan={columns.length}
                                 count={total}
-                                page={page}
+                                page={page - 1}
                                 rowsPerPage={perPage}
-                                onChangePage={(event, page) =>
-                                    onChangePage(page)
-                                }
+                                onChangePage={(event, page) => {
+                                    onChangePage(page);
+                                }}
                                 onChangeRowsPerPage={event =>
-                                    onChangePerPage(event.target.value, 0)
+                                    onChangePerPage(event.target.value, 1)
                                 }
                                 ActionsComponent={StyledPaginationActions}
                             />
