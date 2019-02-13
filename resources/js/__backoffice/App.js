@@ -17,31 +17,11 @@ import { theme } from './theme';
 
 class App extends Component {
     state = {
-        loading: false,
+        loading: true,
         authToken: null,
         authenticated: false,
         username: '',
         user: {},
-        searchTerm: '',
-        searchData: [],
-    };
-
-    /**
-     * Event listener that is triggered when the value of the search box
-     * has been changed
-     *
-     * @param {string} value
-     *
-     * @return {undefined}
-     */
-    handleSearchChange = value => {
-        const searchData = [].filter(item => {
-            return (
-                item.primaryText.toLowerCase().indexOf(value.toLowerCase()) > -1
-            );
-        });
-
-        this.setState({ searchTerm: value, searchData });
     };
 
     /**
@@ -134,9 +114,7 @@ class App extends Component {
         } catch (error) {}
     };
 
-    async componentWillMount() {
-        this.setState({ loading: true });
-
+    async componentDidMount() {
         await this.fetchAuthToken();
 
         await this.fetchAuthUser();
@@ -171,7 +149,6 @@ class App extends Component {
                                 width,
                                 environment: 'backoffice',
                                 routes: BACKOFFICE_ROUTES,
-                                handleSearchChange: this.handleSearchChange,
                                 handleLock: this.handleLock,
                                 handleSignout: this.handleSignout,
                             }}

@@ -14,6 +14,7 @@ class List extends Component {
             by: 'name',
             type: 'asc',
         },
+        message: null,
     };
 
     /**
@@ -128,7 +129,17 @@ class List extends Component {
                     },
                 };
             });
-        } catch (error) {}
+        } catch (error) {
+            this.setState({
+                loading: false,
+                message: {
+                    body: 'Error fetching users!',
+                    actionText: 'Retry',
+                    action: async () => await this.fetchUsers(),
+                    close: () => this.setState({ message: null }),
+                },
+            });
+        }
     };
 
     async componentDidMount() {
@@ -141,7 +152,7 @@ class List extends Component {
     }
 
     render() {
-        const { loading, pagination, sorting } = this.state;
+        const { loading, pagination, sorting, message } = this.state;
         const {
             data: rawData,
             total,
@@ -166,7 +177,12 @@ class List extends Component {
             });
 
         return (
-            <MasterTemplate {...this.props} pageTitle="Users" loading={loading}>
+            <MasterTemplate
+                {...this.props}
+                pageTitle="Users"
+                loading={loading}
+                message={message}
+            >
                 {!loading && data && (
                     <Table
                         data={data}

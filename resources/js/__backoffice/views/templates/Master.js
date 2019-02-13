@@ -3,43 +3,46 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import {
-    withStyles,
-    ClickAwayListener,
+    AppBar,
+    Badge,
+    Button,
     CircularProgress,
+    ClickAwayListener,
+    Divider,
+    Drawer,
     Grid,
     Grow,
-    Drawer,
-    AppBar,
-    Toolbar,
-    Typography,
-    Tooltip,
-    Divider,
     IconButton,
-    Badge,
-    Paper,
-    Popper,
+    InputBase,
     List,
     ListItem,
     ListItemIcon,
     ListItemText,
     ListSubheader,
-    MenuList,
     MenuItem,
-    InputBase,
+    MenuList,
+    Paper,
+    Popper,
+    Snackbar,
+    Toolbar,
+    Tooltip,
+    Typography,
+    withStyles,
 } from '@material-ui/core';
 
 import {
-    ChevronLeft as ChevronLeftIcon,
-    Menu as MenuIcon,
-    Search as SearchIcon,
-    Notifications as NotificationsIcon,
-    Dashboard as DashboardIcon,
-    Group as GroupIcon,
     AccountCircle as AccountCircleIcon,
-    Settings as SettingsIcon,
-    Lock as LockIcon,
+    ChevronLeft as ChevronLeftIcon,
+    Close as CloseIcon,
+    Dashboard as DashboardIcon,
     ExitToApp as ExitToAppIcon,
+    Group as GroupIcon,
+    Lock as LockIcon,
+    Menu as MenuIcon,
     MoreVert as MoreVertIcon,
+    Notifications as NotificationsIcon,
+    Search as SearchIcon,
+    Settings as SettingsIcon,
 } from '@material-ui/icons';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -109,6 +112,7 @@ class Master extends Component {
             loading,
             pageTitle,
             children,
+            message,
         } = this.props;
         const { width, user, handleSignout, handleLock } = pageProps;
 
@@ -243,6 +247,42 @@ class Master extends Component {
             </Popper>
         );
 
+        const renderSnackbar = message && (
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                open
+                autoHideDuration={
+                    message.hasOwnProperty('ttl') ? message.ttl : 5000
+                }
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{message.body}</span>}
+                action={[
+                    <Button
+                        key="undo"
+                        color="secondary"
+                        size="small"
+                        onClick={message.action}
+                    >
+                        {message.actionText}
+                    </Button>,
+
+                    <IconButton
+                        key="close"
+                        aria-label="Close"
+                        color="inherit"
+                        onClick={message.close}
+                    >
+                        <CloseIcon />
+                    </IconButton>,
+                ]}
+            />
+        );
+
         const renderLoading = (
             <Grid
                 container
@@ -257,212 +297,225 @@ class Master extends Component {
         );
 
         return (
-            <Grid container>
-                <Grid item>
-                    <AppBar
-                        position="absolute"
-                        className={classNames(
-                            classes.appBar,
-                            drawerOpened && classes.appBarShift,
-                        )}
-                    >
-                        <Toolbar
-                            disableGutters={!drawerOpened}
-                            className={classes.toolbar}
-                        >
-                            <Tooltip title="Open Drawer">
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="Open drawer"
-                                    onClick={this.handleDrawerToggled}
-                                    className={classNames(
-                                        classes.menuButton,
-                                        drawerOpened &&
-                                            classes.menuButtonHidden,
-                                    )}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                            </Tooltip>
-
-                            {width === 'lg' && (
-                                <Typography
-                                    variant="h6"
-                                    color="inherit"
-                                    noWrap
-                                    className={classes.toolbarTitle}
-                                >
-                                    {pageTitle}
-                                </Typography>
+            <>
+                <Grid container>
+                    <Grid item>
+                        <AppBar
+                            position="absolute"
+                            className={classNames(
+                                classes.appBar,
+                                drawerOpened && classes.appBarShift,
                             )}
+                        >
+                            <Toolbar
+                                disableGutters={!drawerOpened}
+                                className={classes.toolbar}
+                            >
+                                <Tooltip title="Open Drawer">
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="Open drawer"
+                                        onClick={this.handleDrawerToggled}
+                                        className={classNames(
+                                            classes.menuButton,
+                                            drawerOpened &&
+                                                classes.menuButtonHidden,
+                                        )}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Tooltip>
 
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon />
+                                {width === 'lg' && (
+                                    <Typography
+                                        variant="h6"
+                                        color="inherit"
+                                        noWrap
+                                        className={classes.toolbarTitle}
+                                    >
+                                        {pageTitle}
+                                    </Typography>
+                                )}
+
+                                <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <SearchIcon />
+                                    </div>
+
+                                    <InputBase
+                                        placeholder="Search…"
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                    />
                                 </div>
 
-                                <InputBase
-                                    placeholder="Search…"
-                                    classes={{
-                                        root: classes.inputRoot,
-                                        input: classes.inputInput,
-                                    }}
-                                />
-                            </div>
+                                <div className={classes.grow} />
 
-                            <div className={classes.grow} />
+                                <div className={classes.toolbarActionsDesktop}>
+                                    <Tooltip title="Notifications">
+                                        <IconButton color="inherit">
+                                            <Badge
+                                                badgeContent={4}
+                                                color="secondary"
+                                            >
+                                                <NotificationsIcon />
+                                            </Badge>
+                                        </IconButton>
+                                    </Tooltip>
 
-                            <div className={classes.toolbarActionsDesktop}>
-                                <Tooltip title="Notifications">
-                                    <IconButton color="inherit">
-                                        <Badge
-                                            badgeContent={4}
-                                            color="secondary"
+                                    <Tooltip title="Account">
+                                        <IconButton
+                                            aria-owns={
+                                                accountMenuOpen &&
+                                                'material-appbar'
+                                            }
+                                            aria-haspopup="true"
+                                            onClick={
+                                                this.handleAccountMenuToggled
+                                            }
+                                            color="inherit"
                                         >
-                                            <NotificationsIcon />
-                                        </Badge>
-                                    </IconButton>
-                                </Tooltip>
+                                            <AccountCircleIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
 
-                                <Tooltip title="Account">
+                                <div className={classes.toolbarActionsMobile}>
                                     <IconButton
-                                        aria-owns={
-                                            accountMenuOpen && 'material-appbar'
-                                        }
                                         aria-haspopup="true"
-                                        onClick={this.handleAccountMenuToggled}
+                                        onClick={this.handleMobileMenuToggled}
                                         color="inherit"
                                     >
-                                        <AccountCircleIcon />
+                                        <MoreVertIcon />
                                     </IconButton>
-                                </Tooltip>
-                            </div>
+                                </div>
+                            </Toolbar>
+                        </AppBar>
 
-                            <div className={classes.toolbarActionsMobile}>
-                                <IconButton
-                                    aria-haspopup="true"
-                                    onClick={this.handleMobileMenuToggled}
-                                    color="inherit"
-                                >
-                                    <MoreVertIcon />
+                        {renderAccountMenu}
+                        {renderMobileMenu}
+                    </Grid>
+
+                    <Drawer
+                        variant={width === 'lg' ? 'permanent' : 'temporary'}
+                        classes={{
+                            paper: classNames(
+                                classes.drawerPaper,
+                                !drawerOpened && classes.drawerPaperClose,
+                            ),
+                        }}
+                        open={drawerOpened}
+                    >
+                        <div className={classes.toolbarIcon}>
+                            <Tooltip title="Close drawer">
+                                <IconButton onClick={this.handleDrawerToggled}>
+                                    <ChevronLeftIcon />
                                 </IconButton>
-                            </div>
-                        </Toolbar>
-                    </AppBar>
+                            </Tooltip>
+                        </div>
 
-                    {renderAccountMenu}
-                    {renderMobileMenu}
+                        <Divider />
+
+                        <List>
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    history.push(_route('backoffice.home'))
+                                }
+                            >
+                                <Tooltip
+                                    title={!drawerOpened ? 'Dashboard' : ''}
+                                >
+                                    <ListItemIcon>
+                                        <DashboardIcon
+                                            color={
+                                                _route('backoffice.home') ===
+                                                location.pathname
+                                                    ? 'primary'
+                                                    : 'inherit'
+                                            }
+                                        />
+                                    </ListItemIcon>
+                                </Tooltip>
+
+                                <ListItemText
+                                    primary={
+                                        <Typography
+                                            color={
+                                                _route('backoffice.home') ===
+                                                location.pathname
+                                                    ? 'primary'
+                                                    : 'textSecondary'
+                                            }
+                                            variant="h6"
+                                        >
+                                            Dashboard
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+
+                            {drawerOpened && (
+                                <ListSubheader inset>Resources</ListSubheader>
+                            )}
+
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    history.push(
+                                        _route('backoffice.users.index'),
+                                    )
+                                }
+                            >
+                                <Tooltip title={!drawerOpened ? 'Users' : ''}>
+                                    <ListItemIcon>
+                                        <GroupIcon
+                                            color={
+                                                _route(
+                                                    'backoffice.users.index',
+                                                ) === location.pathname
+                                                    ? 'primary'
+                                                    : 'inherit'
+                                            }
+                                        />
+                                    </ListItemIcon>
+                                </Tooltip>
+
+                                <ListItemText
+                                    primary={
+                                        <Typography
+                                            color={
+                                                _route(
+                                                    'backoffice.users.index',
+                                                ) === location.pathname
+                                                    ? 'primary'
+                                                    : 'textSecondary'
+                                            }
+                                            variant="h6"
+                                        >
+                                            Users
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+                        </List>
+                    </Drawer>
+
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer} />
+
+                        {loading ? (
+                            renderLoading
+                        ) : (
+                            <Grid container>{children}</Grid>
+                        )}
+                    </main>
                 </Grid>
 
-                <Drawer
-                    variant={width === 'lg' ? 'permanent' : 'temporary'}
-                    classes={{
-                        paper: classNames(
-                            classes.drawerPaper,
-                            !drawerOpened && classes.drawerPaperClose,
-                        ),
-                    }}
-                    open={drawerOpened}
-                >
-                    <div className={classes.toolbarIcon}>
-                        <Tooltip title="Close drawer">
-                            <IconButton onClick={this.handleDrawerToggled}>
-                                <ChevronLeftIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-
-                    <Divider />
-
-                    <List>
-                        <ListItem
-                            button
-                            onClick={() =>
-                                history.push(_route('backoffice.home'))
-                            }
-                        >
-                            <Tooltip title={!drawerOpened ? 'Dashboard' : ''}>
-                                <ListItemIcon>
-                                    <DashboardIcon
-                                        color={
-                                            _route('backoffice.home') ===
-                                            location.pathname
-                                                ? 'primary'
-                                                : 'inherit'
-                                        }
-                                    />
-                                </ListItemIcon>
-                            </Tooltip>
-
-                            <ListItemText
-                                primary={
-                                    <Typography
-                                        color={
-                                            _route('backoffice.home') ===
-                                            location.pathname
-                                                ? 'primary'
-                                                : 'textSecondary'
-                                        }
-                                        variant="h6"
-                                    >
-                                        Dashboard
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-
-                        {drawerOpened && (
-                            <ListSubheader inset>Resources</ListSubheader>
-                        )}
-
-                        <ListItem
-                            button
-                            onClick={() =>
-                                history.push(_route('backoffice.users.index'))
-                            }
-                        >
-                            <Tooltip title={!drawerOpened ? 'Users' : ''}>
-                                <ListItemIcon>
-                                    <GroupIcon
-                                        color={
-                                            _route('backoffice.users.index') ===
-                                            location.pathname
-                                                ? 'primary'
-                                                : 'inherit'
-                                        }
-                                    />
-                                </ListItemIcon>
-                            </Tooltip>
-
-                            <ListItemText
-                                primary={
-                                    <Typography
-                                        color={
-                                            _route('backoffice.users.index') ===
-                                            location.pathname
-                                                ? 'primary'
-                                                : 'textSecondary'
-                                        }
-                                        variant="h6"
-                                    >
-                                        Users
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                    </List>
-                </Drawer>
-
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} />
-
-                    {loading ? (
-                        renderLoading
-                    ) : (
-                        <Grid container>{children}</Grid>
-                    )}
-                </main>
-            </Grid>
+                {renderSnackbar}
+            </>
         );
     }
 }
@@ -470,6 +523,7 @@ class Master extends Component {
 Master.propTypes = {
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
+    message: PropTypes.object,
     classes: PropTypes.object.isRequired,
 };
 
