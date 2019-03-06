@@ -8,10 +8,10 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - ./public:/var/www/html/public
-      - ./storage:/var/www/html/storage
-      - ./.env:/var/www/html/.env
-      - ./php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./public:/var/www/html/public:ro
+      - ./storage:/var/www/html/storage:ro
+      - ./.env:/var/www/html/.env:ro
+      - ./php.ini:/usr/local/etc/php/conf.d/local.ini:ro
     env_file:
       - .env
 
@@ -38,6 +38,6 @@ services:
       MYSQL_DATABASE: lra
       MYSQL_ROOT_PASSWORD: secret
     volumes:
-      - ./.data:/var/lib/mysql
+      - ~/.lra-data:/var/lib/mysql
     depends_on:
       - lra-php
