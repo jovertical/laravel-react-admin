@@ -8,9 +8,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - ./public:/var/www/html/public:ro
-      - ./storage:/var/www/html/storage:ro
-      - ./.env:/var/www/html/.env:ro
+      - ./:/var/www/html
       - ./php.ini:/usr/local/etc/php/conf.d/local.ini:ro
     env_file:
       - .env

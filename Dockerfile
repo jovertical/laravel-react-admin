@@ -33,21 +33,24 @@ RUN docker-php-ext-install bcmath pdo_mysql mbstring zip exif pcntl && \
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add group & user
-RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
+# This will allow the container to use a cached version of PHP packages
+COPY composer.lock composer.json ${APP_DIR}/
+
+# This is included just to bypass errors thrown by composer scripts
+COPY ./database ${APP_DIR}/database
 
 WORKDIR ${APP_DIR}
-
-# Copy app
-COPY . ${APP_DIR}
 
 # Install app dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts
 
-# Copy app permissions
-COPY --chown=www:www . ${APP_DIR}
+# Copy app
+COPY . ${APP_DIR}
 
-USER www
+# Set proper file permissions
+RUN chown -R www-data:www-data \
+    ${APP_DIR}/storage \
+    ${APP_DIR}/bootstrap/cache
 
 EXPOSE 9000
 CMD ["php-fpm"]
