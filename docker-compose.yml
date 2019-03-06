@@ -1,0 +1,43 @@
+version: "3"
+services:
+  lra-php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lra-php
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./public:/var/www/html/public
+      - ./storage:/var/www/html/storage
+      - ./.env:/var/www/html/.env
+      - ./php.ini:/usr/local/etc/php/conf.d/local.ini
+    env_file:
+      - .env
+
+  lra-webserver:
+    image: nginx:alpine
+    container_name: lra-webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+      - ./webserver.conf:/etc/nginx/conf.d/webserver.conf
+    depends_on:
+      - lra-php
+
+  lra-db:
+    image: mysql:5.7
+    container_name: lra-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: lra
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - ./.data:/var/lib/mysql
+    depends_on:
+      - lra-php
