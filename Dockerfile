@@ -1,10 +1,10 @@
 FROM php:7.3-fpm
 
 # Environment Variables
-ENV TZ=Asia/Manila
-ENV APP_DIR=/var/www/html
+ENV MASTER_TZ=Asia/Manila
+ENV MASTER_DIR=/var/www/html
 
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/${MASTER_TZ} /etc/localtime && echo ${MASTER_TZ} > /etc/timezone
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -34,23 +34,22 @@ RUN docker-php-ext-install bcmath pdo_mysql mbstring zip exif pcntl && \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # This will allow the container to use a cached version of PHP packages
-COPY composer.lock composer.json ${APP_DIR}/
+COPY composer.lock composer.json ${MASTER_DIR}/
 
 # This is included just to bypass errors thrown by composer scripts
-COPY ./database ${APP_DIR}/database
+COPY ./database ${MASTER_DIR}/database
 
-WORKDIR ${APP_DIR}
+WORKDIR ${MASTER_DIR}
 
 # Install app dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts
 
 # Copy app
-COPY . ${APP_DIR}
+COPY . ${MASTER_DIR}
 
-# Set proper file permissions
-RUN chown -R www-data:www-data \
-    ${APP_DIR}/storage \
-    ${APP_DIR}/bootstrap/cache
+# Give proper file permission & ownership
+# RUN chown -R www-data:www-data ${MASTER_DIR}
+# RUN chmod -R 755 ${MASTER_DIR}/storage
 
 EXPOSE 9000
 CMD ["php-fpm"]
