@@ -46,4 +46,16 @@ To make this app run on **docker** you must add a custom host address pointing t
 
 ### Add a virtual host
 
-A `webserver.conf.example` file is included to to help you configuring a _virtual host_ according to your host setup. It is better to just rename it to `webserver.conf` to avoid the file being included in your version control system. **Nginx** will automatically pick up every changes to this configuration file because it is bind-mounted into its container.
+A `webserver.conf.example` file is included to to help you configuring a _virtual host_ according to your host setup. It is better to just rename it to `webserver.conf` to avoid the file being included in your version control system. **Nginx** will automatically pick up every changes to this configuration file because it is _bind-mounted_ into its container.
+
+### You are good to go
+
+You can now run the _image_ using the `docker-compose up` and optionally pass the `--build` flag if you intend to build the image. The app can be visited here `http:your_custom_host_address`.
+
+### Installing PHP & NPM dependencies
+
+Due to the fact that all files inside this app is _bind-mounted_ into the container, **docker** will just use the existing directories, in our concern the `vendor` and `node_modules`. Here is an example of running a composer install command: `docker container exec -it lra-php composer install --no-interaction --no-plugins --no-scripts`.
+
+### Running Artisan Commands
+
+You can run any artisan commands directly into the `lra-php` container. Here is an example of a migration command: `docker container exec -it lra-php php artisan migrate:fresh --seed`.
