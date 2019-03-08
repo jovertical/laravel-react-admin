@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
 import { AuthTemplate } from '../../';
-import { _route } from '../../../../utils/Navigation';
-import { _queryParams, _queryString } from '../../../../utils/URL';
+import { _route } from '../../../utils/Navigation';
+import { _queryParams, _queryString } from '../../../utils/URL';
 
 class PasswordRequest extends Component {
     state = {
@@ -30,7 +30,7 @@ class PasswordRequest extends Component {
 
             const { history } = this.props;
             const { email } = values;
-            const routeSuffix = _route('backoffice.auth.passwords.reset');
+            const routeSuffix = _route('auth.passwords.reset');
 
             const response = await axios.post('api/auth/password/request', {
                 email,
@@ -157,7 +157,7 @@ class PasswordRequest extends Component {
                                                             username: email,
                                                         }),
                                                         pathname: _route(
-                                                            'backoffice.auth.signin',
+                                                            'auth.signin',
                                                         ),
                                                     }}
                                                 />

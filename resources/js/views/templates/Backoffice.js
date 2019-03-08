@@ -47,9 +47,9 @@ import {
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
-import { _route } from '../../../utils/Navigation';
+import { _route } from '../../utils/Navigation';
 
-class Master extends Component {
+class Backoffice extends Component {
     state = {
         drawerOpened: this.props.pageProps.width === 'lg' ? true : false,
         accountMenuOpen: false,
@@ -520,7 +520,7 @@ class Master extends Component {
     }
 }
 
-Master.propTypes = {
+Backoffice.propTypes = {
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
     message: PropTypes.object,
@@ -692,6 +692,6 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Master);
+const Styled = withStyles(styles)(Backoffice);
 
-export { Styled as Master };
+export { Styled as Backoffice };

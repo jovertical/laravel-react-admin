@@ -9,13 +9,13 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 
-import { Navigator } from '../core';
-import { BACKOFFICE_ROUTES } from '../config/routes';
-import { _route } from '../utils/Navigation';
-import { _queryString } from '../utils/URL';
-import { theme } from './theme';
+import { Navigator } from './core';
+import { ROUTES } from './config/routes';
+import { _route } from './utils/Navigation';
+import { _queryString } from './utils/URL';
+import { theme } from './themes/backoffice';
 
-class App extends Component {
+class Backoffice extends Component {
     state = {
         loading: true,
         authToken: null,
@@ -148,7 +148,7 @@ class App extends Component {
                                 ...this.state,
                                 width,
                                 environment: 'backoffice',
-                                routes: BACKOFFICE_ROUTES,
+                                routes: ROUTES,
                                 handleLock: this.handleLock,
                                 handleSignout: this.handleSignout,
                             }}
@@ -166,6 +166,6 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(App);
+const Styled = withStyles(styles)(Backoffice);
 
 export default withWidth()(Styled);
