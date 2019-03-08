@@ -46,7 +46,7 @@ To make this app run on **docker** you must add a custom host address pointing t
 
 ### Add a virtual host
 
-A `webserver.conf.example` file is included to to help you configuring a _virtual host_ according to your host setup. It is better to just rename it to `webserver.conf` to avoid the file being included in your version control system. **Nginx** will automatically pick up every changes to this configuration file because it is _bind-mounted_ into its container.
+A `webserver.conf.example` file is included to help you in configuring a _virtual host_ according to your host setup. It is better to just rename it to `webserver.conf` to avoid the file being included in your version control system. **Nginx** will automatically pick up every changes to this configuration file because it is _bind-mounted_ into its container.
 
 ### You are good to go
 
