@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import {
-    withStyles,
     withWidth,
     CssBaseline,
     MuiThemeProvider,
-    Grid,
-    CircularProgress,
 } from '@material-ui/core';
 
 import { Navigator } from './core';
@@ -14,6 +11,7 @@ import { ROUTES } from './config/routes';
 import { _route } from './utils/Navigation';
 import { _queryString } from './utils/URL';
 import { theme } from './themes/backoffice';
+import { Loading } from './views';
 
 class Backoffice extends Component {
     state = {
@@ -131,16 +129,7 @@ class Backoffice extends Component {
                 <CssBaseline />
 
                 {loading ? (
-                    <Grid
-                        container
-                        className={classes.container}
-                        justify="center"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <CircularProgress color="primary" />
-                        </Grid>
-                    </Grid>
+                    <Loading />
                 ) : (
                     <Router>
                         <Navigator
@@ -160,12 +149,4 @@ class Backoffice extends Component {
     }
 }
 
-const styles = theme => ({
-    container: {
-        height: '100vh',
-    },
-});
-
-const Styled = withStyles(styles)(Backoffice);
-
-export default withWidth()(Styled);
+export default withWidth()(Backoffice);

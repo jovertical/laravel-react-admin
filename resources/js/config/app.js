@@ -1,3 +1,3 @@
 export const APP = {
-    name: 'Helper Solutions',
+    name: 'Laravel React Admin',
 };

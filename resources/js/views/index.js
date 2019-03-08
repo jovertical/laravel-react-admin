@@ -8,4 +8,5 @@ export {
 } from './auth/passwords/Request';
 export { PasswordReset as AuthPasswordReset } from './auth/passwords/Reset';
 
+export { Loading } from './Loading';
 export { NotFound as ErrorNotFound } from './errors/NotFound';

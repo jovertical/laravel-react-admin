@@ -122,7 +122,7 @@ const styles = theme => ({
     },
 
     logo: {
-        width: '10rem',
+        width: '5rem',
         height: '5rem',
     },
 
