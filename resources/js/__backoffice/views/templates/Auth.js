@@ -118,11 +118,12 @@ const styles = theme => ({
 
     logoContainer: {
         textAlign: 'center',
+        paddingTop: '2rem'
     },
 
     logo: {
-        width: '12rem',
-        height: '6rem',
+        width: '10rem',
+        height: '5rem',
     },
 
     heading: {
