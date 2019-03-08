@@ -91,7 +91,7 @@ module.exports = {
                     title:
                         errors.length > 0 ? 'Build Failed' : 'Build Successful',
                     message: `Completed in ${time}ms`,
-                    icon: path.resolve(__dirname, './public/favicon-512.png'),
+                    icon: path.resolve(__dirname, './public/android-chrome-512x512.png'),
                     sound: true,
                     wait: true,
                 });
@@ -146,7 +146,7 @@ if (!inProduction) {
     module.exports.plugins.push(
         new BrowserSyncPlugin({
             host: 'localhost',
-            proxy: 'http://hsbo.test',
+            proxy: 'http://lra.test',
             open: true,
             notify: false,
         }),
