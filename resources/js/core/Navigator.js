@@ -27,9 +27,7 @@ const WrappableNavigator = props => {
                                                 search: _queryString({
                                                     username,
                                                 }),
-                                                pathname: _route(
-                                                    `${environment}.auth.signin`,
-                                                ),
+                                                pathname: _route('auth.signin'),
                                             }}
                                         />
                                     );

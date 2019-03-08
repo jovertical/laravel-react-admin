@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 import { AccountCircle, ExpandMore } from '@material-ui/icons';
 
-import { _queryParams, _queryString } from '../../../utils/URL';
-import { _route } from '../../../utils/Navigation';
+import { _queryParams, _queryString } from '../../utils/URL';
+import { _route } from '../../utils/Navigation';
 import { AuthTemplate } from '../';
 
 class SignIn extends Component {
@@ -301,7 +301,7 @@ class SignIn extends Component {
                                                                     },
                                                                 ),
                                                                 pathname: _route(
-                                                                    'backoffice.auth.passwords.request',
+                                                                    'auth.passwords.request',
                                                                 ),
                                                             }}
                                                         />

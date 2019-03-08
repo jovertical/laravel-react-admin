@@ -20,7 +20,7 @@ module.exports = {
     mode: process.env.NODE_ENV,
 
     entry: {
-        backoffice: path.join(SRC_DIR, '__backoffice/index.js'),
+        backoffice: path.join(SRC_DIR, 'index.backoffice.js'),
     },
 
     module: {

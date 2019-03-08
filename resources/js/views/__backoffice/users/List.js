@@ -4,7 +4,7 @@ import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { Table } from '../../../ui';
-import { MasterTemplate } from '../';
+import { BackofficeTemplate } from '../../';
 
 class List extends Component {
     state = {
@@ -177,7 +177,7 @@ class List extends Component {
             });
 
         return (
-            <MasterTemplate
+            <BackofficeTemplate
                 {...this.props}
                 pageTitle="Users"
                 loading={loading}
@@ -202,7 +202,7 @@ class List extends Component {
                         onChangePerPage={this.handlePerPageChange}
                     />
                 )}
-            </MasterTemplate>
+            </BackofficeTemplate>
         );
     }
 }

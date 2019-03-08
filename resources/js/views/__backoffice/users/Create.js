@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { MasterTemplate } from '../';
+import { BackofficeTemplate } from '../../';
 
 export class Create extends Component {
     render() {
         return (
-            <MasterTemplate {...this.props} pageTitle="Create a user">
+            <BackofficeTemplate {...this.props} pageTitle="Create a user">
                 Create...
-            </MasterTemplate>
+            </BackofficeTemplate>
         );
     }
 }

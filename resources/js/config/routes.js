@@ -1,63 +1,32 @@
-import * as BackofficeViews from '../__backoffice/views';
+import * as Views from '../views';
+import { BACKOFFICE_ROUTES } from '../routers/backoffice';
 
-export const BACKOFFICE_ROUTES = [
+export const ROUTES = [
     {
         name: 'auth.signin',
         path: '/signin',
-        component: BackofficeViews.AuthSignin,
+        component: Views.AuthSignin,
         auth: false,
     },
 
     {
         name: 'auth.passwords.request',
         path: '/password/request',
-        component: BackofficeViews.AuthPasswordRequest,
+        component: Views.AuthPasswordRequest,
         auth: false,
     },
 
     {
         name: 'auth.passwords.reset',
         path: '/password/reset/:token',
-        component: BackofficeViews.AuthPasswordReset,
+        component: Views.AuthPasswordReset,
         auth: false,
     },
 
-    {
-        name: 'home',
-        path: '/',
-        component: BackofficeViews.Home,
-        auth: true,
-    },
-
-    {
-        name: 'users.index',
-        path: '/r/users',
-        component: BackofficeViews.UserList,
-        auth: true,
-    },
-
-    {
-        name: 'users.create',
-        path: '/r/users/create',
-        component: BackofficeViews.UserCreate,
-        auth: true,
-    },
-
-    {
-        name: 'users.edit',
-        path: '/r/users/:id/edit',
-        component: BackofficeViews.UserEdit,
-        auth: true,
-    },
+    ...BACKOFFICE_ROUTES,
 
     {
         name: 'errors.not-found',
-        component: BackofficeViews.ErrorNotFound,
+        component: Views.ErrorNotFound,
     },
-].map(r => {
-    r.name = `backoffice.${r.name}`;
-
-    return r;
-});
-
-export const ROUTES = [...BACKOFFICE_ROUTES];
+];
