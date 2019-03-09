@@ -327,7 +327,7 @@ class Backoffice extends Component {
                                     </IconButton>
                                 </Tooltip>
 
-                                {width === 'lg' && (
+                                {width === 'lg' && !drawerOpened && (
                                     <Typography
                                         variant="h6"
                                         color="inherit"

@@ -8,7 +8,6 @@ import {
     Button,
     Link,
     Chip,
-    Avatar,
     withStyles,
 } from '@material-ui/core';
 import { AccountCircle, ExpandMore } from '@material-ui/icons';
@@ -184,11 +183,7 @@ class SignIn extends Component {
                         <Chip
                             label={username}
                             variant="outlined"
-                            avatar={
-                                <Avatar>
-                                    <AccountCircle />
-                                </Avatar>
-                            }
+                            icon={<AccountCircle color="primary" />}
                             onDelete={this.handleUsernameChipClicked}
                             deleteIcon={<ExpandMore />}
                         />

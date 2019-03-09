@@ -9,7 +9,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import logo from '../../../png/logos/1/512.png';
+import logo from '../../../img/logos/1/512.png';
 
 const Auth = props => (
     <Grid
@@ -118,7 +118,7 @@ const styles = theme => ({
 
     logoContainer: {
         textAlign: 'center',
-        paddingTop: '2rem'
+        paddingTop: '2rem',
     },
 
     logo: {
