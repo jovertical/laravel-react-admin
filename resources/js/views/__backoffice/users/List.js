@@ -180,6 +180,7 @@ class List extends Component {
             >
                 {!loading && data && (
                     <Table
+                        title="Users"
                         data={data}
                         total={total}
                         columns={columns}

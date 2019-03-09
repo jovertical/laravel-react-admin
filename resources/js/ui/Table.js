@@ -1,29 +1,130 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
     withStyles,
-    Paper,
+    Button,
+    ClickAwayListener,
+    Grow,
     IconButton,
-    Tooltip,
+    Paper,
+    Popper,
     Table as MuiTable,
-    TableHead,
     TableBody,
-    TableFooter,
-    TableRow,
     TableCell,
-    TableSortLabel,
+    TableFooter,
+    TableHead,
     TablePagination,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Tooltip,
+    Typography,
 } from '@material-ui/core';
 
 import {
+    FilterList as FilterListIcon,
     FirstPage as FirstPageIcon,
     KeyboardArrowLeft as KeyboardArrowLeftIcon,
     KeyboardArrowRight as KeyboardArrowRightIcon,
     LastPage as LastPageIcon,
 } from '@material-ui/icons';
 
-const PaginationActions = props => {
+let TableToolbar = props => {
+    const { classes, title, filterMenuOpen, handleFilterMenuClick } = props;
+    let filterAnchorEl = null;
+
+    return (
+        <Toolbar>
+            <div className={classes.title}>
+                <Typography variant="h6" id="tableTitle">
+                    {title}
+                </Typography>
+            </div>
+
+            <div className={classes.spacer} />
+
+            <div className={classes.actions}>
+                <Tooltip title="Filter list">
+                    <div class={classes.filterMenuWrapper}>
+                        <IconButton
+                            aria-label="Filter list"
+                            aria-haspopup="true"
+                            buttonRef={node => console.log(node)}
+                            onClick={handleFilterMenuClick}
+                        >
+                            <FilterListIcon />
+                        </IconButton>
+
+                        <Popper
+                            open={filterMenuOpen}
+                            anchorEl={filterAnchorEl}
+                            transition
+                            disablePortal
+                        >
+                            {({ TransitionProps, placement }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    id="menu-list-grow"
+                                    style={{
+                                        transformOrigin:
+                                            placement === 'bottom'
+                                                ? 'center top'
+                                                : 'center bottom',
+                                    }}
+                                >
+                                    <Paper className={classes.filterMenu}>
+                                        <ClickAwayListener
+                                            onClickAway={handleFilterMenuClick}
+                                        >
+                                            <div>Filter Form</div>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
+                    </div>
+                </Tooltip>
+            </div>
+        </Toolbar>
+    );
+};
+
+TableToolbar.propTypes = {
+    title: PropTypes.string.isRequired,
+    filterMenuOpen: PropTypes.bool,
+    handleFilterMenuClick: PropTypes.func,
+};
+
+TableToolbar = withStyles(
+    theme => ({
+        title: {
+            flex: '0 0 auto',
+        },
+
+        spacer: {
+            flex: '1 1 100%',
+        },
+
+        actions: {
+            color: theme.palette.text.secondary,
+        },
+
+        filterMenuWrapper: {
+            position: 'relative',
+            display: 'inline-block',
+        },
+
+        filterMenu: {
+            position: 'absolute',
+            padding: '5rem',
+            right: 0,
+        },
+    }),
+    { withTheme: true },
+)(TableToolbar);
+
+let PaginationActions = props => {
     const {
         classes,
         theme,
@@ -87,7 +188,7 @@ const PaginationActions = props => {
     );
 };
 
-const StyledPaginationActions = withStyles(
+PaginationActions = withStyles(
     theme => ({
         root: {
             flexShrink: 0,
@@ -98,121 +199,150 @@ const StyledPaginationActions = withStyles(
     { withTheme: true },
 )(PaginationActions);
 
-const Table = props => {
-    const {
-        classes,
-        columns,
-        data,
-        total,
-        sortType,
-        sortBy,
-        headerCellClicked,
-        page,
-        perPage,
-        onChangePage,
-        onChangePerPage,
-    } = props;
+class Table extends Component {
+    state = {
+        filterMenuOpen: false,
+    };
 
-    return (
-        <Paper className={classes.root}>
-            <div className={classes.tableWrapper}>
-                <MuiTable className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column, key) => (
-                                <TableCell
-                                    key={key}
-                                    onClick={() =>
-                                        column.sort &&
-                                        headerCellClicked(column.property)
-                                    }
-                                >
-                                    {!column.sort ? (
-                                        column.name
-                                    ) : (
-                                        <Tooltip
-                                            title="Sort"
-                                            placement={
-                                                column.numeric
-                                                    ? 'bottom-end'
-                                                    : 'bottom-start'
-                                            }
-                                            enterDelay={300}
-                                        >
-                                            <TableSortLabel
-                                                active={
-                                                    sortBy === column.property
+    handleFilterMenuClick = () => {
+        this.setState(prevState => {
+            return {
+                filterMenuOpen: !prevState.filterMenuOpen,
+            };
+        });
+    };
+
+    render() {
+        const {
+            classes,
+            title,
+            columns,
+            data,
+            total,
+            sortType,
+            sortBy,
+            headerCellClicked,
+            page,
+            perPage,
+            onChangePage,
+            onChangePerPage,
+        } = this.props;
+
+        const { filterMenuOpen } = this.state;
+
+        return (
+            <Paper className={classes.root}>
+                <TableToolbar
+                    title={title}
+                    filterMenuOpen={filterMenuOpen}
+                    handleFilterMenuClick={this.handleFilterMenuClick}
+                />
+
+                <div className={classes.tableWrapper}>
+                    <MuiTable className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column, key) => (
+                                    <TableCell
+                                        key={key}
+                                        onClick={() =>
+                                            column.sort &&
+                                            headerCellClicked(column.property)
+                                        }
+                                    >
+                                        {!column.sort ? (
+                                            column.name
+                                        ) : (
+                                            <Tooltip
+                                                title="Sort"
+                                                placement={
+                                                    column.numeric
+                                                        ? 'bottom-end'
+                                                        : 'bottom-start'
                                                 }
-                                                direction={sortType}
+                                                enterDelay={300}
                                             >
-                                                {column.name}
-                                            </TableSortLabel>
-                                        </Tooltip>
+                                                <TableSortLabel
+                                                    active={
+                                                        sortBy ===
+                                                        column.property
+                                                    }
+                                                    direction={sortType}
+                                                >
+                                                    {column.name}
+                                                </TableSortLabel>
+                                            </Tooltip>
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                            {data.map((item, key) => (
+                                <TableRow key={key}>
+                                    {Object.values(item).map(
+                                        (cell, cellKey) => {
+                                            if (cellKey === 0) {
+                                                return (
+                                                    <TableCell
+                                                        key={cellKey}
+                                                        component="th"
+                                                        scope="row"
+                                                    >
+                                                        {cell}
+                                                    </TableCell>
+                                                );
+                                            }
+
+                                            return (
+                                                <TableCell key={cellKey}>
+                                                    {cell}
+                                                </TableCell>
+                                            );
+                                        },
                                     )}
-                                </TableCell>
+                                </TableRow>
                             ))}
-                        </TableRow>
-                    </TableHead>
 
-                    <TableBody>
-                        {data.map((item, key) => (
-                            <TableRow key={key}>
-                                {Object.values(item).map((cell, cellKey) => {
-                                    if (cellKey === 0) {
-                                        return (
-                                            <TableCell
-                                                key={cellKey}
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                {cell}
-                                            </TableCell>
-                                        );
+                            {data.length > 0 && (
+                                <TableRow
+                                    style={{
+                                        height: 32 * (perPage - data.length),
+                                    }}
+                                >
+                                    <TableCell colSpan={columns.length} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={['5', '10', '20']}
+                                    colSpan={columns.length}
+                                    count={total}
+                                    page={page - 1}
+                                    rowsPerPage={perPage}
+                                    onChangePage={(event, page) => {
+                                        onChangePage(page);
+                                    }}
+                                    onChangeRowsPerPage={event =>
+                                        onChangePerPage(event.target.value, 1)
                                     }
-
-                                    return (
-                                        <TableCell key={cellKey}>
-                                            {cell}
-                                        </TableCell>
-                                    );
-                                })}
+                                    ActionsComponent={PaginationActions}
+                                />
                             </TableRow>
-                        ))}
-
-                        {data.length > 0 && (
-                            <TableRow
-                                style={{ height: 32 * (perPage - data.length) }}
-                            >
-                                <TableCell colSpan={columns.length} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={['5', '10', '20']}
-                                colSpan={columns.length}
-                                count={total}
-                                page={page - 1}
-                                rowsPerPage={perPage}
-                                onChangePage={(event, page) => {
-                                    onChangePage(page);
-                                }}
-                                onChangeRowsPerPage={event =>
-                                    onChangePerPage(event.target.value, 1)
-                                }
-                                ActionsComponent={StyledPaginationActions}
-                            />
-                        </TableRow>
-                    </TableFooter>
-                </MuiTable>
-            </div>
-        </Paper>
-    );
-};
+                        </TableFooter>
+                    </MuiTable>
+                </div>
+            </Paper>
+        );
+    }
+}
 
 Table.propTypes = {
+    title: PropTypes.string.isRequired,
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     total: PropTypes.number.isRequired,
