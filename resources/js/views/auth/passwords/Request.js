@@ -4,7 +4,7 @@ import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
 import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
-import { AuthTemplate } from '../../';
+import { AuthLayout } from '../../';
 import { _route } from '../../../utils/Navigation';
 import { _queryParams, _queryString } from '../../../utils/URL';
 
@@ -97,7 +97,7 @@ class PasswordRequest extends Component {
         const { loading, message, email } = this.state;
 
         return (
-            <AuthTemplate
+            <AuthLayout
                 title="Forgot Password"
                 subTitle="Enter your email and we'll send a recovery link"
                 loading={loading}
@@ -191,7 +191,7 @@ class PasswordRequest extends Component {
                         );
                     }}
                 </Formik>
-            </AuthTemplate>
+            </AuthLayout>
         );
     }
 }

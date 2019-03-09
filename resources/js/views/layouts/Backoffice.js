@@ -14,6 +14,7 @@ import {
     Grow,
     IconButton,
     InputBase,
+    Link,
     List,
     ListItem,
     ListItemIcon,
@@ -298,7 +299,7 @@ class Backoffice extends Component {
 
         return (
             <>
-                <Grid container>
+                <Grid container className={classes.root}>
                     <Grid item>
                         <AppBar
                             position="absolute"
@@ -512,6 +513,23 @@ class Backoffice extends Component {
                             <Grid container>{children}</Grid>
                         )}
                     </main>
+
+                    <footer className={classes.footer}>
+                        <p>
+                            Built with{' '}
+                            <span role="img" aria-label="Love">
+                                ❤️
+                            </span>{' '}
+                            by{' '}
+                            <Link
+                                href="https://github.com/palonponjovertlota"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                @palonponjovertlota
+                            </Link>
+                        </p>
+                    </footer>
                 </Grid>
 
                 {renderSnackbar}
@@ -641,15 +659,30 @@ const styles = theme => ({
 
     appBarSpacer: theme.mixins.toolbar,
 
+    root: {
+        minHeight: '100vh',
+        maxWidth: '100%',
+        position: 'relative',
+    },
+
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
-        maxWidth: '100%',
-        minHeight: '100vh',
+        padding: theme.spacing.unit * 6,
+        marginBottom: '5rem',
+        backgroundColor: theme.palette.grey['200'],
     },
 
     loadingContainer: {
         minHeight: '100%',
+    },
+
+    footer: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        left: 0,
+        padding: '1rem',
+        textAlign: 'center',
     },
 
     toolbarActionsDesktop: {

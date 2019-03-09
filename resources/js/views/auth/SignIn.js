@@ -15,7 +15,7 @@ import { AccountCircle, ExpandMore } from '@material-ui/icons';
 
 import { _queryParams, _queryString } from '../../utils/URL';
 import { _route } from '../../utils/Navigation';
-import { AuthTemplate } from '../';
+import { AuthLayout } from '../';
 
 class SignIn extends Component {
     state = {
@@ -177,7 +177,7 @@ class SignIn extends Component {
         const { loading, identified, username, message } = this.state;
 
         return (
-            <AuthTemplate
+            <AuthLayout
                 title={identified ? 'Welcome' : 'Sign in'}
                 subTitle={
                     identified ? (
@@ -337,7 +337,7 @@ class SignIn extends Component {
                         );
                     }}
                 </Formik>
-            </AuthTemplate>
+            </AuthLayout>
         );
     }
 }

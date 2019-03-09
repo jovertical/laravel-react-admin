@@ -1,6 +1,6 @@
-export { Auth as AuthTemplate } from './templates/Auth';
-export { Error as ErrorTemplate } from './templates/Error';
-export { Backoffice as BackofficeTemplate } from './templates/Backoffice';
+export { Auth as AuthLayout } from './layouts/Auth';
+export { Error as ErrorLayout } from './layouts/Error';
+export { Backoffice as BackofficeLayout } from './layouts/Backoffice';
 
 export { SignIn as AuthSignin } from './auth/SignIn';
 export {

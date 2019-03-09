@@ -4,7 +4,8 @@ import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { Table } from '../../../ui';
-import { BackofficeTemplate } from '../../';
+import { BackofficeLayout } from '../../';
+import { User } from '../../../models/User';
 
 class List extends Component {
     state = {
@@ -111,18 +112,12 @@ class List extends Component {
         try {
             const { sortBy, sortType } = params;
 
-            const response = await axios.get('/api/users', {
-                params,
-            });
-
-            if (response.status !== 200) {
-                return;
-            }
+            const pagination = await User.paginated(params);
 
             this.setState(prevState => {
                 return {
                     loading: false,
-                    pagination: response.data,
+                    pagination,
                     sorting: {
                         by: sortBy ? sortBy : prevState.sorting.by,
                         type: sortType ? sortType : prevState.sorting.type,
@@ -177,7 +172,7 @@ class List extends Component {
             });
 
         return (
-            <BackofficeTemplate
+            <BackofficeLayout
                 {...this.props}
                 pageTitle="Users"
                 loading={loading}
@@ -202,7 +197,7 @@ class List extends Component {
                         onChangePerPage={this.handlePerPageChange}
                     />
                 )}
-            </BackofficeTemplate>
+            </BackofficeLayout>
         );
     }
 }
