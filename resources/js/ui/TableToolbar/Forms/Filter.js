@@ -11,17 +11,23 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    TextField,
     withStyles,
 } from '@material-ui/core';
 
-const getColumnType = (columns, filterBy) => {
-    const column = columns.find(column => column.property === filterBy);
+const FilterValueInput = props => {
+    const inputProps = {
+        name: 'filterValue',
+        id: 'filterValue',
+        label: 'Value',
+        variant: 'outlined',
+    };
 
-    if (column && !column.hasOwnProperty('type')) {
-        return 'string';
+    if (props.columntype === 'numeric') {
+        return <TextField type="number" {...inputProps} {...props} />;
+    } else {
+        return <TextField {...inputProps} {...props} />;
     }
-
-    return column.type;
 };
 
 let Filter = props => {
@@ -49,11 +55,22 @@ let Filter = props => {
         ],
     };
 
+    const getColumnType = filterBy => {
+        const column = columns.find(column => column.property === filterBy);
+
+        if (column && !column.hasOwnProperty('type')) {
+            return 'string';
+        }
+
+        return column.type;
+    };
+
     return (
         <Formik
             initialValues={{
                 filterBy: '',
                 filterType: '',
+                filterValue: '',
             }}
             onSubmit={onFilter}
             validate={values => {
@@ -67,7 +84,6 @@ let Filter = props => {
                 values,
                 handleChange,
                 setFieldValue,
-                setErrors,
                 errors,
                 isSubmitting,
             }) => {
@@ -123,13 +139,19 @@ let Filter = props => {
 
                                 <Select
                                     value={values.filterType}
-                                    onChange={handleChange}
+                                    onChange={event => {
+                                        if (values.filterType) {
+                                            setFieldValue('filterValue', '');
+                                        }
+
+                                        handleChange(event);
+                                    }}
                                     name="filterType"
                                     id="filterType"
                                     input={<OutlinedInput labelWidth={65} />}
                                 >
                                     {filterTypeSets[
-                                        getColumnType(columns, values.filterBy)
+                                        getColumnType(values.filterBy)
                                     ].map((type, key) => (
                                         <MenuItem key={key} value={type.value}>
                                             {type.label}
@@ -143,6 +165,20 @@ let Filter = props => {
                                     </FormHelperText>
                                 )}
                             </FormControl>
+                        )}
+
+                        {values.filterBy && values.filterType && (
+                            <FilterValueInput
+                                columntype={getColumnType(values.filterBy)}
+                                className={classes.input}
+                                value={values.filterValue}
+                                onChange={handleChange}
+                                error={errors.hasOwnProperty('filterValue')}
+                                helperText={
+                                    errors.hasOwnProperty('filterValue') &&
+                                    errors.filterValue
+                                }
+                            />
                         )}
 
                         <FormControl className={classes.input}>

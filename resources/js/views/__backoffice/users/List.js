@@ -15,10 +15,7 @@ class List extends Component {
             by: 'name',
             type: 'asc',
         },
-        filter: {
-            by: 'name',
-            type: '',
-        },
+        filters: [],
         message: null,
     };
 
@@ -166,7 +163,7 @@ class List extends Component {
         } = pagination;
 
         const columns = [
-            { name: 'ID', property: 'id', type: 'numeric' },
+            { name: 'ID', property: 'id', type: 'numeric', sort: true },
             { name: 'Type', property: 'type' },
             { name: 'Name', property: 'name', sort: true },
             { name: 'Email', property: 'email', sort: true },
