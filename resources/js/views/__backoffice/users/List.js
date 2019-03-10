@@ -15,7 +15,17 @@ class List extends Component {
             by: 'name',
             type: 'asc',
         },
+        filter: {
+            by: 'name',
+            type: '',
+        },
         message: null,
+    };
+
+    handleFiltering = async (values, { setSubmitting }) => {
+        setSubmitting(false);
+
+        alert(JSON.stringify(values));
     };
 
     /**
@@ -156,6 +166,7 @@ class List extends Component {
         } = pagination;
 
         const columns = [
+            { name: 'ID', property: 'id', type: 'numeric' },
             { name: 'Type', property: 'type' },
             { name: 'Name', property: 'name', sort: true },
             { name: 'Email', property: 'email', sort: true },
@@ -165,6 +176,7 @@ class List extends Component {
             rawData &&
             rawData.map(user => {
                 return {
+                    id: user.id,
                     type: user.type,
                     name: user.name,
                     email: user.email,
@@ -196,6 +208,7 @@ class List extends Component {
                         perPage={parseInt(perPage)}
                         onChangePage={this.handlePageChange}
                         onChangePerPage={this.handlePerPageChange}
+                        onFilter={this.handleFiltering}
                     />
                 )}
             </BackofficeLayout>
