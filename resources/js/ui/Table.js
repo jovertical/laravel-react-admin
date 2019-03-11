@@ -32,12 +32,20 @@ const Table = props => {
         perPage,
         onChangePage,
         onChangePerPage,
+        filters,
         onFilter,
+        onFilterRemove,
     } = props;
 
     return (
         <Paper className={classes.root}>
-            <TableToolbar title={title} columns={columns} onFilter={onFilter} />
+            <TableToolbar
+                title={title}
+                columns={columns}
+                filters={filters}
+                onFilter={onFilter}
+                onFilterRemove={onFilterRemove}
+            />
 
             <div className={classes.tableWrapper}>
                 <MuiTable className={classes.table}>
@@ -145,12 +153,14 @@ Table.propTypes = {
     total: PropTypes.number.isRequired,
     sortType: PropTypes.oneOf(['asc', 'desc']),
     sortBy: PropTypes.string,
+    filters: PropTypes.object,
     headerCellClicked: PropTypes.func,
     page: PropTypes.number.isRequired,
     perPage: PropTypes.number.isRequired,
     onChangePage: PropTypes.func.isRequired,
     onChangePerPage: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
+    onFilter: PropTypes.func,
+    onFilterRemove: PropTypes.func,
 };
 
 const styles = theme => ({

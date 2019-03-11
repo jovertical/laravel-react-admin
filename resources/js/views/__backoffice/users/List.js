@@ -19,6 +19,20 @@ class List extends Component {
         message: null,
     };
 
+    handleFilterRemove = async key => {
+        const { filters: prevFilters } = this.state;
+
+        const filters = { ...prevFilters };
+        delete filters[key];
+
+        await this.fetchUsers({
+            ...this.defaultQueryString(),
+            filters,
+        });
+
+        this.updateQueryString();
+    };
+
     /**
      * Event listener that is triggered when the filter form is submitted.
      * This should re-fetch the resource & also update the queryString.
@@ -209,7 +223,7 @@ class List extends Component {
     }
 
     render() {
-        const { loading, pagination, sorting, message } = this.state;
+        const { loading, pagination, sorting, filters, message } = this.state;
         const {
             data: rawData,
             total,
@@ -248,6 +262,7 @@ class List extends Component {
                         data={data}
                         total={total}
                         columns={columns}
+                        filters={filters}
                         sortBy={sorting.by}
                         sortType={sorting.type}
                         headerCellClicked={cellName =>
@@ -261,6 +276,7 @@ class List extends Component {
                         onChangePage={this.handlePageChange}
                         onChangePerPage={this.handlePerPageChange}
                         onFilter={this.handleFiltering}
+                        onFilterRemove={this.handleFilterRemove}
                     />
                 )}
             </BackofficeLayout>
