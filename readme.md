@@ -4,22 +4,24 @@ This is a scaffolding project that comes with authentication &
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
-***
+---
 
 ## Features
 
-- Single Page App
-- Stateless Authentication System
-- Datatables with server-side pagination, sorting & filtering
-- CRUD - Undo common actions.
+-   Progressive Web App (PWA)
+-   Stateless authentication system
+-   Datatables with server-side pagination, sorting & dynamic filtering
+-   Undo common actions
+-   [Docker](https://www.docker.com) ready
+-   [Image Intervention](http://image.intervention.io/) integration for image uploads
 
-***
+---
 
 ## Preview
 
 You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 
-***
+---
 
 ## Quick Start
 
@@ -29,7 +31,7 @@ You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 4. After installation, run: `php artisan serve`
 5. The project will run in this URL: (http://localhost:8000)
 
-***
+---
 
 ## Using Docker
 
