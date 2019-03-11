@@ -24,9 +24,22 @@ const FilterValueInput = props => {
     };
 
     if (props.columntype === 'numeric') {
-        return <TextField type="number" {...inputProps} {...props} />;
+        return (
+            <TextField
+                type="number"
+                {...inputProps}
+                {...props}
+                placeholder="Numeric value here"
+            />
+        );
     } else {
-        return <TextField {...inputProps} {...props} />;
+        return (
+            <TextField
+                {...inputProps}
+                {...props}
+                placeholder="String value here"
+            />
+        );
     }
 };
 

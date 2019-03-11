@@ -15,14 +15,35 @@ class List extends Component {
             by: 'name',
             type: 'asc',
         },
-        filters: [],
+        filters: {},
         message: null,
     };
 
+    /**
+     * Event listener that is triggered when the filter form is submitted.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {object} values
+     * @param {object} form
+     *
+     * @return {undefined}
+     */
     handleFiltering = async (values, { setSubmitting }) => {
         setSubmitting(false);
 
-        alert(JSON.stringify(values));
+        const { filters: prevFilters } = this.state;
+
+        const filters = {
+            ...prevFilters,
+            [`${values.filterBy}[${values.filterType}]`]: values.filterValue,
+        };
+
+        await this.fetchUsers({
+            ...this.defaultQueryString(),
+            filters,
+        });
+
+        this.updateQueryString();
     };
 
     /**
@@ -34,14 +55,9 @@ class List extends Component {
      * @return {undefined}
      */
     handlePageChange = async page => {
-        const { per_page: perPage } = this.state.pagination;
-        const { by: sortBy, type: sortType } = this.state.sorting;
-
         await this.fetchUsers({
-            perPage,
+            ...this.defaultQueryString(),
             page,
-            sortBy,
-            sortType,
         });
 
         this.updateQueryString();
@@ -57,13 +73,10 @@ class List extends Component {
      * @return {undefined}
      */
     handlePerPageChange = async (perPage, page) => {
-        const { by: sortBy, type: sortType } = this.state.sorting;
-
         await this.fetchUsers({
+            ...this.defaultQueryString(),
             perPage,
             page,
-            sortBy,
-            sortType,
         });
 
         this.updateQueryString();
@@ -79,6 +92,7 @@ class List extends Component {
      */
     handleSorting = async (sortBy, sortType) => {
         await this.fetchUsers({
+            ...this.defaultQueryString(),
             sortBy,
             sortType,
         });
@@ -87,13 +101,32 @@ class List extends Component {
     };
 
     /**
+     * This will provide the default sorting, pagination & filters from state.
+     *
+     * @return {object}
+     */
+    defaultQueryString() {
+        const { sortBy, sortType } = this.state.sorting;
+        const { current_page: page, per_page: perPage } = this.state.pagination;
+        const { filters } = this.state;
+
+        return {
+            sortBy,
+            sortType,
+            perPage,
+            page,
+            filters,
+        };
+    }
+
+    /**
      * This will update the URL query string via history API.
      *
      * @return {undefined}
      */
     updateQueryString() {
         const { history, location } = this.props;
-        const { pagination, sorting } = this.state;
+        const { pagination, sorting, filters } = this.state;
         const { current_page: page, per_page: perPage } = pagination;
         const { by: sortBy, type: sortType } = sorting;
 
@@ -102,6 +135,7 @@ class List extends Component {
             perPage,
             sortBy,
             sortType,
+            ...filters,
         });
 
         history.push(`${location.pathname}${queryString}`);
@@ -117,9 +151,17 @@ class List extends Component {
         this.setState({ loading: true });
 
         try {
-            const { sortBy, sortType } = params;
+            const { page, perPage, sortBy, sortType, filters } = params;
 
-            const pagination = await User.paginated(params);
+            const queryParams = {
+                page,
+                perPage,
+                sortBy,
+                sortType,
+                ...filters,
+            };
+
+            const pagination = await User.paginated(queryParams);
 
             this.setState(prevState => {
                 return {
@@ -129,6 +171,7 @@ class List extends Component {
                         by: sortBy ? sortBy : prevState.sorting.by,
                         type: sortType ? sortType : prevState.sorting.type,
                     },
+                    filters: filters ? filters : prevState.filters,
                 };
             });
         } catch (error) {
@@ -150,7 +193,19 @@ class List extends Component {
             ? _queryParams(location.search)
             : {};
 
-        await this.fetchUsers(queryParams);
+        const filters = {};
+        const queryParamValues = Object.values(queryParams);
+
+        Object.keys(queryParams).forEach((param, key) => {
+            if (param.search(/\[*]/) > -1) {
+                filters[param] = queryParamValues[key];
+            }
+        });
+
+        await this.fetchUsers({
+            ...queryParams,
+            filters,
+        });
     }
 
     render() {

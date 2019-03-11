@@ -1,6 +1,6 @@
 {
-    "name": "Helper Solutions",
-    "short_name": "HSBO",
+    "name": "Laravel React Admin",
+    "short_name": "LRA",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
