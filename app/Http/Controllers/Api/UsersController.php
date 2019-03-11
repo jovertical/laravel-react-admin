@@ -145,6 +145,47 @@ class UsersController extends Controller
             $request->input('sortType') ?? 'ASC'
         );
 
+        if ($id = $request->input('id')) {
+            $this->filter($users, 'id', $id);
+        }
+
+        if ($type = $request->input('type')) {
+            $this->filter($users, 'type', $type);
+        }
+
+        if ($name = $request->input('name')) {
+            $this->filter($users, 'name', $name);
+        }
+
+        if ($email = $request->input('email')) {
+            $this->filter($users, 'email', $email);
+        }
+
         return $users->paginate($request->input('perPage') ?? 10);
+    }
+
+    /**
+     * Filter a specific column property
+     *
+     * @param mixed $users
+     * @param string $property
+     * @param array $filters
+     *
+     * @return void
+     */
+    protected function filter($users, string $property, array $filters)
+    {
+        foreach ($filters as $keyword => $value) {
+            // Needed since LIKE statements requires values to be wrapped by %
+            if (in_array($keyword, ['like', 'nlike'])) {
+                $users->where(
+                    $property, _to_sql_operator($keyword), "%{$value}%"
+                );
+
+                return;
+            }
+
+            $users->where($property, _to_sql_operator($keyword), "{$value}");
+        }
     }
 }

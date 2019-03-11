@@ -44,7 +44,7 @@ const FilterValueInput = props => {
 };
 
 let Filter = props => {
-    const { classes, setErrors, errors: formErrors, columns, onFilter } = props;
+    const { classes, errors: formErrors, columns, onFilter } = props;
     const filterTypeSets = {
         numeric: [
             { label: 'Is equal to', value: 'eqs' },
@@ -86,11 +86,8 @@ let Filter = props => {
                 filterValue: '',
             }}
             onSubmit={onFilter}
-            validate={values => {
-                setErrors({});
-            }}
             validationSchema={Yup.object().shape({
-                filterBy: Yup.string().required(),
+                filterBy: Yup.string().required('You must select a column.'),
             })}
         >
             {({
