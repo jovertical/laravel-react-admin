@@ -2,15 +2,24 @@ import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
+
 import {
-    Grid,
-    TextField,
     Button,
-    Link,
     Chip,
+    Grid,
+    IconButton,
+    InputAdornment,
+    Link,
+    TextField,
     withStyles,
 } from '@material-ui/core';
-import { AccountCircle, ExpandMore } from '@material-ui/icons';
+
+import {
+    AccountCircle as AccountCircleIcon,
+    ExpandMore as ExpandMoreIcon,
+    Visibility as VisibilityIcon,
+    VisibilityOff as VisibilityOffIcon,
+} from '@material-ui/icons';
 
 import { _queryParams, _queryString } from '../../utils/URL';
 import { _route } from '../../utils/Navigation';
@@ -20,12 +29,13 @@ class SignIn extends Component {
     state = {
         loading: false,
         identified: false,
+        showPassword: false,
         username: '',
         message: {},
     };
 
     /**
-     * Event listener that is triggered when the usernameChip is clicked.
+     * Event listener that is called on usernameChip clicked.
      *
      * @return {undefined}
      */
@@ -35,6 +45,19 @@ class SignIn extends Component {
         const { history, location } = this.props;
 
         history.push(`${location.pathname}`);
+    };
+
+    /**
+     * Event listener that is called on password visibility toggle.
+     *
+     * @return {undefined}
+     */
+    handleShowPasswordClick = () => {
+        this.setState(prevState => {
+            return {
+                showPassword: !prevState.showPassword,
+            };
+        });
     };
 
     /**
@@ -173,7 +196,13 @@ class SignIn extends Component {
 
     render() {
         const { classes, setErrors, errors: formErrors } = this.props;
-        const { loading, identified, username, message } = this.state;
+        const {
+            loading,
+            identified,
+            showPassword,
+            username,
+            message,
+        } = this.state;
 
         return (
             <AuthLayout
@@ -183,9 +212,9 @@ class SignIn extends Component {
                         <Chip
                             label={username}
                             variant="outlined"
-                            icon={<AccountCircle color="primary" />}
+                            icon={<AccountCircleIcon color="primary" />}
                             onDelete={this.handleUsernameChipClicked}
-                            deleteIcon={<ExpandMore />}
+                            deleteIcon={<ExpandMoreIcon />}
                         />
                     ) : (
                         'with your Account'
@@ -262,7 +291,11 @@ class SignIn extends Component {
                                                 className={classes.formGroup}
                                             >
                                                 <TextField
-                                                    type="password"
+                                                    type={
+                                                        showPassword
+                                                            ? 'text'
+                                                            : 'password'
+                                                    }
                                                     id="password"
                                                     name="password"
                                                     label="Password"
@@ -278,6 +311,25 @@ class SignIn extends Component {
                                                             'password',
                                                         ) && errors.password
                                                     }
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <InputAdornment position="end">
+                                                                <IconButton
+                                                                    aria-label="Toggle password visibility"
+                                                                    onClick={
+                                                                        this
+                                                                            .handleShowPasswordClick
+                                                                    }
+                                                                >
+                                                                    {showPassword ? (
+                                                                        <VisibilityOffIcon />
+                                                                    ) : (
+                                                                        <VisibilityIcon />
+                                                                    )}
+                                                                </IconButton>
+                                                            </InputAdornment>
+                                                        ),
+                                                    }}
                                                 />
                                             </Grid>
 
