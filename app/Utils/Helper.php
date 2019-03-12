@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+
 if (! function_exists('_asset')) {
     /**
      * Load the asset from our assets JSON file.
@@ -12,6 +14,19 @@ if (! function_exists('_asset')) {
         $assets = json_decode(file_get_contents('assets.json'), true);
 
         return $assets[$subPath] ?? '';
+    }
+}
+
+if (! function_exists('_test_user')) {
+    /**
+     * Login and get the then authenticated user.
+     *
+     * @return App\User
+     */
+    function _test_user() {
+        auth()->guard('api')->login(User::first());
+
+        return auth()->guard('api')->user();
     }
 }
 

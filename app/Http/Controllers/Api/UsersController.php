@@ -30,7 +30,23 @@ class UsersController extends Controller
      */
     public function store(Request $request) : JsonResponse
     {
-        return response()->json('Store Users');
+        $request->validate([
+            'type' => 'required|in:superuser,user',
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users'
+        ]);
+
+        $user = new User;
+        $user->type = $request->input('type');
+        $user->firstname = ($firstname = $request->input('firstname'));
+        $user->lastname = ($lastname = $request->input('lastname'));
+
+        $user->name = "{$firstname} {$lastname}";
+        $user->email = $request->input('email');
+        $user->save();
+
+        return response()->json($user, 201);
     }
 
     /**
