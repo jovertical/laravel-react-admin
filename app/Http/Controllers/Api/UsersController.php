@@ -177,6 +177,10 @@ class UsersController extends Controller
             $this->filter($users, 'email', $email);
         }
 
+        if ($last_signin = $request->input('last_signin')) {
+            $this->filter($users, 'last_signin', $last_signin);
+        }
+
         return $users->paginate($request->input('perPage') ?? 10);
     }
 

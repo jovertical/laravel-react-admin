@@ -667,9 +667,13 @@ const styles = theme => ({
 
     content: {
         flexGrow: 1,
+        overflowX: 'scroll',
         padding: theme.spacing.unit * 6,
         marginBottom: '5rem',
         backgroundColor: theme.palette.grey['200'],
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing.unit * 2,
+        },
     },
 
     loadingContainer: {

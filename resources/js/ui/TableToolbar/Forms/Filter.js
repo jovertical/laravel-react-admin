@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, withFormik } from 'formik';
@@ -15,6 +16,10 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
+import MomentUtils from '@date-io/moment';
+
 const FilterValueInput = props => {
     const inputProps = {
         name: 'filterValue',
@@ -31,6 +36,22 @@ const FilterValueInput = props => {
                 {...props}
                 placeholder="Numeric value here"
             />
+        );
+    } else if (props.columntype === 'date') {
+        return (
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                    {...inputProps}
+                    value={props.value}
+                    onChange={date => props.set('filterValue', date)}
+                    className={props.className}
+                    variant="outlined"
+                    format="YYYY-MM-DD"
+                    keyboard
+                    clearable
+                    disableFuture
+                />
+            </MuiPickersUtilsProvider>
         );
     } else {
         return (
@@ -60,6 +81,15 @@ let Filter = props => {
             { label: 'Is not equal to', value: 'neqs' },
         ],
 
+        date: [
+            { label: 'Is equal to', value: 'eqs' },
+            { label: 'Is not equal to', value: 'neqs' },
+            { label: 'Greater than', value: 'gt' },
+            { label: 'Less than', value: 'lt' },
+            { label: 'Greater than equals to', value: 'gte' },
+            { label: 'Less than equals to', value: 'lte' },
+        ],
+
         string: [
             { label: 'Contains', value: 'like' },
             { label: 'Does not contain', value: 'nlike' },
@@ -85,7 +115,28 @@ let Filter = props => {
                 filterType: '',
                 filterValue: '',
             }}
-            onSubmit={onFilter}
+            onSubmit={(values, form) => {
+                // Format values specially the object ones (i.e Moment)
+                let mappedValues = {};
+                let valuesArray = Object.values(values);
+
+                Object.keys(values).forEach((filter, key) => {
+                    if (
+                        typeof valuesArray[key] === 'object' &&
+                        valuesArray[key].hasOwnProperty('_isAMomentObject')
+                    ) {
+                        mappedValues[filter] = moment(valuesArray[key]).format(
+                            'YYYY-MM-DD',
+                        );
+
+                        return;
+                    }
+
+                    mappedValues[filter] = valuesArray[key];
+                });
+
+                onFilter(mappedValues, form);
+            }}
             validationSchema={Yup.object().shape({
                 filterBy: Yup.string().required('You must select a column.'),
             })}
@@ -150,7 +201,15 @@ let Filter = props => {
                                 <Select
                                     value={values.filterType}
                                     onChange={event => {
-                                        if (values.filterType) {
+                                        if (
+                                            getColumnType(values.filterBy) ===
+                                            'date'
+                                        ) {
+                                            setFieldValue(
+                                                'filterValue',
+                                                moment().format('YYYY-MM-DD'),
+                                            );
+                                        } else {
                                             setFieldValue('filterValue', '');
                                         }
 
@@ -183,6 +242,9 @@ let Filter = props => {
                                 className={classes.input}
                                 value={values.filterValue}
                                 onChange={handleChange}
+                                {...(getColumnType(values.filterBy) === 'date'
+                                    ? { set: setFieldValue }
+                                    : {})}
                                 error={errors.hasOwnProperty('filterValue')}
                                 helperText={
                                     errors.hasOwnProperty('filterValue') &&

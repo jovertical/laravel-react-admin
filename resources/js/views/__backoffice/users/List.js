@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { Component } from 'react';
 
 import { _route } from '../../../utils/Navigation';
@@ -232,7 +233,6 @@ class List extends Component {
         } = pagination;
 
         const columns = [
-            { name: 'ID', property: 'id', type: 'numeric', sort: true },
             { name: 'Type', property: 'type' },
             { name: 'Name', property: 'name', sort: true },
             { name: 'Email', property: 'email', sort: true },
@@ -242,7 +242,6 @@ class List extends Component {
             rawData &&
             rawData.map(user => {
                 return {
-                    id: user.id,
                     type: user.type,
                     name: user.name,
                     email: user.email,
