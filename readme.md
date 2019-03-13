@@ -9,6 +9,7 @@ in the frontend & [Laravel](https://laravel.com) in the backend.
 ## Features
 
 -   Progressive Web App (PWA)
+-   Supports multiple locales
 -   Stateless authentication system
 -   Datatables with server-side pagination, sorting & dynamic filtering
 -   Undo common actions
