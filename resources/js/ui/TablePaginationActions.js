@@ -22,60 +22,68 @@ let TablePaginationActions = props => {
 
     return (
         <div className={classes.root}>
-            <Tooltip title="First Page">
-                <IconButton
-                    onClick={event => onChangePage(event, 0)}
-                    disabled={page === 0}
-                    aria-label="First Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <LastPageIcon />
-                    ) : (
-                        <FirstPageIcon />
-                    )}
-                </IconButton>
+            <Tooltip title={lang.table.first_page}>
+                <span>
+                    <IconButton
+                        onClick={event => onChangePage(event, 0)}
+                        disabled={page === 0}
+                        aria-label={lang.table.first_page}
+                    >
+                        {theme.direction === 'rtl' ? (
+                            <LastPageIcon />
+                        ) : (
+                            <FirstPageIcon />
+                        )}
+                    </IconButton>
+                </span>
             </Tooltip>
 
-            <Tooltip title="Previous Page">
-                <IconButton
-                    onClick={event => onChangePage(event, page)}
-                    disabled={page === 0}
-                    aria-label="Previous Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <KeyboardArrowRightIcon />
-                    ) : (
-                        <KeyboardArrowLeftIcon />
-                    )}
-                </IconButton>
+            <Tooltip title={lang.table.previous_page}>
+                <span>
+                    <IconButton
+                        onClick={event => onChangePage(event, page)}
+                        disabled={page === 0}
+                        aria-label={lang.table.previous_page}
+                    >
+                        {theme.direction === 'rtl' ? (
+                            <KeyboardArrowRightIcon />
+                        ) : (
+                            <KeyboardArrowLeftIcon />
+                        )}
+                    </IconButton>
+                </span>
             </Tooltip>
 
-            <Tooltip title="Next Page">
-                <IconButton
-                    onClick={event => onChangePage(event, page + 2)}
-                    disabled={page + 1 >= lastPage}
-                    aria-label="Next Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <KeyboardArrowLeftIcon />
-                    ) : (
-                        <KeyboardArrowRightIcon />
-                    )}
-                </IconButton>
+            <Tooltip title={lang.table.next_page}>
+                <span>
+                    <IconButton
+                        onClick={event => onChangePage(event, page + 2)}
+                        disabled={page + 1 >= lastPage}
+                        aria-label={lang.table.next_page}
+                    >
+                        {theme.direction === 'rtl' ? (
+                            <KeyboardArrowLeftIcon />
+                        ) : (
+                            <KeyboardArrowRightIcon />
+                        )}
+                    </IconButton>
+                </span>
             </Tooltip>
 
-            <Tooltip title="Last Page">
-                <IconButton
-                    onClick={event => onChangePage(event, lastPage)}
-                    disabled={page + 1 >= lastPage}
-                    aria-label="Last Page"
-                >
-                    {theme.direction === 'rtl' ? (
-                        <FirstPageIcon />
-                    ) : (
-                        <LastPageIcon />
-                    )}
-                </IconButton>
+            <Tooltip title={lang.table.last_page}>
+                <span>
+                    <IconButton
+                        onClick={event => onChangePage(event, lastPage)}
+                        disabled={page + 1 >= lastPage}
+                        aria-label={lang.table.last_page}
+                    >
+                        {theme.direction === 'rtl' ? (
+                            <FirstPageIcon />
+                        ) : (
+                            <LastPageIcon />
+                        )}
+                    </IconButton>
+                </span>
             </Tooltip>
         </div>
     );

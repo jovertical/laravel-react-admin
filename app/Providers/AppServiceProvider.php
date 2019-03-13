@@ -21,9 +21,10 @@ class AppServiceProvider extends ServiceProvider
             $locale = app()->getLocale();
 
             $navigation = require resource_path("lang/{$locale}/navigation.php");
+            $table = require resource_path("lang/{$locale}/table.php");
 
             $view->with([
-                'lang' => compact('navigation')
+                'lang' => compact(['navigation', 'table'])
             ]);
         });
     }

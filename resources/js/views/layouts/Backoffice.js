@@ -601,8 +601,9 @@ class Backoffice extends Component {
                             >
                                 <Tooltip
                                     title={
-                                        !drawerOpened &&
-                                        lang.navigation.dashboard
+                                        !drawerOpened
+                                            ? lang.navigation.dashboard
+                                            : ''
                                     }
                                 >
                                     <ListItemIcon>
@@ -650,7 +651,9 @@ class Backoffice extends Component {
                             >
                                 <Tooltip
                                     title={
-                                        !drawerOpened && lang.navigation.users
+                                        !drawerOpened
+                                            ? lang.navigation.users
+                                            : ''
                                     }
                                 >
                                     <ListItemIcon>
