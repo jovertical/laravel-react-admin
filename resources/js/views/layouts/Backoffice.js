@@ -119,7 +119,7 @@ class Backoffice extends Component {
             children,
             message,
         } = this.props;
-        const { width, user, handleSignout, handleLock, lang } = pageProps;
+        const { width, user, handleSignout, handleLock } = pageProps;
 
         const {
             drawerOpened,
@@ -336,7 +336,7 @@ class Backoffice extends Component {
                                             <LanguageIcon />
                                         </IconButton>
 
-                                        <p>{lang.navigation.local}</p>
+                                        <p>{lang.navigation.locale}</p>
                                     </MenuItem>
 
                                     <MenuItem
@@ -424,10 +424,10 @@ class Backoffice extends Component {
                                 disableGutters={!drawerOpened}
                                 className={classes.toolbar}
                             >
-                                <Tooltip title="Open Drawer">
+                                <Tooltip title={lang.navigation.open_drawer}>
                                     <IconButton
                                         color="inherit"
-                                        aria-label="Open drawer"
+                                        aria-label={lang.navigation.open_drawer}
                                         onClick={this.handleDrawerToggled}
                                         className={classNames(
                                             classes.menuButton,
@@ -583,7 +583,7 @@ class Backoffice extends Component {
                         open={drawerOpened}
                     >
                         <div className={classes.toolbarIcon}>
-                            <Tooltip title="Close drawer">
+                            <Tooltip title={lang.navigation.close_drawer}>
                                 <IconButton onClick={this.handleDrawerToggled}>
                                     <ChevronLeftIcon />
                                 </IconButton>
@@ -600,7 +600,10 @@ class Backoffice extends Component {
                                 }
                             >
                                 <Tooltip
-                                    title={!drawerOpened ? 'Dashboard' : ''}
+                                    title={
+                                        !drawerOpened &&
+                                        lang.navigation.dashboard
+                                    }
                                 >
                                     <ListItemIcon>
                                         <DashboardIcon
@@ -645,7 +648,11 @@ class Backoffice extends Component {
                                     )
                                 }
                             >
-                                <Tooltip title={!drawerOpened ? 'Users' : ''}>
+                                <Tooltip
+                                    title={
+                                        !drawerOpened && lang.navigation.users
+                                    }
+                                >
                                     <ListItemIcon>
                                         <GroupIcon
                                             color={

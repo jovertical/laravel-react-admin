@@ -1,6 +1,16 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Navigation Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used in the frontend of the appication,
+    | specifically in navigation links, page titles, form buttons etc.
+    |
+    */
+
     'signin_guest_title' => 'Mag-sign in',
     'signin_guest_subtitle' => 'sa iyong Account',
     'signin_identified_title' => 'Kamusta?',
@@ -24,6 +34,8 @@ return [
 
     'notifications' => 'Mga Abiso',
 
+    'open_drawer' => 'I-bukas ang Drawer',
+    'close_drawer' => 'I-sarado ang Drawer',
     'search' => 'Maghanap',
 
     'dashboard' => 'Dashboard',

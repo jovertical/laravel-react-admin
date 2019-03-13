@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton, withStyles } from '@material-ui/core';
+import { IconButton, Tooltip, withStyles } from '@material-ui/core';
 
 import {
     FirstPage as FirstPageIcon,
@@ -22,53 +22,61 @@ let TablePaginationActions = props => {
 
     return (
         <div className={classes.root}>
-            <IconButton
-                onClick={event => onChangePage(event, 0)}
-                disabled={page === 0}
-                aria-label="First Page"
-            >
-                {theme.direction === 'rtl' ? (
-                    <LastPageIcon />
-                ) : (
-                    <FirstPageIcon />
-                )}
-            </IconButton>
+            <Tooltip title="First Page">
+                <IconButton
+                    onClick={event => onChangePage(event, 0)}
+                    disabled={page === 0}
+                    aria-label="First Page"
+                >
+                    {theme.direction === 'rtl' ? (
+                        <LastPageIcon />
+                    ) : (
+                        <FirstPageIcon />
+                    )}
+                </IconButton>
+            </Tooltip>
 
-            <IconButton
-                onClick={event => onChangePage(event, page)}
-                disabled={page === 0}
-                aria-label="Previous Page"
-            >
-                {theme.direction === 'rtl' ? (
-                    <KeyboardArrowRightIcon />
-                ) : (
-                    <KeyboardArrowLeftIcon />
-                )}
-            </IconButton>
+            <Tooltip title="Previous Page">
+                <IconButton
+                    onClick={event => onChangePage(event, page)}
+                    disabled={page === 0}
+                    aria-label="Previous Page"
+                >
+                    {theme.direction === 'rtl' ? (
+                        <KeyboardArrowRightIcon />
+                    ) : (
+                        <KeyboardArrowLeftIcon />
+                    )}
+                </IconButton>
+            </Tooltip>
 
-            <IconButton
-                onClick={event => onChangePage(event, page + 2)}
-                disabled={page + 1 >= lastPage}
-                aria-label="Next Page"
-            >
-                {theme.direction === 'rtl' ? (
-                    <KeyboardArrowLeftIcon />
-                ) : (
-                    <KeyboardArrowRightIcon />
-                )}
-            </IconButton>
+            <Tooltip title="Next Page">
+                <IconButton
+                    onClick={event => onChangePage(event, page + 2)}
+                    disabled={page + 1 >= lastPage}
+                    aria-label="Next Page"
+                >
+                    {theme.direction === 'rtl' ? (
+                        <KeyboardArrowLeftIcon />
+                    ) : (
+                        <KeyboardArrowRightIcon />
+                    )}
+                </IconButton>
+            </Tooltip>
 
-            <IconButton
-                onClick={event => onChangePage(event, lastPage)}
-                disabled={page + 1 >= lastPage}
-                aria-label="Last Page"
-            >
-                {theme.direction === 'rtl' ? (
-                    <FirstPageIcon />
-                ) : (
-                    <LastPageIcon />
-                )}
-            </IconButton>
+            <Tooltip title="Last Page">
+                <IconButton
+                    onClick={event => onChangePage(event, lastPage)}
+                    disabled={page + 1 >= lastPage}
+                    aria-label="Last Page"
+                >
+                    {theme.direction === 'rtl' ? (
+                        <FirstPageIcon />
+                    ) : (
+                        <LastPageIcon />
+                    )}
+                </IconButton>
+            </Tooltip>
         </div>
     );
 };

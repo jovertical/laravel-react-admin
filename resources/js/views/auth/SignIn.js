@@ -195,13 +195,7 @@ class SignIn extends Component {
     }
 
     render() {
-        const {
-            classes,
-            setErrors,
-            errors: formErrors,
-            pageProps,
-        } = this.props;
-        const { lang } = pageProps;
+        const { classes, setErrors, errors: formErrors } = this.props;
 
         const {
             loading,

@@ -6,7 +6,10 @@ import { BackofficeLayout } from '../';
 export class Home extends Component {
     render() {
         return (
-            <BackofficeLayout {...this.props} pageTitle="Dashboard">
+            <BackofficeLayout
+                {...this.props}
+                pageTitle={lang.navigation.dashboard}
+            >
                 <Typography>There is no place like home</Typography>
             </BackofficeLayout>
         );

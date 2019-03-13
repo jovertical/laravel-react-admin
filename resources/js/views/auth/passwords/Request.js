@@ -93,14 +93,7 @@ class PasswordRequest extends Component {
     }
 
     render() {
-        const {
-            classes,
-            location,
-            setErrors,
-            errors: formErrors,
-            pageProps,
-        } = this.props;
-        const { lang } = pageProps;
+        const { classes, location, setErrors, errors: formErrors } = this.props;
 
         const { loading, message, email } = this.state;
 

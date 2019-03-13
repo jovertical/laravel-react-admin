@@ -1,6 +1,16 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Navigation Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used in the frontend of the appication,
+    | specifically in navigation links, page titles, form buttons etc.
+    |
+    */
+
     'signin_guest_title' => 'Sign in',
     'signin_guest_subtitle' => 'with your Account',
     'signin_identified_title' => 'Welcome',
@@ -24,6 +34,8 @@ return [
 
     'notifications' => 'Notifications',
 
+    'open_drawer' => 'Open Drawer',
+    'close_drawer' => 'Close Drawer',
     'search' => 'Search',
 
     'dashboard' => 'Dashboard',

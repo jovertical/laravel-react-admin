@@ -12,26 +12,10 @@ import { Loading } from './views';
 class Backoffice extends Component {
     state = {
         loading: true,
-        lang: {},
         authToken: null,
         authenticated: false,
         username: '',
         user: {},
-    };
-
-    /**
-     * Set the language files here.
-     *
-     * @return {undefined}
-     */
-    localize = () => {
-        const lang = document.querySelector('meta[name="lang"]');
-
-        if (lang) {
-            this.setState({
-                lang: JSON.parse(lang.content),
-            });
-        }
     };
 
     /**
@@ -125,8 +109,6 @@ class Backoffice extends Component {
     };
 
     async componentDidMount() {
-        this.localize();
-
         await this.fetchAuthToken();
 
         await this.fetchAuthUser();
