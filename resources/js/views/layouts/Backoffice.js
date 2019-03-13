@@ -38,6 +38,7 @@ import {
     Dashboard as DashboardIcon,
     ExitToApp as ExitToAppIcon,
     Group as GroupIcon,
+    Language as LanguageIcon,
     Lock as LockIcon,
     Menu as MenuIcon,
     MoreVert as MoreVertIcon,
@@ -50,9 +51,14 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import { _route } from '../../utils/Navigation';
 
+import { Us as UsIcon } from '../../icons/flags/4x3/Us';
+import { Ph as PhIcon } from '../../icons/flags/4x3/Ph';
+
 class Backoffice extends Component {
     state = {
         drawerOpened: this.props.pageProps.width === 'lg' ? true : false,
+        localeMenuOpen: false,
+        localeMenuEl: null,
         accountMenuOpen: false,
         accountMenuEl: null,
         mobileMenuOpen: false,
@@ -74,29 +80,27 @@ class Backoffice extends Component {
     };
 
     /**
-     * Event listener that is triggered when the account menu link is clicked.
+     * Event listener that is triggered when the a nav item menu link is clicked.
      *
-     * @param {object} event
+     * @param {string} statusIndicator
      *
      * @return {undefined}
      */
-    handleAccountMenuToggled = event => {
+    handleNavItemMenuToggled = statusIndicator => {
         this.setState(prevState => {
             return {
-                accountMenuOpen: !prevState.accountMenuOpen,
+                [statusIndicator]: !prevState[statusIndicator],
                 mobileMenuOpen: false,
             };
         });
     };
 
     /**
-     * Event listener that is triggered when the mobile menu button is clicked.
-     *
-     * @param {object} event
+     * Event listener that is triggered when the the mobile menu link is clicked.
      *
      * @return {undefined}
      */
-    handleMobileMenuToggled = event => {
+    handleMobileMenuToggled = () => {
         this.setState(prevState => {
             return {
                 mobileMenuOpen: !prevState.mobileMenuOpen,
@@ -119,17 +123,19 @@ class Backoffice extends Component {
 
         const {
             drawerOpened,
+            localeMenuOpen,
+            localeMenuEl,
             accountMenuOpen,
             accountMenuEl,
             mobileMenuOpen,
             mobileMenuEl,
         } = this.state;
 
-        const renderAccountMenu = (
+        const renderLocaleMenu = (
             <Popper
-                open={accountMenuOpen}
-                anchorEl={accountMenuEl}
-                className={classes.accountMenu}
+                open={localeMenuOpen}
+                anchorEl={localeMenuEl}
+                className={classes.navItemMenu}
                 transition
                 disablePortal
             >
@@ -145,7 +151,61 @@ class Backoffice extends Component {
                     >
                         <Paper>
                             <ClickAwayListener
-                                onClickAway={this.handleAccountMenuToggled}
+                                onClickAway={() =>
+                                    this.handleNavItemMenuToggled(
+                                        'localeMenuOpen',
+                                    )
+                                }
+                            >
+                                <MenuList>
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <UsIcon />
+                                        </ListItemIcon>
+
+                                        <Typography>English</Typography>
+                                    </MenuItem>
+
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <PhIcon />
+                                        </ListItemIcon>
+
+                                        <Typography>Tagalog</Typography>
+                                    </MenuItem>
+                                </MenuList>
+                            </ClickAwayListener>
+                        </Paper>
+                    </Grow>
+                )}
+            </Popper>
+        );
+
+        const renderAccountMenu = (
+            <Popper
+                open={accountMenuOpen}
+                anchorEl={accountMenuEl}
+                className={classes.navItemMenu}
+                transition
+                disablePortal
+            >
+                {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                            transformOrigin:
+                                placement === 'bottom'
+                                    ? 'center top'
+                                    : 'center bottom',
+                        }}
+                    >
+                        <Paper>
+                            <ClickAwayListener
+                                onClickAway={() =>
+                                    this.handleNavItemMenuToggled(
+                                        'accountMenuOpen',
+                                    )
+                                }
                             >
                                 <MenuList>
                                     <MenuItem
@@ -201,7 +261,7 @@ class Backoffice extends Component {
             <Popper
                 open={mobileMenuOpen}
                 anchorEl={mobileMenuEl}
-                className={classes.mobileMenu}
+                className={classes.navItemMenu}
                 transition
                 disablePortal
             >
@@ -229,15 +289,35 @@ class Backoffice extends Component {
                                                 <NotificationsIcon />
                                             </Badge>
                                         </IconButton>
+
                                         <p>Notifications</p>
                                     </MenuItem>
 
                                     <MenuItem
-                                        onClick={this.handleAccountMenuToggled}
+                                        onClick={() =>
+                                            this.handleNavItemMenuToggled(
+                                                'localeMenuOpen',
+                                            )
+                                        }
+                                    >
+                                        <IconButton color="inherit">
+                                            <LanguageIcon />
+                                        </IconButton>
+
+                                        <p>Locale</p>
+                                    </MenuItem>
+
+                                    <MenuItem
+                                        onClick={() =>
+                                            this.handleNavItemMenuToggled(
+                                                'accountMenuOpen',
+                                            )
+                                        }
                                     >
                                         <IconButton color="inherit">
                                             <AccountCircleIcon />
                                         </IconButton>
+
                                         <p>Account</p>
                                     </MenuItem>
                                 </MenuList>
@@ -347,56 +427,109 @@ class Backoffice extends Component {
                                         placeholder="Search…"
                                         classes={{
                                             root: classes.inputRoot,
-                                            input: classes.inputInput,
+                                            input: classes.inputField,
                                         }}
                                     />
                                 </div>
 
                                 <div className={classes.grow} />
 
-                                <div className={classes.toolbarActionsDesktop}>
-                                    <Tooltip title="Notifications">
-                                        <IconButton color="inherit">
-                                            <Badge
-                                                badgeContent={4}
-                                                color="secondary"
-                                            >
-                                                <NotificationsIcon />
-                                            </Badge>
-                                        </IconButton>
-                                    </Tooltip>
-
-                                    <Tooltip title="Account">
-                                        <IconButton
-                                            aria-owns={
-                                                accountMenuOpen &&
-                                                'material-appbar'
-                                            }
-                                            aria-haspopup="true"
-                                            onClick={
-                                                this.handleAccountMenuToggled
-                                            }
-                                            color="inherit"
-                                        >
-                                            <AccountCircleIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-
-                                <div className={classes.toolbarActionsMobile}>
-                                    <IconButton
-                                        aria-haspopup="true"
-                                        onClick={this.handleMobileMenuToggled}
-                                        color="inherit"
+                                {width === 'lg' ? (
+                                    <div
+                                        className={
+                                            classes.toolbarActionsDesktop
+                                        }
                                     >
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                </div>
+                                        <Tooltip title="Notifications">
+                                            <IconButton color="inherit">
+                                                <Badge
+                                                    badgeContent={4}
+                                                    color="secondary"
+                                                >
+                                                    <NotificationsIcon />
+                                                </Badge>
+                                            </IconButton>
+                                        </Tooltip>
+
+                                        <Tooltip title="Locale">
+                                            <div
+                                                className={
+                                                    classes.navItemMenuWrapper
+                                                }
+                                            >
+                                                <IconButton
+                                                    aria-owns={
+                                                        localeMenuOpen &&
+                                                        'material-appbar'
+                                                    }
+                                                    aria-haspopup="true"
+                                                    onClick={() =>
+                                                        this.handleNavItemMenuToggled(
+                                                            'localeMenuOpen',
+                                                        )
+                                                    }
+                                                    color="inherit"
+                                                >
+                                                    <LanguageIcon />
+                                                </IconButton>
+
+                                                {renderLocaleMenu}
+                                            </div>
+                                        </Tooltip>
+
+                                        <Tooltip title="Account">
+                                            <div
+                                                className={
+                                                    classes.navItemMenuWrapper
+                                                }
+                                            >
+                                                <IconButton
+                                                    aria-owns={
+                                                        accountMenuOpen &&
+                                                        'material-appbar'
+                                                    }
+                                                    aria-haspopup="true"
+                                                    onClick={() =>
+                                                        this.handleNavItemMenuToggled(
+                                                            'accountMenuOpen',
+                                                        )
+                                                    }
+                                                    color="inherit"
+                                                >
+                                                    <AccountCircleIcon />
+                                                </IconButton>
+
+                                                {renderAccountMenu}
+                                            </div>
+                                        </Tooltip>
+                                    </div>
+                                ) : (
+                                    <div
+                                        className={classes.toolbarActionsMobile}
+                                    >
+                                        <div
+                                            className={
+                                                classes.navItemMenuWrapper
+                                            }
+                                        >
+                                            <IconButton
+                                                aria-haspopup="true"
+                                                onClick={
+                                                    this.handleMobileMenuToggled
+                                                }
+                                                color="inherit"
+                                            >
+                                                <MoreVertIcon />
+                                            </IconButton>
+
+                                            {renderLocaleMenu}
+                                            {renderAccountMenu}
+                                            {renderMobileMenu}
+                                        </div>
+                                    </div>
+                                )}
                             </Toolbar>
                         </AppBar>
-
-                        {renderAccountMenu}
-                        {renderMobileMenu}
                     </Grid>
 
                     <Drawer
@@ -578,8 +711,8 @@ const styles = theme => ({
     },
 
     menuButton: {
-        marginLeft: 12,
-        marginRight: 36,
+        marginLeft: '1.2rem',
+        marginRight: '3.6rem',
     },
 
     menuButtonHidden: {
@@ -587,7 +720,7 @@ const styles = theme => ({
     },
 
     toolbarTitle: {
-        marginRight: 12,
+        marginRight: '1.2rem',
     },
 
     drawerPaper: {
@@ -642,7 +775,7 @@ const styles = theme => ({
         width: '100%',
     },
 
-    inputInput: {
+    inputField: {
         paddingTop: theme.spacing.unit,
         paddingRight: theme.spacing.unit,
         paddingBottom: theme.spacing.unit,
@@ -707,25 +840,16 @@ const styles = theme => ({
         flex: 1,
     },
 
-    accountMenu: {
-        position: 'fixed',
-        zIndex: 9999,
-        right: 35,
-        top: 70,
-        [theme.breakpoints.up('md')]: {
-            right: 70,
-            top: 10,
-        },
+    navItemMenuWrapper: {
+        position: 'relative',
+        display: 'inline-block',
     },
 
-    mobileMenu: {
-        position: 'fixed',
+    navItemMenu: {
+        position: 'absolute',
+        padding: '1rem',
+        right: 0,
         zIndex: 9999,
-        right: 70,
-        top: 10,
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
     },
 });
 
