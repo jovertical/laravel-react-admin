@@ -93,13 +93,21 @@ class PasswordRequest extends Component {
     }
 
     render() {
-        const { classes, location, setErrors, errors: formErrors } = this.props;
+        const {
+            classes,
+            location,
+            setErrors,
+            errors: formErrors,
+            pageProps,
+        } = this.props;
+        const { lang } = pageProps;
+
         const { loading, message, email } = this.state;
 
         return (
             <AuthLayout
-                title="Forgot Password"
-                subTitle="Enter your email and we'll send a recovery link"
+                title={lang.navigation.password_request_title}
+                subTitle={lang.navigation.password_request_subtitle}
                 loading={loading}
                 message={message}
             >
@@ -163,7 +171,7 @@ class PasswordRequest extends Component {
                                                 />
                                             )}
                                         >
-                                            Sign in instead
+                                            {lang.navigation.signin}
                                         </Link>
                                     </Grid>
                                 </Grid>
@@ -183,7 +191,7 @@ class PasswordRequest extends Component {
                                                 isSubmitting
                                             }
                                         >
-                                            Send Link
+                                            {lang.navigation.send_link}
                                         </Button>
                                     </Grid>
                                 </Grid>

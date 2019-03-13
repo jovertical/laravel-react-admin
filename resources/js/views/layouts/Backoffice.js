@@ -119,7 +119,7 @@ class Backoffice extends Component {
             children,
             message,
         } = this.props;
-        const { width, user, handleSignout, handleLock } = pageProps;
+        const { width, user, handleSignout, handleLock, lang } = pageProps;
 
         const {
             drawerOpened,
@@ -158,20 +158,44 @@ class Backoffice extends Component {
                                 }
                             >
                                 <MenuList>
-                                    <MenuItem>
+                                    <MenuItem
+                                        onClick={() => {
+                                            if (
+                                                window.location.pathname.indexOf(
+                                                    '/en',
+                                                ) === -1
+                                            ) {
+                                                window.location.href = '/en';
+                                            }
+                                        }}
+                                    >
                                         <ListItemIcon>
                                             <UsIcon />
                                         </ListItemIcon>
 
-                                        <Typography>English</Typography>
+                                        <Typography>
+                                            {lang.navigation.english}
+                                        </Typography>
                                     </MenuItem>
 
-                                    <MenuItem>
+                                    <MenuItem
+                                        onClick={() => {
+                                            if (
+                                                window.location.pathname.indexOf(
+                                                    '/fil',
+                                                ) === -1
+                                            ) {
+                                                window.location.href = '/fil';
+                                            }
+                                        }}
+                                    >
                                         <ListItemIcon>
                                             <PhIcon />
                                         </ListItemIcon>
 
-                                        <Typography>Tagalog</Typography>
+                                        <Typography>
+                                            {lang.navigation.filipino}
+                                        </Typography>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -217,7 +241,9 @@ class Backoffice extends Component {
                                             <AccountCircleIcon />
                                         </ListItemIcon>
 
-                                        <Typography>Profile</Typography>
+                                        <Typography>
+                                            {lang.navigation.profile}
+                                        </Typography>
                                     </MenuItem>
 
                                     <MenuItem>
@@ -225,7 +251,9 @@ class Backoffice extends Component {
                                             <SettingsIcon />
                                         </ListItemIcon>
 
-                                        <Typography>Settings</Typography>
+                                        <Typography>
+                                            {lang.navigation.settings}
+                                        </Typography>
                                     </MenuItem>
 
                                     <Divider />
@@ -239,7 +267,9 @@ class Backoffice extends Component {
                                             <LockIcon />
                                         </ListItemIcon>
 
-                                        <Typography>Lock</Typography>
+                                        <Typography>
+                                            {lang.navigation.lock}
+                                        </Typography>
                                     </MenuItem>
 
                                     <MenuItem onClick={handleSignout}>
@@ -247,7 +277,9 @@ class Backoffice extends Component {
                                             <ExitToAppIcon />
                                         </ListItemIcon>
 
-                                        <Typography>Signout</Typography>
+                                        <Typography>
+                                            {lang.navigation.signout}
+                                        </Typography>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -290,7 +322,7 @@ class Backoffice extends Component {
                                             </Badge>
                                         </IconButton>
 
-                                        <p>Notifications</p>
+                                        <p>{lang.navigation.notifications}</p>
                                     </MenuItem>
 
                                     <MenuItem
@@ -304,7 +336,7 @@ class Backoffice extends Component {
                                             <LanguageIcon />
                                         </IconButton>
 
-                                        <p>Locale</p>
+                                        <p>{lang.navigation.local}</p>
                                     </MenuItem>
 
                                     <MenuItem
@@ -318,7 +350,7 @@ class Backoffice extends Component {
                                             <AccountCircleIcon />
                                         </IconButton>
 
-                                        <p>Account</p>
+                                        <p>{lang.navigation.account}</p>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -424,7 +456,9 @@ class Backoffice extends Component {
                                     </div>
 
                                     <InputBase
-                                        placeholder="Search…"
+                                        placeholder={`${
+                                            lang.navigation.search
+                                        }...`}
                                         classes={{
                                             root: classes.inputRoot,
                                             input: classes.inputField,
@@ -440,7 +474,11 @@ class Backoffice extends Component {
                                             classes.toolbarActionsDesktop
                                         }
                                     >
-                                        <Tooltip title="Notifications">
+                                        <Tooltip
+                                            title={
+                                                lang.navigation.notifications
+                                            }
+                                        >
                                             <IconButton color="inherit">
                                                 <Badge
                                                     badgeContent={4}
@@ -451,7 +489,7 @@ class Backoffice extends Component {
                                             </IconButton>
                                         </Tooltip>
 
-                                        <Tooltip title="Locale">
+                                        <Tooltip title={lang.navigation.locale}>
                                             <div
                                                 className={
                                                     classes.navItemMenuWrapper
@@ -477,7 +515,9 @@ class Backoffice extends Component {
                                             </div>
                                         </Tooltip>
 
-                                        <Tooltip title="Account">
+                                        <Tooltip
+                                            title={lang.navigation.account}
+                                        >
                                             <div
                                                 className={
                                                     classes.navItemMenuWrapper
@@ -585,14 +625,16 @@ class Backoffice extends Component {
                                             }
                                             variant="h6"
                                         >
-                                            Dashboard
+                                            {lang.navigation.dashboard}
                                         </Typography>
                                     }
                                 />
                             </ListItem>
 
                             {drawerOpened && (
-                                <ListSubheader inset>Resources</ListSubheader>
+                                <ListSubheader inset>
+                                    {lang.navigation.resources}
+                                </ListSubheader>
                             )}
 
                             <ListItem
@@ -629,7 +671,7 @@ class Backoffice extends Component {
                                             }
                                             variant="h6"
                                         >
-                                            Users
+                                            {lang.navigation.users}
                                         </Typography>
                                     }
                                 />
@@ -649,11 +691,7 @@ class Backoffice extends Component {
 
                     <footer className={classes.footer}>
                         <p>
-                            Built with{' '}
-                            <span role="img" aria-label="Love">
-                                ❤️
-                            </span>{' '}
-                            by{' '}
+                            {lang.navigation.citation}{' '}
                             <Link
                                 href="https://github.com/palonponjovertlota"
                                 target="_blank"

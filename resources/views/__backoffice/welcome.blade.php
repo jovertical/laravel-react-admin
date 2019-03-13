@@ -8,6 +8,7 @@
         <meta name="description" content="{{ config('app.description') }}">
         <meta name="theme-color" content="#00AEDF">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="lang" content="{{ json_encode($lang) }}">
 
         <meta property="og:site_name" content="{{ config('app.name') }}">
         <meta property="og:title" content="{{ config('app.name') }}">

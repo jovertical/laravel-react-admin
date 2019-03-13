@@ -195,7 +195,14 @@ class SignIn extends Component {
     }
 
     render() {
-        const { classes, setErrors, errors: formErrors } = this.props;
+        const {
+            classes,
+            setErrors,
+            errors: formErrors,
+            pageProps,
+        } = this.props;
+        const { lang } = pageProps;
+
         const {
             loading,
             identified,
@@ -206,7 +213,11 @@ class SignIn extends Component {
 
         return (
             <AuthLayout
-                title={identified ? 'Welcome' : 'Sign in'}
+                title={
+                    identified
+                        ? lang.navigation.signin_identified_title
+                        : lang.navigation.signin_guest_title
+                }
                 subTitle={
                     identified ? (
                         <Chip
@@ -217,7 +228,7 @@ class SignIn extends Component {
                             deleteIcon={<ExpandMoreIcon />}
                         />
                     ) : (
-                        'with your Account'
+                        lang.navigation.signin_guest_subtitle
                     )
                 }
                 loading={loading}
@@ -280,7 +291,10 @@ class SignIn extends Component {
                                                 className={classes.formGroup}
                                             >
                                                 <Link to="#">
-                                                    Forgot Email?
+                                                    {
+                                                        lang.navigation
+                                                            .forgot_email
+                                                    }
                                                 </Link>
                                             </Grid>
                                         </>
@@ -354,7 +368,10 @@ class SignIn extends Component {
                                                         />
                                                     )}
                                                 >
-                                                    Forgot Password?
+                                                    {
+                                                        lang.navigation
+                                                            .forgot_password
+                                                    }
                                                 </Link>
                                             </Grid>
                                         </>
@@ -376,7 +393,7 @@ class SignIn extends Component {
                                                 isSubmitting
                                             }
                                         >
-                                            Next
+                                            {lang.navigation.next}
                                         </Button>
                                     </Grid>
                                 </Grid>
