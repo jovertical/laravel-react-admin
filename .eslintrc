@@ -22,5 +22,11 @@
         "no-unused-vars": 0,
         "no-console": "off",
         "no-undef": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["resources/js/*.js", "public/js/*.js"],
+            "excludedFiles": "*.bundlejs"
+        }
+    ]
 }
