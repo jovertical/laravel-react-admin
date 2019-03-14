@@ -380,7 +380,7 @@ class Backoffice extends Component {
                     <Button
                         key="undo"
                         color="secondary"
-                        size="small"
+                        size="mdall"
                         onClick={message.action}
                     >
                         {message.actionText}
@@ -547,7 +547,7 @@ class Backoffice extends Component {
                                     </div>
                                 ) : (
                                     <div
-                                        className={classes.toolbarActionsMobile}
+                                        className={classes.toolbarActionmdobile}
                                     >
                                         <div
                                             className={
@@ -556,6 +556,9 @@ class Backoffice extends Component {
                                         >
                                             <IconButton
                                                 aria-haspopup="true"
+                                                className={
+                                                    classes.mobileMenuButton
+                                                }
                                                 onClick={
                                                     this.handleMobileMenuToggled
                                                 }
@@ -732,7 +735,10 @@ const drawerWidth = 240;
 
 const styles = theme => ({
     toolbar: {
-        paddingRight: '2.4rem',
+        paddingRight: 0,
+        [theme.breakpoints.up('md')]: {
+            paddingRight: '1.2rem',
+        },
     },
 
     toolbarIcon: {
@@ -762,9 +768,7 @@ const styles = theme => ({
 
     menuButton: {
         marginLeft: '1.2rem',
-        [theme.breakpoints.up('sm')]: {
-            marginRight: '1.2rem',
-        },
+        marginRight: '1.2rem',
     },
 
     menuButtonHidden: {
@@ -792,7 +796,7 @@ const styles = theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         width: theme.spacing.unit * 7,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: theme.spacing.unit * 9,
         },
     },
@@ -806,7 +810,7 @@ const styles = theme => ({
         },
         marginLeft: 0,
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             marginLeft: theme.spacing.unit,
             width: 'auto',
         },
@@ -834,12 +838,17 @@ const styles = theme => ({
         paddingLeft: theme.spacing.unit * 10,
         transition: theme.transitions.create('width'),
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: 120,
             '&:focus': {
                 width: 200,
             },
         },
+    },
+
+    mobileMenuButton: {
+        marginLeft: '1.2rem',
+        marginRight: '1.2rem',
     },
 
     appBarSpacer: theme.mixins.toolbar,
@@ -856,7 +865,7 @@ const styles = theme => ({
         padding: theme.spacing.unit * 6,
         marginBottom: '5rem',
         backgroundColor: theme.palette.grey['200'],
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             padding: theme.spacing.unit * 2,
         },
     },
@@ -881,7 +890,7 @@ const styles = theme => ({
         },
     },
 
-    toolbarActionsMobile: {
+    toolbarActionmdobile: {
         display: 'flex',
         [theme.breakpoints.up('md')]: {
             display: 'none',
