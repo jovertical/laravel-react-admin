@@ -5,7 +5,7 @@ import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { Table } from '../../../ui';
-import { BackofficeLayout } from '../../';
+import { MasterLayout } from '../';
 import { User } from '../../../models/User';
 
 class List extends Component {
@@ -249,7 +249,7 @@ class List extends Component {
             });
 
         return (
-            <BackofficeLayout
+            <MasterLayout
                 {...this.props}
                 pageTitle={Lang.get('navigation.users')}
                 loading={loading}
@@ -278,7 +278,7 @@ class List extends Component {
                         onFilterRemove={this.handleFilterRemove}
                     />
                 )}
-            </BackofficeLayout>
+            </MasterLayout>
         );
     }
 }

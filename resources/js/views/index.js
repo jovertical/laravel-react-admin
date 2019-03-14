@@ -1,6 +1,5 @@
 export { Auth as AuthLayout } from './layouts/Auth';
 export { Error as ErrorLayout } from './layouts/Error';
-export { Backoffice as BackofficeLayout } from './layouts/Backoffice';
 
 export { SignIn as AuthSignin } from './auth/SignIn';
 export {

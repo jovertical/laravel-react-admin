@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { BackofficeLayout } from '../../';
+import { MasterLayout } from '../';
 
 export class Create extends Component {
     render() {
         return (
-            <BackofficeLayout {...this.props} pageTitle="Create a user">
+            <MasterLayout {...this.props} pageTitle="Create a user">
                 Create...
-            </BackofficeLayout>
+            </MasterLayout>
         );
     }
 }
