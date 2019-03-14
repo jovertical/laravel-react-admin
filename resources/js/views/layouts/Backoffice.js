@@ -538,22 +538,30 @@ class Backoffice extends Component {
                                 </div>
 
                                 <div className={classes.toolbarActionsMobile}>
-                                    <div className={classes.navItemMenuWrapper}>
-                                        <IconButton
-                                            aria-haspopup="true"
-                                            className={classes.mobileMenuButton}
-                                            onClick={
-                                                this.handleMobileMenuToggled
+                                    {['md', 'lg'].indexOf(width) < 0 && (
+                                        <div
+                                            className={
+                                                classes.navItemMenuWrapper
                                             }
-                                            color="inherit"
                                         >
-                                            <MoreVertIcon />
-                                        </IconButton>
+                                            <IconButton
+                                                aria-haspopup="true"
+                                                className={
+                                                    classes.mobileMenuButton
+                                                }
+                                                onClick={
+                                                    this.handleMobileMenuToggled
+                                                }
+                                                color="inherit"
+                                            >
+                                                <MoreVertIcon />
+                                            </IconButton>
 
-                                        {renderLocaleMenu}
-                                        {renderAccountMenu}
-                                        {renderMobileMenu}
-                                    </div>
+                                            {renderLocaleMenu}
+                                            {renderAccountMenu}
+                                            {renderMobileMenu}
+                                        </div>
+                                    )}
                                 </div>
                             </Toolbar>
                         </AppBar>
