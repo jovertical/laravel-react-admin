@@ -13,6 +13,17 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+import {
+    ChevronLeft as ChevronLeftIcon,
+    ChevronRight as ChevronRightIcon,
+    Clear as ClearIcon,
+    Done as DoneIcon,
+    Favorite as FavoriteIcon,
+    FavoriteBorder as FavoriteBorderIcon,
+    TrendingDown as TrendingDownIcon,
+    TrendingUp as TrendingUpIcon,
+} from '@material-ui/icons';
+
 import { FilterList as FilterListIcon } from '@material-ui/icons';
 
 import { _uppercaseFirst } from '../../utils/String';
@@ -21,6 +32,42 @@ import { Filter as FilterForm } from './Forms/Filter';
 class TableToolbar extends Component {
     state = {
         filterMenuOpen: false,
+    };
+
+    filterIcon = type => {
+        switch (type) {
+            case 'eqs':
+                return <DoneIcon />;
+                break;
+
+            case 'neqs':
+                return <ClearIcon />;
+                break;
+
+            case 'gt':
+                return <ChevronRightIcon />;
+                break;
+
+            case 'lt':
+                return <ChevronLeftIcon />;
+                break;
+
+            case 'gte':
+                return <TrendingUpIcon />;
+                break;
+
+            case 'lte':
+                return <TrendingDownIcon />;
+                break;
+
+            case 'like':
+                return <FavoriteIcon />;
+                break;
+
+            case 'nlike':
+                return <FavoriteBorderIcon />;
+                break;
+        }
     };
 
     handleFilterMenuClick = () => {
@@ -131,6 +178,9 @@ class TableToolbar extends Component {
                                     </small>
 
                                     <Chip
+                                        icon={this.filterIcon(
+                                            filterKey.match(/\[(.*)\]/).pop(),
+                                        )}
                                         label={filterValues[key]}
                                         onDelete={() =>
                                             onFilterRemove(filterKey)
