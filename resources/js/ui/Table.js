@@ -65,8 +65,10 @@ const Table = props => {
                                         <Tooltip
                                             title={
                                                 sortType === 'asc'
-                                                    ? lang.table.sort_desc
-                                                    : lang.table.sort_asc
+                                                    ? Lang.get(
+                                                          'table.sort_desc',
+                                                      )
+                                                    : Lang.get('table.sort_asc')
                                             }
                                             placement={
                                                 column.numeric
@@ -134,7 +136,7 @@ const Table = props => {
                                 count={total}
                                 page={page - 1}
                                 rowsPerPage={perPage}
-                                labelRowsPerPage={lang.table.per_page}
+                                labelRowsPerPage={Lang.get('table.per_page')}
                                 onChangePage={(event, page) => {
                                     onChangePage(page);
                                 }}

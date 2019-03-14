@@ -23,7 +23,7 @@ const FilterValueInput = props => {
     const inputProps = {
         name: 'filterValue',
         id: 'filterValue',
-        label: lang.table.filter_value_label,
+        label: Lang.get('table.filter_value_label'),
         variant: 'outlined',
     };
 
@@ -33,7 +33,7 @@ const FilterValueInput = props => {
                 type="number"
                 {...inputProps}
                 {...props}
-                placeholder={lang.table.numeric_value_placeholder}
+                placeholder={Lang.get('table.numeric_value_placeholder')}
             />
         );
     } else if (props.columntype === 'date') {
@@ -57,7 +57,7 @@ const FilterValueInput = props => {
             <TextField
                 {...inputProps}
                 {...props}
-                placeholder={lang.table.string_value_placeholder}
+                placeholder={Lang.get('table.string_value_placeholder')}
             />
         );
     }
@@ -67,33 +67,33 @@ let Filter = props => {
     const { classes, errors: formErrors, columns, onFilter } = props;
     const filterTypeSets = {
         numeric: [
-            { label: lang.table.eqs, value: 'eqs' },
-            { label: lang.table.neqs, value: 'neqs' },
-            { label: lang.table.gt, value: 'gt' },
-            { label: lang.table.lt, value: 'lt' },
-            { label: lang.table.gte, value: 'gte' },
-            { label: lang.table.lte, value: 'lte' },
+            { label: Lang.get('table.eqs'), value: 'eqs' },
+            { label: Lang.get('table.neqs'), value: 'neqs' },
+            { label: Lang.get('table.gt'), value: 'gt' },
+            { label: Lang.get('table.lt'), value: 'lt' },
+            { label: Lang.get('table.gte'), value: 'gte' },
+            { label: Lang.get('table.lte'), value: 'lte' },
         ],
 
         boolean: [
-            { label: lang.table.eqs, value: 'eqs' },
-            { label: lang.table.neqs, value: 'neqs' },
+            { label: Lang.get('table.eqs'), value: 'eqs' },
+            { label: Lang.get('table.neqs'), value: 'neqs' },
         ],
 
         date: [
-            { label: lang.table.eqs, value: 'eqs' },
-            { label: lang.table.neqs, value: 'neqs' },
-            { label: lang.table.gt, value: 'gt' },
-            { label: lang.table.lt, value: 'lt' },
-            { label: lang.table.gte, value: 'gte' },
-            { label: lang.table.lte, value: 'lte' },
+            { label: Lang.get('table.eqs'), value: 'eqs' },
+            { label: Lang.get('table.neqs'), value: 'neqs' },
+            { label: Lang.get('table.gt'), value: 'gt' },
+            { label: Lang.get('table.lt'), value: 'lt' },
+            { label: Lang.get('table.gte'), value: 'gte' },
+            { label: Lang.get('table.lte'), value: 'lte' },
         ],
 
         string: [
-            { label: lang.table.like, value: 'like' },
-            { label: lang.table.nlike, value: 'nlike' },
-            { label: lang.table.eqs, value: 'eqs' },
-            { label: lang.table.neqs, value: 'neqs' },
+            { label: Lang.get('table.like'), value: 'like' },
+            { label: Lang.get('table.nlike'), value: 'nlike' },
+            { label: Lang.get('table.eqs'), value: 'eqs' },
+            { label: Lang.get('table.neqs'), value: 'neqs' },
         ],
     };
 
@@ -159,7 +159,7 @@ let Filter = props => {
                             error={errors.hasOwnProperty('filterBy')}
                         >
                             <InputLabel htmlFor="filterBy">
-                                {lang.table.filter_by_label}
+                                {Lang.get('table.filter_by_label')}
                             </InputLabel>
 
                             <Select
@@ -196,7 +196,7 @@ let Filter = props => {
                                 error={errors.hasOwnProperty('filterType')}
                             >
                                 <InputLabel htmlFor="filterType">
-                                    {lang.table.filter_type_label}
+                                    {Lang.get('table.filter_type_label')}
                                 </InputLabel>
 
                                 <Select
@@ -265,7 +265,7 @@ let Filter = props => {
                                     isSubmitting
                                 }
                             >
-                                {lang.table.add_filter}
+                                {Lang.get('table.add_filter')}
                             </Button>
                         </FormControl>
                     </Form>

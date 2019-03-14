@@ -251,13 +251,13 @@ class List extends Component {
         return (
             <BackofficeLayout
                 {...this.props}
-                pageTitle={lang.navigation.users}
+                pageTitle={Lang.get('navigation.users')}
                 loading={loading}
                 message={message}
             >
                 {!loading && data && (
                     <Table
-                        title={lang.navigation.users}
+                        title={Lang.get('navigation.users')}
                         data={data}
                         total={total}
                         columns={columns}

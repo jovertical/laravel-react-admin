@@ -115,10 +115,10 @@ class TableToolbar extends Component {
                     <div className={classes.spacer} />
 
                     <div className={classes.actions}>
-                        <Tooltip title={lang.table.filter_list}>
+                        <Tooltip title={Lang.get('table.filter_list')}>
                             <div className={classes.filterMenuWrapper}>
                                 <IconButton
-                                    aria-label={lang.table.filter_list}
+                                    aria-label={Lang.get('table.filter_list')}
                                     aria-haspopup="true"
                                     buttonRef={node => (filterAnchorEl = node)}
                                     onClick={this.handleFilterMenuClick}

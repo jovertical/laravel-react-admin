@@ -176,7 +176,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.english}
+                                            {Lang.get('navigation.english')}
                                         </Typography>
                                     </MenuItem>
 
@@ -196,7 +196,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.filipino}
+                                            {Lang.get('navigation.filipino')}
                                         </Typography>
                                     </MenuItem>
                                 </MenuList>
@@ -244,7 +244,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.profile}
+                                            {Lang.get('navigation.profile')}
                                         </Typography>
                                     </MenuItem>
 
@@ -254,7 +254,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.settings}
+                                            {Lang.get('navigation.settings')}
                                         </Typography>
                                     </MenuItem>
 
@@ -270,7 +270,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.lock}
+                                            {Lang.get('navigation.lock')}
                                         </Typography>
                                     </MenuItem>
 
@@ -280,7 +280,7 @@ class Backoffice extends Component {
                                         </ListItemIcon>
 
                                         <Typography>
-                                            {lang.navigation.signout}
+                                            {Lang.get('navigation.signout')}
                                         </Typography>
                                     </MenuItem>
                                 </MenuList>
@@ -324,7 +324,7 @@ class Backoffice extends Component {
                                             </Badge>
                                         </IconButton>
 
-                                        <p>{lang.navigation.notifications}</p>
+                                        <p>{Lang.get('navigation.notifications')}</p>
                                     </MenuItem>
 
                                     <MenuItem
@@ -338,7 +338,7 @@ class Backoffice extends Component {
                                             <LanguageIcon />
                                         </IconButton>
 
-                                        <p>{lang.navigation.locale}</p>
+                                        <p>{Lang.get('navigation.locale')}</p>
                                     </MenuItem>
 
                                     <MenuItem
@@ -352,7 +352,7 @@ class Backoffice extends Component {
                                             <AccountCircleIcon />
                                         </IconButton>
 
-                                        <p>{lang.navigation.account}</p>
+                                        <p>{Lang.get('navigation.account')}</p>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -426,10 +426,10 @@ class Backoffice extends Component {
                                 disableGutters={!drawerOpened}
                                 className={classes.toolbar}
                             >
-                                <Tooltip title={lang.navigation.open_drawer}>
+                                <Tooltip title={Lang.get('navigation.open_drawer')}>
                                     <IconButton
                                         color="inherit"
-                                        aria-label={lang.navigation.open_drawer}
+                                        aria-label={Lang.get('navigation.open_drawer')}
                                         onClick={this.handleDrawerToggled}
                                         className={classNames(
                                             classes.menuButton,
@@ -459,7 +459,7 @@ class Backoffice extends Component {
 
                                     <InputBase
                                         placeholder={`${
-                                            lang.navigation.search
+                                            Lang.get('navigation.search')
                                         }...`}
                                         classes={{
                                             root: classes.inputRoot,
@@ -472,7 +472,7 @@ class Backoffice extends Component {
 
                                 <div className={classes.toolbarActionsDesktop}>
                                     <Tooltip
-                                        title={lang.navigation.notifications}
+                                        title={Lang.get('navigation.notifications')}
                                     >
                                         <IconButton color="inherit">
                                             <Badge
@@ -484,7 +484,7 @@ class Backoffice extends Component {
                                         </IconButton>
                                     </Tooltip>
 
-                                    <Tooltip title={lang.navigation.locale}>
+                                    <Tooltip title={Lang.get('navigation.locale')}>
                                         <div
                                             className={
                                                 classes.navItemMenuWrapper
@@ -510,7 +510,7 @@ class Backoffice extends Component {
                                         </div>
                                     </Tooltip>
 
-                                    <Tooltip title={lang.navigation.account}>
+                                    <Tooltip title={Lang.get('navigation.account')}>
                                         <div
                                             className={
                                                 classes.navItemMenuWrapper
@@ -578,7 +578,7 @@ class Backoffice extends Component {
                         open={drawerOpened}
                     >
                         <div className={classes.toolbarIcon}>
-                            <Tooltip title={lang.navigation.close_drawer}>
+                            <Tooltip title={Lang.get('navigation.close_drawer')}>
                                 <IconButton onClick={this.handleDrawerToggled}>
                                     <ChevronLeftIcon />
                                 </IconButton>
@@ -597,7 +597,7 @@ class Backoffice extends Component {
                                 <Tooltip
                                     title={
                                         !drawerOpened
-                                            ? lang.navigation.dashboard
+                                            ? Lang.get('navigation.dashboard')
                                             : ''
                                     }
                                 >
@@ -624,7 +624,7 @@ class Backoffice extends Component {
                                             }
                                             variant="h6"
                                         >
-                                            {lang.navigation.dashboard}
+                                            {Lang.get('navigation.dashboard')}
                                         </Typography>
                                     }
                                 />
@@ -632,7 +632,7 @@ class Backoffice extends Component {
 
                             {drawerOpened && (
                                 <ListSubheader inset>
-                                    {lang.navigation.resources}
+                                    {Lang.get('navigation.resources')}
                                 </ListSubheader>
                             )}
 
@@ -647,7 +647,7 @@ class Backoffice extends Component {
                                 <Tooltip
                                     title={
                                         !drawerOpened
-                                            ? lang.navigation.users
+                                            ? Lang.get('navigation.users')
                                             : ''
                                     }
                                 >
@@ -676,7 +676,7 @@ class Backoffice extends Component {
                                             }
                                             variant="h6"
                                         >
-                                            {lang.navigation.users}
+                                            {Lang.get('navigation.users')}
                                         </Typography>
                                     }
                                 />
@@ -696,7 +696,7 @@ class Backoffice extends Component {
 
                     <footer className={classes.footer}>
                         <p>
-                            {lang.navigation.citation}{' '}
+                            {Lang.get('navigation.citation')}{' '}
                             <Link
                                 href="https://github.com/palonponjovertlota"
                                 target="_blank"

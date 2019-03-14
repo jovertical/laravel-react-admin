@@ -1,5 +1,8 @@
 import axios from 'axios';
 import moment from 'moment';
+import Lang from 'lang.js';
+
+import { LOCALE } from './config/locale';
 
 /**
  * We registered axios so that we don't have to import it all the time.
@@ -19,15 +22,10 @@ if (token) {
 }
 
 /**
- * Here, we will just register the language files in the form of a
- * JSON string and parse it so that it can be accessed as a global object.
+ * Here, we will initialize our localization for the first time.
  *
  */
-const lang = document.head.querySelector('meta[name="lang"]');
-
-if (lang) {
-    window.lang = JSON.parse(lang.content);
-}
+window.Lang = new Lang({ messages: LOCALE });
 
 /**
  * We registered moment.js so that we don't have to import it all the time.

@@ -67,6 +67,12 @@ module.exports = {
                     },
                 ],
             },
+
+            {
+                // Matches all PHP or JSON files in `resources/lang` directory.
+                test: /resources[\\\/]lang.+\.(php|json)$/,
+                loader: 'laravel-localization-loader',
+            },
         ],
     },
 
@@ -91,7 +97,10 @@ module.exports = {
                     title:
                         errors.length > 0 ? 'Build Failed' : 'Build Successful',
                     message: `Completed in ${time}ms`,
-                    icon: path.resolve(__dirname, './public/android-chrome-512x512.png'),
+                    icon: path.resolve(
+                        __dirname,
+                        './public/android-chrome-512x512.png',
+                    ),
                     sound: true,
                     wait: true,
                 });

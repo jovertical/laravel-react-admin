@@ -209,8 +209,8 @@ class SignIn extends Component {
             <AuthLayout
                 title={
                     identified
-                        ? lang.navigation.signin_identified_title
-                        : lang.navigation.signin_guest_title
+                        ? Lang.get('navigation.signin_identified_title')
+                        : Lang.get('navigation.signin_guest_title')
                 }
                 subTitle={
                     identified ? (
@@ -222,7 +222,7 @@ class SignIn extends Component {
                             deleteIcon={<ExpandMoreIcon />}
                         />
                     ) : (
-                        lang.navigation.signin_guest_subtitle
+                        Lang.get('navigation.signin_guest_subtitle')
                     )
                 }
                 loading={loading}
@@ -285,10 +285,9 @@ class SignIn extends Component {
                                                 className={classes.formGroup}
                                             >
                                                 <Link to="#">
-                                                    {
-                                                        lang.navigation
-                                                            .forgot_email
-                                                    }
+                                                    {Lang.get(
+                                                        'navigation.forgot_email',
+                                                    )}
                                                 </Link>
                                             </Grid>
                                         </>
@@ -362,10 +361,9 @@ class SignIn extends Component {
                                                         />
                                                     )}
                                                 >
-                                                    {
-                                                        lang.navigation
-                                                            .forgot_password
-                                                    }
+                                                    {Lang.get(
+                                                        'navigation.forgot_password',
+                                                    )}
                                                 </Link>
                                             </Grid>
                                         </>
@@ -387,7 +385,7 @@ class SignIn extends Component {
                                                 isSubmitting
                                             }
                                         >
-                                            {lang.navigation.next}
+                                            {Lang.get('navigation.next')}
                                         </Button>
                                     </Grid>
                                 </Grid>

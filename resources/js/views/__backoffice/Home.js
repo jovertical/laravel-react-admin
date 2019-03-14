@@ -8,7 +8,7 @@ export class Home extends Component {
         return (
             <BackofficeLayout
                 {...this.props}
-                pageTitle={lang.navigation.dashboard}
+                pageTitle={Lang.get('navigation.dashboard')}
             >
                 <Typography>There is no place like home</Typography>
             </BackofficeLayout>

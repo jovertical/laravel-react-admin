@@ -99,8 +99,8 @@ class PasswordRequest extends Component {
 
         return (
             <AuthLayout
-                title={lang.navigation.password_request_title}
-                subTitle={lang.navigation.password_request_subtitle}
+                title={Lang.get('navigation.password_request_title')}
+                subTitle={Lang.get('navigation.password_request_subtitle')}
                 loading={loading}
                 message={message}
             >
@@ -164,7 +164,7 @@ class PasswordRequest extends Component {
                                                 />
                                             )}
                                         >
-                                            {lang.navigation.signin}
+                                            {Lang.get('navigation.signin')}
                                         </Link>
                                     </Grid>
                                 </Grid>
@@ -184,7 +184,7 @@ class PasswordRequest extends Component {
                                                 isSubmitting
                                             }
                                         >
-                                            {lang.navigation.send_link}
+                                            {Lang.get('navigation.send_link')}
                                         </Button>
                                     </Grid>
                                 </Grid>
