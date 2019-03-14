@@ -470,109 +470,91 @@ class Backoffice extends Component {
 
                                 <div className={classes.grow} />
 
-                                {width === 'lg' ? (
-                                    <div
-                                        className={
-                                            classes.toolbarActionsDesktop
-                                        }
+                                <div className={classes.toolbarActionsDesktop}>
+                                    <Tooltip
+                                        title={lang.navigation.notifications}
                                     >
-                                        <Tooltip
-                                            title={
-                                                lang.navigation.notifications
-                                            }
-                                        >
-                                            <IconButton color="inherit">
-                                                <Badge
-                                                    badgeContent={4}
-                                                    color="secondary"
-                                                >
-                                                    <NotificationsIcon />
-                                                </Badge>
-                                            </IconButton>
-                                        </Tooltip>
-
-                                        <Tooltip title={lang.navigation.locale}>
-                                            <div
-                                                className={
-                                                    classes.navItemMenuWrapper
-                                                }
+                                        <IconButton color="inherit">
+                                            <Badge
+                                                badgeContent={4}
+                                                color="secondary"
                                             >
-                                                <IconButton
-                                                    aria-owns={
-                                                        localeMenuOpen &&
-                                                        'material-appbar'
-                                                    }
-                                                    aria-haspopup="true"
-                                                    onClick={() =>
-                                                        this.handleNavItemMenuToggled(
-                                                            'localeMenuOpen',
-                                                        )
-                                                    }
-                                                    color="inherit"
-                                                >
-                                                    <LanguageIcon />
-                                                </IconButton>
+                                                <NotificationsIcon />
+                                            </Badge>
+                                        </IconButton>
+                                    </Tooltip>
 
-                                                {renderLocaleMenu}
-                                            </div>
-                                        </Tooltip>
-
-                                        <Tooltip
-                                            title={lang.navigation.account}
-                                        >
-                                            <div
-                                                className={
-                                                    classes.navItemMenuWrapper
-                                                }
-                                            >
-                                                <IconButton
-                                                    aria-owns={
-                                                        accountMenuOpen &&
-                                                        'material-appbar'
-                                                    }
-                                                    aria-haspopup="true"
-                                                    onClick={() =>
-                                                        this.handleNavItemMenuToggled(
-                                                            'accountMenuOpen',
-                                                        )
-                                                    }
-                                                    color="inherit"
-                                                >
-                                                    <AccountCircleIcon />
-                                                </IconButton>
-
-                                                {renderAccountMenu}
-                                            </div>
-                                        </Tooltip>
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={classes.toolbarActionmdobile}
-                                    >
+                                    <Tooltip title={lang.navigation.locale}>
                                         <div
                                             className={
                                                 classes.navItemMenuWrapper
                                             }
                                         >
                                             <IconButton
-                                                aria-haspopup="true"
-                                                className={
-                                                    classes.mobileMenuButton
+                                                aria-owns={
+                                                    localeMenuOpen &&
+                                                    'material-appbar'
                                                 }
-                                                onClick={
-                                                    this.handleMobileMenuToggled
+                                                aria-haspopup="true"
+                                                onClick={() =>
+                                                    this.handleNavItemMenuToggled(
+                                                        'localeMenuOpen',
+                                                    )
                                                 }
                                                 color="inherit"
                                             >
-                                                <MoreVertIcon />
+                                                <LanguageIcon />
                                             </IconButton>
 
                                             {renderLocaleMenu}
-                                            {renderAccountMenu}
-                                            {renderMobileMenu}
                                         </div>
+                                    </Tooltip>
+
+                                    <Tooltip title={lang.navigation.account}>
+                                        <div
+                                            className={
+                                                classes.navItemMenuWrapper
+                                            }
+                                        >
+                                            <IconButton
+                                                aria-owns={
+                                                    accountMenuOpen &&
+                                                    'material-appbar'
+                                                }
+                                                aria-haspopup="true"
+                                                onClick={() =>
+                                                    this.handleNavItemMenuToggled(
+                                                        'accountMenuOpen',
+                                                    )
+                                                }
+                                                color="inherit"
+                                            >
+                                                <AccountCircleIcon />
+                                            </IconButton>
+
+                                            {renderAccountMenu}
+                                        </div>
+                                    </Tooltip>
+                                </div>
+
+                                <div className={classes.toolbarActionsMobile}>
+                                    <div className={classes.navItemMenuWrapper}>
+                                        <IconButton
+                                            aria-haspopup="true"
+                                            className={classes.mobileMenuButton}
+                                            onClick={
+                                                this.handleMobileMenuToggled
+                                            }
+                                            color="inherit"
+                                        >
+                                            <MoreVertIcon />
+                                        </IconButton>
+
+                                        {renderLocaleMenu}
+                                        {renderAccountMenu}
+                                        {renderMobileMenu}
                                     </div>
-                                )}
+                                </div>
                             </Toolbar>
                         </AppBar>
                     </Grid>
@@ -890,7 +872,7 @@ const styles = theme => ({
         },
     },
 
-    toolbarActionmdobile: {
+    toolbarActionsMobile: {
         display: 'flex',
         [theme.breakpoints.up('md')]: {
             display: 'none',
