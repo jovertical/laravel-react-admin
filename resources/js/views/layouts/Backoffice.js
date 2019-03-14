@@ -104,6 +104,8 @@ class Backoffice extends Component {
         this.setState(prevState => {
             return {
                 mobileMenuOpen: !prevState.mobileMenuOpen,
+                localeMenuOpen: false,
+                accountMenuOpen: false,
             };
         });
     };
@@ -730,14 +732,14 @@ const drawerWidth = 240;
 
 const styles = theme => ({
     toolbar: {
-        paddingRight: 24,
+        paddingRight: '2.4rem',
     },
 
     toolbarIcon: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        padding: '0 8px',
+        padding: '0 0.8rem',
         ...theme.mixins.toolbar,
     },
 
@@ -760,7 +762,9 @@ const styles = theme => ({
 
     menuButton: {
         marginLeft: '1.2rem',
-        marginRight: '3.6rem',
+        [theme.breakpoints.up('sm')]: {
+            marginRight: '1.2rem',
+        },
     },
 
     menuButtonHidden: {

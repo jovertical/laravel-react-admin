@@ -1,6 +1,16 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Table Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used in the frontend of the application,
+    | specifically in table pagination controls, table toolbar forms etc.
+    |
+    */
+
     // Filters
     'filter_list' => 'Salain ang listahan',
     'filter_by_label' => 'Column',
@@ -8,7 +18,7 @@ return [
     'filter_value_label' => 'Halaga',
     'string_value_placeholder' => 'String value here',
     'numeric_value_placeholder' => 'Numeric value here',
-    'add_filter' => 'Magdagdag ng Filter',
+    'add_filter' => 'Idagdag ang Filter',
     'eqs' => 'Katumbas ng',
     'neqs' => 'Hindi katumbas ng',
     'gt' => 'Mahigit sa',

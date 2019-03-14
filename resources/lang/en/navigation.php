@@ -6,7 +6,7 @@ return [
     | Navigation Language Lines
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used in the frontend of the appication,
+    | The following language lines are used in the frontend of the application,
     | specifically in navigation links, page titles, form buttons etc.
     |
     */

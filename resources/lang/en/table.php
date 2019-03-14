@@ -1,6 +1,16 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Table Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used in the frontend of the application,
+    | specifically in table pagination controls, table toolbar forms etc.
+    |
+    */
+
     // Filters
     'filter_list' => 'Filter the list',
     'filter_by_label' => 'Column',
