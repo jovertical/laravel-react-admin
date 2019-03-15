@@ -103,6 +103,7 @@ const styles = theme => ({
     },
 
     form: {
+        padding: '1rem',
         [theme.breakpoints.up('sm')]: {
             padding: '2rem',
             minHeight: '75vh',

@@ -12,7 +12,7 @@ export class Home extends Component {
 
         const tabs = [
             {
-                name: 'Stats',
+                name: 'Overview',
                 active: true,
             },
         ];

@@ -1,5 +1,8 @@
-import moment from 'moment';
 import React, { Component } from 'react';
+
+import { IconButton, Tooltip } from '@material-ui/core';
+
+import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
 import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
@@ -233,7 +236,9 @@ class List extends Component {
         } = pagination;
 
         const primaryAction = {
-            text: 'Add user',
+            text: Lang.get('resources.create', {
+                name: 'User',
+            }),
             clicked: () => alert('As you wish...'),
         };
 
@@ -248,6 +253,12 @@ class List extends Component {
             { name: 'Type', property: 'type' },
             { name: 'Name', property: 'name', sort: true },
             { name: 'Email', property: 'email', sort: true },
+            {
+                name: 'Actions',
+                property: 'actions',
+                filter: false,
+                sort: false,
+            },
         ];
 
         const data =
@@ -257,6 +268,29 @@ class List extends Component {
                     type: user.type,
                     name: user.name,
                     email: user.email,
+                    actions: (
+                        <div style={{ width: '5rem' }}>
+                            <Tooltip
+                                title={Lang.get('resources.edit', {
+                                    name: 'User',
+                                })}
+                            >
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip
+                                title={Lang.get('resources.delete', {
+                                    name: 'User',
+                                })}
+                            >
+                                <IconButton color="secondary">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    ),
                 };
             });
 
