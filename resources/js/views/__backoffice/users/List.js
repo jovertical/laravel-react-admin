@@ -232,6 +232,18 @@ class List extends Component {
             current_page: page,
         } = pagination;
 
+        const primaryAction = {
+            text: 'Add user',
+            clicked: () => alert('As you wish...'),
+        };
+
+        const tabs = [
+            {
+                name: 'List',
+                active: true,
+            },
+        ];
+
         const columns = [
             { name: 'Type', property: 'type' },
             { name: 'Name', property: 'name', sort: true },
@@ -252,6 +264,8 @@ class List extends Component {
             <MasterLayout
                 {...this.props}
                 pageTitle={Lang.get('navigation.users')}
+                primaryAction={primaryAction}
+                tabs={tabs}
                 loading={loading}
                 message={message}
             >

@@ -15,21 +15,39 @@ import { Header, Sidebar } from '../';
 class Master extends Component {
     state = {
         mobileOpen: false,
+        localeMenuOpen: false,
+        localeMenuEl: null,
+        accountMenuOpen: false,
+        accountMenuEl: null,
     };
 
-    handleDrawerToggle = () => {
+    /**
+     * Event listener that is triggered when the a nav link menu is clicked.
+     *
+     * @param {string} statusIndicator
+     *
+     * @return {undefined}
+     */
+    handleNavLinkMenuToggled = statusIndicator => {
+        this.setState(prevState => {
+            return {
+                [statusIndicator]: !prevState[statusIndicator],
+                mobileOpen: false,
+            };
+        });
+    };
+
+    /**
+     * Event listener that is triggered when the the mobile drawer toggle is clicked.
+     *
+     * @return {undefined}
+     */
+    handleDrawerToggled = () => {
         this.setState(prevState => ({ mobileOpen: !prevState.mobileOpen }));
     };
 
     render() {
-        const {
-            classes,
-            children,
-            history,
-            location,
-            pageTitle,
-            loading,
-        } = this.props;
+        const { classes, children, history, location, loading } = this.props;
 
         const { mobileOpen } = this.state;
 
@@ -56,7 +74,7 @@ class Master extends Component {
                             PaperProps={{ style: { width: drawerWidth } }}
                             variant="temporary"
                             open={mobileOpen}
-                            onClose={this.handleDrawerToggle}
+                            onClose={this.handleDrawerToggled}
                             locationPathname={location.pathname}
                             navigate={path => history.push(path)}
                         />
@@ -73,8 +91,12 @@ class Master extends Component {
 
                 <div className={classes.contentWrapper}>
                     <Header
-                        pageTitle={pageTitle}
-                        onDrawerToggle={this.handleDrawerToggle}
+                        parentProps={{
+                            ...this.props,
+                            ...this.state,
+                            onDrawerToggle: this.handleDrawerToggled,
+                            onNavLinkMenuToggle: this.handleNavLinkMenuToggled,
+                        }}
                     />
 
                     <main className={classes.content}>
@@ -105,6 +127,10 @@ class Master extends Component {
 
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
+    pageTitle: PropTypes.string.isRequired,
+    primaryAction: PropTypes.object,
+    tabs: PropTypes.array,
 };
 
 const drawerWidth = 256;
@@ -128,12 +154,12 @@ const styles = theme => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflowX: 'scroll',
     },
 
     content: {
         flex: 1,
         padding: theme.spacing.unit * 4,
-        overflowX: 'scroll',
         marginBottom: '5rem',
         backgroundColor: theme.palette.grey['200'],
     },
