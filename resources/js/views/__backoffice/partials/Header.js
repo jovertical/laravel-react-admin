@@ -39,23 +39,11 @@ import {
 import { Ph as PhIcon } from '../../../icons/flags/4x3/Ph';
 import { Us as UsIcon } from '../../../icons/flags/4x3/Us';
 
-const Header = props => {
+const LocaleMenu = props => {
     const { classes, parentProps } = props;
-    const {
-        onDrawerToggle,
-        pageProps,
-        pageTitle,
-        primaryAction,
-        tabs,
-        localeMenuOpen,
-        localeMenuEl,
-        accountMenuOpen,
-        accountMenuEl,
-    } = parentProps;
+    const { localeMenuOpen, localeMenuEl } = parentProps;
 
-    const { user, handleLock, handleSignout } = pageProps;
-
-    const renderLocaleMenu = (
+    return (
         <Popper
             open={localeMenuOpen}
             anchorEl={localeMenuEl}
@@ -132,8 +120,15 @@ const Header = props => {
             )}
         </Popper>
     );
+};
 
-    const renderAccountMenu = (
+const AccountMenu = props => {
+    const { classes, parentProps } = props;
+    const { pageProps, accountMenuOpen, accountMenuEl } = parentProps;
+
+    const { user, handleLock, handleSignout } = pageProps;
+
+    return (
         <Popper
             open={accountMenuOpen}
             anchorEl={accountMenuEl}
@@ -222,6 +217,22 @@ const Header = props => {
             )}
         </Popper>
     );
+};
+
+const Header = props => {
+    const { classes, parentProps } = props;
+    const {
+        onDrawerToggle,
+        pageProps,
+        pageTitle,
+        primaryAction,
+        tabs,
+        localeMenuOpen,
+        accountMenuOpen,
+        mobileOpen,
+    } = parentProps;
+
+    const { user } = pageProps;
 
     return (
         <>
@@ -235,14 +246,18 @@ const Header = props => {
                     <Grid container spacing={8} alignItems="center">
                         <Hidden smUp>
                             <Grid item>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="Open drawer"
-                                    onClick={onDrawerToggle}
-                                    className={classes.menuButton}
+                                <Tooltip
+                                    title={Lang.get('navigation.open_drawer')}
                                 >
-                                    <MenuIcon />
-                                </IconButton>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="Open drawer"
+                                        onClick={onDrawerToggle}
+                                        className={classes.menuButton}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </Grid>
                         </Hidden>
 
@@ -295,7 +310,7 @@ const Header = props => {
                                         <LanguageIcon />
                                     </IconButton>
 
-                                    {renderLocaleMenu}
+                                    <LocaleMenu {...props} />
                                 </div>
                             </Tooltip>
                         </Grid>
@@ -322,7 +337,7 @@ const Header = props => {
                                         </Avatar>
                                     </IconButton>
 
-                                    {renderAccountMenu}
+                                    <AccountMenu {...props} />
                                 </div>
                             </Tooltip>
                         </Grid>
@@ -360,7 +375,7 @@ const Header = props => {
                         )}
 
                         <Grid item>
-                            <Tooltip title="Help">
+                            <Tooltip title={Lang.get('navigation.help')}>
                                 <IconButton color="inherit">
                                     <HelpIcon />
                                 </IconButton>

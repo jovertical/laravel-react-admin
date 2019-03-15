@@ -34,6 +34,8 @@ return [
 
     'notifications' => 'Mga Abiso',
 
+    'help' => 'Tulong',
+
     'open_drawer' => 'I-bukas ang Drawer',
     'close_drawer' => 'I-sarado ang Drawer',
     'search' => 'Maghanap',

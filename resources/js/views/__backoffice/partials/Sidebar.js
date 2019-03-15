@@ -24,17 +24,17 @@ const Sidebar = props => {
     const { classes, locationPathname, navigate, ...other } = props;
 
     const homeLink = {
-        name: 'Dashboard',
+        name: Lang.get('navigation.dashboard'),
         icon: <DashboardIcon />,
         path: NavigationUtils._route('backoffice.home'),
     };
 
     const linkGroups = [
         {
-            name: 'Resources',
+            name: Lang.get('navigation.resources'),
             links: [
                 {
-                    name: 'Users',
+                    name: Lang.get('navigation.users'),
                     icon: <PeopleIcon />,
                     path: NavigationUtils._route('backoffice.users.index'),
                 },

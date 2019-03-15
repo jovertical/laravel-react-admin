@@ -31,8 +31,10 @@ class Master extends Component {
     handleNavLinkMenuToggled = statusIndicator => {
         this.setState(prevState => {
             return {
-                [statusIndicator]: !prevState[statusIndicator],
+                localeMenuOpen: false,
+                accountMenuOpen: false,
                 mobileOpen: false,
+                [statusIndicator]: !prevState[statusIndicator],
             };
         });
     };

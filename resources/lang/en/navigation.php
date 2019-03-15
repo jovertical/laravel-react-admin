@@ -34,6 +34,8 @@ return [
 
     'notifications' => 'Notifications',
 
+    'help' => 'Help',
+
     'open_drawer' => 'Open Drawer',
     'close_drawer' => 'Close Drawer',
     'search' => 'Search',

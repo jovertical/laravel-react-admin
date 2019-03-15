@@ -110,7 +110,7 @@ const styles = theme => ({
     },
 
     progress: {
-        margin: 0,
+        margin: '0 0.5rem',
         minHeight: '0.5rem',
         borderTopRightRadius: '100%',
         borderTopLeftRadius: '100%',
@@ -118,7 +118,6 @@ const styles = theme => ({
 
     logoContainer: {
         textAlign: 'center',
-        paddingTop: '2rem',
     },
 
     logo: {
