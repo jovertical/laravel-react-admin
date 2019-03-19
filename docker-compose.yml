@@ -22,7 +22,7 @@ services:
       - "443:443"
     volumes:
       - ./:/var/www/html
-      - ./webserver.conf:/etc/nginx/conf.d/webserver.conf
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
     depends_on:
       - lra-php
 
