@@ -1,5 +1,5 @@
 dump.sql
-webserver.conf
+nginx.conf
 /node_modules
 /public/hot
 /public/storage
