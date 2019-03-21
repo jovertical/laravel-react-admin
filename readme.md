@@ -29,8 +29,8 @@ You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 1. Clone the repo `git clone https://github.com/palonponjovertlota/laravel-react-admin.git`
 2. Go to your project folder from your terminal
 3. Run: `composer install` and `npm install`
-4. After installation, run: `php artisan serve`
-5. The project will run in this URL: (http://localhost:8000)
+4. After installation, run: `php artisan serve` then `npm run watch`
+5. The project will run in this URL: (http://localhost:3000)
 
 ---
 
@@ -57,8 +57,12 @@ You can now run the _image_ using the `docker-compose up` and optionally pass th
 
 ### Installing PHP & NPM dependencies
 
-Due to the fact that all files inside this app is _bind-mounted_ into the container, **docker** will just use the existing directories, in our concern the `vendor` and `node_modules`. Here is an example of running a composer install command: `docker container exec -it lra-php composer install --no-interaction --no-plugins --no-scripts`.
+In development, do note that all files inside this app is _bind-mounted_ into the container, **docker** will just use the existing directories, in our concern the `vendor` and `node_modules`. Here is an example of running a composer install command: `docker container exec -it lra-php composer install --no-interaction --no-plugins --no-scripts`.
 
 ### Running Artisan Commands
 
 You can run any artisan commands directly into the `lra-php` container. Here is an example of a migration command: `docker container exec -it lra-php php artisan migrate:fresh --seed`.
+
+### What about webpack?
+
+As we are bundling frontend assets with [webpack](https://webpack.js.org/) under the hood, you must specify the custom host address where the application runs in docker so that webpack can proxy that to be able to develop using docker. You can pass a `--env.proxy` flag when running for example the `npm run watch` command: `npm run watch -- --env.proxy=http:your_custom_host_address`.
