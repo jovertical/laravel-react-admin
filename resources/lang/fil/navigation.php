@@ -17,6 +17,7 @@ return [
     'forgot_email' => 'Nakalimutan ang Email?',
     'forgot_password' => 'Nakalimutan ang Password?',
     'next' => 'Susunod',
+    'previous' => 'Nakaraan',
     'password_request_title' => 'Pag-recover sa Account',
     'password_request_subtitle' => 'Ipasok ang iyong email at magpapadala kami ng recovery link',
     'signin' => 'Mag-sign in nalang',

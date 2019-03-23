@@ -45,4 +45,18 @@ class UsersTest extends BaseTest
             ->assertStatus(200)
             ->assertJson($user->toArray());
     }
+
+    /** @test */
+    public function a_user_can_delete_a_user()
+    {
+        $payload = array_merge($this->getDefaultPayload(), []);
+        $user = User::latest()->first();
+        $decremented =  User::count() - 1;
+
+        $this->delete(route('api.users.destroy', $user))
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'total' => $decremented
+            ]);
+    }
 }

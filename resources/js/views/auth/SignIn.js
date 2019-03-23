@@ -266,6 +266,7 @@ class SignIn extends Component {
                                                     id="username"
                                                     name="username"
                                                     label="Username"
+                                                    placeholder="jovert123"
                                                     value={values.username}
                                                     onChange={handleChange}
                                                     variant="outlined"
@@ -307,6 +308,7 @@ class SignIn extends Component {
                                                     id="password"
                                                     name="password"
                                                     label="Password"
+                                                    placeholder="secret"
                                                     value={values.password}
                                                     onChange={handleChange}
                                                     variant="outlined"

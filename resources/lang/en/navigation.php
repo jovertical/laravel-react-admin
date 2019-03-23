@@ -17,6 +17,7 @@ return [
     'forgot_email' => 'Forgot Email?',
     'forgot_password' => 'Forgot Password?',
     'next' => 'Next',
+    'previous' => 'Previous',
     'password_request_title' => 'Account Recovery',
     'password_request_subtitle' => "Enter your email and we'll send a recovery link",
     'signin' => 'Sign in instead',

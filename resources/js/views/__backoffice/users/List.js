@@ -18,9 +18,45 @@ class List extends Component {
             type: 'asc',
         },
         filters: {},
-        message: null,
+        selectedResources: [],
+        activeResource: 0,
+        message: {},
+        alert: {},
     };
 
+    /**
+     * Event listener that is triggered when a resource delete button is clicked.
+     * This should prompt for confirmation.
+     *
+     * @param {string} resource
+     *
+     * @return {undefined}
+     */
+    handleDeleteClick = resource => {
+        this.setState({
+            alert: {
+                type: 'confirmation',
+                title: Lang.get('resources.delete_confirmation_title', {
+                    name: 'User',
+                }),
+                body: Lang.get('resources.delete_confirmation_body', {
+                    name: 'User',
+                }),
+                confirmText: Lang.get('resources.continue'),
+                confirmed: () => alert('Deleting User:' + resource),
+                cancelled: () => this.setState({ alert: {} }),
+            },
+        });
+    };
+
+    /**
+     * Event listener that is triggered when a filter is removed.
+     * This should re-fetch the resource & also update the queryString.
+     *
+     * @param {string} key
+     *
+     * @return {undefined}
+     */
     handleFilterRemove = async key => {
         const { filters: prevFilters } = this.state;
 
@@ -194,10 +230,11 @@ class List extends Component {
             this.setState({
                 loading: false,
                 message: {
+                    type: 'error',
                     body: 'Error fetching users!',
+                    closed: () => this.setState({ message: {} }),
                     actionText: 'Retry',
                     action: async () => await this.fetchUsers(),
-                    close: () => this.setState({ message: null }),
                 },
             });
         }
@@ -225,7 +262,15 @@ class List extends Component {
     }
 
     render() {
-        const { loading, pagination, sorting, filters, message } = this.state;
+        const {
+            loading,
+            pagination,
+            sorting,
+            filters,
+            message,
+            alert,
+        } = this.state;
+
         const {
             data: rawData,
             total,
@@ -283,7 +328,12 @@ class List extends Component {
                                     name: 'User',
                                 })}
                             >
-                                <IconButton color="secondary">
+                                <IconButton
+                                    color="secondary"
+                                    onClick={() =>
+                                        this.handleDeleteClick(user.id)
+                                    }
+                                >
                                     <DeleteIcon />
                                 </IconButton>
                             </Tooltip>
@@ -300,6 +350,7 @@ class List extends Component {
                 tabs={tabs}
                 loading={loading}
                 message={message}
+                alert={alert}
             >
                 {!loading && data && (
                     <Table

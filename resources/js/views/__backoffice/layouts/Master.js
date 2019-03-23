@@ -10,6 +10,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+import { Snackbar, Modal } from '../../../ui';
 import { Header, Sidebar } from '../partials';
 
 class Master extends Component {
@@ -49,7 +50,15 @@ class Master extends Component {
     };
 
     render() {
-        const { classes, children, history, location, loading } = this.props;
+        const {
+            classes,
+            children,
+            history,
+            location,
+            loading,
+            message,
+            alert,
+        } = this.props;
 
         const { mobileOpen } = this.state;
 
@@ -67,62 +76,73 @@ class Master extends Component {
         );
 
         return (
-            <div className={classes.root}>
-                <CssBaseline />
+            <>
+                <div className={classes.root}>
+                    <CssBaseline />
 
-                <nav className={classes.drawer}>
-                    <Hidden smUp implementation="js">
-                        <Sidebar
-                            PaperProps={{ style: { width: drawerWidth } }}
-                            variant="temporary"
-                            open={mobileOpen}
-                            onClose={this.handleDrawerToggled}
-                            locationPathname={location.pathname}
-                            navigate={path => history.push(path)}
+                    <nav className={classes.drawer}>
+                        <Hidden smUp implementation="js">
+                            <Sidebar
+                                PaperProps={{ style: { width: drawerWidth } }}
+                                variant="temporary"
+                                open={mobileOpen}
+                                onClose={this.handleDrawerToggled}
+                                locationPathname={location.pathname}
+                                navigate={path => history.push(path)}
+                            />
+                        </Hidden>
+
+                        <Hidden xsDown implementation="css">
+                            <Sidebar
+                                PaperProps={{ style: { width: drawerWidth } }}
+                                locationPathname={location.pathname}
+                                navigate={path => history.push(path)}
+                            />
+                        </Hidden>
+                    </nav>
+
+                    <div className={classes.contentWrapper}>
+                        <Header
+                            parentProps={{
+                                ...this.props,
+                                ...this.state,
+                                onDrawerToggle: this.handleDrawerToggled,
+                                onNavLinkMenuToggle: this
+                                    .handleNavLinkMenuToggled,
+                            }}
                         />
-                    </Hidden>
 
-                    <Hidden xsDown implementation="css">
-                        <Sidebar
-                            PaperProps={{ style: { width: drawerWidth } }}
-                            locationPathname={location.pathname}
-                            navigate={path => history.push(path)}
-                        />
-                    </Hidden>
-                </nav>
+                        <main className={classes.content}>
+                            {loading ? (
+                                renderLoading
+                            ) : (
+                                <Grid container>{children}</Grid>
+                            )}
+                        </main>
 
-                <div className={classes.contentWrapper}>
-                    <Header
-                        parentProps={{
-                            ...this.props,
-                            ...this.state,
-                            onDrawerToggle: this.handleDrawerToggled,
-                            onNavLinkMenuToggle: this.handleNavLinkMenuToggled,
-                        }}
-                    />
-
-                    <main className={classes.content}>
-                        {loading ? (
-                            renderLoading
-                        ) : (
-                            <Grid container>{children}</Grid>
-                        )}
-                    </main>
-
-                    <footer className={classes.footer}>
-                        <p>
-                            {Lang.get('navigation.citation')}{' '}
-                            <Link
-                                href="https://github.com/palonponjovertlota"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                @palonponjovertlota
-                            </Link>
-                        </p>
-                    </footer>
+                        <footer className={classes.footer}>
+                            <p>
+                                {Lang.get('navigation.citation')}{' '}
+                                <Link
+                                    href="https://github.com/palonponjovertlota"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    @palonponjovertlota
+                                </Link>
+                            </p>
+                        </footer>
+                    </div>
                 </div>
-            </div>
+
+                {message && message.hasOwnProperty('type') > 0 && (
+                    <Snackbar {...message} />
+                )}
+
+                {alert && alert.hasOwnProperty('type') > 0 && (
+                    <Modal {...alert} />
+                )}
+            </>
         );
     }
 }
@@ -131,6 +151,8 @@ Master.propTypes = {
     classes: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
+    message: PropTypes.object,
+    alert: PropTypes.object,
     primaryAction: PropTypes.object,
     tabs: PropTypes.array,
 };
