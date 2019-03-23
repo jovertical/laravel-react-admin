@@ -3,14 +3,9 @@
 namespace Tests\Feature\Api;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UsersTest extends TestCase
+class UsersTest extends BaseTest
 {
-    use WithFaker, RefreshDatabase;
-
     /** @test */
     public function a_user_can_list_users()
     {
