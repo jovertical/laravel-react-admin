@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UsersController extends Controller
@@ -199,7 +200,9 @@ class UsersController extends Controller
             // Needed since LIKE statements requires values to be wrapped by %
             if (in_array($keyword, ['like', 'nlike'])) {
                 $users->where(
-                    $property, _to_sql_operator($keyword), "%{$value}%"
+                    $property,
+                    _to_sql_operator($keyword),
+                    "%{$value}%"
                 );
 
                 return;

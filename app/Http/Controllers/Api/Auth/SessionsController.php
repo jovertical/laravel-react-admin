@@ -29,7 +29,8 @@ class SessionsController extends Controller
 
         return response()->json(
             User::where(
-                $this->identifier($request), $request->input('username')
+                $this->identifier($request),
+                $request->input('username')
             )->first()->email
         );
     }
@@ -84,7 +85,8 @@ class SessionsController extends Controller
     protected function identifier(Request $request) : string
     {
         return filter_var(
-            $request->input('username'), FILTER_VALIDATE_EMAIL
+            $request->input('username'),
+            FILTER_VALIDATE_EMAIL
         ) ? 'email' : 'username';
     }
 

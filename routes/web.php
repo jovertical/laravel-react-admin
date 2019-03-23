@@ -12,7 +12,7 @@
 */
 
 Route::prefix('/{locale?}')->where(['locale' => 'en|fil'])->group(function () {
-    Route::name('backoffice.')->group(function() {
+    Route::name('backoffice.')->group(function () {
         Route::get('/', function () {
             return view('__backoffice.welcome');
         })->name('welcome');

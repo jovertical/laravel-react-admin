@@ -10,7 +10,8 @@ if (! function_exists('_asset')) {
      *
      * @return string $filePath
      */
-    function _asset(string $subPath) : string {
+    function _asset(string $subPath) : string
+    {
         $assets = json_decode(file_get_contents('assets.json'), true);
 
         return $assets[$subPath] ?? '';
@@ -23,7 +24,8 @@ if (! function_exists('_test_user')) {
      *
      * @return App\User
      */
-    function _test_user() {
+    function _test_user()
+    {
         auth()->guard('api')->login(User::first());
 
         return auth()->guard('api')->user();
@@ -38,7 +40,8 @@ if (! function_exists('_keyword_to_sql_operator')) {
      *
      * @return string $operator
      */
-    function _to_sql_operator($keyword) {
+    function _to_sql_operator($keyword)
+    {
         switch ($keyword) {
             case 'eqs':
                 return '=';

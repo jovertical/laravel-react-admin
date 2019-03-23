@@ -29,7 +29,9 @@ class ForgotPasswordController extends Controller
 
         if ($this->storeResetToken($user, $token)) {
             $routeSuffix = strstr(
-                $request->input('routeSuffix'), ':', true
+                $request->input('routeSuffix'),
+                ':',
+                true
             ).$token;
 
             $resetLink = route('backoffice.welcome').'#'.$routeSuffix;

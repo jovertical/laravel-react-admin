@@ -22,7 +22,7 @@ Route::namespace('Api')->name('api.')->group(function () {
             Route::post('user', 'SessionsController@user')->name('user');
         });
 
-        Route::name('password.')->prefix('password')->group(function() {
+        Route::name('password.')->prefix('password')->group(function () {
             Route::post('request', 'ForgotPasswordController@sendResetLinkEmail')->name('request');
             Route::post('reset/{token}', 'ResetPasswordController@reset')->name('reset');
         });
