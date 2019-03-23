@@ -10,10 +10,33 @@ import { Loading } from './views';
 class Backoffice extends Component {
     state = {
         loading: true,
-        authToken: null,
         authenticated: false,
-        username: '',
+        auth: {},
         user: {},
+        username: '',
+    };
+
+    /**
+     * Authenticate the user.
+     *
+     * @param {string} tokenString
+     *
+     * @return {undefined}
+     */
+    authenticate = async (tokenString = null) => {
+        const auth = JSON.parse(tokenString);
+
+        // We will set a default Authorization header, this will
+        // eliminate the need to include the Authorization header
+        // for almost every AJAX requests.
+        window.axios.defaults.headers.common['Authorization'] = `Bearer ${
+            auth.auth_token
+        }`;
+
+        // Store it locally for the authentication data to persist.
+        window.localStorage.setItem('auth', tokenString);
+
+        await this.fetchAuthUser();
     };
 
     /**
@@ -28,8 +51,8 @@ class Backoffice extends Component {
             const response = await axios.post('/api/auth/signout');
 
             if (response.status === 200) {
-                // remove uid stored in localStorage.
-                await localStorage.removeItem('uid');
+                // remove auth data stored in localStorage.
+                await localStorage.removeItem('auth');
 
                 this.setState({
                     loading: false,
@@ -65,27 +88,21 @@ class Backoffice extends Component {
     };
 
     /**
-     * Fetch the Authentication Token.
+     * Get the Authentication Data from the persistent storage.
      *
-     * @return {undefined}
+     * @return {object}
      */
-    fetchAuthToken = async () => {
-        try {
-            const response = await axios.post('/api/auth/token', {
-                uid: window.localStorage.getItem('uid'),
-            });
+    getAuthData = async () => {
+        const authString = await window.localStorage.getItem('auth');
+        const auth = JSON.parse(authString);
 
-            if (response.status === 200) {
-                // We will set a default Authorization header, this will
-                // eliminate the need to include the Authorization header
-                // for almost every AJAX requests.
-                window.axios.defaults.headers.common[
-                    'Authorization'
-                ] = `Bearer ${response.data}`;
+        if (!authString) {
+            return {};
+        }
 
-                this.setState({ authToken: response.data });
-            }
-        } catch (error) {}
+        this.setState({ auth });
+
+        return auth;
     };
 
     /**
@@ -107,15 +124,17 @@ class Backoffice extends Component {
     };
 
     async componentDidMount() {
-        await this.fetchAuthToken();
+        const auth = await this.getAuthData();
 
-        await this.fetchAuthUser();
+        if (auth) {
+            await this.authenticate(JSON.stringify(auth));
+        }
 
         this.setState({ loading: false });
     }
 
     render() {
-        const { classes, width } = this.props;
+        const { width } = this.props;
         const { loading } = this.state;
 
         return (
@@ -132,6 +151,7 @@ class Backoffice extends Component {
                                 width,
                                 environment: 'backoffice',
                                 routes: ROUTES,
+                                authenticate: this.authenticate,
                                 handleLock: this.handleLock,
                                 handleSignout: this.handleSignout,
                             }}

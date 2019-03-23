@@ -15,7 +15,6 @@ Route::namespace('Api')->name('api.')->group(function () {
     Route::namespace('Auth')->name('auth.')->prefix('auth')->group(function () {
         Route::post('identify', 'SessionsController@identify')->name('identify');
         Route::post('signin', 'SessionsController@signin')->name('signin');
-        Route::post('token', 'SessionsController@token')->name('token');
 
         Route::middleware('auth:api')->group(function () {
             Route::post('signout', 'SessionsController@signout')->name('signout');

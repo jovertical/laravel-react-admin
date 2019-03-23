@@ -35,7 +35,7 @@ class SessionsController extends Controller
     }
 
     /**
-     * Authenticate the user and then give it's userId.
+     * Authenticate the user and give the token data.
      *
      * @param Illuminate\Http\Request
      *
@@ -49,7 +49,7 @@ class SessionsController extends Controller
         ]);
 
         if ($token = $this->attempt($request)) {
-            return $this->respondWithUserId($token);
+            return $this->respondWithToken($token);
         }
 
         throw ValidationException::withMessages([
@@ -57,20 +57,6 @@ class SessionsController extends Controller
         ]);
 
         return response()->json(['error' => 'Unauthorized'], 401);
-    }
-
-    /**
-     * Get the auth token.
-     *
-     * @param Illuminate\Http\Request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function token(Request $request) : JsonResponse
-    {
-        return response()->json(
-            optional(User::find($request->input('uid')))->auth_token
-        );
     }
 
     /**
@@ -105,17 +91,21 @@ class SessionsController extends Controller
     /**
      * Get the authenticated user's Id.
      *
-     * @param  string $token
+     * @param  string $authToken
      *
      * @return Illuminate\Http\JsonResponse
      */
-    protected function respondWithUserId($token) : JsonResponse
+    protected function respondWithToken($authToken) : JsonResponse
     {
-        $user = JWTAuth::setToken($token)->toUser();
+        $user = JWTAuth::setToken($authToken)->toUser();
 
-        $this->saveAuthToken($token, $user);
+        $this->saveAuthToken($authToken, $user);
 
-        return response()->json($user->id);
+        return response()->json([
+            'auth_token' => $authToken,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
+        ]);
     }
 
     /**
@@ -151,7 +141,7 @@ class SessionsController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithUserId($this->guard()->refresh());
+        return $this->respondWithToken($this->guard()->refresh());
     }
 
     /**
@@ -171,7 +161,7 @@ class SessionsController extends Controller
      *
      * @return \Illuminate\Contracts\Auth\Guard
      */
-    public function guard() : Guard
+    protected function guard() : Guard
     {
         return Auth::guard('api');
     }

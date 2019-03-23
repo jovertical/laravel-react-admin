@@ -116,6 +116,7 @@ class SignIn extends Component {
         this.setState({ loading: true });
 
         try {
+            const { pageProps } = this.props;
             const { username } = this.state;
             const { password } = values;
 
@@ -124,13 +125,13 @@ class SignIn extends Component {
                 password,
             });
 
-            if (response.status === 200) {
-                window.localStorage.setItem('uid', response.data);
-
-                this.setState({ loading: false });
-
-                window.location.reload();
+            if (response.status !== 200) {
+                return;
             }
+
+            pageProps.authenticate(JSON.stringify(response.data));
+
+            this.setState({ loading: false });
         } catch (error) {
             if (!error.response) {
                 throw new Error('Unknown error');
