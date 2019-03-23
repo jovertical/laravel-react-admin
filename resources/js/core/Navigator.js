@@ -5,7 +5,7 @@ import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { _route } from '../utils/Navigation';
 import { _queryString } from '../utils/URL';
 
-const WrappableNavigator = props => {
+const Navigator = props => {
     const { authenticated, username, environment, routes } = props.pageProps;
 
     return (
@@ -53,8 +53,8 @@ const WrappableNavigator = props => {
     );
 };
 
-WrappableNavigator.propTypes = {
+Navigator.propTypes = {
     pageProps: PropTypes.object,
 };
 
-export const Navigator = withRouter(WrappableNavigator);
+export default withRouter(Navigator);

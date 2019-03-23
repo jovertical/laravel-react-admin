@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class User {
+export default class User {
     /**
      * Fetch a paginated user list.
      *

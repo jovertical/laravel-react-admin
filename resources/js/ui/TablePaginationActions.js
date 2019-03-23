@@ -109,4 +109,4 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-export { TablePaginationActions };
+export default TablePaginationActions;

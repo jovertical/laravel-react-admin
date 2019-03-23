@@ -15,8 +15,7 @@ import {
     Tooltip,
 } from '@material-ui/core';
 
-import { TableToolbar } from './TableToolbar/TableToolbar';
-import { TablePaginationActions } from './TablePaginationActions';
+import { TableToolbar, TablePaginationActions } from './';
 
 const Table = props => {
     const {
@@ -186,6 +185,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Table);
-
-export { Styled as Table };
+export default withStyles(styles)(Table);

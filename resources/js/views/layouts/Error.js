@@ -18,6 +18,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Error);
-
-export { Styled as Error };
+export default withStyles(styles)(Error);

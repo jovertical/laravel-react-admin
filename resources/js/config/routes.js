@@ -1,7 +1,7 @@
 import * as Views from '../views';
-import { BACKOFFICE_ROUTES } from '../routers/backoffice';
+import { BACKOFFICE_ROUTES } from '../routers';
 
-export const ROUTES = [
+export default [
     {
         name: 'auth.signin',
         path: '/signin',

@@ -27,7 +27,7 @@ import {
 import { FilterList as FilterListIcon } from '@material-ui/icons';
 
 import { _uppercaseFirst } from '../../utils/String';
-import { Filter as FilterForm } from './Forms/Filter';
+import FilterForm from './Forms/Filter';
 
 class TableToolbar extends Component {
     state = {
@@ -205,7 +205,7 @@ TableToolbar.propTypes = {
     onFilterRemove: PropTypes.func,
 };
 
-const StyledTableToolbar = withStyles(
+export default withStyles(
     theme => ({
         title: {
             flex: '0 0 auto',
@@ -241,5 +241,3 @@ const StyledTableToolbar = withStyles(
     }),
     { withTheme: true },
 )(TableToolbar);
-
-export { StyledTableToolbar as TableToolbar };

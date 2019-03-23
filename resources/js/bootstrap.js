@@ -2,7 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Lang from 'lang.js';
 
-import { LOCALE } from './config/locale';
+import { LOCALE } from './config';
 
 /**
  * We registered axios so that we don't have to import it all the time.

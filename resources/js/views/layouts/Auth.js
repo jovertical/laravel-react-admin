@@ -137,6 +137,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Auth);
-
-export { Styled as Auth };
+export default withStyles(styles)(Auth);

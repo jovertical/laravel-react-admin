@@ -1,6 +1,6 @@
 import * as BackofficeViews from '../views/__backoffice';
 
-export const BACKOFFICE_ROUTES = [
+export default [
     {
         name: 'home',
         path: '/',

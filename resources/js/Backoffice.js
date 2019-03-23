@@ -3,10 +3,10 @@ import { HashRouter as Router } from 'react-router-dom';
 import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
 import { Navigator } from './core';
-import { ROUTES } from './config/routes';
+import { ROUTES } from './config';
 import { _route } from './utils/Navigation';
 import { _queryString } from './utils/URL';
-import { theme } from './themes/backoffice';
+import { backofficeTheme as theme } from './themes';
 import { Loading } from './views';
 
 class Backoffice extends Component {

@@ -1,3 +1,3 @@
-export { APP } from './app';
-export { LOCALE } from './locale';
-export { ROUTES } from './routes';
+export { default as APP } from './app';
+export { default as LOCALE } from './locale';
+export { default as ROUTES } from './routes';

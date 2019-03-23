@@ -300,4 +300,4 @@ Filter = withStyles(
 
 Filter = withFormik({})(Filter);
 
-export { Filter };
+export default Filter;

@@ -1,4 +1,4 @@
-export const LOCALE = {
+export default {
     // English
     'en.navigation': require('../../lang/en/navigation.php'),
     'en.resources': require('../../lang/en/resources.php'),

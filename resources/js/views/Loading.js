@@ -47,6 +47,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Loading);
-
-export { Styled as Loading };
+export default withStyles(styles)(Loading);

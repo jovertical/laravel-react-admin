@@ -1,3 +1,3 @@
-export const APP = {
+export default {
     name: 'LaReact',
 };

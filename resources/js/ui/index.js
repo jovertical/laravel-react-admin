@@ -1,3 +1,3 @@
-export { Table } from './Table';
-export { TableToolbar } from './TableToolbar/TableToolbar';
-export { TablePaginationActions } from './TablePaginationActions';
+export { default as Table } from './Table';
+export { default as TableToolbar } from './TableToolbar/TableToolbar';
+export { default as TablePaginationActions } from './TablePaginationActions';

@@ -1,5 +1,5 @@
-export { Auth as AuthLayout } from './layouts/Auth';
-export { Error as ErrorLayout } from './layouts/Error';
+export { default as AuthLayout } from './layouts/Auth';
+export { default as ErrorLayout } from './layouts/Error';
 
 export { SignIn as AuthSignin } from './auth/SignIn';
 export {
@@ -7,5 +7,5 @@ export {
 } from './auth/passwords/Request';
 export { PasswordReset as AuthPasswordReset } from './auth/passwords/Reset';
 
-export { Loading } from './Loading';
+export { default as Loading } from './Loading';
 export { NotFound as ErrorNotFound } from './errors/NotFound';
