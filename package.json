@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "format": "prettier --write 'resources/**/*.{css,js,jsx}'",
         "dev": "npm run development",
         "development": "node_modules/.bin/webpack --env.NODE_ENV=development --progress --hide-modules --colors",
         "watch": "npm run development -- --watch",
@@ -48,6 +49,7 @@
         "laravel-localization-loader": "^1.0.5",
         "mini-css-extract-plugin": "^0.4.5",
         "node-notifier": "^5.4.0",
+        "prettier": "1.16.4",
         "sw-precache-webpack-plugin": "^0.11.5",
         "url-loader": "^1.1.2",
         "webpack": "^4.29.3",
