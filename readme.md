@@ -26,11 +26,12 @@ You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 
 ## Quick Start
 
-1. Clone the repo `git clone https://github.com/palonponjovertlota/laravel-react-admin.git`
-2. Go to your project folder from your terminal
-3. Run: `composer install` and `npm install`
-4. After installation, run: `php artisan serve` then `npm run watch`
-5. The project will run in this URL: (http://localhost:3000)
+1. Clone the repo `git clone https://github.com/palonponjovertlota/laravel-react-admin.git`.
+2. Go to your project folder from your terminal.
+3. Run: `composer install` and `npm install` to install application dependencies.
+4. Copy the `env.example` file into a `.env` file and then configure based on your local setup.
+5. Installation is done, you can now run: `php artisan serve` then `npm run watch`.
+6. The project will run in this URL: (http://localhost:3000).
 
 ---
 
