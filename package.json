@@ -6,7 +6,7 @@
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run development -- --watch-poll",
         "prod": "npm run production",
-        "production": "node_modules/.bin/webpack--env.NODE_ENV=production --no-progress --hide-modules --colors"
+        "production": "node_modules/.bin/webpack --env.NODE_ENV=production --no-progress --hide-modules --colors"
     },
     "dependencies": {
         "@babel/runtime": "^7.3.1",
