@@ -19,7 +19,7 @@ class List extends Component {
         },
         filters: {},
         selectedResources: [],
-        activeResource: 0,
+        activeResourceId: 0,
         message: {},
         alert: {},
     };
@@ -28,12 +28,13 @@ class List extends Component {
      * Event listener that is triggered when a resource delete button is clicked.
      * This should prompt for confirmation.
      *
-     * @param {string} resource
+     * @param {string} resourceId
      *
      * @return {undefined}
      */
-    handleDeleteClick = resource => {
+    handleDeleteClick = resourceId => {
         this.setState({
+            activeResourceId: resourceId,
             alert: {
                 type: 'confirmation',
                 title: Lang.get('resources.delete_confirmation_title', {
@@ -42,8 +43,8 @@ class List extends Component {
                 body: Lang.get('resources.delete_confirmation_body', {
                     name: 'User',
                 }),
-                confirmText: Lang.get('resources.continue'),
-                confirmed: () => alert('Deleting User:' + resource),
+                confirmText: Lang.get('actions.continue'),
+                confirmed: async () => await this.deleteUser(resourceId),
                 cancelled: () => this.setState({ alert: {} }),
             },
         });
@@ -194,6 +195,47 @@ class List extends Component {
     }
 
     /**
+     * This should send an API request to delete a resource.
+     *
+     * @param {string} resourceId
+     *
+     * @return {undefined}
+     */
+    deleteUser = async resourceId => {
+        this.setState({ loading: true });
+
+        try {
+            const pagination = await User.delete(resourceId);
+
+            this.setState({
+                loading: false,
+                pagination,
+                alert: {},
+                message: {
+                    type: 'success',
+                    body: 'User successfully deleted!',
+                    closed: () => this.setState({ message: {} }),
+                    actionText: Lang.get('actions.undo'),
+                    action: () => alert('Recovering...'),
+                },
+            });
+        } catch (error) {
+            const { activeResourceId } = this.state;
+
+            this.setState({
+                loading: false,
+                message: {
+                    type: 'error',
+                    body: 'Error deleting user!',
+                    closed: () => this.setState({ message: {} }),
+                    actionText: Lang.get('actions.retry'),
+                    action: async () => await this.deleteUser(activeResourceId),
+                },
+            });
+        }
+    };
+
+    /**
      * This should send an API request to fetch all resource.
      *
      * @param {object} params
@@ -278,6 +320,9 @@ class List extends Component {
             current_page: page,
         } = pagination;
 
+        const { pageProps } = this.props;
+        const { user: authUser } = pageProps;
+
         const primaryAction = {
             text: Lang.get('resources.create', {
                 name: 'User',
@@ -323,20 +368,22 @@ class List extends Component {
                                 </IconButton>
                             </Tooltip>
 
-                            <Tooltip
-                                title={Lang.get('resources.delete', {
-                                    name: 'User',
-                                })}
-                            >
-                                <IconButton
-                                    color="secondary"
-                                    onClick={() =>
-                                        this.handleDeleteClick(user.id)
-                                    }
+                            {authUser.id !== user.id && (
+                                <Tooltip
+                                    title={Lang.get('resources.delete', {
+                                        name: 'User',
+                                    })}
                                 >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
+                                    <IconButton
+                                        color="secondary"
+                                        onClick={() =>
+                                            this.handleDeleteClick(user.id)
+                                        }
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </div>
                     ),
                 };

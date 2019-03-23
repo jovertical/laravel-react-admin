@@ -37,11 +37,11 @@ const Confirmation = props => {
 
             <DialogActions>
                 <Button onClick={cancelled} color="primary">
-                    {cancelText ? cancelText : Lang.get('resources.cancel')}
+                    {cancelText ? cancelText : Lang.get('actions.cancel')}
                 </Button>
 
                 <Button onClick={confirmed} color="secondary" autoFocus>
-                    {confirmText ? confirmText : Lang.get('resources.confirm')}
+                    {confirmText ? confirmText : Lang.get('actions.confirm')}
                 </Button>
             </DialogActions>
         </Dialog>
