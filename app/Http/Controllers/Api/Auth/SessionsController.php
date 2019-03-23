@@ -151,6 +151,11 @@ class SessionsController extends Controller
      */
     public function signout() : JsonResponse
     {
+        $user = $this->guard()->user();
+
+        $user->auth_token = null;
+        $user->update();
+
         $this->guard()->logout();
 
         return response()->json(['message' => 'Successfully signed out']);

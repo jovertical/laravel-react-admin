@@ -45,16 +45,4 @@ class UsersTest extends BaseTest
             ->assertStatus(200)
             ->assertJson($user->toArray());
     }
-
-    /**
-     * Get default request payload
-     *
-     * @return array
-     */
-    protected function getDefaultPayload()
-    {
-        return [
-            'auth_token' => _test_user()->auth_token,
-        ];
-    }
 }
