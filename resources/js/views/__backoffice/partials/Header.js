@@ -455,6 +455,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Header);
-
-export { Styled as Header };
+export default withStyles(styles)(Header);

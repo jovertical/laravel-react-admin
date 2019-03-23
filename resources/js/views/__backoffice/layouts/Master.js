@@ -10,7 +10,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import { Header, Sidebar } from '../';
+import { Header, Sidebar } from '../partials';
 
 class Master extends Component {
     state = {
@@ -180,6 +180,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Master);
-
-export { Styled as Master };
+export default withStyles(styles)(Master);

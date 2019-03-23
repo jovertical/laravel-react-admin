@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { MasterLayout } from '../';
 
-export class Edit extends Component {
+import { Master as MasterLayout } from '../layouts';
+
+class Edit extends Component {
     render() {
         const { params } = this.props.match;
 
@@ -12,3 +13,5 @@ export class Edit extends Component {
         );
     }
 }
+
+export default Edit;

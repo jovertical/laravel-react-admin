@@ -23,7 +23,7 @@ import {
 
 import { _queryParams, _queryString } from '../../utils/URL';
 import { _route } from '../../utils/Navigation';
-import { AuthLayout } from '../';
+import { Auth as AuthLayout } from '../layouts';
 
 class SignIn extends Component {
     state = {
@@ -406,6 +406,5 @@ const styles = theme => ({
 });
 
 const Styled = withStyles(styles)(SignIn);
-const WrappedForm = withFormik({})(Styled);
 
-export { WrappedForm as SignIn };
+export default withFormik({})(Styled);

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { MasterLayout } from '../';
 
-export class Create extends Component {
+import { Master as MasterLayout } from '../layouts';
+
+class Create extends Component {
     render() {
         return (
             <MasterLayout {...this.props} pageTitle="Create a user">
@@ -10,3 +11,5 @@ export class Create extends Component {
         );
     }
 }
+
+export default Create;

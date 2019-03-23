@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
 
-import { MasterLayout } from './';
+import { Master as MasterLayout } from './layouts';
 
-export class Home extends Component {
+class Home extends Component {
     render() {
         const primaryAction = {
             text: 'Export Stats',
@@ -29,3 +29,5 @@ export class Home extends Component {
         );
     }
 }
+
+export default Home;

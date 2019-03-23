@@ -4,7 +4,7 @@ import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
 import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
-import { AuthLayout } from '../../';
+import { Auth as AuthLayout } from '../../layouts';
 import { _route } from '../../../utils/Navigation';
 import { _queryParams, _queryString } from '../../../utils/URL';
 
@@ -205,6 +205,5 @@ const styles = theme => ({
 });
 
 const Styled = withStyles(styles)(PasswordRequest);
-const WrappedForm = withFormik({})(Styled);
 
-export { WrappedForm as PasswordRequest };
+export default withFormik({})(Styled);

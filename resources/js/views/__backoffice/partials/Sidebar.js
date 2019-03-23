@@ -183,6 +183,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(Sidebar);
-
-export { Styled as Sidebar };
+export default withStyles(styles)(Sidebar);

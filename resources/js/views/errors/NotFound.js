@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { ErrorLayout } from '../';
+import { Error as ErrorLayout } from '../layouts';
 
-export const NotFound = () => (
+const NotFound = () => (
     <ErrorLayout>
         <h1>Whooops! We couldn't find what you're looking for :(</h1>
     </ErrorLayout>
 );
+
+export default NotFound;

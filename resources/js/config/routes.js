@@ -1,25 +1,26 @@
-import * as Views from '../views';
 import { BACKOFFICE_ROUTES } from '../routers';
+import * as Auth from '../views/auth';
+import * as Errors from '../views/errors';
 
 export default [
     {
         name: 'auth.signin',
         path: '/signin',
-        component: Views.AuthSignin,
+        component: Auth.SignIn,
         auth: false,
     },
 
     {
         name: 'auth.passwords.request',
         path: '/password/request',
-        component: Views.AuthPasswordRequest,
+        component: Auth.PasswordRequest,
         auth: false,
     },
 
     {
         name: 'auth.passwords.reset',
         path: '/password/reset/:token',
-        component: Views.AuthPasswordReset,
+        component: Auth.PasswordReset,
         auth: false,
     },
 
@@ -27,6 +28,6 @@ export default [
 
     {
         name: 'errors.not-found',
-        component: Views.ErrorNotFound,
+        component: Errors.NotFound,
     },
 ];

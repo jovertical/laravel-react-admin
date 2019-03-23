@@ -8,7 +8,7 @@ import { _route } from '../../../utils/Navigation';
 import { _color } from '../../../utils/Random';
 import { _queryParams, _queryString } from '../../../utils/URL';
 import { Table } from '../../../ui';
-import { MasterLayout } from '../';
+import { Master as MasterLayout } from '../layouts';
 import { User } from '../../../models';
 
 class List extends Component {
@@ -331,4 +331,4 @@ class List extends Component {
     }
 }
 
-export { List };
+export default List;
