@@ -1,16 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api;
 
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UsersTest extends TestCase
 {
-    use WithFaker, DatabaseTransactions;
+    use WithFaker, RefreshDatabase;
 
     /** @test */
     public function a_user_can_list_users()
