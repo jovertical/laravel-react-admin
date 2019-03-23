@@ -4,8 +4,6 @@ import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
 import { Navigator } from './core';
 import { ROUTES } from './config';
-import { _route } from './utils/Navigation';
-import { _queryString } from './utils/URL';
 import { backofficeTheme as theme } from './themes';
 import { Loading } from './views';
 

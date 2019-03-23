@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { _route } from '../utils/Navigation';
-import { _queryString } from '../utils/URL';
+import * as NavigationUtils from '../utils/Navigation';
+import * as UrlUtils from '../utils/URL';
 
 const Navigator = props => {
     const { authenticated, username, environment, routes } = props.pageProps;
@@ -24,10 +24,12 @@ const Navigator = props => {
                                     return (
                                         <Redirect
                                             to={{
-                                                search: _queryString({
+                                                search: UrlUtils._queryString({
                                                     username,
                                                 }),
-                                                pathname: _route('auth.signin'),
+                                                pathname: NavigationUtils._route(
+                                                    'auth.signin',
+                                                ),
                                             }}
                                         />
                                     );
@@ -38,7 +40,9 @@ const Navigator = props => {
                                 if (authenticated) {
                                     return (
                                         <Redirect
-                                            to={_route(`${environment}.home`)}
+                                            to={NavigationUtils._route(
+                                                `${environment}.home`,
+                                            )}
                                         />
                                     );
                                 }

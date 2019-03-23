@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
 
 import { Auth as AuthLayout } from '../../layouts';
-import { _route } from '../../../utils/Navigation';
-import { _queryParams, _queryString } from '../../../utils/URL';
+import * as NavigationUtils from '../../../utils/Navigation';
+import * as UrlUtils from '../../../utils/URL';
 
 class PasswordRequest extends Component {
     state = {
@@ -30,7 +30,7 @@ class PasswordRequest extends Component {
 
             const { history } = this.props;
             const { email } = values;
-            const routeSuffix = _route('auth.passwords.reset');
+            const routeSuffix = NavigationUtils._route('auth.passwords.reset');
 
             const response = await axios.post('api/auth/password/request', {
                 email,
@@ -86,8 +86,10 @@ class PasswordRequest extends Component {
         const { location } = this.props;
 
         this.setState({
-            email: _queryParams(location.search).hasOwnProperty('username')
-                ? _queryParams(location.search).username
+            email: UrlUtils._queryParams(location.search).hasOwnProperty(
+                'username',
+            )
+                ? UrlUtils._queryParams(location.search).username
                 : '',
         });
     }
@@ -107,7 +109,7 @@ class PasswordRequest extends Component {
                 <Formik
                     initialValues={{
                         email: !email
-                            ? _queryParams(location.search).username
+                            ? UrlUtils._queryParams(location.search).username
                             : email,
                     }}
                     onSubmit={this.handleRequestPasswordSubmit}
@@ -154,10 +156,12 @@ class PasswordRequest extends Component {
                                                 <RouterLink
                                                     {...props}
                                                     to={{
-                                                        search: _queryString({
-                                                            username: email,
-                                                        }),
-                                                        pathname: _route(
+                                                        search: UrlUtils._queryString(
+                                                            {
+                                                                username: email,
+                                                            },
+                                                        ),
+                                                        pathname: NavigationUtils._route(
                                                             'auth.signin',
                                                         ),
                                                     }}

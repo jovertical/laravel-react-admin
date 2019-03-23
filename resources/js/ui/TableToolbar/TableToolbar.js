@@ -26,7 +26,6 @@ import {
 
 import { FilterList as FilterListIcon } from '@material-ui/icons';
 
-import { _uppercaseFirst } from '../../utils/String';
 import FilterForm from './Forms/Filter';
 
 class TableToolbar extends Component {

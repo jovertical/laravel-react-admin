@@ -1,5 +1,5 @@
 import { ROUTES } from '../config';
-import { _queryString } from '../utils/URL';
+import * as UrlUtils from '../utils/URL';
 
 /**
  * Find the route by its name.
@@ -31,7 +31,7 @@ export function _route(name, segmentParams = {}, queryParams = {}) {
 
     // We will append a query string if there are query parameters provided.
     if (segmentParams && Object.values(segmentParams).length > 0) {
-        routePath = `${routePath}${_queryString(queryParams)}`;
+        routePath = `${routePath}${UrlUtils._queryString(queryParams)}`;
     }
 
     return routePath;

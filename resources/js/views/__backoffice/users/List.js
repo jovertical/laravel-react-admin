@@ -4,9 +4,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
-import { _route } from '../../../utils/Navigation';
-import { _color } from '../../../utils/Random';
-import { _queryParams, _queryString } from '../../../utils/URL';
+import * as UrlUtils from '../../../utils/URL';
 import { Table } from '../../../ui';
 import { Master as MasterLayout } from '../layouts';
 import { User } from '../../../models';
@@ -148,7 +146,7 @@ class List extends Component {
         const { current_page: page, per_page: perPage } = pagination;
         const { by: sortBy, type: sortType } = sorting;
 
-        const queryString = _queryString({
+        const queryString = UrlUtils._queryString({
             page,
             perPage,
             sortBy,
@@ -208,7 +206,7 @@ class List extends Component {
     async componentDidMount() {
         const { location } = this.props;
         const queryParams = (location, 'search')
-            ? _queryParams(location.search)
+            ? UrlUtils._queryParams(location.search)
             : {};
 
         const filters = {};

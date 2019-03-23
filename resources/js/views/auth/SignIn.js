@@ -21,8 +21,8 @@ import {
     VisibilityOff as VisibilityOffIcon,
 } from '@material-ui/icons';
 
-import { _queryParams, _queryString } from '../../utils/URL';
-import { _route } from '../../utils/Navigation';
+import * as UrlUtils from '../../utils/URL';
+import * as NavigationUtils from '../../utils/Navigation';
 import { Auth as AuthLayout } from '../layouts';
 
 class SignIn extends Component {
@@ -84,7 +84,7 @@ class SignIn extends Component {
                     username: response.data,
                 });
 
-                const queryString = _queryString({
+                const queryString = UrlUtils._queryString({
                     username: response.data,
                 });
 
@@ -184,7 +184,7 @@ class SignIn extends Component {
     async componentDidMount() {
         const { location } = this.props;
 
-        const queryParams = _queryParams(location.search);
+        const queryParams = UrlUtils._queryParams(location.search);
 
         if (
             queryParams.hasOwnProperty('username') &&
@@ -349,12 +349,12 @@ class SignIn extends Component {
                                                         <RouterLink
                                                             {...props}
                                                             to={{
-                                                                search: _queryString(
+                                                                search: UrlUtils._queryString(
                                                                     {
                                                                         username,
                                                                     },
                                                                 ),
-                                                                pathname: _route(
+                                                                pathname: NavigationUtils._route(
                                                                     'auth.passwords.request',
                                                                 ),
                                                             }}
