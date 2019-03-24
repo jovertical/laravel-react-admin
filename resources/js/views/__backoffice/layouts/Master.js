@@ -55,6 +55,7 @@ class Master extends Component {
             children,
             history,
             location,
+            pageProps,
             loading,
             message,
             alert,
@@ -83,6 +84,7 @@ class Master extends Component {
                     <nav className={classes.drawer}>
                         <Hidden smUp implementation="js">
                             <Sidebar
+                                pageProps={pageProps}
                                 PaperProps={{ style: { width: drawerWidth } }}
                                 variant="temporary"
                                 open={mobileOpen}
@@ -94,6 +96,7 @@ class Master extends Component {
 
                         <Hidden xsDown implementation="css">
                             <Sidebar
+                                pageProps={pageProps}
                                 PaperProps={{ style: { width: drawerWidth } }}
                                 locationPathname={location.pathname}
                                 navigate={path => history.push(path)}

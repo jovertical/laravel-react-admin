@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import {
+    colors,
     Divider,
     Drawer,
     List,
@@ -19,9 +20,10 @@ import {
 
 import { APP } from '../../../config';
 import * as NavigationUtils from '../../../utils/Navigation';
+import { Skeleton } from '../../../ui';
 
 const Sidebar = props => {
-    const { classes, locationPathname, navigate, ...other } = props;
+    const { classes, locationPathname, pageProps, navigate, ...other } = props;
 
     const homeLink = {
         name: Lang.get('navigation.dashboard'),
@@ -42,90 +44,187 @@ const Sidebar = props => {
         },
     ];
 
-    return (
-        <Drawer variant="permanent" {...other}>
-            <List disablePadding>
-                <ListItem
-                    className={classNames(
-                        classes.title,
-                        classes.link,
-                        classes.linkGroup,
-                    )}
-                >
-                    {APP.name}
-                </ListItem>
+    const renderNavigating = (
+        <div>
+            <div
+                className={classNames(
+                    classes.title,
+                    classes.link,
+                    classes.linkGroup,
+                    classes.titleLoading,
+                )}
+            >
+                <Skeleton
+                    width={100}
+                    color={colors.grey['A700']}
+                    highlightColor={colors.grey['A400']}
+                />
+            </div>
 
-                <ListItem
-                    button
-                    dense
-                    className={classNames(
-                        classes.link,
-                        classes.linkGroup,
-                        classes.linkActionable,
-                        locationPathname === homeLink.path &&
-                            classes.itemActive,
-                    )}
-                    onClick={() => navigate(homeLink.path)}
-                >
-                    <ListItemIcon>{homeLink.icon}</ListItemIcon>
+            <div
+                className={classNames(
+                    classes.link,
+                    classes.linkGroup,
+                    classes.linkActionable,
+                    classes.linkLoading,
+                )}
+            >
+                <span className={classes.linkIconLoading}>
+                    <Skeleton
+                        circle
+                        width={25}
+                        height={25}
+                        color={colors.grey['900']}
+                        highlightColor={colors.grey['700']}
+                    />
+                </span>
 
-                    <ListItemText
-                        classes={{
-                            primary: classes.linkPrimary,
-                        }}
+                <span className={classes.linkTextLoading}>
+                    <Skeleton
+                        width={100}
+                        color={colors.grey['900']}
+                        highlightColor={colors.grey['700']}
+                    />
+                </span>
+            </div>
+
+            {linkGroups.map(({ name, links }) => (
+                <React.Fragment key={name}>
+                    <div
+                        className={classNames(
+                            classes.linkGroupHeader,
+                            classes.linkLoading,
+                        )}
                     >
-                        {homeLink.name}
-                    </ListItemText>
-                </ListItem>
+                        <Skeleton
+                            width={100}
+                            color={colors.grey['A700']}
+                            highlightColor={colors.grey['A400']}
+                        />
+                    </div>
 
-                {linkGroups.map(({ name, links }) => (
-                    <React.Fragment key={name}>
-                        <ListItem className={classes.linkGroupHeader}>
+                    {links.map(({ name }) => (
+                        <div
+                            key={name}
+                            className={classNames(
+                                classes.link,
+                                classes.linkActionable,
+                                classes.linkLoading,
+                            )}
+                        >
+                            <span className={classes.linkIconLoading}>
+                                <Skeleton
+                                    circle
+                                    width={25}
+                                    height={25}
+                                    color={colors.grey['900']}
+                                    highlightColor={colors.grey['700']}
+                                />
+                            </span>
+
+                            <span className={classes.linkTextLoading}>
+                                <Skeleton
+                                    width={100}
+                                    color={colors.grey['900']}
+                                    highlightColor={colors.grey['700']}
+                                />
+                            </span>
+                        </div>
+                    ))}
+
+                    <Divider className={classes.divider} />
+                </React.Fragment>
+            ))}
+        </div>
+    );
+
+    const renderNavigated = (
+        <List disablePadding>
+            <ListItem
+                className={classNames(
+                    classes.title,
+                    classes.link,
+                    classes.linkGroup,
+                )}
+            >
+                {APP.name}
+            </ListItem>
+
+            <ListItem
+                button
+                dense
+                className={classNames(
+                    classes.link,
+                    classes.linkGroup,
+                    classes.linkActionable,
+                    locationPathname === homeLink.path && classes.itemActive,
+                )}
+                onClick={() => navigate(homeLink.path)}
+            >
+                <ListItemIcon>{homeLink.icon}</ListItemIcon>
+
+                <ListItemText
+                    classes={{
+                        primary: classes.linkPrimary,
+                    }}
+                >
+                    {homeLink.name}
+                </ListItemText>
+            </ListItem>
+
+            {linkGroups.map(({ name, links }) => (
+                <React.Fragment key={name}>
+                    <ListItem className={classes.linkGroupHeader}>
+                        <ListItemText
+                            classes={{
+                                primary: classes.linkGroupHeaderPrimary,
+                            }}
+                        >
+                            {name}
+                        </ListItemText>
+                    </ListItem>
+
+                    {links.map(({ name, icon, path }) => (
+                        <ListItem
+                            button
+                            dense
+                            key={name}
+                            className={classNames(
+                                classes.link,
+                                classes.linkActionable,
+                                locationPathname === path && classes.itemActive,
+                            )}
+                            onClick={() => navigate(path)}
+                        >
+                            <ListItemIcon>{icon}</ListItemIcon>
+
                             <ListItemText
                                 classes={{
-                                    primary: classes.linkGroupHeaderPrimary,
+                                    primary: classes.linkPrimary,
+                                    textDense: classes.textDense,
                                 }}
                             >
                                 {name}
                             </ListItemText>
                         </ListItem>
+                    ))}
 
-                        {links.map(({ name, icon, path }) => (
-                            <ListItem
-                                button
-                                dense
-                                key={name}
-                                className={classNames(
-                                    classes.link,
-                                    classes.linkActionable,
-                                    locationPathname === path &&
-                                        classes.itemActive,
-                                )}
-                                onClick={() => navigate(path)}
-                            >
-                                <ListItemIcon>{icon}</ListItemIcon>
+                    <Divider className={classes.divider} />
+                </React.Fragment>
+            ))}
+        </List>
+    );
 
-                                <ListItemText
-                                    classes={{
-                                        primary: classes.linkPrimary,
-                                        textDense: classes.textDense,
-                                    }}
-                                >
-                                    {name}
-                                </ListItemText>
-                            </ListItem>
-                        ))}
-
-                        <Divider className={classes.divider} />
-                    </React.Fragment>
-                ))}
-            </List>
+    return (
+        <Drawer variant="permanent" {...other}>
+            {pageProps.navigating ? renderNavigating : renderNavigated}
         </Drawer>
     );
 };
 
 Sidebar.propTypes = {
     classes: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
     locationPathname: PropTypes.string,
 };
 
@@ -150,6 +249,24 @@ const styles = theme => ({
         boxShadow: '0 -1px 0 #404854 inset',
         paddingTop: 16,
         paddingBottom: 16,
+    },
+
+    titleLoading: {
+        padding: '1rem 0.75rem',
+    },
+
+    linkLoading: {
+        padding: '0.75rem',
+        display: 'flex',
+        flexDirection: 'row',
+    },
+
+    linkIconLoading: {
+        marginRight: theme.spacing.unit * 2,
+    },
+
+    linkTextLoading: {
+        marginTop: theme.spacing.unit / 2,
     },
 
     title: {

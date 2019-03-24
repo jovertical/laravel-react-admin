@@ -316,9 +316,11 @@ class List extends Component {
                 loading: false,
                 message: {
                     type: 'error',
-                    body: 'Error fetching users!',
+                    body: Lang.get('resources.not_fetched', {
+                        name: 'User',
+                    }),
                     closed: () => this.setState({ message: {} }),
-                    actionText: 'Retry',
+                    actionText: Lang.get('actions.retry'),
                     action: async () => await this.fetchUsers(),
                 },
             });

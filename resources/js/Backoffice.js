@@ -10,10 +10,28 @@ import { Loading } from './views';
 class Backoffice extends Component {
     state = {
         loading: true,
+        navigating: true,
         authenticated: false,
         auth: {},
         user: {},
         username: '',
+    };
+
+    /**
+     * Refresh the user's session.
+     *
+     * @return {undefined}
+     */
+    refresh = async () => {
+        this.setState({ navigating: true });
+
+        try {
+            const response = await axios.post('/api/auth/refresh');
+
+            await this.authenticate(JSON.stringify(response.data));
+
+            this.setState({ navigating: false });
+        } catch (error) {}
     };
 
     /**
@@ -33,8 +51,7 @@ class Backoffice extends Component {
             auth.auth_token
         }`;
 
-        // Store it locally for the authentication data to persist.
-        window.localStorage.setItem('auth', tokenString);
+        this.setAuthData(auth);
 
         await this.fetchAuthUser();
     };
@@ -92,8 +109,8 @@ class Backoffice extends Component {
      *
      * @return {object}
      */
-    getAuthData = async () => {
-        const authString = await window.localStorage.getItem('auth');
+    getAuthData = () => {
+        const authString = window.localStorage.getItem('auth');
         const auth = JSON.parse(authString);
 
         if (!authString) {
@@ -103,6 +120,18 @@ class Backoffice extends Component {
         this.setState({ auth });
 
         return auth;
+    };
+
+    /**
+     * Store the authentication object as string into a persistent storage.
+     *
+     * @param {object} data
+     *
+     * @return {undefined}
+     */
+    setAuthData = data => {
+        // Store it locally for the authentication data to persist.
+        window.localStorage.setItem('auth', JSON.stringify(data));
     };
 
     /**
@@ -130,7 +159,7 @@ class Backoffice extends Component {
             await this.authenticate(JSON.stringify(auth));
         }
 
-        this.setState({ loading: false });
+        this.setState({ loading: false, navigating: false });
     }
 
     render() {
@@ -151,6 +180,7 @@ class Backoffice extends Component {
                                 width,
                                 environment: 'backoffice',
                                 routes: ROUTES,
+                                refresh: this.refresh,
                                 authenticate: this.authenticate,
                                 handleLock: this.handleLock,
                                 handleSignout: this.handleSignout,
