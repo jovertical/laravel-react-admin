@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 
 import { Snackbar, Modal } from '../../../ui';
+import { LinearDeterminate } from '../../../ui/Loaders';
 import { Header, Sidebar } from '../partials';
 
 class Master extends Component {
@@ -60,6 +61,7 @@ class Master extends Component {
             message,
             alert,
         } = this.props;
+        const { navigating } = pageProps;
 
         const { mobileOpen } = this.state;
 
@@ -78,6 +80,8 @@ class Master extends Component {
 
         return (
             <>
+                {navigating && <LinearDeterminate className={classes.loader} />}
+
                 <div className={classes.root}>
                     <CssBaseline />
 
@@ -163,6 +167,10 @@ Master.propTypes = {
 const drawerWidth = 256;
 
 const styles = theme => ({
+    loader: {
+        zIndex: 9999,
+    },
+
     root: {
         display: 'flex',
         position: 'relative',
