@@ -67,3 +67,33 @@ You can run any artisan commands directly into the `lra-php` container. Here is 
 ### What about webpack?
 
 As we are bundling frontend assets with [webpack](https://webpack.js.org/) under the hood, you must specify the custom host address where the application runs in docker so that webpack can proxy that to be able to develop using docker. You can pass a `--env.proxy` flag when running for example the `npm run watch` command: `npm run watch -- --env.proxy=http:your_custom_host_address`.
+
+---
+
+## Credits
+
+Without open source, this project will not come this far. Below are the list of technologies that the project uses:
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/laravel.svg" width="120">](https://laravel.com)
+
+The application use it as its backend framework.
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/react.svg" width="120">](https://reactjs.org)
+
+The application use it as its frontend framework.
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/webpack.svg" width="120">](https://webpack.js.org)
+
+The application uses it in bundling up different assets such as JavaScript, Sass, images, fonts and more.
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/material-ui.svg" width="120">](https://material-ui.com)
+
+The frontend of the application is designed using this UI kit.
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/docker.svg" width="120">](https://www.docker.com)
+
+Used in deploying the application in multiple environments (development and production).
+
+[<img src="https://laravel-react-admin.herokuapp.com/credits/nginx.svg" width="120">](https://www.nginx.com)
+
+Used as the application's http webserver both in development & production.
