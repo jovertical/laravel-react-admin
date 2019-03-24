@@ -410,7 +410,12 @@ class List extends Component {
                 return {
                     type: user.type,
                     name: (
-                        <Grid container direction="row" alignItems="center">
+                        <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            style={{ minWidth: 150 }}
+                        >
                             <Grid item style={{ marginRight: 10 }}>
                                 <Avatar
                                     style={{
