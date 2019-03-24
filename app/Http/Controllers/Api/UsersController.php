@@ -92,58 +92,18 @@ class UsersController extends Controller
     }
 
     /**
-     * Destroy multiple resources.
-     *
-     * @param Illuminate\Http\Request $request
-     * @param string $idCollectionString
-     *
-     * @return Illuminate\Http\JsonResponse
-     */
-    public function destroyMultiple(Request $request, string $idCollectionString)
-    {
-        $idCollection = explode(',', $idCollectionString);
-
-        foreach ($idCollection as $id) {
-            User::where('id', $id)->delete();
-        }
-
-        return response()->json($this->paginatedQuery($request));
-    }
-
-    /**
      * Restore a resource.
      *
      * @param Illuminate\Http\Request $request
-     * @param string $userId
+     * @param string $id
      *
      * @return Illuminate\Http\JsonResponse
      */
-    public function restore(Request $request, $userId)
+    public function restore(Request $request, $id)
     {
-        $user = User::withTrashed()->where('id', $userId)->first();
+        $user = User::withTrashed()->where('id', $id)->first();
         $user->deleted_at = null;
         $user->update();
-
-        return response()->json($this->paginatedQuery($request));
-    }
-
-    /**
-     * Restore multiple resources.
-     *
-     * @param Illuminate\Http\Request $request
-     * @param string $idCollectionString
-     *
-     * @return Illuminate\Http\JsonResponse
-     */
-    public function restoreMultiple(Request $request, string $idCollectionString)
-    {
-        $idCollection = explode(',', $idCollectionString);
-
-        foreach ($idCollection as $id) {
-            User::withTrashed()->where('id', $id)->update([
-                'deleted_at' => null
-            ]);
-        }
 
         return response()->json($this->paginatedQuery($request));
     }
@@ -162,10 +122,6 @@ class UsersController extends Controller
             $request->input('sortType') ?? 'ASC'
         );
 
-        if ($id = $request->input('id')) {
-            $this->filter($users, 'id', $id);
-        }
-
         if ($type = $request->input('type')) {
             $this->filter($users, 'type', $type);
         }
@@ -176,10 +132,6 @@ class UsersController extends Controller
 
         if ($email = $request->input('email')) {
             $this->filter($users, 'email', $email);
-        }
-
-        if ($last_signin = $request->input('last_signin')) {
-            $this->filter($users, 'last_signin', $last_signin);
         }
 
         return $users->paginate($request->input('perPage') ?? 10);

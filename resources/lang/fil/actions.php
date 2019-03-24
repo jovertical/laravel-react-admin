@@ -15,4 +15,5 @@ return [
     'cancel' => 'I-cancel',
     'continue' => 'Ituloy',
     'retry' => 'Ulitin',
+    'undo' => 'I-balik',
 ];

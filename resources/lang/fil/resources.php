@@ -18,4 +18,9 @@ return [
 
     'delete_confirmation_title' => 'Ikaw ay nagbubura ng isang :name',
     'delete_confirmation_body' => "Kung maituloy, ang :name ay di na mare-recover pa.",
+
+    'deleted' => 'Ang :name ay burado na!',
+    'not_deleted' => 'Ang :name ay hindi nabura!',
+    'restored' => 'Ang :name ay naibalik!',
+    'not_restored' => 'Ang :name ay hindi naibalik!',
 ];

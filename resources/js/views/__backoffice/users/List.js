@@ -19,7 +19,6 @@ class List extends Component {
         },
         filters: {},
         selectedResources: [],
-        activeResourceId: 0,
         message: {},
         alert: {},
     };
@@ -34,7 +33,6 @@ class List extends Component {
      */
     handleDeleteClick = resourceId => {
         this.setState({
-            activeResourceId: resourceId,
             alert: {
                 type: 'confirmation',
                 title: Lang.get('resources.delete_confirmation_title', {
@@ -195,6 +193,48 @@ class List extends Component {
     }
 
     /**
+     * This should send an API request to restore a deleted resource.
+     *
+     * @param {string} resourceId
+     *
+     * @return {undefined}
+     */
+    restoreUser = async resourceId => {
+        this.setState({ loading: true });
+
+        try {
+            const pagination = await User.restore(resourceId);
+
+            this.setState({
+                loading: false,
+                pagination,
+                alert: {},
+                message: {
+                    type: 'success',
+                    body: Lang.get('resources.restored', {
+                        name: 'User',
+                    }),
+                    closed: () => this.setState({ message: {} }),
+                },
+            });
+        } catch (error) {
+            this.setState({
+                loading: false,
+                alert: {},
+                message: {
+                    type: 'error',
+                    body: Lang.get('resources.not_restored', {
+                        name: 'User',
+                    }),
+                    closed: () => this.setState({ message: {} }),
+                    actionText: Lang.get('actions.retry'),
+                    action: async () => await this.restoreUser(resourceId),
+                },
+            });
+        }
+    };
+
+    /**
      * This should send an API request to delete a resource.
      *
      * @param {string} resourceId
@@ -213,23 +253,26 @@ class List extends Component {
                 alert: {},
                 message: {
                     type: 'success',
-                    body: 'User successfully deleted!',
+                    body: Lang.get('resources.deleted', {
+                        name: 'User',
+                    }),
                     closed: () => this.setState({ message: {} }),
                     actionText: Lang.get('actions.undo'),
-                    action: () => alert('Recovering...'),
+                    action: async () => this.restoreUser(resourceId),
                 },
             });
         } catch (error) {
-            const { activeResourceId } = this.state;
-
             this.setState({
                 loading: false,
+                alert: {},
                 message: {
                     type: 'error',
-                    body: 'Error deleting user!',
+                    body: Lang.get('resources.not_deleted', {
+                        name: 'User',
+                    }),
                     closed: () => this.setState({ message: {} }),
                     actionText: Lang.get('actions.retry'),
-                    action: async () => await this.deleteUser(activeResourceId),
+                    action: async () => await this.deleteUser(resourceId),
                 },
             });
         }

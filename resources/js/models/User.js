@@ -23,12 +23,29 @@ export default class User {
     /**
      * Delete a user
      *
-     * @param {number}
+     * @param {number} id
      *
      * @return {object}
      */
     static async delete(id) {
         const response = await axios.delete(`/api/users/${id}`);
+
+        if (response.status !== 200) {
+            return;
+        }
+
+        return response.data;
+    }
+
+    /**
+     * Restore a user
+     *
+     * @param {number} id
+     *
+     * @return {object}
+     */
+    static async restore(id) {
+        const response = await axios.patch(`/api/users/${id}/restore`);
 
         if (response.status !== 200) {
             return;

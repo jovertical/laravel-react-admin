@@ -31,9 +31,5 @@ Route::namespace('Api')->name('api.')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
         Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
-        Route::delete('users/{idCollectionString}/multiple', 'UsersController@destroyMultiple')
-            ->name('users.destroy-multiple');
-        Route::patch('users/{idCollectionString}/restore/multiple', 'UsersController@restoreMultiple')
-            ->name('users.restore-multiple');
     });
 });
