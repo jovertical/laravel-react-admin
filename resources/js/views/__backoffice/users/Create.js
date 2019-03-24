@@ -512,7 +512,6 @@ const styles = theme => ({
     },
 
     pageContent: {
-        minWidth: 500,
         padding: theme.spacing.unit * 3,
     },
 

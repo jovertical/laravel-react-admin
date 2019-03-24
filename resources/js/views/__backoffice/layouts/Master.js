@@ -60,7 +60,7 @@ class Master extends Component {
      * @return {undefined}
      */
     setGlobalMessage = () => {
-        const { location } = this.props;
+        const { history, location } = this.props;
 
         const queryParams = UrlUtils._queryParams(location.search);
         const messageKeys = Object.keys(queryParams).filter(
@@ -73,7 +73,11 @@ class Master extends Component {
             message[key.match(/\[(.*)\]/).pop()] = queryParams[key];
         });
 
-        message.closed = () => this.setState({ message: {} });
+        message.closed = () => {
+            this.setState({ message: {} });
+
+            history.push(location.pathname);
+        };
 
         this.setState({ message });
     };
@@ -178,11 +182,9 @@ class Master extends Component {
                     <Snackbar {...globalMessage} />
                 )}
 
-                {!globalMessage &&
-                    message &&
-                    message.hasOwnProperty('type') > 0 && (
-                        <Snackbar {...message} />
-                    )}
+                {message && message.hasOwnProperty('type') > 0 && (
+                    <Snackbar {...message} />
+                )}
 
                 {alert && alert.hasOwnProperty('type') > 0 && (
                     <Modal {...alert} />
@@ -232,9 +234,12 @@ const styles = theme => ({
 
     content: {
         flex: 1,
-        padding: theme.spacing.unit * 4,
+        padding: theme.spacing.unit,
         marginBottom: '5rem',
         backgroundColor: theme.palette.grey['200'],
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing.unit * 4,
+        },
     },
 
     loadingContainer: {
