@@ -1,3 +1,9 @@
+public/assets.json
+public/service-worker.js
+public/fonts/*
+public/img/*
+public/css/*
+public/js/*
 .php_cs.cache
 dump.sql
 nginx.conf
