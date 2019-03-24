@@ -15,6 +15,11 @@ class Home extends Component {
                 name: 'Overview',
                 active: true,
             },
+
+            {
+                name: 'Monthly',
+                active: false,
+            },
         ];
 
         return (

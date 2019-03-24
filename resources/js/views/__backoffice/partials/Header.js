@@ -7,6 +7,7 @@ import {
     Badge,
     Button,
     ClickAwayListener,
+    colors,
     Divider,
     Grid,
     Grow,
@@ -36,8 +37,8 @@ import {
     Settings as SettingsIcon,
 } from '@material-ui/icons';
 
-import { Ph as PhIcon } from '../../../icons/flags/4x3/Ph';
-import { Us as UsIcon } from '../../../icons/flags/4x3/Us';
+import { Ph as PhIcon, Us as UsIcon } from '../../../icons/flags/4x3';
+import { Skeleton } from '../../../ui';
 
 const LocaleMenu = props => {
     const { classes, parentProps } = props;
@@ -229,12 +230,158 @@ const Header = props => {
         tabs,
         localeMenuOpen,
         accountMenuOpen,
-        mobileOpen,
     } = parentProps;
 
-    const { user } = pageProps;
+    const { user, navigating } = pageProps;
 
-    return (
+    const skeletonProps = {
+        color: colors.grey[400],
+        highlightColor: colors.grey[200],
+    };
+
+    const renderNavigating = (
+        <>
+            <AppBar
+                color="primary"
+                position="sticky"
+                elevation={0}
+                className={classes.primaryBar}
+            >
+                <Toolbar>
+                    <Grid container spacing={8} alignItems="center">
+                        <Hidden smUp>
+                            <Grid item>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="Open drawer"
+                                    className={classes.menuButton}
+                                >
+                                    <Skeleton
+                                        {...skeletonProps}
+                                        height={25}
+                                        width={25}
+                                    />
+                                </IconButton>
+                            </Grid>
+                        </Hidden>
+
+                        <Grid item xs />
+
+                        <Grid item>
+                            <Skeleton
+                                {...skeletonProps}
+                                height={20}
+                                width={70}
+                                className={classes.link}
+                            />
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={30}
+                                    width={30}
+                                />
+                            </IconButton>
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={30}
+                                    width={30}
+                                />
+                            </IconButton>
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={30}
+                                    width={30}
+                                />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
+
+            <AppBar
+                component="div"
+                className={classes.secondaryBar}
+                color="primary"
+                position="static"
+                elevation={0}
+            >
+                <Toolbar>
+                    <Grid container alignItems="center" spacing={8}>
+                        <Grid item xs>
+                            <Skeleton
+                                height={30}
+                                width={100 + pageTitle.length * 2}
+                                {...skeletonProps}
+                                className={classes.button}
+                            />
+                        </Grid>
+
+                        {primaryAction && (
+                            <Grid item>
+                                <Skeleton
+                                    {...skeletonProps}
+                                    height={30}
+                                    width={50 + primaryAction.text.length * 2}
+                                    className={classes.button}
+                                />
+                            </Grid>
+                        )}
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={25}
+                                    width={25}
+                                />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
+
+            <AppBar
+                component="div"
+                className={classes.secondaryBar}
+                color="primary"
+                position="static"
+                elevation={0}
+            >
+                <Tabs value={0} textColor="inherit">
+                    {tabs.map((tab, key) => (
+                        <Tab
+                            key={key}
+                            textColor="inherit"
+                            label={
+                                <Skeleton
+                                    {...skeletonProps}
+                                    height={20}
+                                    width={30 + tab.name.length * 2}
+                                />
+                            }
+                        />
+                    ))}
+                </Tabs>
+            </AppBar>
+        </>
+    );
+
+    const renderNavigated = (
         <>
             <AppBar
                 color="primary"
@@ -400,6 +547,8 @@ const Header = props => {
             </AppBar>
         </>
     );
+
+    return <>{navigating ? renderNavigating : renderNavigated}</>;
 };
 
 Header.propTypes = {

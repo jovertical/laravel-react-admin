@@ -309,6 +309,7 @@ class List extends Component {
                         type: sortType ? sortType : prevState.sorting.type,
                     },
                     filters: filters ? filters : prevState.filters,
+                    message: {},
                 };
             });
         } catch (error) {

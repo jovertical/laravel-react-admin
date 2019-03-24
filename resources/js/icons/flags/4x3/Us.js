@@ -1,7 +1,7 @@
 import React from 'react';
 import { SvgIcon } from '@material-ui/core';
 
-export const Us = props => (
+const Us = props => (
     <SvgIcon
         {...props}
         xmlns="http://www.w3.org/2000/svg"
@@ -34,3 +34,5 @@ export const Us = props => (
         </g>
     </SvgIcon>
 );
+
+export default Us;
