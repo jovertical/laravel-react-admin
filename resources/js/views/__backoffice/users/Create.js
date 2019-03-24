@@ -5,7 +5,7 @@ import { Master as MasterLayout } from '../layouts';
 class Create extends Component {
     render() {
         return (
-            <MasterLayout {...this.props} pageTitle="Create a user">
+            <MasterLayout {...this.props} pageTitle="Create a user" tabs={[]}>
                 Create...
             </MasterLayout>
         );

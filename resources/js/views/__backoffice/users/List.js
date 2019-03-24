@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 
-import { IconButton, Tooltip } from '@material-ui/core';
+import {
+    Avatar,
+    Grid,
+    IconButton,
+    Tooltip,
+    withStyles,
+} from '@material-ui/core';
 
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
+import * as RandomUtils from '../../../utils/Random';
+import * as NavigationUtils from '../../../utils/Navigation';
 import * as UrlUtils from '../../../utils/URL';
 import { Table } from '../../../ui';
 import { Master as MasterLayout } from '../layouts';
@@ -366,14 +374,15 @@ class List extends Component {
             current_page: page,
         } = pagination;
 
-        const { pageProps } = this.props;
+        const { pageProps, history } = this.props;
         const { user: authUser } = pageProps;
 
         const primaryAction = {
             text: Lang.get('resources.create', {
                 name: 'User',
             }),
-            clicked: () => alert('As you wish...'),
+            clicked: () =>
+                history.push(NavigationUtils._route('backoffice.users.create')),
         };
 
         const tabs = [
@@ -400,7 +409,29 @@ class List extends Component {
             rawData.map(user => {
                 return {
                     type: user.type,
-                    name: user.name,
+                    name: (
+                        <Grid container direction="row" alignItems="center">
+                            <Grid item style={{ marginRight: 10 }}>
+                                <Avatar
+                                    style={{
+                                        fontSize: 17,
+                                        backgroundColor: RandomUtils._color(
+                                            user.firstname.length -
+                                                user.created_at.charAt(
+                                                    user.created_at.length - 2,
+                                                ),
+                                        ),
+                                    }}
+                                >
+                                    {`${user.firstname.charAt(
+                                        0,
+                                    )}${user.lastname.charAt(0)}`}
+                                </Avatar>
+                            </Grid>
+
+                            <Grid item>{user.name}</Grid>
+                        </Grid>
+                    ),
                     email: user.email,
                     actions: (
                         <div style={{ width: '5rem' }}>
@@ -409,7 +440,18 @@ class List extends Component {
                                     name: 'User',
                                 })}
                             >
-                                <IconButton>
+                                <IconButton
+                                    onClick={() =>
+                                        history.push(
+                                            NavigationUtils._route(
+                                                'backoffice.users.edit',
+                                                {
+                                                    id: user.id,
+                                                },
+                                            ),
+                                        )
+                                    }
+                                >
                                     <EditIcon />
                                 </IconButton>
                             </Tooltip>

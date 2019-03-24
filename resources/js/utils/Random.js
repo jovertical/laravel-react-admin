@@ -1,6 +1,8 @@
 /**
- * ? Get color from list.
+ * Get color from list.
+ *
  * @param {int} key
+ *
  * @return {string}
  */
 export const _color = key => {
