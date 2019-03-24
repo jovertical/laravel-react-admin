@@ -35,17 +35,31 @@ class UsersController extends Controller
             'type' => 'required|in:superuser,user',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users'
+
+            'gender' => 'nullable|in:female,male',
+            'birthdate' =>
+                'nullable|date:Y-m-d|before:'.now()->subYear(10)->format('Y-m-d'),
+            'address' => 'nullable|string|max:510',
+
+            'email' => 'required|email|unique:users',
+            'username' => 'nullable|unique:users'
         ]);
 
-        $user = new User;
-        $user->type = $request->input('type');
-        $user->firstname = ($firstname = $request->input('firstname'));
-        $user->lastname = ($lastname = $request->input('lastname'));
+        $user = User::create([
+            'type' => $request->input('type'),
+            'firstname' => ($firstname = $request->input('firstname')),
+            'middlename' => ($middlename = $request->input('middlename')),
+            'lastname' => ($lastname = $request->input('lastname')),
 
-        $user->name = "{$firstname} {$lastname}";
-        $user->email = $request->input('email');
-        $user->save();
+            'gender' => $request->input('gender'),
+            'birthdate' => $request->input('birthdate'),
+            'address' => $request->input('address'),
+
+            'name' => "{$firstname} {$middlename} {$lastname}",
+
+            'email' => $request->input('email'),
+            'username' => $request->input('username'),
+        ]);
 
         return response()->json($user, 201);
     }

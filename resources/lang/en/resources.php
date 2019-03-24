@@ -21,6 +21,10 @@ return [
 
     'fetched' => 'Fetched :total :names.',
     'not_fetched' => 'Error fetching :names!',
+    'created' => ':name sucessfully created!',
+    'not_created' => 'Error creating :name!',
+    'updated' => ':name sucessfully updated!',
+    'not_updated' => 'Error updating :name!',
     'deleted' => ':name successfully deleted!',
     'not_deleted' => 'Error deleting :name!',
     'restored' => ':name successfully restored!',

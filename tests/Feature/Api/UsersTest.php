@@ -21,8 +21,15 @@ class UsersTest extends BaseTest
         $attributes = [
             'type' => $this->faker->randomElements(['superuser', 'user'])[0],
             'firstname' => $this->faker->firstName,
+            'middlename' => $this->faker->lastName,
             'lastname' => $this->faker->lastName,
+
+            'gender' => $this->faker->randomElements(['female', 'male'])[0],
+            'birthdate' => now()->subYears(mt_rand(10, 50))->format('Y-m-d'),
+            'address' => $this->faker->address,
+
             'email' => $this->faker->email,
+            'username' => $this->faker->userName,
         ];
 
         $payload = array_merge($this->getDefaultPayload(), []);

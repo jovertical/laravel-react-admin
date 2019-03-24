@@ -4,9 +4,9 @@ import * as UrlUtils from '../utils/URL';
 /**
  * Find the route by its name.
  *
+ * @param {string} name
  * @param {object} segmentParams
  * @param {object} queryParams
- * @param {string} name
  */
 export function _route(name, segmentParams = {}, queryParams = {}) {
     const i = ROUTES.findIndex(route => route.name === name);

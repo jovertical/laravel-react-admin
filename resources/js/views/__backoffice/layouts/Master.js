@@ -10,6 +10,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+import * as UrlUtils from '../../../utils/URL';
 import { Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
 import { Header, Sidebar } from '../partials';
@@ -21,6 +22,7 @@ class Master extends Component {
         localeMenuEl: null,
         accountMenuOpen: false,
         accountMenuEl: null,
+        message: {},
     };
 
     /**
@@ -50,6 +52,36 @@ class Master extends Component {
         this.setState(prevState => ({ mobileOpen: !prevState.mobileOpen }));
     };
 
+    /**
+     * This will setup a global message into the state coming from the URL
+     * passed message parameters. Useful when attempting to notify actions after
+     * a redirect by React's router.
+     *
+     * @return {undefined}
+     */
+    setGlobalMessage = () => {
+        const { location } = this.props;
+
+        const queryParams = UrlUtils._queryParams(location.search);
+        const messageKeys = Object.keys(queryParams).filter(
+            key => key.indexOf('_message') > -1,
+        );
+
+        const message = {};
+
+        messageKeys.forEach(key => {
+            message[key.match(/\[(.*)\]/).pop()] = queryParams[key];
+        });
+
+        message.closed = () => this.setState({ message: {} });
+
+        this.setState({ message });
+    };
+
+    componentDidMount() {
+        this.setGlobalMessage();
+    }
+
     render() {
         const {
             classes,
@@ -63,7 +95,7 @@ class Master extends Component {
         } = this.props;
         const { navigating } = pageProps;
 
-        const { mobileOpen } = this.state;
+        const { mobileOpen, message: globalMessage } = this.state;
 
         const renderLoading = (
             <Grid
@@ -142,9 +174,15 @@ class Master extends Component {
                     </div>
                 </div>
 
-                {message && message.hasOwnProperty('type') > 0 && (
-                    <Snackbar {...message} />
+                {globalMessage && globalMessage.hasOwnProperty('type') > 0 && (
+                    <Snackbar {...globalMessage} />
                 )}
+
+                {!globalMessage &&
+                    message &&
+                    message.hasOwnProperty('type') > 0 && (
+                        <Snackbar {...message} />
+                    )}
 
                 {alert && alert.hasOwnProperty('type') > 0 && (
                     <Modal {...alert} />

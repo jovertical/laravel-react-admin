@@ -21,6 +21,10 @@ return [
 
     'fetched' => 'Nakakuha ng :total :name.',
     'not_fetched' => 'Error sa pagkuha ng mga :name!',
+    'created' => 'Ang :name ay matagumpay na nagawa!',
+    'not_created' => 'Ang :name ay hindi nagawa!',
+    'updated' => 'Ang :name ay matagumpay na na-updated!',
+    'not_updated' => 'Ang :name ay hindi ma-updated!',
     'deleted' => 'Ang :name ay burado na!',
     'not_deleted' => 'Ang :name ay hindi nabura!',
     'restored' => 'Ang :name ay naibalik!',

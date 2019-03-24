@@ -346,7 +346,7 @@ class List extends Component {
         const queryParamValues = Object.values(queryParams);
 
         Object.keys(queryParams).forEach((param, key) => {
-            if (param.search(/\[*]/) > -1) {
+            if (param.search(/\[*]/) > -1 && param.indexOf('_') < 0) {
                 filters[param] = queryParamValues[key];
             }
         });
