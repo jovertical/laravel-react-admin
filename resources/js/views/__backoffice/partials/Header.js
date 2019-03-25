@@ -514,9 +514,11 @@ const Header = props => {
                                         color="inherit"
                                     >
                                         <Avatar className={classes.avatar}>
-                                            {`${user.firstname.charAt(
-                                                0,
-                                            )}${user.lastname.charAt(0)}`}
+                                            <Typography>
+                                                {`${user.firstname.charAt(
+                                                    0,
+                                                )}${user.lastname.charAt(0)}`}
+                                            </Typography>
                                         </Avatar>
                                     </IconButton>
 

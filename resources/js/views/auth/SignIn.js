@@ -208,6 +208,7 @@ class SignIn extends Component {
 
         return (
             <AuthLayout
+                {...this.props}
                 title={
                     identified
                         ? Lang.get('navigation.signin_identified_title')

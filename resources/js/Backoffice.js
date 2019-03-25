@@ -4,7 +4,7 @@ import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
 import { Navigator } from './core';
 import { ROUTES } from './config';
-import { backofficeTheme as theme } from './themes';
+import { dark as darkTheme, light as lightTheme } from './themes/backoffice';
 import { Loading } from './views';
 
 class Backoffice extends Component {
@@ -200,14 +200,18 @@ class Backoffice extends Component {
 
     render() {
         const { width } = this.props;
-        const { loading } = this.state;
+        const { loading, nightMode } = this.state;
 
         return (
-            <MuiThemeProvider theme={theme}>
+            <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
                 <CssBaseline />
 
                 {loading ? (
-                    <Loading />
+                    <Loading
+                        pageProps={{
+                            ...this.state,
+                        }}
+                    />
                 ) : (
                     <Router>
                         <Navigator

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
     Chip,
+    Grid,
     Grow,
     IconButton,
     Paper,
@@ -163,7 +164,7 @@ class TableToolbar extends Component {
                         {Object.keys(filters).map((filterKey, key) => {
                             return (
                                 <div key={key} className={classes.filter}>
-                                    <small className={classes.filterName}>
+                                    <Typography className={classes.filterName}>
                                         {
                                             columns.find(
                                                 column =>
@@ -174,7 +175,7 @@ class TableToolbar extends Component {
                                                     ),
                                             ).name
                                         }
-                                    </small>
+                                    </Typography>
 
                                     <Chip
                                         icon={this.filterIcon(
@@ -231,6 +232,10 @@ export default withStyles(
         },
 
         filter: {
+            display: 'flex',
+            flexWrap: 'no-wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
             margin: theme.spacing.unit / 2,
         },
 

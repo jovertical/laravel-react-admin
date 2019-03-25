@@ -9,7 +9,8 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import logo from '../../../img/logos/short-light.svg';
+import logoLight from '../../../img/logos/short-light.svg';
+import logoDark from '../../../img/logos/short-dark.svg';
 
 const Auth = props => (
     <Grid
@@ -33,7 +34,9 @@ const Auth = props => (
                         justify="center"
                     >
                         <img
-                            src={logo}
+                            src={
+                                props.pageProps.nightMode ? logoDark : logoLight
+                            }
                             alt="company-logo"
                             className={props.classes.logo}
                         />

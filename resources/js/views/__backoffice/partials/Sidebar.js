@@ -18,12 +18,15 @@ import {
     People as PeopleIcon,
 } from '@material-ui/icons';
 
-import { APP } from '../../../config';
 import * as NavigationUtils from '../../../utils/Navigation';
 import { Skeleton } from '../../../ui';
 
+import brandLogoLight from '../../../../img/logos/full-light.svg';
+import brandLogoDark from '../../../../img/logos/full-dark.svg';
+
 const Sidebar = props => {
     const { classes, locationPathname, pageProps, navigate, ...other } = props;
+    const { nightMode } = pageProps;
 
     const homeLink = {
         name: Lang.get('navigation.dashboard'),
@@ -48,10 +51,10 @@ const Sidebar = props => {
         <div>
             <div
                 className={classNames(
-                    classes.title,
+                    classes.brand,
                     classes.link,
                     classes.linkGroup,
-                    classes.titleLoading,
+                    classes.brandLoading,
                 )}
             >
                 <Skeleton
@@ -142,12 +145,16 @@ const Sidebar = props => {
         <List disablePadding>
             <ListItem
                 className={classNames(
-                    classes.title,
+                    classes.brand,
                     classes.link,
                     classes.linkGroup,
                 )}
             >
-                {APP.name}
+                <img
+                    src={nightMode ? brandLogoDark : brandLogoLight}
+                    alt="company-logo"
+                    className={classes.brandLogo}
+                />
             </ListItem>
 
             <ListItem
@@ -251,8 +258,12 @@ const styles = theme => ({
         paddingBottom: 16,
     },
 
-    titleLoading: {
+    brandLoading: {
         padding: '1rem 0.75rem',
+    },
+
+    brandLogo: {
+        width: 230,
     },
 
     linkLoading: {
@@ -269,7 +280,7 @@ const styles = theme => ({
         marginTop: theme.spacing.unit / 2,
     },
 
-    title: {
+    brand: {
         fontSize: 24,
         fontFamily: theme.typography.fontFamily,
         color: theme.palette.common.white,

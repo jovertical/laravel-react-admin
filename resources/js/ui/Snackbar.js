@@ -8,6 +8,7 @@ import {
     IconButton,
     Snackbar as MuiSnackbar,
     SnackbarContent,
+    Typography,
     withStyles,
 } from '@material-ui/core';
 
@@ -44,7 +45,7 @@ const Snackbar = props => {
     if (action && actionText) {
         primaryAction = (
             <Button key="undo" color="inherit" size="small" onClick={action}>
-                {actionText}
+                <Typography>{actionText}</Typography>
             </Button>
         );
     }
@@ -86,7 +87,8 @@ const Snackbar = props => {
                                 classes.iconVariant,
                             )}
                         />
-                        {body}
+
+                        <Typography>{body}</Typography>
                     </span>
                 }
                 action={actions.reverse()}
@@ -94,6 +96,14 @@ const Snackbar = props => {
             />
         </MuiSnackbar>
     );
+};
+
+Snackbar.propTypes = {
+    type: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+    body: PropTypes.string.isRequired,
+    closed: PropTypes.func.isRequired,
+    actionText: PropTypes.string,
+    action: PropTypes.func,
 };
 
 const styles = theme => ({
@@ -115,6 +125,7 @@ const styles = theme => ({
 
     icon: {
         fontSize: 20,
+        color: theme.palette.common['white'],
     },
 
     iconVariant: {
@@ -127,13 +138,5 @@ const styles = theme => ({
         alignItems: 'center',
     },
 });
-
-Snackbar.propTypes = {
-    type: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
-    body: PropTypes.string.isRequired,
-    closed: PropTypes.func.isRequired,
-    actionText: PropTypes.string,
-    action: PropTypes.func,
-};
 
 export default withStyles(styles)(Snackbar);

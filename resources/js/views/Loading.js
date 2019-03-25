@@ -1,7 +1,8 @@
 import React from 'react';
 import { withStyles, Grid, CircularProgress } from '@material-ui/core';
 
-import logo from '../../img/logos/short-light.svg';
+import darkLogo from '../../img/logos/short-dark.svg';
+import lightLogo from '../../img/logos/short-light.svg';
 
 const Loading = props => (
     <Grid
@@ -13,7 +14,7 @@ const Loading = props => (
         <Grid item>
             <Grid item className={props.classes.logoContainer}>
                 <img
-                    src={logo}
+                    src={props.pageProps.nightMode ? darkLogo : lightLogo}
                     alt="company-logo"
                     className={props.classes.logo}
                 />

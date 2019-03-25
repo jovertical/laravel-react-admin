@@ -5,6 +5,7 @@ import {
     Grid,
     IconButton,
     Tooltip,
+    Typography,
     withStyles,
 } from '@material-ui/core';
 
@@ -428,9 +429,11 @@ class List extends Component {
                                         ),
                                     }}
                                 >
-                                    {`${user.firstname.charAt(
-                                        0,
-                                    )}${user.lastname.charAt(0)}`}
+                                    <Typography>
+                                        {`${user.firstname.charAt(
+                                            0,
+                                        )}${user.lastname.charAt(0)}`}
+                                    </Typography>
                                 </Avatar>
                             </Grid>
 

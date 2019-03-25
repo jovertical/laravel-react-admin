@@ -101,6 +101,7 @@ class PasswordRequest extends Component {
 
         return (
             <AuthLayout
+                {...this.props}
                 title={Lang.get('navigation.password_request_title')}
                 subTitle={Lang.get('navigation.password_request_subtitle')}
                 loading={loading}
