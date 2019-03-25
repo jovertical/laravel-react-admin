@@ -23,17 +23,20 @@ return [
     'signin' => 'Mag-sign in nalang',
     'send_link' => 'I-send ang Link',
 
-    'account' => 'Account',
-    'profile' => 'Profile',
-    'settings' => 'Mga Setting',
-    'lock' => 'I-lock',
-    'signout' => 'Mag-sign out',
+    'notifications' => 'Mga Abiso',
 
     'locale' => 'Lokal',
     'english' => 'Ingles',
     'filipino' => 'Filipino',
 
-    'notifications' => 'Mga Abiso',
+    'nightmode_on' => 'I-On ang Night Mode',
+    'nightmode_off' => 'I-Off ang Night Mode',
+
+    'account' => 'Account',
+    'profile' => 'Profile',
+    'settings' => 'Mga Setting',
+    'lock' => 'I-lock',
+    'signout' => 'Mag-sign out',
 
     'help' => 'Tulong',
 

@@ -23,17 +23,20 @@ return [
     'signin' => 'Sign in instead',
     'send_link' => 'Send Link',
 
-    'account' => 'Account',
-    'profile' => 'Profile',
-    'settings' => 'Settings',
-    'lock' => 'Lock',
-    'signout' => 'Sign out',
+    'notifications' => 'Notifications',
 
     'locale' => 'Locale',
     'english' => 'English',
     'filipino' => 'Filipino',
 
-    'notifications' => 'Notifications',
+    'nightmode_on' => 'Toggle Night Mode On',
+    'nightmode_off' => 'Toggle Night Mode Off',
+
+    'account' => 'Account',
+    'profile' => 'Profile',
+    'settings' => 'Settings',
+    'lock' => 'Lock',
+    'signout' => 'Sign out',
 
     'help' => 'Help',
 

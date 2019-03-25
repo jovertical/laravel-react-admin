@@ -12,6 +12,7 @@ class Backoffice extends Component {
         loading: true,
         navigating: true,
         authenticated: false,
+        nightMode: false,
         auth: {},
         user: {},
         username: '',
@@ -81,6 +82,26 @@ class Backoffice extends Component {
     };
 
     /**
+     * Handle nightmode toggle.
+     * Store boolean value in persistent storage.
+     *
+     * @return {undefined}
+     */
+    handleNightmodeToggled = () => {
+        this.setState(prevState => {
+            return {
+                nightMode: !prevState.nightMode,
+            };
+        });
+
+        if (!this.state.nightMode) {
+            window.localStorage.setItem('nightMode', true);
+        } else {
+            window.localStorage.removeItem('nightMode');
+        }
+    };
+
+    /**
      * Sign out the user, but retain the username.
      *
      * @param {string} username
@@ -102,6 +123,19 @@ class Backoffice extends Component {
      */
     handleSignout = async () => {
         await this.signout();
+    };
+
+    /**
+     * Set nightmode based on stored value in persistent storage.
+     *
+     * @return {undefined}
+     */
+    setNightMode = () => {
+        const nightMode = window.localStorage.getItem('nightMode');
+
+        this.setState({
+            nightMode: nightMode ? true : false,
+        });
     };
 
     /**
@@ -159,6 +193,8 @@ class Backoffice extends Component {
             await this.authenticate(JSON.stringify(auth));
         }
 
+        this.setNightMode();
+
         this.setState({ loading: false, navigating: false });
     }
 
@@ -180,6 +216,8 @@ class Backoffice extends Component {
                                 width,
                                 environment: 'backoffice',
                                 routes: ROUTES,
+                                handleNightmodeToggled: this
+                                    .handleNightmodeToggled,
                                 refresh: this.refresh,
                                 authenticate: this.authenticate,
                                 handleLock: this.handleLock,

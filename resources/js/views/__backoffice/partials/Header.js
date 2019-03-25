@@ -37,6 +37,10 @@ import {
     Settings as SettingsIcon,
 } from '@material-ui/icons';
 
+import {
+    LightbulbOff as LightbulbOffIcon,
+    LightbulbOn as LightbulbOnIcon,
+} from '../../../icons/1x1';
 import { Ph as PhIcon, Us as UsIcon } from '../../../icons/flags/4x3';
 import { Skeleton } from '../../../ui';
 
@@ -232,7 +236,7 @@ const Header = props => {
         accountMenuOpen,
     } = parentProps;
 
-    const { user, navigating } = pageProps;
+    const { user, navigating, nightMode, handleNightmodeToggled } = pageProps;
 
     const skeletonProps = {
         color: colors.grey[400],
@@ -274,6 +278,17 @@ const Header = props => {
                                 width={70}
                                 className={classes.link}
                             />
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={30}
+                                    width={30}
+                                />
+                            </IconButton>
                         </Grid>
 
                         <Grid item>
@@ -459,6 +474,27 @@ const Header = props => {
 
                                     <LocaleMenu {...props} />
                                 </div>
+                            </Tooltip>
+                        </Grid>
+
+                        <Grid item>
+                            <Tooltip
+                                title={
+                                    nightMode
+                                        ? Lang.get('navigation.nightmode_off')
+                                        : Lang.get('navigation.nightmode_on')
+                                }
+                            >
+                                <IconButton
+                                    color="inherit"
+                                    onClick={handleNightmodeToggled}
+                                >
+                                    {nightMode ? (
+                                        <LightbulbOnIcon />
+                                    ) : (
+                                        <LightbulbOffIcon />
+                                    )}
+                                </IconButton>
                             </Tooltip>
                         </Grid>
 
