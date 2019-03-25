@@ -414,7 +414,7 @@ class List extends Component {
                             container
                             direction="row"
                             alignItems="center"
-                            style={{ minWidth: 150 }}
+                            wrap="nowrap"
                         >
                             <Grid item style={{ marginRight: 10 }}>
                                 <Avatar

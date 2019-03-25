@@ -322,6 +322,7 @@ const styles = theme => ({
 
     breadcrumbBar: {
         backgroundColor: theme.palette.grey['200'],
+        zIndex: 0,
     },
 
     breadcrumbWrapper: {
@@ -346,11 +347,11 @@ const styles = theme => ({
 
     content: {
         flex: 1,
-        padding: theme.spacing.unit,
-        marginBottom: '5rem',
+        padding: `0 ${theme.spacing.unit}px`,
+        marginBottom: 50,
         backgroundColor: theme.palette.grey['200'],
         [theme.breakpoints.up('sm')]: {
-            padding: theme.spacing.unit * 4,
+            padding: `${theme.spacing.unit}px ${theme.spacing.unit * 3}px`,
         },
     },
 
@@ -363,7 +364,7 @@ const styles = theme => ({
         right: 0,
         bottom: 0,
         left: 0,
-        padding: '1rem',
+        padding: theme.spacing.unit * 2,
         textAlign: 'center',
     },
 });
