@@ -41,7 +41,7 @@ class UsersController extends Controller
                 'nullable|date:Y-m-d|before:'.now()->subYear(10)->format('Y-m-d'),
             'address' => 'nullable|string|max:510',
 
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'username' => 'nullable|unique:users'
         ]);
 

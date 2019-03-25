@@ -39,6 +39,32 @@ const Snackbar = props => {
     } = props;
     const Icon = icons[type];
 
+    let primaryAction = null;
+
+    if (action && actionText) {
+        primaryAction = (
+            <Button key="undo" color="inherit" size="small" onClick={action}>
+                {actionText}
+            </Button>
+        );
+    }
+
+    let actions = [
+        <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={closed}
+        >
+            <CloseIcon className={classes.icon} />
+        </IconButton>,
+    ];
+
+    if (primaryAction) {
+        actions.push(primaryAction);
+    }
+
     return (
         <MuiSnackbar
             anchorOrigin={{
@@ -63,26 +89,7 @@ const Snackbar = props => {
                         {body}
                     </span>
                 }
-                action={[
-                    <Button
-                        key="undo"
-                        color="inherit"
-                        size="small"
-                        onClick={action}
-                    >
-                        {actionText}
-                    </Button>,
-
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={closed}
-                    >
-                        <CloseIcon className={classes.icon} />
-                    </IconButton>,
-                ]}
+                action={actions.reverse()}
                 {...other}
             />
         </MuiSnackbar>
