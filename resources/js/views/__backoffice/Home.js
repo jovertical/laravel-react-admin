@@ -28,6 +28,7 @@ class Home extends Component {
                 pageTitle={Lang.get('navigation.dashboard')}
                 primaryAction={primaryAction}
                 tabs={tabs}
+                breadcrumbs={[]}
             >
                 <Typography>There is no place like home</Typography>
             </MasterLayout>

@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
+    AppBar,
     CircularProgress,
     CssBaseline,
     Grid,
     Hidden,
     Link,
+    Typography,
     withStyles,
 } from '@material-ui/core';
 
+import { Breadcrumbs } from '@material-ui/lab';
+
+import { Home as HomeIcon } from '@material-ui/icons';
+
+import * as NavigationUtils from '../../../utils/Navigation';
+import * as StringUtils from '../../../utils/String';
 import * as UrlUtils from '../../../utils/URL';
 import { Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
@@ -101,6 +110,11 @@ class Master extends Component {
 
         const { mobileOpen, message: globalMessage } = this.state;
 
+        const segments = location.pathname
+            .split('/')
+            .splice(1)
+            .filter(segment => segment.length > 0);
+
         const renderLoading = (
             <Grid
                 container
@@ -155,6 +169,87 @@ class Master extends Component {
                             }}
                         />
 
+                        <AppBar
+                            component="div"
+                            color="inherit"
+                            position="static"
+                            elevation={0}
+                            className={classes.breadcrumbBar}
+                        >
+                            <div className={classes.breadcrumbWrapper}>
+                                <Breadcrumbs arial-label="Breadcrumb">
+                                    {segments.length > 0 ? (
+                                        <Link
+                                            color="inherit"
+                                            component={linkProps => (
+                                                <RouterLink
+                                                    {...linkProps}
+                                                    to={NavigationUtils._route(
+                                                        'backoffice.home',
+                                                    )}
+                                                />
+                                            )}
+                                            className={classes.breadcrumbItem}
+                                        >
+                                            <HomeIcon
+                                                className={
+                                                    classes.breadcrumbItemIcon
+                                                }
+                                            />
+                                        </Link>
+                                    ) : (
+                                        <HomeIcon
+                                            className={
+                                                classes.breadcrumbItemIcon
+                                            }
+                                        />
+                                    )}
+
+                                    {segments.map((segment, key) => {
+                                        if (key + 1 === segments.length) {
+                                            return (
+                                                <Typography
+                                                    key={key}
+                                                    className={
+                                                        classes.breadcrumbItem
+                                                    }
+                                                >
+                                                    {StringUtils._uppercaseFirst(
+                                                        segment,
+                                                    )}
+                                                </Typography>
+                                            );
+                                        }
+
+                                        return (
+                                            <Link
+                                                key={key}
+                                                color="inherit"
+                                                component={linkProps => (
+                                                    <RouterLink
+                                                        {...linkProps}
+                                                        to={
+                                                            '/' +
+                                                            segment
+                                                                .split('/')
+                                                                .join('.')
+                                                        }
+                                                    />
+                                                )}
+                                                className={
+                                                    classes.breadcrumbItem
+                                                }
+                                            >
+                                                {StringUtils._uppercaseFirst(
+                                                    segment,
+                                                )}
+                                            </Link>
+                                        );
+                                    })}
+                                </Breadcrumbs>
+                            </div>
+                        </AppBar>
+
                         <main className={classes.content}>
                             {loading ? (
                                 renderLoading
@@ -198,10 +293,10 @@ Master.propTypes = {
     classes: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
-    message: PropTypes.object,
-    alert: PropTypes.object,
     primaryAction: PropTypes.object,
     tabs: PropTypes.array,
+    message: PropTypes.object,
+    alert: PropTypes.object,
 };
 
 const drawerWidth = 256;
@@ -223,6 +318,23 @@ const styles = theme => ({
             width: drawerWidth,
             flexShrink: 0,
         },
+    },
+
+    breadcrumbBar: {
+        backgroundColor: theme.palette.grey['200'],
+    },
+
+    breadcrumbWrapper: {
+        padding: theme.spacing.unit * 3,
+    },
+
+    breadcrumbItemIcon: {
+        marginRight: theme.spacing.unit / 2,
+        width: 20,
+    },
+
+    breadcrumbItem: {
+        display: 'flex',
     },
 
     contentWrapper: {

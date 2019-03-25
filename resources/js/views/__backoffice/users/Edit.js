@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import * as NavigationUtils from '../../../utils/Navigation';
 import { Master as MasterLayout } from '../layouts';
 
 class Edit extends Component {

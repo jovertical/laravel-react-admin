@@ -11,21 +11,21 @@ export default [
 
     {
         name: 'users.index',
-        path: '/r/users',
+        path: '/users',
         component: Users.List,
         auth: true,
     },
 
     {
         name: 'users.create',
-        path: '/r/users/create',
+        path: '/users/create',
         component: Users.Create,
         auth: true,
     },
 
     {
         name: 'users.edit',
-        path: '/r/users/:id/edit',
+        path: '/users/:id/edit',
         component: Users.Edit,
         auth: true,
     },
