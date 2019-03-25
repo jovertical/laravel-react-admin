@@ -352,8 +352,9 @@ const styles = theme => ({
     content: {
         flex: 1,
         padding: `0 ${theme.spacing.unit}px`,
-        marginBottom: 50,
+        marginBottom: 75,
         [theme.breakpoints.up('sm')]: {
+            marginBottom: 50,
             padding: `${theme.spacing.unit}px ${theme.spacing.unit * 3}px`,
         },
     },
