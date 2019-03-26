@@ -183,7 +183,9 @@ class Backoffice extends Component {
                     user: response.data,
                 });
             }
-        } catch (error) {}
+        } catch (error) {
+            //
+        }
     };
 
     async componentDidMount() {

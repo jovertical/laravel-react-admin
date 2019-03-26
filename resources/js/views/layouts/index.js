@@ -1,2 +1,4 @@
+import loadable from '@loadable/component';
+
 export { default as Auth } from './Auth';
-export { default as Error } from './Error';
+export const Error = loadable(() => import('./Error'));

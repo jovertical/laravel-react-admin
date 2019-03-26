@@ -1,1 +1,3 @@
-export { default as Master } from './Master';
+import loadable from '@loadable/component';
+
+export const Master = loadable(() => import('./Master'));

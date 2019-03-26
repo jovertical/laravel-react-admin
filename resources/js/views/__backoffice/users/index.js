@@ -1,3 +1,5 @@
-export { default as List } from './List';
-export { default as Create } from './Create';
-export { default as Edit } from './Edit';
+import loadable from '@loadable/component';
+
+export const List = loadable(() => import('./List'));
+export const Create = loadable(() => import('./Create'));
+export const Edit = loadable(() => import('./Edit'));

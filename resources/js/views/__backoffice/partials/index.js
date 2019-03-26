@@ -1,2 +1,4 @@
-export { default as Header } from './Header';
-export { default as Sidebar } from './Sidebar';
+import loadable from '@loadable/component';
+
+export const Header = loadable(() => import('./Header'));
+export const Sidebar = loadable(() => import('./Sidebar'));

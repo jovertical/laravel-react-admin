@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+const moment = () => import('moment');
 import Lang from 'lang.js';
 
 import { LOCALE } from './config';
