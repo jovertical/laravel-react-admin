@@ -1,6 +1,12 @@
-export { default as Modal } from './Modal';
-export { default as Skeleton } from './Skeleton';
-export { default as Snackbar } from './Snackbar';
-export { default as Table } from './Table';
-export { default as TablePaginationActions } from './TablePaginationActions';
-export { default as TableToolbar } from './TableToolbar/TableToolbar';
+import loadable from '@loadable/component';
+
+export const Modal = loadable(() => import('./Modal'));
+export const Skeleton = loadable(() => import('./Skeleton'));
+export const Snackbar = loadable(() => import('./Snackbar'));
+export const Table = loadable(() => import('./Table'));
+export const TablePaginationActions = loadable(() =>
+    import('./TablePaginationActions'),
+);
+export const TableToolbar = loadable(() =>
+    import('./TableToolbar/TableToolbar'),
+);
