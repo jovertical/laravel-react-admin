@@ -13,7 +13,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 module.exports = env => {
     // Globals
     const inProduction = env.NODE_ENV === 'production';
-    const PUBLIC_DIR = path.resolve(__dirname, './public');
+    const PUBLIC_DIR = '/';
     const SRC_DIR = path.resolve(__dirname, './resources/js');
     const DIST_DIR = path.resolve(__dirname, './public');
 
@@ -133,6 +133,7 @@ module.exports = env => {
             path: DIST_DIR,
             publicPath: PUBLIC_DIR,
             filename: 'js/[name].bundle.[contenthash].js',
+            chunkFilename: 'js/[name].bundle.[contenthash].js',
         },
 
         optimization: {
