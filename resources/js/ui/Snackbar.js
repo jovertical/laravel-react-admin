@@ -45,7 +45,7 @@ const Snackbar = props => {
     if (action && actionText) {
         primaryAction = (
             <Button key="undo" color="inherit" size="small" onClick={action}>
-                <Typography>{actionText}</Typography>
+                <Typography color="inherit">{actionText}</Typography>
             </Button>
         );
     }
@@ -88,7 +88,7 @@ const Snackbar = props => {
                             )}
                         />
 
-                        <Typography>{body}</Typography>
+                        <Typography color="inherit">{body}</Typography>
                     </span>
                 }
                 action={actions.reverse()}

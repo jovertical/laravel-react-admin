@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
@@ -204,32 +204,38 @@ class Backoffice extends Component {
         const { width } = this.props;
         const { loading, nightMode } = this.state;
 
+        const renderLoading = (
+            <Loading
+                pageProps={{
+                    ...this.state,
+                }}
+            />
+        );
+
         return (
             <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
                 <CssBaseline />
 
                 {loading ? (
-                    <Loading
-                        pageProps={{
-                            ...this.state,
-                        }}
-                    />
+                    renderLoading
                 ) : (
                     <Router>
-                        <Navigator
-                            pageProps={{
-                                ...this.state,
-                                width,
-                                environment: 'backoffice',
-                                routes: ROUTES,
-                                handleNightmodeToggled: this
-                                    .handleNightmodeToggled,
-                                refresh: this.refresh,
-                                authenticate: this.authenticate,
-                                handleLock: this.handleLock,
-                                handleSignout: this.handleSignout,
-                            }}
-                        />
+                        <Suspense fallback={renderLoading}>
+                            <Navigator
+                                pageProps={{
+                                    ...this.state,
+                                    width,
+                                    environment: 'backoffice',
+                                    routes: ROUTES,
+                                    handleNightmodeToggled: this
+                                        .handleNightmodeToggled,
+                                    refresh: this.refresh,
+                                    authenticate: this.authenticate,
+                                    handleLock: this.handleLock,
+                                    handleSignout: this.handleSignout,
+                                }}
+                            />
+                        </Suspense>
                     </Router>
                 )}
             </MuiThemeProvider>

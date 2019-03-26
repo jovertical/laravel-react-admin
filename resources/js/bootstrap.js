@@ -1,5 +1,5 @@
 import axios from 'axios';
-const moment = () => import('moment');
+import moment from 'moment';
 import Lang from 'lang.js';
 
 import { LOCALE } from './config';
@@ -23,7 +23,6 @@ if (token) {
 
 /**
  * Here, we will initialize our localization for the first time.
- *
  */
 window.Lang = new Lang({ messages: LOCALE });
 

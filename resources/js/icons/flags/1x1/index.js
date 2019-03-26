@@ -1,2 +1,4 @@
-export { default as Ph } from './Ph';
-export { default as Us } from './Us';
+import loadable from '@loadable/component';
+
+export const Ph = loadable(() => import('./Ph'));
+export const Us = loadable(() => import('./Us'));

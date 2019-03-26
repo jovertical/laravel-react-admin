@@ -1,2 +1,4 @@
-export { default as LightbulbOff } from './LightbulbOff';
-export { default as LightbulbOn } from './LightbulbOn';
+import loadable from '@loadable/component';
+
+export const LightbulbOff = loadable(() => import('./LightbulbOff'));
+export const LightbulbOn = loadable(() => import('./LightbulbOn'));
