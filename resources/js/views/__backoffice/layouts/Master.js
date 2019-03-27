@@ -256,7 +256,7 @@ class Master extends Component {
                         </AppBar>
 
                         <main className={classes.content}>
-                            {loading ? (
+                            {loading || navigating ? (
                                 renderLoading
                             ) : (
                                 <Grid container>{children}</Grid>

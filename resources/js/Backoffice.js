@@ -13,7 +13,7 @@ class Backoffice extends Component {
         navigating: true,
         authenticated: false,
         nightMode: false,
-        auth: {},
+        token: {},
         user: {},
         username: '',
     };
@@ -28,10 +28,22 @@ class Backoffice extends Component {
 
         try {
             const response = await axios.post('/api/auth/refresh');
+            const token = response.data;
 
-            await this.authenticate(JSON.stringify(response.data));
+            this.setToken(token);
 
-            this.setState({ navigating: false });
+            this.setState(prevState => {
+                return {
+                    navigating: false,
+                    token,
+
+                    // Update the user's auth_token after refreshing it in the API
+                    user: {
+                        ...prevState.user,
+                        auth_token: token.auth_token,
+                    },
+                };
+            });
         } catch (error) {}
     };
 
@@ -42,19 +54,14 @@ class Backoffice extends Component {
      *
      * @return {undefined}
      */
-    authenticate = async (tokenString = null) => {
-        const auth = JSON.parse(tokenString);
+    authenticate = async tokenString => {
+        const token = JSON.parse(tokenString);
 
-        // We will set a default Authorization header, this will
-        // eliminate the need to include the Authorization header
-        // for almost every AJAX requests.
-        window.axios.defaults.headers.common['Authorization'] = `Bearer ${
-            auth.auth_token
-        }`;
+        if (token) {
+            this.setToken(token);
 
-        this.setAuthData(auth);
-
-        await this.fetchAuthUser();
+            await this.fetchUser();
+        }
     };
 
     /**
@@ -69,8 +76,8 @@ class Backoffice extends Component {
             const response = await axios.post('/api/auth/signout');
 
             if (response.status === 200) {
-                // remove auth data stored in localStorage.
-                await localStorage.removeItem('auth');
+                // remove token data stored in localStorage.
+                await localStorage.removeItem('token');
 
                 this.setState({
                     loading: false,
@@ -143,29 +150,37 @@ class Backoffice extends Component {
      *
      * @return {object}
      */
-    getAuthData = () => {
-        const authString = window.localStorage.getItem('auth');
-        const auth = JSON.parse(authString);
+    token = () => {
+        const tokenString = window.localStorage.getItem('token');
 
-        if (!authString) {
+        if (!tokenString) {
             return {};
         }
 
-        this.setState({ auth });
+        const token = JSON.parse(tokenString);
 
-        return auth;
+        this.setState({ token });
+
+        return token;
     };
 
     /**
      * Store the authentication object as string into a persistent storage.
      *
-     * @param {object} data
+     * @param {object} token
      *
      * @return {undefined}
      */
-    setAuthData = data => {
-        // Store it locally for the authentication data to persist.
-        window.localStorage.setItem('auth', JSON.stringify(data));
+    setToken = token => {
+        // We will set a default Authorization header, this will
+        // eliminate the need to include the Authorization header
+        // for almost every AJAX requests.
+        window.axios.defaults.headers.common['Authorization'] = `Bearer ${
+            token.auth_token
+        }`;
+
+        // Store it locally for the authentication token to persist.
+        window.localStorage.setItem('token', JSON.stringify(token));
     };
 
     /**
@@ -173,29 +188,30 @@ class Backoffice extends Component {
      *
      * @return {undefined}
      */
-    fetchAuthUser = async () => {
+    fetchUser = async () => {
+        this.setState({ loading: true });
+
         try {
             const response = await axios.post('/api/auth/user');
 
             if (response.status === 200) {
                 this.setState({
+                    loading: false,
                     authenticated: true,
                     user: response.data,
                 });
             }
-        } catch (error) {
-            //
-        }
+        } catch (error) {}
     };
 
     async componentDidMount() {
-        const auth = await this.getAuthData();
-
-        if (auth) {
-            await this.authenticate(JSON.stringify(auth));
-        }
-
         this.setNightMode();
+
+        const token = this.token();
+
+        if (token) {
+            await this.authenticate(JSON.stringify(token));
+        }
 
         this.setState({ loading: false, navigating: false });
     }

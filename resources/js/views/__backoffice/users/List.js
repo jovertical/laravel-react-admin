@@ -6,7 +6,6 @@ import {
     IconButton,
     Tooltip,
     Typography,
-    withStyles,
 } from '@material-ui/core';
 
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
