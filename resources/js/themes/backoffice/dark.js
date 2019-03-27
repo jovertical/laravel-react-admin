@@ -29,7 +29,7 @@ theme = {
     overrides: {
         MuiDrawer: {
             paper: {
-                backgroundColor: '#18202c',
+                backgroundColor: theme.palette.grey[800],
             },
         },
 
@@ -89,7 +89,7 @@ theme = {
 
         MuiDivider: {
             root: {
-                backgroundColor: '#404854',
+                backgroundColor: theme.palette.text.secondary,
             },
         },
 

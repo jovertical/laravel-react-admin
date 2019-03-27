@@ -45,7 +45,7 @@ const Snackbar = props => {
     if (action && actionText) {
         primaryAction = (
             <Button key="undo" color="inherit" size="small" onClick={action}>
-                <Typography color="inherit">{actionText}</Typography>
+                <Typography className={classes.text}>{actionText}</Typography>
             </Button>
         );
     }
@@ -88,7 +88,7 @@ const Snackbar = props => {
                             )}
                         />
 
-                        <Typography color="inherit">{body}</Typography>
+                        <Typography className={classes.text}>{body}</Typography>
                     </span>
                 }
                 action={actions.reverse()}
@@ -125,6 +125,10 @@ const styles = theme => ({
 
     icon: {
         fontSize: 20,
+        color: theme.palette.common['white'],
+    },
+
+    text: {
         color: theme.palette.common['white'],
     },
 

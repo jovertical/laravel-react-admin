@@ -59,10 +59,12 @@ const Sidebar = props => {
             >
                 <Skeleton
                     width={100}
-                    color={colors.grey['A700']}
-                    highlightColor={colors.grey['A400']}
+                    color={nightMode && colors.grey['A700']}
+                    highlightColor={nightMode && colors.grey['A400']}
                 />
             </div>
+
+            <Divider className={classes.topDivider} />
 
             <div
                 className={classNames(
@@ -77,16 +79,16 @@ const Sidebar = props => {
                         circle
                         width={25}
                         height={25}
-                        color={colors.grey['900']}
-                        highlightColor={colors.grey['700']}
+                        color={nightMode && colors.grey['A700']}
+                        highlightColor={nightMode && colors.grey['A400']}
                     />
                 </span>
 
                 <span className={classes.linkTextLoading}>
                     <Skeleton
                         width={100}
-                        color={colors.grey['900']}
-                        highlightColor={colors.grey['700']}
+                        color={nightMode && colors.grey['A700']}
+                        highlightColor={nightMode && colors.grey['A400']}
                     />
                 </span>
             </div>
@@ -101,8 +103,8 @@ const Sidebar = props => {
                     >
                         <Skeleton
                             width={100}
-                            color={colors.grey['A700']}
-                            highlightColor={colors.grey['A400']}
+                            color={nightMode && colors.grey['A700']}
+                            highlightColor={nightMode && colors.grey['A400']}
                         />
                     </div>
 
@@ -120,16 +122,20 @@ const Sidebar = props => {
                                     circle
                                     width={25}
                                     height={25}
-                                    color={colors.grey['900']}
-                                    highlightColor={colors.grey['700']}
+                                    color={nightMode && colors.grey['A700']}
+                                    highlightColor={
+                                        nightMode && colors.grey['A400']
+                                    }
                                 />
                             </span>
 
                             <span className={classes.linkTextLoading}>
                                 <Skeleton
                                     width={100}
-                                    color={colors.grey['900']}
-                                    highlightColor={colors.grey['700']}
+                                    color={nightMode && colors.grey['A700']}
+                                    highlightColor={
+                                        nightMode && colors.grey['A400']
+                                    }
                                 />
                             </span>
                         </div>
@@ -157,6 +163,8 @@ const Sidebar = props => {
                 />
             </ListItem>
 
+            <Divider className={classes.topDivider} />
+
             <ListItem
                 button
                 dense
@@ -164,7 +172,7 @@ const Sidebar = props => {
                     classes.link,
                     classes.linkGroup,
                     classes.linkActionable,
-                    locationPathname === homeLink.path && classes.itemActive,
+                    locationPathname === homeLink.path && classes.linkActive,
                 )}
                 onClick={() => navigate(homeLink.path)}
             >
@@ -172,7 +180,7 @@ const Sidebar = props => {
 
                 <ListItemText
                     classes={{
-                        primary: classes.linkPrimary,
+                        primary: classes.linkText,
                     }}
                 >
                     {homeLink.name}
@@ -199,7 +207,7 @@ const Sidebar = props => {
                             className={classNames(
                                 classes.link,
                                 classes.linkActionable,
-                                locationPathname === path && classes.itemActive,
+                                locationPathname === path && classes.linkActive,
                             )}
                             onClick={() => navigate(path)}
                         >
@@ -207,7 +215,7 @@ const Sidebar = props => {
 
                             <ListItemText
                                 classes={{
-                                    primary: classes.linkPrimary,
+                                    primary: classes.linkText,
                                     textDense: classes.textDense,
                                 }}
                             >
@@ -236,34 +244,85 @@ Sidebar.propTypes = {
 };
 
 const styles = theme => ({
+    brand: {
+        fontSize: 24,
+        fontFamily: theme.typography.fontFamily,
+        color: theme.palette.common.white,
+    },
+
+    brandLogo: {
+        width: 230,
+    },
+
     linkGroupHeader: {
         paddingTop: 16,
         paddingBottom: 16,
     },
 
     linkGroupHeaderPrimary: {
-        color: theme.palette.common.white,
+        color:
+            theme.palette.type === 'dark'
+                ? theme.palette.text.primary
+                : theme.palette.text.secondary,
     },
 
     link: {
         paddingTop: 4,
         paddingBottom: 4,
-        color: 'rgba(255, 255, 255, 0.7)',
+        color: theme.palette.text.secondary,
     },
 
     linkGroup: {
-        backgroundColor: '#232f3e',
-        boxShadow: '0 -1px 0 #404854 inset',
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.grey[800]
+                : theme.palette.common.white,
         paddingTop: 16,
         paddingBottom: 16,
     },
 
-    brandLoading: {
-        padding: '1rem 0.75rem',
+    linkText: {
+        color: 'inherit',
+        fontSize: theme.typography.fontSize,
+        '&$textDense': {
+            fontSize: theme.typography.fontSize,
+        },
     },
 
-    brandLogo: {
-        width: 230,
+    linkActionable: {
+        '&:hover': {
+            color:
+                theme.palette.type === 'dark'
+                    ? theme.palette.text.primary
+                    : theme.palette.text.secondary,
+        },
+    },
+
+    linkActive: {
+        color: theme.palette.common.white,
+        backgroundColor: theme.palette.primary.main,
+    },
+
+    textDense: {},
+
+    divider: {
+        marginTop: theme.spacing.unit * 2,
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.grey['700']
+                : theme.palette.grey['200'],
+    },
+
+    topDivider: {
+        marginBottom: theme.spacing.unit * 2,
+        backgroundColor:
+            theme.palette.type === 'dark'
+                ? theme.palette.grey['700']
+                : theme.palette.grey['200'],
+    },
+
+    brandLoading: {
+        padding: '1rem 0.75rem',
     },
 
     linkLoading: {
@@ -278,36 +337,6 @@ const styles = theme => ({
 
     linkTextLoading: {
         marginTop: theme.spacing.unit / 2,
-    },
-
-    brand: {
-        fontSize: 24,
-        fontFamily: theme.typography.fontFamily,
-        color: theme.palette.common.white,
-    },
-
-    linkActionable: {
-        '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-        },
-    },
-
-    itemActive: {
-        color: '#4fc3f7',
-    },
-
-    linkPrimary: {
-        color: 'inherit',
-        fontSize: theme.typography.fontSize,
-        '&$textDense': {
-            fontSize: theme.typography.fontSize,
-        },
-    },
-
-    textDense: {},
-
-    divider: {
-        marginTop: theme.spacing.unit * 2,
     },
 });
 
