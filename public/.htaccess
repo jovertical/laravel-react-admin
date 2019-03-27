@@ -20,8 +20,9 @@
     RewriteRule ^ index.php [L]
 
     ##Force SSL
+
+    RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+    RewriteCond %{HTTP:X-Forwarded-Proto} =""
     RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP:X-Forwarded-Proto} !https
-	RewriteCond %{HTTP_HOST} ^laravel-react-admin.herokuapp.com
-	RewriteRule ^(.*)$ https://laravel-react-admin.herokuapp.com/$1 [R,L]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
