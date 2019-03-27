@@ -15,7 +15,7 @@ class HttpsOnly
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->secure() && env('APP_ENV') === 'production') {
+        if (env('APP_ENV') === 'production' && $request->getScheme() !== 'https') {
             return redirect()->secure($request->getRequestUri());
         }
 
