@@ -53,7 +53,10 @@ class Navigator extends Component {
                                     }
                                 }
 
-                                if (!route.auth) {
+                                if (
+                                    !route.auth &&
+                                    route.hasOwnProperty('path')
+                                ) {
                                     if (authenticated) {
                                         return (
                                             <Redirect
