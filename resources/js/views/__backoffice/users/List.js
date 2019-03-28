@@ -321,18 +321,7 @@ class List extends Component {
                 };
             });
         } catch (error) {
-            this.setState({
-                loading: false,
-                message: {
-                    type: 'error',
-                    body: Lang.get('resources.not_fetched', {
-                        name: 'User',
-                    }),
-                    closed: () => this.setState({ message: {} }),
-                    actionText: Lang.get('actions.retry'),
-                    action: async () => await this.fetchUsers(),
-                },
-            });
+            this.setState({ loading: false });
         }
     };
 
@@ -358,14 +347,16 @@ class List extends Component {
     }
 
     render() {
-        const {
-            loading,
-            pagination,
-            sorting,
-            filters,
-            message,
-            alert,
-        } = this.state;
+        const { loading, sorting, filters, message, alert } = this.state;
+
+        let { pagination } = this.state;
+
+        // Use the response data from the successful response (result of retry
+        // on failed (401) API requests) for pagination.
+        const { successfulResponse: response, retrying } = this.props.pageProps;
+        if (response.hasOwnProperty('data') && !retrying) {
+            pagination = response.data;
+        }
 
         const {
             data: rawData,
@@ -490,7 +481,7 @@ class List extends Component {
                 pageTitle={Lang.get('navigation.users')}
                 primaryAction={primaryAction}
                 tabs={tabs}
-                loading={loading}
+                loading={loading || pageProps.retrying}
                 message={message}
                 alert={alert}
             >

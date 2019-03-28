@@ -10,12 +10,17 @@ import { Loading } from './views';
 class Backoffice extends Component {
     state = {
         loading: true,
+        retrying: false,
         navigating: true,
         authenticated: false,
         nightMode: false,
         token: {},
         user: {},
         username: '',
+
+        errorResponse: {},
+        successfulResponse: {},
+        responseInterceptor: null,
     };
 
     /**
@@ -204,9 +209,91 @@ class Backoffice extends Component {
         } catch (error) {}
     };
 
+    /**
+     * Remove the response interceptor.
+     *
+     * @param {any} interceptor
+     *
+     * @param {undefined}
+     */
+    removeResponseInterceptor = interceptor => {
+        axios.interceptors.response.eject(interceptor);
+    };
+
+    /**
+     * Record API responses & do something.
+     *
+     * @param {any} interceptor
+     *
+     * @param {undefined}
+     */
+    addResponseInterceptor = () => {
+        const responseInterceptor = axios.interceptors.response.use(
+            response => {
+                return response;
+            },
+
+            async error => {
+                // In occasions of Unauthorized requests, retry.
+                if (error.response.status === 401) {
+                    this.setState({
+                        retrying: true,
+                    });
+
+                    // Request options
+                    const {
+                        url,
+                        method,
+                        headers,
+                        params: data,
+                    } = error.response.config;
+
+                    const response = await axios({
+                        url,
+                        method,
+                        headers: {
+                            ...headers,
+
+                            // This is an override of the Authorization header
+                            // to fix the 401 errors when we retry.
+                            Authorization:
+                                window.axios.defaults.headers.common[
+                                    'Authorization'
+                                ],
+                        },
+                        data,
+                    });
+
+                    // If the request returns 200 or 201 (Resource created),
+                    // Treat it as successful response.
+                    if ([200, 201].indexOf(response.status) > -1) {
+                        this.setState({
+                            successfulResponse: response,
+                        });
+                    }
+
+                    this.setState({
+                        retrying: false,
+                    });
+                }
+
+                return Promise.reject(error);
+            },
+        );
+
+        this.setState({
+            responseInterceptor,
+        });
+    };
+
     async componentDidMount() {
+        // Listen for all API responses.
+        this.addResponseInterceptor();
+
+        // Setup Night Mode via Persistent Storage.
         this.setNightMode();
 
+        // Authenticate via Persistent Storage.
         const token = this.token();
 
         if (token) {
@@ -214,6 +301,12 @@ class Backoffice extends Component {
         }
 
         this.setState({ loading: false, navigating: false });
+    }
+
+    componentWillUnmount() {
+        const { responseInterceptor } = this.state;
+
+        this.removeResponseInterceptor(responseInterceptor);
     }
 
     render() {
