@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
@@ -35,7 +35,7 @@ class Backoffice extends Component {
             const response = await axios.post('/api/auth/refresh');
             const token = response.data;
 
-            this.setToken(token);
+            await this.setToken(token);
 
             this.setState(prevState => {
                 return {
@@ -63,7 +63,7 @@ class Backoffice extends Component {
         const token = JSON.parse(tokenString);
 
         if (token) {
-            this.setToken(token);
+            await this.setToken(token);
 
             await this.fetchUser();
         }
@@ -234,8 +234,9 @@ class Backoffice extends Component {
             },
 
             async error => {
-                // In occasions of Unauthorized requests, retry.
-                if (error.response.status === 401) {
+                // In occasions of Unauthorized requests (401),
+                // Retry (if authenticated earlier).
+                if (error.response.status === 401 && this.state.authenticated) {
                     this.setState({
                         retrying: true,
                     });
@@ -313,38 +314,32 @@ class Backoffice extends Component {
         const { width } = this.props;
         const { loading, nightMode } = this.state;
 
-        const renderLoading = (
-            <Loading
-                pageProps={{
-                    ...this.state,
-                }}
-            />
-        );
-
         return (
             <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
                 <CssBaseline />
 
                 {loading ? (
-                    renderLoading
+                    <Loading
+                        pageProps={{
+                            ...this.state,
+                        }}
+                    />
                 ) : (
                     <Router>
-                        <Suspense fallback={renderLoading}>
-                            <Navigator
-                                pageProps={{
-                                    ...this.state,
-                                    width,
-                                    environment: 'backoffice',
-                                    routes: ROUTES,
-                                    handleNightmodeToggled: this
-                                        .handleNightmodeToggled,
-                                    refresh: this.refresh,
-                                    authenticate: this.authenticate,
-                                    handleLock: this.handleLock,
-                                    handleSignout: this.handleSignout,
-                                }}
-                            />
-                        </Suspense>
+                        <Navigator
+                            pageProps={{
+                                ...this.state,
+                                width,
+                                environment: 'backoffice',
+                                routes: ROUTES,
+                                handleNightmodeToggled: this
+                                    .handleNightmodeToggled,
+                                refresh: this.refresh,
+                                authenticate: this.authenticate,
+                                handleLock: this.handleLock,
+                                handleSignout: this.handleSignout,
+                            }}
+                        />
                     </Router>
                 )}
             </MuiThemeProvider>
