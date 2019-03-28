@@ -1,41 +1,41 @@
-version: "3"
+version: '3'
 services:
-  lra-php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: lra-php
-    restart: unless-stopped
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-      - ./php.ini:/usr/local/etc/php/conf.d/local.ini:ro
-    env_file:
-      - .env
+    laravel-react-admin-php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel-react-admin-php
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+            - ./php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+        env_file:
+            - .env
 
-  lra-webserver:
-    image: nginx:alpine
-    container_name: lra-webserver
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www/html
-      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
-    depends_on:
-      - lra-php
+    laravel-react-admin-webserver:
+        image: nginx:alpine
+        container_name: laravel-react-admin-webserver
+        restart: unless-stopped
+        ports:
+            - '80:80'
+            - '443:443'
+        volumes:
+            - ./:/var/www/html
+            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+        depends_on:
+            - laravel-react-admin-php
 
-  lra-db:
-    image: mysql:5.7
-    container_name: lra-db
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: lra
-      MYSQL_ROOT_PASSWORD: secret
-    volumes:
-      - ~/.lra-data:/var/lib/mysql
-    depends_on:
-      - lra-php
+    laravel-react-admin-db:
+        image: mysql:5.7
+        container_name: laravel-react-admin-db
+        restart: unless-stopped
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_DATABASE: laravel-react-admin
+            MYSQL_ROOT_PASSWORD: secret
+        volumes:
+            - ~/.laravel-react-admin-data:/var/lib/mysql
+        depends_on:
+            - laravel-react-admin-php
