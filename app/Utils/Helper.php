@@ -12,7 +12,7 @@ if (! function_exists('_asset')) {
      */
     function _asset(string $subPath) : string
     {
-        $assets = json_decode(file_get_contents('assets.json'), true);
+        $assets = json_decode(@file_get_contents('assets.json'), true);
 
         return $assets[$subPath] ?? '';
     }
