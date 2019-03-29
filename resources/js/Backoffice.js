@@ -303,9 +303,9 @@ class Backoffice extends Component {
 
         // Authenticate via Persistent Storage.
         const token = this.token();
-        let expired = false;
+        let expired = true;
 
-        if (token) {
+        if (token.hasOwnProperty('expired_at')) {
             expired = token.expired_at < moment().format('YYYY-MM-DD hh:mm:ss');
         }
 
