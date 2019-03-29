@@ -97,3 +97,9 @@ Used in deploying the application in multiple environments (development and prod
 [<img src="https://laravel-react-admin.herokuapp.com/credits/nginx.svg" width="120">](https://www.nginx.com)
 
 Used as the application's http webserver both in development & production.
+
+---
+
+## Special Thanks
+
+-   [@reeshkeed](https://github.com/reeshkeed) for designing the logo & design ideas.
