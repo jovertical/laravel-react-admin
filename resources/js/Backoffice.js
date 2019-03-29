@@ -35,7 +35,7 @@ class Backoffice extends Component {
             const response = await axios.post('/api/auth/refresh');
             const token = response.data;
 
-            await this.setToken(token);
+            this.setToken(token, true);
 
             this.setState(prevState => {
                 return {
@@ -63,7 +63,7 @@ class Backoffice extends Component {
         const token = JSON.parse(tokenString);
 
         if (token) {
-            await this.setToken(token);
+            this.setToken(token);
 
             await this.fetchUser();
         }
@@ -173,16 +173,26 @@ class Backoffice extends Component {
      * Store the authentication object as string into a persistent storage.
      *
      * @param {object} token
+     * @param {boolean} updateExpiry
      *
      * @return {undefined}
      */
-    setToken = token => {
+    setToken = (token, updateExpiry = false) => {
         // We will set a default Authorization header, this will
         // eliminate the need to include the Authorization header
         // for almost every AJAX requests.
         window.axios.defaults.headers.common['Authorization'] = `Bearer ${
             token.auth_token
         }`;
+
+        if (updateExpiry) {
+            // Add an expired_at timestamp based in the expired_in property in the token.
+            // A client defined expiry time makes sense here since a server time is
+            // not what we should depend on.
+            token.expired_at = moment()
+                .add(token.expires_in, 'seconds')
+                .format('YYYY-MM-DD hh:mm:ss');
+        }
 
         // Store it locally for the authentication token to persist.
         window.localStorage.setItem('token', JSON.stringify(token));
@@ -269,13 +279,10 @@ class Backoffice extends Component {
                     // Treat it as successful response.
                     if ([200, 201].indexOf(response.status) > -1) {
                         this.setState({
+                            retrying: false,
                             successfulResponse: response,
                         });
                     }
-
-                    this.setState({
-                        retrying: false,
-                    });
                 }
 
                 return Promise.reject(error);
@@ -296,8 +303,13 @@ class Backoffice extends Component {
 
         // Authenticate via Persistent Storage.
         const token = this.token();
+        let expired = false;
 
         if (token) {
+            expired = token.expired_at < moment().format('YYYY-MM-DD hh:mm:ss');
+        }
+
+        if (!expired) {
             await this.authenticate(JSON.stringify(token));
         }
 
