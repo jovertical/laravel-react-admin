@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        app()->bind('uploader', function () {
+            return new \App\Utils\Uploader;
+        });
     }
 }
