@@ -198,8 +198,8 @@ return [
     */
 
     'aliases' => [
+        'Uploader' => App\Utils\Uploader::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'Uploader' => App\Utils\Facades\Uploader::class,
 
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
