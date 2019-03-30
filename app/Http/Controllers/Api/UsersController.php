@@ -32,18 +32,23 @@ class UsersController extends Controller
     public function store(Request $request) : JsonResponse
     {
         $request->validate([
-            'type' => 'required|in:superuser,user',
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
+            'firstname' => 'required_if:step,0|string|max:255',
+            'lastname' => 'required_if:step,0|string|max:255',
 
             'gender' => 'nullable|in:female,male',
             'birthdate' =>
                 'nullable|date:Y-m-d|before:'.now()->subYear(10)->format('Y-m-d'),
             'address' => 'nullable|string|max:510',
 
-            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
+            'type' => 'required_if:step,1|in:superuser,user',
+            'email' => 'required_if:step,1|email|unique:users,email,NULL,id,deleted_at,NULL',
             'username' => 'nullable|unique:users'
         ]);
+
+        // Return here if the user is just in the first step.
+        if ($request->input('step') === 0) {
+            return response()->json(200);
+        }
 
         $user = User::create([
             'type' => $request->input('type'),
