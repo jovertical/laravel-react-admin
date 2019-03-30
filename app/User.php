@@ -3,15 +3,17 @@
 namespace App;
 
 use App\Traits\HasJWT;
+use App\Contracts\Uploader;
+use App\Traits\UploadsFiles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, Uploader
 {
-    use Notifiable, SoftDeletes, HasJWT;
+    use Notifiable, SoftDeletes, HasJWT, UploadsFiles;
 
     /**
      * The attributes that are mass assignable.
@@ -28,4 +30,14 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get the directory for uploads.
+     *
+     * @return string
+     */
+    public function getDirectory() : string
+    {
+        return 'users/'.$this->getKey();
+    }
 }
