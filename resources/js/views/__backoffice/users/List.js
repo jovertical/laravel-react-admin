@@ -349,7 +349,7 @@ class List extends Component {
     render() {
         const { ...childProps } = this.props;
 
-        const { pageProps } = this.props;
+        const { history, pageProps } = this.props;
         const { user: authUser } = pageProps;
 
         const { loading, sorting, filters, message, alert } = this.state;
