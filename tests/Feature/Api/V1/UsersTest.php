@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\V1;
 
 use App\User;
 
@@ -11,7 +11,7 @@ class UsersTest extends BaseTest
     {
         $payload = array_merge($this->getDefaultPayload(), []);
 
-        $this->get(route('api.users.index'), $payload)->assertStatus(200);
+        $this->get(route('api.v1.users.index'), $payload)->assertStatus(200);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ class UsersTest extends BaseTest
         // Assuming that the user is created through the test data,
         // It must return a 201 response status and then,
         // It must return a response body consisting our test data, if not all.
-        $this->post(route('api.users.store'), array_merge($attributes, $payload))
+        $this->post(route('api.v1.users.store'), array_merge($attributes, $payload))
             ->assertStatus(201)
             ->assertJson($attributes);
 
@@ -59,7 +59,7 @@ class UsersTest extends BaseTest
         // Assuming that a user is found,
         // It must return a 200 response status and then,
         // It must be found as is in the JSON response.
-        $this->get(route('api.users.show', $user), $payload)
+        $this->get(route('api.v1.users.show', $user), $payload)
             ->assertStatus(200)
             ->assertExactJson($user->toArray());
     }
@@ -78,7 +78,7 @@ class UsersTest extends BaseTest
         // Assuming that the API will delete one,
         // It must return a 200 response status and then,
         // It must equal this decremented counter.
-        $this->delete(route('api.users.destroy', $user))
+        $this->delete(route('api.v1.users.destroy', $user))
             ->assertStatus(200)
             ->assertJsonFragment([
                 'total' => $decremented
@@ -103,7 +103,7 @@ class UsersTest extends BaseTest
         // Assuming that the users count is decremented after deleting one,
         // It must return a 200 response status and then,
         // It must equal this incremented counter.
-        $this->patch(route('api.users.restore', $recoverableUser))
+        $this->patch(route('api.v1.users.restore', $recoverableUser))
             ->assertStatus(200)
             ->assertJsonFragment([
                 'total' => $incremented

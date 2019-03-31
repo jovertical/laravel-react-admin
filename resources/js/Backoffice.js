@@ -32,7 +32,7 @@ class Backoffice extends Component {
         this.setState({ navigating: true });
 
         try {
-            const response = await axios.post('/api/auth/refresh');
+            const response = await axios.post('/api/v1/auth/refresh');
             const token = response.data;
 
             this.setToken(token, true);
@@ -78,7 +78,7 @@ class Backoffice extends Component {
         this.setState({ loading: true });
 
         try {
-            const response = await axios.post('/api/auth/signout');
+            const response = await axios.post('/api/v1/auth/signout');
 
             if (response.status === 200) {
                 // remove token data stored in localStorage.
@@ -207,7 +207,7 @@ class Backoffice extends Component {
         this.setState({ loading: true });
 
         try {
-            const response = await axios.post('/api/auth/user');
+            const response = await axios.post('/api/v1/auth/user');
 
             if (response.status === 200) {
                 this.setState({

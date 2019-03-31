@@ -71,7 +71,7 @@ class SignIn extends Component {
         this.setState({ loading: true });
 
         try {
-            const response = await axios.post('/api/auth/identify', {
+            const response = await axios.post('/api/v1/auth/identify', {
                 username,
             });
 
@@ -120,7 +120,7 @@ class SignIn extends Component {
             const { username } = this.state;
             const { password } = values;
 
-            const response = await axios.post('/api/auth/signin', {
+            const response = await axios.post('/api/v1/auth/signin', {
                 username,
                 password,
             });

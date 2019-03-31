@@ -9,7 +9,7 @@ export default class User {
      * @return {object}
      */
     static async paginated(params = {}) {
-        const response = await axios.get('/api/users', {
+        const response = await axios.get('/api/v1/users', {
             params,
         });
 
@@ -28,7 +28,7 @@ export default class User {
      * @return {object}
      */
     static async store(attributes) {
-        const response = await axios.post('/api/users', attributes);
+        const response = await axios.post('/api/v1/users', attributes);
 
         if (response.status !== 201) {
             return {};
@@ -45,7 +45,7 @@ export default class User {
      * @return {object}
      */
     static async delete(id) {
-        const response = await axios.delete(`/api/users/${id}`);
+        const response = await axios.delete(`/api/v1/users/${id}`);
 
         if (response.status !== 200) {
             return {};
@@ -62,7 +62,7 @@ export default class User {
      * @return {object}
      */
     static async restore(id) {
-        const response = await axios.patch(`/api/users/${id}/restore`);
+        const response = await axios.patch(`/api/v1/users/${id}/restore`);
 
         if (response.status !== 200) {
             return {};

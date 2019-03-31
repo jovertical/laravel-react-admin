@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\V1\Auth;
 
 use App\User;
-use Tests\Feature\Api\BaseTest;
+use Tests\Feature\Api\V1\BaseTest;
 
 class SessionsTest extends BaseTest
 {
@@ -16,7 +16,7 @@ class SessionsTest extends BaseTest
             'username' => $user->username,
         ];
 
-        $this->post(route('api.auth.identify'), $payload)
+        $this->post(route('api.v1.auth.identify'), $payload)
             ->assertStatus(200)
             ->assertSee($user->email);
     }
@@ -31,7 +31,7 @@ class SessionsTest extends BaseTest
             'password' => 'secret'
         ];
 
-        $this->post(route('api.auth.signin'), $payload)
+        $this->post(route('api.v1.auth.signin'), $payload)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'auth_token', 'token_type', 'expires_in'
@@ -43,7 +43,7 @@ class SessionsTest extends BaseTest
     {
         $payload = array_merge($this->getDefaultPayload(), []);
 
-        $this->post(route('api.auth.user'), $payload)
+        $this->post(route('api.v1.auth.user'), $payload)
             ->assertStatus(200)
             ->assertJson(_test_user()->toArray());
     }
@@ -53,7 +53,7 @@ class SessionsTest extends BaseTest
     {
         $payload = array_merge($this->getDefaultPayload(), []);
 
-        $this->post(route('api.auth.refresh'), $payload)
+        $this->post(route('api.v1.auth.refresh'), $payload)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'auth_token', 'token_type', 'expires_in'
@@ -68,7 +68,7 @@ class SessionsTest extends BaseTest
     {
         $payload = array_merge($this->getDefaultPayload(), []);
 
-        $this->post(route('api.auth.signout'), $payload)
+        $this->post(route('api.v1.auth.signout'), $payload)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'message'

@@ -12,24 +12,26 @@
 */
 
 Route::namespace('Api')->name('api.')->group(function () {
-    Route::namespace('Auth')->name('auth.')->prefix('auth')->group(function () {
-        Route::post('identify', 'SessionsController@identify')->name('identify');
-        Route::post('signin', 'SessionsController@signin')->name('signin');
+    Route::namespace('V1')->name('v1.')->prefix('v1')->group(function () {
+        Route::namespace('Auth')->name('auth.')->prefix('auth')->group(function () {
+            Route::post('identify', 'SessionsController@identify')->name('identify');
+            Route::post('signin', 'SessionsController@signin')->name('signin');
+
+            Route::middleware('auth:api')->group(function () {
+                Route::post('signout', 'SessionsController@signout')->name('signout');
+                Route::post('refresh', 'SessionsController@refresh')->name('refresh');
+                Route::post('user', 'SessionsController@user')->name('user');
+            });
+
+            Route::name('password.')->prefix('password')->group(function () {
+                Route::post('request', 'ForgotPasswordController@sendResetLinkEmail')->name('request');
+                Route::post('reset/{token}', 'ResetPasswordController@reset')->name('reset');
+            });
+        });
 
         Route::middleware('auth:api')->group(function () {
-            Route::post('signout', 'SessionsController@signout')->name('signout');
-            Route::post('refresh', 'SessionsController@refresh')->name('refresh');
-            Route::post('user', 'SessionsController@user')->name('user');
+            Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
+            Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
         });
-
-        Route::name('password.')->prefix('password')->group(function () {
-            Route::post('request', 'ForgotPasswordController@sendResetLinkEmail')->name('request');
-            Route::post('reset/{token}', 'ResetPasswordController@reset')->name('reset');
-        });
-    });
-
-    Route::middleware('auth:api')->group(function () {
-        Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
-        Route::patch('users/{user}/restore', 'UsersController@restore')->name('users.restore');
     });
 });

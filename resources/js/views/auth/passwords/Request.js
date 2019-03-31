@@ -32,7 +32,7 @@ class PasswordRequest extends Component {
             const { email } = values;
             const routeSuffix = NavigationUtils._route('auth.passwords.reset');
 
-            const response = await axios.post('api/auth/password/request', {
+            const response = await axios.post('api/v1/auth/password/request', {
                 email,
                 routeSuffix,
             });
