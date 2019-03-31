@@ -25,7 +25,7 @@ import brandLogoLight from '../../../../img/logos/full-light.svg';
 import brandLogoDark from '../../../../img/logos/full-dark.svg';
 
 const Sidebar = props => {
-    const { classes, locationPathname, pageProps, navigate, ...other } = props;
+    const { classes, location, pageProps, loading, navigate } = props;
     const { nightMode } = pageProps;
 
     const homeLink = {
@@ -47,9 +47,9 @@ const Sidebar = props => {
         },
     ];
 
-    const renderNavigating = (
-        <div>
-            <div
+    const renderLoading = (
+        <List disablePadding className={classes.links}>
+            <ListItem
                 className={classNames(
                     classes.brand,
                     classes.link,
@@ -62,11 +62,11 @@ const Sidebar = props => {
                     color={nightMode && colors.grey['A700']}
                     highlightColor={nightMode && colors.grey['A400']}
                 />
-            </div>
+            </ListItem>
 
             <Divider className={classes.topDivider} />
 
-            <div
+            <ListItem
                 className={classNames(
                     classes.link,
                     classes.linkGroup,
@@ -91,11 +91,11 @@ const Sidebar = props => {
                         highlightColor={nightMode && colors.grey['A400']}
                     />
                 </span>
-            </div>
+            </ListItem>
 
             {linkGroups.map(({ name, links }) => (
                 <React.Fragment key={name}>
-                    <div
+                    <ListItem
                         className={classNames(
                             classes.linkGroupHeader,
                             classes.linkLoading,
@@ -106,10 +106,10 @@ const Sidebar = props => {
                             color={nightMode && colors.grey['A700']}
                             highlightColor={nightMode && colors.grey['A400']}
                         />
-                    </div>
+                    </ListItem>
 
                     {links.map(({ name }) => (
-                        <div
+                        <ListItem
                             key={name}
                             className={classNames(
                                 classes.link,
@@ -138,17 +138,17 @@ const Sidebar = props => {
                                     }
                                 />
                             </span>
-                        </div>
+                        </ListItem>
                     ))}
 
                     <Divider className={classes.divider} />
                 </React.Fragment>
             ))}
-        </div>
+        </List>
     );
 
     const renderNavigated = (
-        <List disablePadding>
+        <List disablePadding className={classes.links}>
             <ListItem
                 className={classNames(
                     classes.brand,
@@ -172,7 +172,7 @@ const Sidebar = props => {
                     classes.link,
                     classes.linkGroup,
                     classes.linkActionable,
-                    locationPathname === homeLink.path && classes.linkActive,
+                    location.pathname === homeLink.path && classes.linkActive,
                 )}
                 onClick={() => navigate(homeLink.path)}
             >
@@ -207,7 +207,8 @@ const Sidebar = props => {
                             className={classNames(
                                 classes.link,
                                 classes.linkActionable,
-                                locationPathname === path && classes.linkActive,
+                                location.pathname === path &&
+                                    classes.linkActive,
                             )}
                             onClick={() => navigate(path)}
                         >
@@ -231,8 +232,8 @@ const Sidebar = props => {
     );
 
     return (
-        <Drawer variant="permanent" {...other}>
-            {pageProps.navigating ? renderNavigating : renderNavigated}
+        <Drawer variant="permanent">
+            {loading ? renderLoading : renderNavigated}
         </Drawer>
     );
 };
@@ -240,10 +241,16 @@ const Sidebar = props => {
 Sidebar.propTypes = {
     classes: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired,
-    locationPathname: PropTypes.string,
 };
 
 const styles = theme => ({
+    links: {
+        [theme.breakpoints.up('sm')]: {
+            width: 256,
+            flexShrink: 0,
+        },
+    },
+
     brand: {
         fontSize: 24,
         fontFamily: theme.typography.fontFamily,

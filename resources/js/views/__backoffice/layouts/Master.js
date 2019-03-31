@@ -96,17 +96,18 @@ class Master extends Component {
     }
 
     render() {
+        const { classes, ...childProps } = this.props;
+
         const {
-            classes,
-            children,
             history,
             location,
+            children,
             pageProps,
             loading,
             message,
             alert,
         } = this.props;
-        const { navigating, nightMode } = pageProps;
+        const { nightMode } = pageProps;
 
         const { mobileOpen, message: globalMessage } = this.state;
 
@@ -130,7 +131,7 @@ class Master extends Component {
 
         return (
             <>
-                {navigating && <LinearDeterminate className={classes.loader} />}
+                {loading && <LinearDeterminate className={classes.loader} />}
 
                 <div className={classes.root}>
                     <CssBaseline />
@@ -138,7 +139,9 @@ class Master extends Component {
                     <nav className={classes.drawer}>
                         <Hidden smUp implementation="js">
                             <Sidebar
-                                pageProps={pageProps}
+                                {...childProps}
+                                {...this.state}
+                                loading={loading}
                                 PaperProps={{ style: { width: drawerWidth } }}
                                 variant="temporary"
                                 open={mobileOpen}
@@ -150,9 +153,10 @@ class Master extends Component {
 
                         <Hidden xsDown implementation="css">
                             <Sidebar
-                                pageProps={pageProps}
+                                {...childProps}
+                                {...this.state}
+                                loading={loading}
                                 PaperProps={{ style: { width: drawerWidth } }}
-                                locationPathname={location.pathname}
                                 navigate={path => history.push(path)}
                             />
                         </Hidden>
@@ -160,13 +164,11 @@ class Master extends Component {
 
                     <div className={classes.contentWrapper}>
                         <Header
-                            parentProps={{
-                                ...this.props,
-                                ...this.state,
-                                onDrawerToggle: this.handleDrawerToggled,
-                                onNavLinkMenuToggle: this
-                                    .handleNavLinkMenuToggled,
-                            }}
+                            {...childProps}
+                            {...this.state}
+                            loading={loading}
+                            onDrawerToggle={this.handleDrawerToggled}
+                            onNavLinkMenuToggle={this.handleNavLinkMenuToggled}
                         />
 
                         <AppBar
@@ -256,7 +258,7 @@ class Master extends Component {
                         </AppBar>
 
                         <main className={classes.content}>
-                            {loading || navigating ? (
+                            {loading ? (
                                 renderLoading
                             ) : (
                                 <Grid container>{children}</Grid>
@@ -296,6 +298,7 @@ class Master extends Component {
 
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
+    loading: PropTypes.bool,
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
     primaryAction: PropTypes.object,

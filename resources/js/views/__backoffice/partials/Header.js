@@ -45,8 +45,7 @@ import { Ph as PhIcon, Us as UsIcon } from '../../../icons/flags/4x3';
 import { Skeleton } from '../../../ui';
 
 const LocaleMenu = props => {
-    const { classes, parentProps } = props;
-    const { localeMenuOpen, localeMenuEl } = parentProps;
+    const { classes, localeMenuOpen, localeMenuEl } = props;
 
     return (
         <Popper
@@ -69,9 +68,7 @@ const LocaleMenu = props => {
                     <Paper>
                         <ClickAwayListener
                             onClickAway={() =>
-                                props.parentProps.onNavLinkMenuToggle(
-                                    'localeMenuOpen',
-                                )
+                                props.onNavLinkMenuToggle('localeMenuOpen')
                             }
                         >
                             <MenuList>
@@ -128,9 +125,7 @@ const LocaleMenu = props => {
 };
 
 const AccountMenu = props => {
-    const { classes, parentProps } = props;
-    const { pageProps, accountMenuOpen, accountMenuEl } = parentProps;
-
+    const { classes, accountMenuOpen, accountMenuEl, pageProps } = props;
     const { user, handleLock, handleSignout } = pageProps;
 
     return (
@@ -154,9 +149,7 @@ const AccountMenu = props => {
                     <Paper>
                         <ClickAwayListener
                             onClickAway={() =>
-                                props.parentProps.onNavLinkMenuToggle(
-                                    'accountMenuOpen',
-                                )
+                                props.onNavLinkMenuToggle('accountMenuOpen')
                             }
                         >
                             <MenuList>
@@ -225,8 +218,9 @@ const AccountMenu = props => {
 };
 
 const Header = props => {
-    const { classes, parentProps } = props;
     const {
+        classes,
+        loading,
         onDrawerToggle,
         pageProps,
         pageTitle,
@@ -234,9 +228,9 @@ const Header = props => {
         tabs,
         localeMenuOpen,
         accountMenuOpen,
-    } = parentProps;
+    } = props;
 
-    const { user, navigating, nightMode, handleNightmodeToggled } = pageProps;
+    const { user, nightMode, handleNightmodeToggled } = pageProps;
 
     const skeletonProps = {
         color: colors.grey[400],
@@ -463,7 +457,7 @@ const Header = props => {
                                         }
                                         aria-haspopup="true"
                                         onClick={() =>
-                                            props.parentProps.onNavLinkMenuToggle(
+                                            props.onNavLinkMenuToggle(
                                                 'localeMenuOpen',
                                             )
                                         }
@@ -507,7 +501,7 @@ const Header = props => {
                                         }
                                         aria-haspopup="true"
                                         onClick={() =>
-                                            props.parentProps.onNavLinkMenuToggle(
+                                            props.onNavLinkMenuToggle(
                                                 'accountMenuOpen',
                                             )
                                         }
@@ -586,12 +580,11 @@ const Header = props => {
         </>
     );
 
-    return <>{navigating ? renderNavigating : renderNavigated}</>;
+    return <>{loading ? renderNavigating : renderNavigated}</>;
 };
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired,
-    parentProps: PropTypes.object.isRequired,
 };
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';

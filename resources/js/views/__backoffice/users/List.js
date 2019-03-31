@@ -347,16 +347,14 @@ class List extends Component {
     }
 
     render() {
+        const { ...childProps } = this.props;
+
+        const { pageProps } = this.props;
+        const { user: authUser } = pageProps;
+
         const { loading, sorting, filters, message, alert } = this.state;
 
         let { pagination } = this.state;
-
-        // Use the response data from the successful response (result of retry
-        // on failed (401) API requests) for pagination.
-        const { successfulResponse: response, retrying } = this.props.pageProps;
-        if (response.hasOwnProperty('data') && !retrying) {
-            pagination = response.data;
-        }
 
         const {
             data: rawData,
@@ -364,9 +362,6 @@ class List extends Component {
             per_page: perPage,
             current_page: page,
         } = pagination;
-
-        const { pageProps, history } = this.props;
-        const { user: authUser } = pageProps;
 
         const primaryAction = {
             text: Lang.get('resources.create', {
@@ -477,11 +472,12 @@ class List extends Component {
 
         return (
             <MasterLayout
-                {...this.props}
+                {...childProps}
+                loading={this.state.loading}
                 pageTitle={Lang.get('navigation.users')}
                 primaryAction={primaryAction}
                 tabs={tabs}
-                loading={loading || pageProps.retrying}
+                loading={loading}
                 message={message}
                 alert={alert}
             >
