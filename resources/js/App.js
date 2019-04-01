@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
 import { Navigator } from './core';
 import { ROUTES } from './config';
-import { dark as darkTheme, light as lightTheme } from './themes/backoffice';
 import { Loading } from './views';
 
-class Backoffice extends Component {
+class App extends Component {
     state = {
         loading: true,
         authenticated: false,
@@ -15,6 +16,50 @@ class Backoffice extends Component {
         token: {},
         user: {},
         username: '',
+
+        errorResponse: {},
+        successfulResponse: {},
+        responseInterceptor: null,
+    };
+
+    /**
+     * Remove the response interceptor.
+     *
+     * @param {any} interceptor
+     *
+     * @param {undefined}
+     */
+    removeResponseInterceptor = interceptor => {
+        axios.interceptors.response.eject(interceptor);
+    };
+
+    /**
+     * Record API responses & do something.
+     *
+     * @param {any} interceptor
+     *
+     * @param {undefined}
+     */
+    addResponseInterceptor = () => {
+        const responseInterceptor = axios.interceptors.response.use(
+            response => {
+                return response;
+            },
+
+            error => {
+                // In occasions of Unauthorized requests (401),
+                // Remove the stored tokens.
+                if (error.response.status === 401) {
+                    this.removeToken();
+                }
+
+                return Promise.reject(error);
+            },
+        );
+
+        this.setState({
+            responseInterceptor,
+        });
     };
 
     /**
@@ -48,8 +93,7 @@ class Backoffice extends Component {
             const response = await axios.post('/api/v1/auth/signout');
 
             if (response.status === 200) {
-                // remove token data stored in localStorage.
-                await localStorage.removeItem('token');
+                this.removeToken();
 
                 this.setState({
                     loading: false,
@@ -151,15 +195,17 @@ class Backoffice extends Component {
             token.auth_token
         }`;
 
-        // Add an expired_at timestamp based in the expired_in property in the token.
-        // A client defined expiry time makes sense here since a server time is
-        // not what we should depend on.
-        token.expired_at = moment()
-            .add(token.expires_in, 'seconds')
-            .format('YYYY-MM-DD hh:mm:ss');
-
         // Store it locally for the authentication token to persist.
         window.localStorage.setItem('token', JSON.stringify(token));
+    };
+
+    /**
+     * Remove token data stored in persistent storage.
+     *
+     * @return {undefined}
+     */
+    removeToken = () => {
+        localStorage.removeItem('token');
     };
 
     /**
@@ -188,26 +234,30 @@ class Backoffice extends Component {
     };
 
     async componentDidMount() {
+        // Listen for all API responses.
+        this.addResponseInterceptor();
+
         // Setup Night Mode via Persistent Storage.
         this.setNightMode();
 
         // Authenticate via Persistent Storage.
         const token = this.token();
-        let expired = true;
 
-        if (token.hasOwnProperty('expired_at')) {
-            expired = moment(token.expired_at).unix() > moment().unix();
+        if (Object.keys(token).length > 0) {
+            await this.authenticate(JSON.stringify(token));
         }
-
-        // if (!expired) {
-        await this.authenticate(JSON.stringify(token));
-        // }
 
         this.setState({ loading: false });
     }
 
+    componentWillUnmount() {
+        const { responseInterceptor } = this.state;
+
+        this.removeResponseInterceptor(responseInterceptor);
+    }
+
     render() {
-        const { width } = this.props;
+        const { width, environment, darkTheme, lightTheme } = this.props;
         const { loading, nightMode } = this.state;
 
         return (
@@ -226,7 +276,7 @@ class Backoffice extends Component {
                             pageProps={{
                                 ...this.state,
                                 width,
-                                environment: 'backoffice',
+                                environment: environment,
                                 routes: ROUTES,
                                 handleNightmodeToggled: this
                                     .handleNightmodeToggled,
@@ -242,4 +292,10 @@ class Backoffice extends Component {
     }
 }
 
-export default withWidth()(Backoffice);
+App.propTypes = {
+    environment: PropTypes.oneOf(['backoffice']).isRequired,
+    darkTheme: PropTypes.object.isRequired,
+    lightTheme: PropTypes.object.isRequired,
+};
+
+export default withWidth()(App);
