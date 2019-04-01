@@ -25,7 +25,17 @@ import brandLogoLight from '../../../../img/logos/full-light.svg';
 import brandLogoDark from '../../../../img/logos/full-dark.svg';
 
 const Sidebar = props => {
-    const { classes, location, pageProps, loading, navigate } = props;
+    const {
+        classes,
+        location,
+        pageProps,
+        pageTitle, // Never used here.
+        primaryAction, // Never used here.
+        staticContext, // Never used here.
+        loading,
+        navigate,
+        ...other
+    } = props;
     const { nightMode } = pageProps;
 
     const homeLink = {
@@ -232,13 +242,16 @@ const Sidebar = props => {
     );
 
     return (
-        <Drawer variant="permanent">
+        <Drawer variant="permanent" {...other}>
             {loading ? renderLoading : renderNavigated}
         </Drawer>
     );
 };
 
 Sidebar.propTypes = {
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
+    PaperProps: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired,
 };

@@ -199,9 +199,9 @@ class Backoffice extends Component {
             expired = moment(token.expired_at).unix() > moment().unix();
         }
 
-        if (!expired) {
-            await this.authenticate(JSON.stringify(token));
-        }
+        // if (!expired) {
+        await this.authenticate(JSON.stringify(token));
+        // }
 
         this.setState({ loading: false });
     }

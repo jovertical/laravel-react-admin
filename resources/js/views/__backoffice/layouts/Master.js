@@ -99,9 +99,10 @@ class Master extends Component {
         const { classes, ...childProps } = this.props;
 
         const {
+            children,
             history,
             location,
-            children,
+            pageTitle,
             pageProps,
             loading,
             message,
@@ -140,24 +141,21 @@ class Master extends Component {
                         <Hidden smUp implementation="js">
                             <Sidebar
                                 {...childProps}
-                                {...this.state}
                                 loading={loading}
-                                PaperProps={{ style: { width: drawerWidth } }}
+                                navigate={path => history.push(path)}
                                 variant="temporary"
                                 open={mobileOpen}
                                 onClose={this.handleDrawerToggled}
-                                locationPathname={location.pathname}
-                                navigate={path => history.push(path)}
+                                PaperProps={{ style: { width: drawerWidth } }}
                             />
                         </Hidden>
 
                         <Hidden xsDown implementation="css">
                             <Sidebar
                                 {...childProps}
-                                {...this.state}
                                 loading={loading}
-                                PaperProps={{ style: { width: drawerWidth } }}
                                 navigate={path => history.push(path)}
+                                PaperProps={{ style: { width: drawerWidth } }}
                             />
                         </Hidden>
                     </nav>
