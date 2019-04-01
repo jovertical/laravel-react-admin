@@ -1,5 +1,6 @@
 import loadable from '@loadable/component';
 
+export const Dropzone = loadable(() => import('./Dropzone'));
 export const Modal = loadable(() => import('./Modal'));
 export const Skeleton = loadable(() => import('./Skeleton'));
 export const Snackbar = loadable(() => import('./Snackbar'));

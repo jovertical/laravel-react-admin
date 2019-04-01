@@ -19,7 +19,7 @@ import { Profile, Account, Avatar } from './Forms';
 class Create extends Component {
     state = {
         loading: false,
-        activeStep: 0,
+        activeStep: 2,
         formValues: [],
         errors: {},
         message: {},

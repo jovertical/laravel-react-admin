@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 
+import { Dropzone } from '../../../../ui';
+
 const Avatar = props => {
     const { classes, values, errors, handleSubmit, handleSkip } = props;
 
@@ -12,7 +14,7 @@ const Avatar = props => {
                 Avatar Upload
             </Typography>
 
-            <div className={classes.root} />
+            <Dropzone />
 
             <div className={classes.sectionSpacer} />
 
