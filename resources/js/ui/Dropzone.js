@@ -17,6 +17,7 @@ import {
 import {
     Block as BlockIcon,
     CheckCircle as CheckCircleIcon,
+    Queue as QueueIcon,
 } from '@material-ui/icons';
 
 import * as StringUtils from '../utils/String';
@@ -24,16 +25,20 @@ import { LinearDeterminate } from './Loaders';
 
 const getFileStatusClass = status => {
     switch (status) {
+        case 'queued':
+            return 'fileQueued';
+            break;
+
         case 'uploaded':
-            return 'fileSuccess';
+            return 'fileUploaded';
             break;
 
         case 'rejected':
-            return 'fileError';
+            return 'fileRejected';
             break;
 
         default:
-            return 'filePrimary';
+            return 'fileUploading';
             break;
     }
 };
@@ -42,12 +47,21 @@ let FileIcon = props => {
     const { classes, status } = props;
 
     switch (status) {
+        case 'queued':
+            return <QueueIcon className={classes.queued} fontSize="large" />;
+            break;
+
         case 'uploaded':
-            return <CheckCircleIcon color="primary" fontSize="large" />;
+            return (
+                <CheckCircleIcon
+                    className={classes.uploaded}
+                    fontSize="large"
+                />
+            );
             break;
 
         case 'rejected':
-            return <BlockIcon className={classes.error} fontSize="large" />;
+            return <BlockIcon className={classes.rejected} fontSize="large" />;
             break;
 
         default:
@@ -60,15 +74,20 @@ let FileIcon = props => {
 
 FileIcon.propTypes = {
     classes: PropTypes.object.isRequired,
-    status: PropTypes.oneOf(['uploading', 'uploaded', 'rejected']).isRequired,
+    status: PropTypes.oneOf(['queued', 'uploading', 'uploaded', 'rejected'])
+        .isRequired,
 };
 
 FileIcon = withStyles(theme => ({
-    success: {
+    queued: {
+        color: theme.palette.grey[500],
+    },
+
+    uploaded: {
         color: colors.green[600],
     },
 
-    error: {
+    rejected: {
         color: theme.palette.error.light,
     },
 
@@ -82,11 +101,17 @@ FileIcon = withStyles(theme => ({
 }))(FileIcon);
 
 function Dropzone(props) {
-    const { classes, acceptedFileTypes, maxFiles, maxFileSize } = props;
+    const {
+        classes,
+        acceptedFileTypes,
+        maxFiles,
+        maxFileSize,
+        handleUpload,
+    } = props;
 
     const [files, setFiles] = useState([]);
 
-    const getFileErrorMessage = file => {
+    const getfileRejectedMessage = file => {
         let errors = [];
 
         if (
@@ -116,7 +141,8 @@ function Dropzone(props) {
             acceptedFiles = acceptedFiles.map(file =>
                 Object.assign(file, {
                     url: URL.createObjectURL(file),
-                    status: 'uploading',
+                    status: 'queued',
+                    message: 'File is on the waiting queue.',
                 }),
             );
 
@@ -126,11 +152,21 @@ function Dropzone(props) {
                     status: 'rejected',
                     message: file.hasOwnProperty('message')
                         ? file.message
-                        : getFileErrorMessage(file),
+                        : getfileRejectedMessage(file),
                 }),
             );
 
-            setFiles(files.concat(acceptedFiles, rejectedFiles));
+            setFiles(
+                files.concat(acceptedFiles, rejectedFiles).map((file, key) => {
+                    if (key === 0 && file.status === 'queued') {
+                        file.status = 'uploading';
+
+                        return file;
+                    }
+
+                    return file;
+                }),
+            );
         },
         noClick: true,
         noKeyboard: true,
@@ -143,9 +179,9 @@ function Dropzone(props) {
             files.forEach(file => {
                 // Make sure to revoke the data uris to avoid memory leaks.
                 URL.revokeObjectURL(file.preview);
-
-                // Process uploading here.
             });
+
+            // If there aren't any one being uploaded, pick one from the queue.
         },
         [files],
     );
@@ -321,9 +357,9 @@ function Dropzone(props) {
 
 Dropzone.propTypes = {
     acceptedFileTypes: PropTypes.array,
-    onDrop: PropTypes.func,
     maxFiles: PropTypes.number,
     maxFileSize: PropTypes.number,
+    handleUpload: PropTypes.func.isRequired,
 };
 
 Dropzone.defaultProps = {
@@ -401,16 +437,20 @@ const styles = theme => ({
         },
     },
 
-    fileSuccess: {
+    fileQueued: {
+        border: `2px solid ${theme.palette.grey[500]}`,
+    },
+
+    fileUploading: {
+        border: `2px solid ${theme.palette.primary.main}`,
+    },
+
+    fileUploaded: {
         border: `2px solid ${colors.green[600]}`,
     },
 
-    fileError: {
+    fileRejected: {
         border: `2px solid ${theme.palette.error.light}`,
-    },
-
-    filePrimary: {
-        border: `2px solid ${theme.palette.primary.main}`,
     },
 
     fileAdd: {

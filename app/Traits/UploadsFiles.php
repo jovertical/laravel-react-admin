@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use Uploader;
+use App\Utils\Uploader;
 use Illuminate\Http\UploadedFile;
 
 trait UploadsFiles

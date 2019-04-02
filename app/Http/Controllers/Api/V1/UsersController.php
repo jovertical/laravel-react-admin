@@ -137,7 +137,7 @@ class UsersController extends Controller
      */
     public function storeAvatar(Request $request, User $user) : JsonResponse
     {
-        return response()->json();
+        return response()->json($user);
     }
 
     /**

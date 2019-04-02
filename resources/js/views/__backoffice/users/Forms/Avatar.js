@@ -14,7 +14,11 @@ const Avatar = props => {
                 Avatar Upload
             </Typography>
 
-            <Dropzone maxFiles={2} maxFileSize={2} />
+            <Dropzone
+                maxFiles={2}
+                maxFileSize={2}
+                handleUpload={file => console.log(file)}
+            />
 
             <div className={classes.sectionSpacer} />
 
