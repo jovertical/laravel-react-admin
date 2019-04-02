@@ -109,4 +109,17 @@ class UsersTest extends BaseTest
                 'total' => $incremented
             ]);
     }
+
+    /** @test */
+    public function a_user_can_store_a_user_avatar()
+    {
+        $user = User::first();
+
+        $payload = array_merge($this->getDefaultPayload(), [
+            'user' => $user
+        ]);
+
+        $this->post(route('api.v1.users.avatar.store', $payload))
+            ->assertStatus(200);
+    }
 }

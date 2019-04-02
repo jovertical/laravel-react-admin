@@ -128,6 +128,19 @@ class UsersController extends Controller
     }
 
     /**
+     * Store the user's avatar.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\User $user
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function storeAvatar(Request $request, User $user) : JsonResponse
+    {
+        return response()->json();
+    }
+
+    /**
      * Get the paginated resource query.
      *
      * @param Illuminate\Http\Request
