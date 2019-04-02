@@ -9,12 +9,42 @@ class LinearDeterminate extends Component {
     };
 
     componentDidMount() {
-        this.timer = setInterval(this.progress, 500);
+        this.timer = setInterval(
+            this.progress,
+            this.convertSpeed(this.props.speed),
+        );
     }
 
     componentWillUnmount() {
         clearInterval(this.timer);
     }
+
+    convertSpeed = speed => {
+        switch (speed) {
+            case 'verySlow':
+                return 5000;
+                break;
+
+            case 'slow':
+                return 2500;
+                break;
+
+            case 'moderate':
+                return 1000;
+                break;
+
+            case 'fast':
+                return 500;
+                break;
+
+            case 'veryFast':
+                return 250;
+                break;
+
+            default:
+                break;
+        }
+    };
 
     progress = () => {
         const { completed } = this.state;
@@ -46,8 +76,19 @@ class LinearDeterminate extends Component {
     }
 }
 
+LinearDeterminate.defaultProps = {
+    speed: 'moderate',
+};
+
 LinearDeterminate.propTypes = {
     classes: PropTypes.object.isRequired,
+    speed: PropTypes.oneOf([
+        'verySlow',
+        'slow',
+        'moderate',
+        'fast',
+        'veryFast',
+    ]),
 };
 
 const styles = {
