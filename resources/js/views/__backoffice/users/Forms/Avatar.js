@@ -17,7 +17,16 @@ const Avatar = props => {
             <Dropzone
                 maxFiles={2}
                 maxFileSize={2}
-                handleUpload={file => console.log(file)}
+                handleUpload={(file, done) => {
+                    setTimeout(() => {
+                        done();
+                    }, Math.floor(Math.random() * Math.floor(15)) * 1000);
+                }}
+                handleFileRemoved={removed => {
+                    setTimeout(() => {
+                        removed();
+                    }, Math.floor(Math.random() * Math.floor(10)) * 1000);
+                }}
             />
 
             <div className={classes.sectionSpacer} />

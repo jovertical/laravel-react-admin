@@ -107,6 +107,7 @@ function Dropzone(props) {
         maxFiles,
         maxFileSize,
         handleUpload,
+        handleFileRemoved,
     } = props;
 
     const [files, setFiles] = useState([]);
@@ -134,6 +135,100 @@ function Dropzone(props) {
         return errors[0];
     };
 
+    const removeFile = removedFile => {
+        if (removedFile.status === 'uploading') {
+            const confirmed = confirm('The file is being uploaded, stop it?');
+
+            if (!confirmed) {
+                return;
+            }
+        }
+
+        if (removedFile.status === 'uploaded') {
+            handleFileRemoved(() => {
+                setFiles(files.filter(file => file.url !== removedFile.url));
+            });
+
+            return;
+        }
+
+        setFiles(files.filter(file => file.url !== removedFile.url));
+    };
+
+    useEffect(
+        () => () =>
+            files.forEach(file => {
+                // Make sure to revoke the data uris to avoid memory leaks.
+                URL.revokeObjectURL(file.preview);
+            }),
+        [files],
+    );
+
+    /**
+     * Handle the queueing of files here.
+     */
+    useEffect(() => {
+        // If nothing is in the queue, stop.
+        if (files.findIndex(file => file.status === 'queued') < 0) {
+            return;
+        }
+
+        // Stop if there is a file being uploaded.
+        if (files.findIndex(file => file.status === 'uploading') > -1) {
+            return;
+        }
+
+        // Queue out a file if the one being uploaded is removed / has finished.
+        setFiles(
+            files
+                // Set aside the uploaded files
+                .filter(file => file.status === 'uploaded')
+                .concat(
+                    files
+                        // Only the queued files should be a candidate for uploading.
+                        .filter(file => file.status === 'queued')
+                        .map((file, key) => {
+                            // Upload the first in the queue
+                            if (key === 0) {
+                                return Object.assign(file, {
+                                    status: 'uploading',
+                                    message: '',
+                                });
+                            }
+
+                            return file;
+                        }),
+                )
+                // Append the rejected files at the end.
+                .concat(files.filter(file => file.status === 'rejected')),
+        );
+    }, [files]);
+
+    /**
+     * Handle the file being uploaded here.
+     */
+    useEffect(() => {
+        // Stop if there are nothing to be uploaded.
+        if (files.findIndex(file => file.status === 'uploading') < 0) {
+            return;
+        }
+
+        handleUpload(files.find(file => file.status === 'uploading'), () => {
+            setFiles(
+                files.map(file => {
+                    if (file.status === 'uploading') {
+                        return Object.assign(file, {
+                            status: 'uploaded',
+                            message: '',
+                        });
+                    }
+
+                    return file;
+                }),
+            );
+        });
+    }, [files]);
+
     const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
         accept: acceptedFileTypes.join(','),
         maxSize: maxFileSize * 1000 * 1000,
@@ -158,10 +253,12 @@ function Dropzone(props) {
 
             setFiles(
                 files.concat(acceptedFiles, rejectedFiles).map((file, key) => {
+                    // Set the first one as uploading.
                     if (key === 0 && file.status === 'queued') {
-                        file.status = 'uploading';
-
-                        return file;
+                        return Object.assign(file, {
+                            status: 'uploading',
+                            message: '',
+                        });
                     }
 
                     return file;
@@ -173,18 +270,6 @@ function Dropzone(props) {
     });
 
     const { ref, ...rootProps } = getRootProps();
-
-    useEffect(
-        () => () => {
-            files.forEach(file => {
-                // Make sure to revoke the data uris to avoid memory leaks.
-                URL.revokeObjectURL(file.preview);
-            });
-
-            // If there aren't any one being uploaded, pick one from the queue.
-        },
-        [files],
-    );
 
     return (
         <RootRef rootRef={ref}>
@@ -278,25 +363,11 @@ function Dropzone(props) {
                                 <Typography
                                     color="primary"
                                     className={classes.removeLink}
-                                    onClick={() => {
-                                        if (file.status === 'uploading') {
-                                            const confirmed = confirm(
-                                                'The file is being uploaded, stop it?',
-                                            );
-
-                                            if (!confirmed) {
-                                                return;
-                                            }
-                                        }
-
-                                        setFiles(
-                                            files.filter(
-                                                (file, i) => i !== key,
-                                            ),
-                                        );
-                                    }}
+                                    onClick={() => removeFile(file)}
                                 >
-                                    Remove File
+                                    {file.status === 'uploading'
+                                        ? 'Cancel'
+                                        : 'Remove File'}
                                 </Typography>
                             </Grid>
                         ))
@@ -360,6 +431,7 @@ Dropzone.propTypes = {
     maxFiles: PropTypes.number,
     maxFileSize: PropTypes.number,
     handleUpload: PropTypes.func.isRequired,
+    handleFileRemoved: PropTypes.func.isRequired,
 };
 
 Dropzone.defaultProps = {
