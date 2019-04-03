@@ -131,6 +131,7 @@ class Create extends Component {
 
                     return (
                         <Profile
+                            {...other}
                             values={
                                 formValues[0] ? formValues[0] : defaultValues
                             }
@@ -143,6 +144,7 @@ class Create extends Component {
                 case 1:
                     return (
                         <Account
+                            {...other}
                             values={{
                                 type: '',
                                 email: '',
@@ -158,6 +160,7 @@ class Create extends Component {
                 case 2:
                     return (
                         <Avatar
+                            {...other}
                             values={{}}
                             errors={errors}
                             handleSubmit={this.handleSubmit}

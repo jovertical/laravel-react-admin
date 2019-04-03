@@ -233,7 +233,7 @@ function Dropzone(props) {
         accept: acceptedFileTypes.join(','),
         maxSize: maxFileSize * 1000 * 1000,
         onDrop: (acceptedFiles, rejectedFiles) => {
-            acceptedFiles = acceptedFiles.map(file =>
+            acceptedFiles = acceptedFiles.map((file, key) =>
                 Object.assign(file, {
                     url: URL.createObjectURL(file),
                     status: 'queued',

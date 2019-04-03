@@ -1,52 +1,80 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 
 import { Dropzone } from '../../../../ui';
 
-const Avatar = props => {
-    const { classes, values, errors, handleSubmit, handleSkip } = props;
+class Avatar extends Component {
+    /**
+     * Handle the file upload.
+     *
+     * @param {object} file The file that should be fed to the API.
+     * @param {function} done When called, will inform that upload is done.
+     *
+     * @return {undefined}
+     */
+    handleUpload = async (file, done) => {
+        const { pageProps } = this.props;
+        const { user } = pageProps;
 
-    return (
-        <>
-            <Typography variant="h6" gutterBottom>
-                Avatar Upload
-            </Typography>
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
 
-            <Dropzone
-                maxFiles={2}
-                maxFileSize={2}
-                handleUpload={(file, done) => {
-                    setTimeout(() => {
-                        done();
-                    }, Math.floor(Math.random() * Math.floor(15)) * 1000);
-                }}
-                handleFileRemoved={removed => {
-                    setTimeout(() => {
-                        removed();
-                    }, Math.floor(Math.random() * Math.floor(10)) * 1000);
-                }}
-            />
+            const response = await fetch(`api/v1/users/${user.id}/avatar`, {
+                method: 'POST',
+                headers: {
+                    Authorization:
+                        axios.defaults.headers.common['Authorization'],
+                    'X-CSRF-TOKEN':
+                        axios.defaults.headers.common['X-CSRF-TOKEN'],
+                },
+                body: formData,
+            });
+        } catch (error) {}
+    };
 
-            <div className={classes.sectionSpacer} />
+    render() {
+        const { classes, handleSkip } = this.props;
 
-            <Grid container spacing={24} justify="flex-end">
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSkip}
-                    >
-                        Skip
-                    </Button>
+        return (
+            <>
+                <Typography variant="h6" gutterBottom>
+                    Avatar Upload
+                </Typography>
+
+                <Dropzone
+                    maxFiles={2}
+                    maxFileSize={2}
+                    handleUpload={this.handleUpload}
+                    handleFileRemoved={removed => {
+                        setTimeout(() => {
+                            removed();
+                        }, Math.floor(Math.random() * Math.floor(10)) * 1000);
+                    }}
+                />
+
+                <div className={classes.sectionSpacer} />
+
+                <Grid container spacing={24} justify="flex-end">
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSkip}
+                        >
+                            Skip
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </>
-    );
-};
+            </>
+        );
+    }
+}
 
 Avatar.propTypes = {
+    classes: PropTypes.object.isRequired,
     values: PropTypes.object.isRequired,
     errors: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\User;
+use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -135,9 +136,9 @@ class UsersController extends Controller
      *
      * @return Illuminate\Http\JsonResponse
      */
-    public function storeAvatar(Request $request, User $user) : JsonResponse
+    public function storeAvatar(Request $request, User $user)
     {
-        return response()->json($user);
+        return response()->json($request->input('avatar'));
     }
 
     /**
