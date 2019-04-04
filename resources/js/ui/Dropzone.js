@@ -262,6 +262,14 @@ function Dropzone(props) {
                         });
                     }
 
+                    // If the file count exceeds the maximum, set it as rejected.
+                    if (key + 1 > maxFiles) {
+                        return Object.assign(file, {
+                            status: 'rejected',
+                            message: 'It could not accept more files.',
+                        });
+                    }
+
                     return file;
                 }),
             );

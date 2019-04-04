@@ -105,8 +105,8 @@ class Avatar extends Component {
 
                 <Dropzone
                     initialFiles={files}
-                    maxFiles={2}
-                    maxFileSize={2}
+                    maxFiles={1}
+                    maxFileSize={5}
                     handleUpload={this.handleUpload}
                     handleFileRemoved={this.handleFileRemoved}
                 />
