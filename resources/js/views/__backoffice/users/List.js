@@ -8,7 +8,11 @@ import {
     Typography,
 } from '@material-ui/core';
 
-import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
+import {
+    Delete as DeleteIcon,
+    Edit as EditIcon,
+    Image as ImageIcon,
+} from '@material-ui/icons';
 
 import * as RandomUtils from '../../../utils/Random';
 import * as NavigationUtils from '../../../utils/Navigation';
@@ -436,7 +440,31 @@ class List extends Component {
                     ),
                     email: user.email,
                     actions: (
-                        <div style={{ width: '5rem' }}>
+                        <div style={{ width: 120, flex: 'no-wrap' }}>
+                            <Tooltip
+                                title={Lang.get('resources.edit_image', {
+                                    name: 'User',
+                                })}
+                            >
+                                <IconButton
+                                    onClick={() =>
+                                        history.push(
+                                            NavigationUtils._route(
+                                                'backoffice.users.edit',
+                                                {
+                                                    id: user.id,
+                                                },
+                                                {
+                                                    step: 2,
+                                                },
+                                            ),
+                                        )
+                                    }
+                                >
+                                    <ImageIcon />
+                                </IconButton>
+                            </Tooltip>
+
                             <Tooltip
                                 title={Lang.get('resources.edit', {
                                     name: 'User',

@@ -11,6 +11,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+import * as UrlUtils from '../../../utils/URL';
 import * as NavigationUtils from '../../../utils/Navigation';
 import { User } from '../../../models';
 import { LinearIndeterminate } from '../../../ui/Loaders';
@@ -137,6 +138,13 @@ class Edit extends Component {
 
     async componentDidMount() {
         const { params } = this.props.match;
+        const { location } = this.props;
+
+        const queryParams = UrlUtils._queryParams(location.search);
+
+        if (queryParams.hasOwnProperty('step')) {
+            this.setState({ activeStep: parseInt(queryParams.step) });
+        }
 
         await this.fetchUser(params.id);
     }
