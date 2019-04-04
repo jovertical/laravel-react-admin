@@ -60,6 +60,9 @@
         "format": [
             "vendor/bin/php-cs-fixer fix ."
         ],
+        "post-install-cmd": [
+            "php artisan storage:link"
+        ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
