@@ -7,7 +7,7 @@ import { Dropzone } from '../../../../ui';
 
 class Avatar extends Component {
     state = {
-        intitialFiles: [], // An item's format must comply to the File Object's.
+        files: [], // An item's format must comply to the File Object's.
     };
 
     /**
@@ -15,7 +15,7 @@ class Avatar extends Component {
      *
      * @return {array}
      */
-    loadFiles = () => {
+    loadFiles = (reset = false) => {
         const { user } = this.props;
 
         if (!user.hasOwnProperty('filename')) {
@@ -37,7 +37,7 @@ class Avatar extends Component {
         ];
 
         this.setState({
-            initialFiles: files,
+            files,
         });
     };
 
@@ -95,7 +95,7 @@ class Avatar extends Component {
 
     render() {
         const { classes, handleSkip } = this.props;
-        const { initialFiles } = this.state;
+        const { files } = this.state;
 
         return (
             <>
@@ -104,7 +104,7 @@ class Avatar extends Component {
                 </Typography>
 
                 <Dropzone
-                    initialFiles={initialFiles}
+                    initialFiles={files}
                     maxFiles={2}
                     maxFileSize={2}
                     handleUpload={this.handleUpload}
@@ -120,7 +120,7 @@ class Avatar extends Component {
                             color="primary"
                             onClick={handleSkip}
                         >
-                            Skip
+                            Finish
                         </Button>
                     </Grid>
                 </Grid>

@@ -65,6 +65,24 @@ class UsersTest extends BaseTest
     }
 
     /** @test */
+    public function a_user_can_update_a_user()
+    {
+        $payload = array_merge($this->getDefaultPayload(), []);
+
+        // The user to be updated.
+        $user = User::first();
+        $user->address = $this->faker->address;
+        $user->update();
+
+        // Assuming that the user is updated,
+        // It must return a 200 response status and then,
+        // It must be found as is in the JSON response.
+        $this->patch(route('api.v1.users.update', $user), $payload)
+            ->assertStatus(200)
+            ->assertExactJson($user->toArray());
+    }
+
+    /** @test */
     public function a_user_can_delete_a_user()
     {
         $payload = array_merge($this->getDefaultPayload(), []);
@@ -108,18 +126,5 @@ class UsersTest extends BaseTest
             ->assertJsonFragment([
                 'total' => $incremented
             ]);
-    }
-
-    /** @test */
-    public function a_user_can_store_a_user_avatar()
-    {
-        $user = User::first();
-
-        $payload = array_merge($this->getDefaultPayload(), [
-            'user' => $user
-        ]);
-
-        $this->post(route('api.v1.users.avatar.store', $payload))
-            ->assertStatus(200);
     }
 }

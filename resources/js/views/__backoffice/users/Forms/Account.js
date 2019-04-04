@@ -17,13 +17,7 @@ import {
 } from '@material-ui/core';
 
 const Account = props => {
-    const {
-        classes,
-        values,
-        errors: apiErrors,
-        handleSubmit,
-        handleBack,
-    } = props;
+    const { classes, values, handleSubmit, handleBack } = props;
 
     return (
         <Formik
@@ -38,146 +32,135 @@ const Account = props => {
             onSubmit={handleSubmit}
             validateOnBlur={false}
         >
-            {({ values, handleChange, errors, isSubmitting }) => {
-                if (apiErrors && Object.keys(apiErrors).length > 0) {
-                    errors = apiErrors;
-                }
+            {({ values, handleChange, errors, isSubmitting }) => (
+                <Form>
+                    <Typography variant="h6" gutterBottom>
+                        Account Settings
+                    </Typography>
 
-                return (
-                    <Form>
-                        <Typography variant="h6" gutterBottom>
-                            Account Settings
-                        </Typography>
+                    <Grid container spacing={24}>
+                        <Grid item xs={12} sm={12}>
+                            <FormControl
+                                className={classes.formControl}
+                                error={errors.hasOwnProperty('type')}
+                            >
+                                <InputLabel htmlFor="type">
+                                    Type{' '}
+                                    <span className={classes.required}>*</span>
+                                </InputLabel>
 
-                        <Grid container spacing={24}>
-                            <Grid item xs={12} sm={12}>
-                                <FormControl
-                                    className={classes.formControl}
-                                    error={errors.hasOwnProperty('type')}
+                                <Select
+                                    id="type"
+                                    name="type"
+                                    value={values.type}
+                                    onChange={handleChange}
+                                    input={<Input fullWidth />}
+                                    autoWidth
                                 >
-                                    <InputLabel htmlFor="type">
-                                        Type{' '}
-                                        <span className={classes.required}>
-                                            *
-                                        </span>
-                                    </InputLabel>
+                                    <MenuItem value="">
+                                        Please select the user's type
+                                    </MenuItem>
 
-                                    <Select
-                                        id="type"
-                                        name="type"
-                                        value={values.type}
-                                        onChange={handleChange}
-                                        input={<Input fullWidth />}
-                                        autoWidth
-                                    >
-                                        <MenuItem value="">
-                                            Please select the user's type
-                                        </MenuItem>
+                                    <MenuItem value="superuser">
+                                        Superuser
+                                    </MenuItem>
 
-                                        <MenuItem value="superuser">
-                                            Superuser
-                                        </MenuItem>
+                                    <MenuItem value="user">User</MenuItem>
+                                </Select>
 
-                                        <MenuItem value="user">User</MenuItem>
-                                    </Select>
+                                {errors.hasOwnProperty('type') && (
+                                    <FormHelperText>
+                                        {errors.type}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+                    </Grid>
 
-                                    {errors.hasOwnProperty('type') && (
-                                        <FormHelperText>
-                                            {errors.type}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
-                            </Grid>
+                    <Grid container spacing={24}>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl
+                                className={classes.formControl}
+                                error={errors.hasOwnProperty('email')}
+                            >
+                                <InputLabel htmlFor="email">
+                                    Email{' '}
+                                    <span className={classes.required}>*</span>
+                                </InputLabel>
+
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    fullWidth
+                                />
+                                {errors.hasOwnProperty('email') && (
+                                    <FormHelperText>
+                                        {errors.email}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
                         </Grid>
 
-                        <Grid container spacing={24}>
-                            <Grid item xs={12} sm={6}>
-                                <FormControl
-                                    className={classes.formControl}
-                                    error={errors.hasOwnProperty('email')}
-                                >
-                                    <InputLabel htmlFor="email">
-                                        Email{' '}
-                                        <span className={classes.required}>
-                                            *
-                                        </span>
-                                    </InputLabel>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl
+                                className={classes.formControl}
+                                error={errors.hasOwnProperty('username')}
+                            >
+                                <InputLabel htmlFor="username">
+                                    Username
+                                </InputLabel>
 
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        value={values.email}
-                                        onChange={handleChange}
-                                        fullWidth
-                                    />
-                                    {errors.hasOwnProperty('email') && (
-                                        <FormHelperText>
-                                            {errors.email}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
-                            </Grid>
-
-                            <Grid item xs={12} sm={6}>
-                                <FormControl
-                                    className={classes.formControl}
-                                    error={errors.hasOwnProperty('username')}
-                                >
-                                    <InputLabel htmlFor="username">
-                                        Username
-                                    </InputLabel>
-
-                                    <Input
-                                        id="username"
-                                        name="username"
-                                        value={values.username}
-                                        onChange={handleChange}
-                                        fullWidth
-                                    />
-                                    {errors.hasOwnProperty('username') && (
-                                        <FormHelperText>
-                                            {errors.username}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
-                            </Grid>
+                                <Input
+                                    id="username"
+                                    name="username"
+                                    value={values.username}
+                                    onChange={handleChange}
+                                    fullWidth
+                                />
+                                {errors.hasOwnProperty('username') && (
+                                    <FormHelperText>
+                                        {errors.username}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
                         </Grid>
+                    </Grid>
 
-                        <div className={classes.sectionSpacer} />
+                    <div className={classes.sectionSpacer} />
 
-                        <Grid container spacing={24} justify="flex-end">
-                            <Grid item>
-                                <Button
-                                    onClick={handleBack}
-                                    className={classes.backButton}
-                                >
-                                    Back
-                                </Button>
+                    <Grid container spacing={24} justify="flex-end">
+                        <Grid item>
+                            <Button
+                                onClick={handleBack}
+                                className={classes.backButton}
+                            >
+                                Back
+                            </Button>
 
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={
-                                        (errors &&
-                                            Object.keys(errors).length > 0) ||
-                                        isSubmitting
-                                    }
-                                >
-                                    Next
-                                </Button>
-                            </Grid>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                disabled={
+                                    (errors &&
+                                        Object.keys(errors).length > 0) ||
+                                    isSubmitting
+                                }
+                            >
+                                Next
+                            </Button>
                         </Grid>
-                    </Form>
-                );
-            }}
+                    </Grid>
+                </Form>
+            )}
         </Formik>
     );
 };
 
 Account.propTypes = {
     values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
 };
 

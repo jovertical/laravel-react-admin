@@ -22,7 +22,6 @@ class Create extends Component {
         activeStep: 0,
         formValues: [],
         user: {},
-        errors: {},
         message: {},
     };
 
@@ -115,14 +114,7 @@ class Create extends Component {
 
     render() {
         const { classes, ...other } = this.props;
-        const {
-            loading,
-            activeStep,
-            formValues,
-            user,
-            errors,
-            message,
-        } = this.state;
+        const { loading, activeStep, formValues, user, message } = this.state;
 
         const steps = ['Profile', 'Account', 'Avatar'];
 
@@ -144,7 +136,6 @@ class Create extends Component {
                             values={
                                 formValues[0] ? formValues[0] : defaultValues
                             }
-                            errors={errors}
                             handleSubmit={this.handleSubmit}
                         />
                     );
@@ -159,7 +150,6 @@ class Create extends Component {
                                 email: '',
                                 username: '',
                             }}
-                            errors={errors}
                             handleSubmit={this.handleSubmit}
                             handleBack={this.handleBack}
                         />
