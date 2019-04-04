@@ -5,6 +5,7 @@ server {
     access_log /var/log/nginx/access.log;
     root /var/www/html/public;
     server_name example.com;
+    client_max_body_size 25M;
 
     location ~ \.php$ {
         try_files $uri =404;
