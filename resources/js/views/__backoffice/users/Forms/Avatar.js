@@ -6,6 +6,59 @@ import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 import { Dropzone } from '../../../../ui';
 
 class Avatar extends Component {
+    state = {
+        intitialFiles: [], // An item's format must comply to the File Object's.
+    };
+
+    /**
+     * Initial files to be fed to dropzone.
+     *
+     * @return {array}
+     */
+    loadFiles = () => {
+        const { user } = this.props;
+
+        if (!user.hasOwnProperty('filename')) {
+            return;
+        }
+
+        if (user.filename === null) {
+            return;
+        }
+
+        const files = [
+            {
+                name: user.original_filename,
+                size: user.thumbnail_filesize,
+                url: user.thumbnail_url,
+                type: `image/${user.filename.split('.').reverse()[0]}`,
+                status: 'uploaded',
+            },
+        ];
+
+        this.setState({
+            initialFiles: files,
+        });
+    };
+
+    /**
+     * Handle the removal of files.
+     *
+     * @param {object} file The file that should be fed to the API.
+     * @param {function} removed  When called, will inform that the file is removed.
+     *
+     * @return {undefined}
+     */
+    handleFileRemoved = async (file, removed) => {
+        const { user } = this.props;
+
+        try {
+            await axios.delete(`api/v1/users/${user.id}/avatar`);
+
+            removed();
+        } catch (error) {}
+    };
+
     /**
      * Handle the file upload.
      *
@@ -15,14 +68,13 @@ class Avatar extends Component {
      * @return {undefined}
      */
     handleUpload = async (file, done) => {
-        const { pageProps } = this.props;
-        const { user } = pageProps;
+        const { user } = this.props;
 
         try {
             const formData = new FormData();
             formData.append('avatar', file);
 
-            const response = await fetch(`api/v1/users/${user.id}/avatar`, {
+            await fetch(`api/v1/users/${user.id}/avatar`, {
                 method: 'POST',
                 headers: {
                     Authorization:
@@ -32,11 +84,18 @@ class Avatar extends Component {
                 },
                 body: formData,
             });
+
+            done();
         } catch (error) {}
     };
 
+    componentDidMount() {
+        this.loadFiles();
+    }
+
     render() {
         const { classes, handleSkip } = this.props;
+        const { initialFiles } = this.state;
 
         return (
             <>
@@ -45,14 +104,11 @@ class Avatar extends Component {
                 </Typography>
 
                 <Dropzone
+                    initialFiles={initialFiles}
                     maxFiles={2}
                     maxFileSize={2}
                     handleUpload={this.handleUpload}
-                    handleFileRemoved={removed => {
-                        setTimeout(() => {
-                            removed();
-                        }, Math.floor(Math.random() * Math.floor(10)) * 1000);
-                    }}
+                    handleFileRemoved={this.handleFileRemoved}
                 />
 
                 <div className={classes.sectionSpacer} />
@@ -75,9 +131,7 @@ class Avatar extends Component {
 
 Avatar.propTypes = {
     classes: PropTypes.object.isRequired,
-    values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
-    handleSubmit: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
     handleSkip: PropTypes.func.isRequired,
 };
 

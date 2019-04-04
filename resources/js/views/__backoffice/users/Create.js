@@ -19,8 +19,9 @@ import { Profile, Account, Avatar } from './Forms';
 class Create extends Component {
     state = {
         loading: false,
-        activeStep: 2,
+        activeStep: 0,
         formValues: [],
+        user: {},
         errors: {},
         message: {},
     };
@@ -72,7 +73,7 @@ class Create extends Component {
             // Instruct the API the current step.
             values.step = activeStep;
 
-            await User.store({ ...previousValues, ...values });
+            const user = await User.store({ ...previousValues, ...values });
 
             // After persisting the previous values. Move to the next step...
             this.setState(prevState => {
@@ -93,8 +94,9 @@ class Create extends Component {
 
                 return {
                     loading: false,
-                    message,
                     formValues,
+                    user,
+                    message,
                     activeStep: prevState.activeStep + 1,
                 };
             });
@@ -113,7 +115,14 @@ class Create extends Component {
 
     render() {
         const { classes, ...other } = this.props;
-        const { loading, activeStep, formValues, errors, message } = this.state;
+        const {
+            loading,
+            activeStep,
+            formValues,
+            user,
+            errors,
+            message,
+        } = this.state;
 
         const steps = ['Profile', 'Account', 'Avatar'];
 
@@ -161,9 +170,7 @@ class Create extends Component {
                     return (
                         <Avatar
                             {...other}
-                            values={{}}
-                            errors={errors}
-                            handleSubmit={this.handleSubmit}
+                            user={user}
                             handleSkip={() =>
                                 this.props.history.push(
                                     NavigationUtils._route(

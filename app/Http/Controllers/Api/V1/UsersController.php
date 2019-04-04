@@ -136,9 +136,26 @@ class UsersController extends Controller
      *
      * @return Illuminate\Http\JsonResponse
      */
-    public function storeAvatar(Request $request, User $user)
+    public function storeAvatar(Request $request, User $user) : JsonResponse
     {
-        return response()->json($request->input('avatar'));
+        if (! $user->upload($request->files->get('avatar'))) {
+            return response()->json('Unable to process the upload', 422);
+        }
+
+        return response()->json('Uploaded successfully!');
+    }
+
+    /**
+     * Destroy the user's avatar.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\User $user
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroyAvatar(Request $request, User $user)  : JsonResponse
+    {
+        return response()->json($user->destroyUpload());
     }
 
     /**

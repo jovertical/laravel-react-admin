@@ -32,6 +32,21 @@ class User extends Authenticatable implements JWTSubject, Uploader
     ];
 
     /**
+     * The attributes used for uploads.
+     *
+     * @var array
+     */
+    protected $uploadAttributes = [
+        'directory',
+        'filename',
+        'original_filename',
+        'filesize',
+        'thumbnail_filesize',
+        'url',
+        'thumbnail_url'
+    ];
+
+    /**
      * Get the directory for uploads.
      *
      * @return string

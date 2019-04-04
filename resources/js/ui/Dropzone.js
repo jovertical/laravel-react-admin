@@ -103,6 +103,7 @@ FileIcon = withStyles(theme => ({
 function Dropzone(props) {
     const {
         classes,
+        initialFiles,
         acceptedFileTypes,
         maxFiles,
         maxFileSize,
@@ -110,7 +111,7 @@ function Dropzone(props) {
         handleFileRemoved,
     } = props;
 
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState(initialFiles);
 
     const getfileRejectedMessage = file => {
         let errors = [];
@@ -145,7 +146,7 @@ function Dropzone(props) {
         }
 
         if (removedFile.status === 'uploaded') {
-            handleFileRemoved(() => {
+            handleFileRemoved(removedFile, () => {
                 setFiles(files.filter(file => file.url !== removedFile.url));
             });
 
@@ -427,6 +428,7 @@ function Dropzone(props) {
 }
 
 Dropzone.propTypes = {
+    initialFiles: PropTypes.array,
     acceptedFileTypes: PropTypes.array,
     maxFiles: PropTypes.number,
     maxFileSize: PropTypes.number,
@@ -435,6 +437,7 @@ Dropzone.propTypes = {
 };
 
 Dropzone.defaultProps = {
+    initialFiles: [],
     acceptedFileTypes: ['image/*'],
     maxFiles: 5,
     maxFileSize: 1,

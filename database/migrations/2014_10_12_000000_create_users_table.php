@@ -32,9 +32,13 @@ class CreateUsersTable extends Migration
             $table->date('birthdate', 'Y-m-d')->nullable();
             $table->text('address')->nullable();
 
-            $table->text('path')->nullable();
             $table->string('directory')->nullable();
             $table->string('filename')->nullable();
+            $table->string('original_filename')->nullable();
+            $table->integer('filesize')->nullable();
+            $table->integer('thumbnail_filesize')->nullable();
+            $table->text('url')->nullable();
+            $table->text('thumbnail_url')->nullable();
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
