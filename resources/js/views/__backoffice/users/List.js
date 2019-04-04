@@ -403,23 +403,32 @@ class List extends Component {
                             wrap="nowrap"
                         >
                             <Grid item style={{ marginRight: 10 }}>
-                                <Avatar
-                                    style={{
-                                        fontSize: 17,
-                                        backgroundColor: RandomUtils._color(
-                                            user.firstname.length -
-                                                user.created_at.charAt(
-                                                    user.created_at.length - 2,
-                                                ),
-                                        ),
-                                    }}
-                                >
-                                    <Typography>
-                                        {`${user.firstname.charAt(
-                                            0,
-                                        )}${user.lastname.charAt(0)}`}
-                                    </Typography>
-                                </Avatar>
+                                {user.hasOwnProperty('thumbnail_url') &&
+                                user.thumbnail_url !== null ? (
+                                    <Avatar
+                                        alt={user.name}
+                                        src={user.thumbnail_url}
+                                    />
+                                ) : (
+                                    <Avatar
+                                        style={{
+                                            fontSize: 17,
+                                            backgroundColor: RandomUtils._color(
+                                                user.firstname.length -
+                                                    user.created_at.charAt(
+                                                        user.created_at.length -
+                                                            2,
+                                                    ),
+                                            ),
+                                        }}
+                                    >
+                                        <Typography>
+                                            {`${user.firstname.charAt(
+                                                0,
+                                            )}${user.lastname.charAt(0)}`}
+                                        </Typography>
+                                    </Avatar>
+                                )}
                             </Grid>
 
                             <Grid item>{user.name}</Grid>

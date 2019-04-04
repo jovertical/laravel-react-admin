@@ -37,6 +37,7 @@ import {
     Settings as SettingsIcon,
 } from '@material-ui/icons';
 
+import * as RandomUtils from '../../../utils/Random';
 import {
     LightbulbOff as LightbulbOffIcon,
     LightbulbOn as LightbulbOnIcon,
@@ -507,13 +508,34 @@ const Header = props => {
                                         }
                                         color="inherit"
                                     >
-                                        <Avatar className={classes.avatar}>
-                                            <Typography>
-                                                {`${user.firstname.charAt(
-                                                    0,
-                                                )}${user.lastname.charAt(0)}`}
-                                            </Typography>
-                                        </Avatar>
+                                        {user.hasOwnProperty('thumbnail_url') &&
+                                        user.thumbnail_url !== null ? (
+                                            <Avatar
+                                                alt={user.name}
+                                                src={user.thumbnail_url}
+                                            />
+                                        ) : (
+                                            <Avatar
+                                                style={{
+                                                    fontSize: 17,
+                                                    backgroundColor: RandomUtils._color(
+                                                        user.firstname.length -
+                                                            user.created_at.charAt(
+                                                                user.created_at
+                                                                    .length - 2,
+                                                            ),
+                                                    ),
+                                                }}
+                                            >
+                                                <Typography>
+                                                    {`${user.firstname.charAt(
+                                                        0,
+                                                    )}${user.lastname.charAt(
+                                                        0,
+                                                    )}`}
+                                                </Typography>
+                                            </Avatar>
+                                        )}
                                     </IconButton>
 
                                     <AccountMenu {...props} />
