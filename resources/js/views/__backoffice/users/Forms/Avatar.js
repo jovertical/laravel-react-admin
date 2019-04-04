@@ -53,10 +53,26 @@ class Avatar extends Component {
         const { user } = this.props;
 
         try {
-            await axios.delete(`api/v1/users/${user.id}/avatar`);
+            const response = await axios.delete(
+                `api/v1/users/${user.id}/avatar`,
+            );
 
-            removed();
-        } catch (error) {}
+            if (response.status !== 200) {
+                removed(false, response.statusText);
+
+                return;
+            }
+
+            removed(true);
+        } catch (error) {
+            if (!error.response) {
+                removed(false, 'File not removed due to unknown error.');
+
+                return;
+            }
+
+            removed(false, error.response.statusText);
+        }
     };
 
     /**
@@ -74,7 +90,7 @@ class Avatar extends Component {
             const formData = new FormData();
             formData.append('avatar', file);
 
-            await fetch(`api/v1/users/${user.id}/avatar`, {
+            const response = await fetch(`api/v1/users/${user.id}/avatar`, {
                 method: 'POST',
                 headers: {
                     Authorization:
@@ -85,8 +101,20 @@ class Avatar extends Component {
                 body: formData,
             });
 
-            done();
-        } catch (error) {}
+            if (response.status !== 200) {
+                done(false, response.statusText);
+            }
+
+            done(true);
+        } catch (error) {
+            if (!error.response) {
+                removed(false, 'File not uploaded due to unknown error.');
+
+                return;
+            }
+
+            removed(false, error.response.statusText);
+        }
     };
 
     componentDidMount() {

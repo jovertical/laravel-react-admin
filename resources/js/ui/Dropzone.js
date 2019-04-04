@@ -146,7 +146,24 @@ function Dropzone(props) {
         }
 
         if (removedFile.status === 'uploaded') {
-            handleFileRemoved(removedFile, () => {
+            handleFileRemoved(removedFile, (removed, message = '') => {
+                if (!removed) {
+                    // Let it be known why the file is not removed.
+                    setFiles(
+                        files.map(file => {
+                            if (file.url === removedFile.url) {
+                                return Object.assign(file, {
+                                    message,
+                                });
+                            }
+
+                            return file;
+                        }),
+                    );
+
+                    return;
+                }
+
                 setFiles(files.filter(file => file.url !== removedFile.url));
             });
 
@@ -214,20 +231,33 @@ function Dropzone(props) {
             return;
         }
 
-        handleUpload(files.find(file => file.status === 'uploading'), () => {
-            setFiles(
-                files.map(file => {
-                    if (file.status === 'uploading') {
-                        return Object.assign(file, {
-                            status: 'uploaded',
-                            message: '',
-                        });
-                    }
+        handleUpload(
+            files.find(file => file.status === 'uploading'),
+            (uploaded, message = '') => {
+                function updateFiles(fileStatus, fileMessage = '') {
+                    setFiles(
+                        files.map(file => {
+                            if (file.status === 'uploading') {
+                                return Object.assign(file, {
+                                    status: fileStatus,
+                                    message: fileMessage,
+                                });
+                            }
 
-                    return file;
-                }),
-            );
-        });
+                            return file;
+                        }),
+                    );
+                }
+
+                if (!uploaded) {
+                    updateFiles('rejected', message);
+
+                    return;
+                }
+
+                updateFiles('uploaded');
+            },
+        );
     }, [files]);
 
     const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
