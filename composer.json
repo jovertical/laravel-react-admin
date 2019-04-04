@@ -8,7 +8,11 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.3",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
         "beyondcode/laravel-self-diagnosis": "^1.1",
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.4",
