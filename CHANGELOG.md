@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v1.1.1](https://github.com/palonponjovertlota/laravel-react-admin/releases/tag/1.1.1) - 2019-04-05
+
+# Changes
+
+- _#33_ API error messages of a file upload is not shown by `Dropzone` component. [d210b37](https://github.com/palonponjovertlota/laravel-react-admin/commit/d210b37132261eefac8511157cd6574860dd83db).
+- _#37_ Added a link to the User's avatar (from the list) [1dc4465](https://github.com/palonponjovertlota/laravel-react-admin/commit/1dc4465486710e4c65fcc9c83cf22877c6514bb5).
+
+# Fixes
+
+- _#36_ Uploading large files fails [3051873](https://github.com/palonponjovertlota/laravel-react-admin/commit/305187322927dc64bd9a25c2afa32e3a6ac0bda1).
+
 ## [v1.1.0](https://github.com/palonponjovertlota/laravel-react-admin/releases/tag/1.1.0) - 2019-04-04
 
 ### Additions
