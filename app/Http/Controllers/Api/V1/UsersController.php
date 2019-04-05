@@ -160,11 +160,11 @@ class UsersController extends Controller
      */
     public function storeAvatar(Request $request, User $user) : JsonResponse
     {
-        if (! $user->upload($request->files->get('avatar'))) {
-            return response()->json('Unable to process the upload', 422);
+        if ($user->upload($request->files->get('avatar'))) {
+            return response()->json($user);
         }
 
-        return response()->json('Uploaded successfully!');
+        return response()->json('Unable to process the upload', 422);
     }
 
     /**
@@ -177,7 +177,11 @@ class UsersController extends Controller
      */
     public function destroyAvatar(Request $request, User $user)  : JsonResponse
     {
-        return response()->json($user->destroyUpload());
+        if ($user->destroyUpload()) {
+            return response()->json($user);
+        }
+
+        return response()->json('Uploaded file not removed', 422);
     }
 
     /**

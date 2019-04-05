@@ -3,12 +3,16 @@
 namespace Tests\Feature\Api\V1;
 
 use App\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\TestResponse;
 
 class UsersTest extends BaseTest
 {
     /** @test */
     public function a_user_can_list_users()
     {
+        // The payload that should be sent alongside the request.
         $payload = array_merge($this->getDefaultPayload(), []);
 
         $this->get(route('api.v1.users.index'), $payload)->assertStatus(200);
@@ -32,6 +36,7 @@ class UsersTest extends BaseTest
             'username' => $this->faker->userName,
         ];
 
+        // The payload that should be sent alongside the request.
         $payload = array_merge($this->getDefaultPayload(), []);
 
         // Assuming that the user is created through the test data,
@@ -51,6 +56,7 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_view_a_user()
     {
+        // The payload that should be sent alongside the request.
         $payload = array_merge($this->getDefaultPayload(), []);
 
         // The user to be shown.
@@ -67,6 +73,7 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_update_a_user()
     {
+        // The payload that should be sent alongside the request.
         $payload = array_merge($this->getDefaultPayload(), []);
 
         // The user to be updated.
@@ -85,6 +92,7 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_delete_a_user()
     {
+        // The payload that should be sent alongside the request.
         $payload = array_merge($this->getDefaultPayload(), []);
 
         // The user to be deleted.
@@ -126,5 +134,73 @@ class UsersTest extends BaseTest
             ->assertJsonFragment([
                 'total' => $incremented
             ]);
+    }
+
+    /** @test */
+    public function a_user_can_store_an_avatar()
+    {
+        // The user to upload the file for.
+        $user = User::first();
+
+        // Store a fake avatar.
+        $response = $this->storeAvatar($user);
+
+        $data = $response->decodeResponseJson();
+
+        // The original & thumbnail file should exist in the disk.
+        Storage::disk(config('filesystems.default'))
+            ->assertExists("{$data['directory']}/{$data['filename']}")
+            ->assertExists("{$data['directory']}/thumbnails/{$data['filename']}");
+    }
+
+    /** @test */
+    public function a_user_can_destroy_an_avatar()
+    {
+        // The user to upload the file for.
+        $user = User::first();
+
+        // Fake an upload so that we could destroy it.
+        $response = $this->storeAvatar($user);
+
+        // The payload that should be sent alongside the request.
+        $payload = array_merge($this->getDefaultPayload());
+
+        // Assuming that the user's avatar is removed,
+        // It must return a 200 response status and then,
+        // It must return a response with a user containing
+        // null upload attributes to indicate that it was completely destroyed.
+        $response = $this->delete(route('api.v1.users.avatar.destroy', $user), $payload)
+            ->assertStatus(200)
+            ->assertJsonFragment(
+                array_fill_keys($user->getUploadAttributes(), null)
+            );
+
+        // The original & thumbnail file should not exist in the disk.
+        Storage::disk(config('filesystems.default'))
+            ->assertMissing("{$user->directory}/{$user->filename}")
+            ->assertMissing("{$user->directory}/thumbnails/{$user->filename}");
+    }
+
+    /**
+     * Store a fake avatar.
+     *
+     * @param App\User $user
+     *
+     * @return Illuminate\Foundation\Testing\TestResponse
+     */
+    protected function storeAvatar(User $user) : TestResponse
+    {
+        // The payload that should be sent alongside the request.
+        $payload = array_merge($this->getDefaultPayload(), [
+            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+        ]);
+
+        return $this->post(
+            route('api.v1.users.avatar.store', $user), $payload
+        )
+            ->assertStatus(200)
+            ->assertJsonMissing(
+                array_fill_keys($user->getUploadAttributes(), null)
+            );
     }
 }

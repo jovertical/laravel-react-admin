@@ -55,4 +55,14 @@ class User extends Authenticatable implements JWTSubject, Uploader
     {
         return 'users/'.$this->getKey();
     }
+
+    /**
+     * Get the upload attributes
+     *
+     * @return array
+     */
+    public function getUploadAttributes() : array
+    {
+        return $this->uploadAttributes;
+    }
 }
