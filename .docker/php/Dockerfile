@@ -9,7 +9,6 @@ RUN ln -snf /usr/share/zoneinfo/${MASTER_TZ} /etc/localtime && echo ${MASTER_TZ}
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    mysql-client \
     libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -37,7 +36,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY composer.lock composer.json ${MASTER_DIR}/
 
 # This is included just to bypass errors thrown by composer scripts
-COPY ./database ${MASTER_DIR}/database
+COPY database ${MASTER_DIR}/database
 
 WORKDIR ${MASTER_DIR}
 
@@ -46,10 +45,6 @@ RUN composer install --no-interaction --no-plugins --no-scripts
 
 # Copy app
 COPY . ${MASTER_DIR}
-
-# Give proper file permission & ownership
-# RUN chown -R www-data:www-data ${MASTER_DIR}
-# RUN chmod -R 755 ${MASTER_DIR}/storage
 
 EXPOSE 9000
 CMD ["php-fpm"]

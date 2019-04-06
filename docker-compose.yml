@@ -3,13 +3,13 @@ services:
     laravel-react-admin-php:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: ./.docker/php/Dockerfile
         container_name: laravel-react-admin-php
         restart: unless-stopped
         working_dir: /var/www/html
         volumes:
             - ./:/var/www/html
-            - ./php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+            - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
         env_file:
             - .env
 
@@ -22,7 +22,7 @@ services:
             - '443:443'
         volumes:
             - ./:/var/www/html
-            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+            - ./.docker/webserver/nginx.conf:/etc/nginx/conf.d/nginx.conf
         depends_on:
             - laravel-react-admin-php
 
