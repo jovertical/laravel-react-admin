@@ -46,5 +46,13 @@ RUN composer install --no-interaction --no-plugins --no-scripts
 # Copy app
 COPY . ${MASTER_DIR}
 
+# Copy scripts
+COPY ./.docker/scripts/queuer.sh /usr/local/bin/laravel-queuer
+COPY ./.docker/scripts/scheduler.sh /usr/local/bin/laravel-scheduler
+
+# Give the scripts executable permissions
+RUN chmod u+x /usr/local/bin/laravel-queuer
+RUN chmod u+x /usr/local/bin/laravel-scheduler
+
 EXPOSE 9000
 CMD ["php-fpm"]

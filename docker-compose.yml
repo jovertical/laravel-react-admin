@@ -1,19 +1,42 @@
 version: '3'
 services:
-    laravel-react-admin-php:
+    php-fpm:
         build:
             context: .
-            dockerfile: ./.docker/php/Dockerfile
-        container_name: laravel-react-admin-php
+            dockerfile: ./.docker/php-fpm/Dockerfile
+        image: laravel-react-admin-php-fpm
+        container_name: laravel-react-admin-php-fpm
         restart: unless-stopped
         working_dir: /var/www/html
         volumes:
             - ./:/var/www/html
-            - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+            - ./.docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
         env_file:
             - .env
 
-    laravel-react-admin-webserver:
+    scheduler:
+        image: laravel-react-admin-php-fpm
+        container_name: laravel-react-admin-scheduler
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - php-fpm
+        command: laravel-scheduler
+        env_file:
+            - .env
+
+    queuer:
+        image: laravel-react-admin-php-fpm
+        container_name: laravel-react-admin-queuer
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - php-fpm
+        command: laravel-queuer
+        env_file:
+            - .env
+
+    webserver:
         image: nginx:alpine
         container_name: laravel-react-admin-webserver
         restart: unless-stopped
@@ -24,9 +47,9 @@ services:
             - ./:/var/www/html
             - ./.docker/webserver/nginx.conf:/etc/nginx/conf.d/nginx.conf
         depends_on:
-            - laravel-react-admin-php
+            - php-fpm
 
-    laravel-react-admin-db:
+    db:
         image: mysql:5.7
         container_name: laravel-react-admin-db
         restart: unless-stopped
@@ -38,4 +61,4 @@ services:
         volumes:
             - ~/.laravel-react-admin-data:/var/lib/mysql
         depends_on:
-            - laravel-react-admin-php
+            - php-fpm
