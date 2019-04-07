@@ -20,8 +20,11 @@ return [
     'previous' => 'Previous',
     'password_request_title' => 'Account Recovery',
     'password_request_subtitle' => "Enter your email and we'll send a recovery link",
+    'password_reset_title' => 'Reset Password',
+    'password_reset_subtitle' => "You can now set your new password",
     'signin' => 'Sign in instead',
     'send_link' => 'Send Link',
+    'reset' => 'Reset',
 
     'notifications' => 'Notifications',
 

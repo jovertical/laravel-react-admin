@@ -20,8 +20,11 @@ return [
     'previous' => 'Nakaraan',
     'password_request_title' => 'Pag-recover sa Account',
     'password_request_subtitle' => 'Ipasok ang iyong email at magpapadala kami ng recovery link',
+    'password_reset_title' => 'Reset Password',
+    'password_reset_subtitle' => "Maaari mo nang i-set ang iyong bagong password",
     'signin' => 'Mag-sign in nalang',
     'send_link' => 'I-send ang Link',
+    'reset' => 'I-reset',
 
     'notifications' => 'Mga Abiso',
 

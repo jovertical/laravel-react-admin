@@ -32,7 +32,7 @@ class ForgotPasswordController extends Controller
                 $request->input('routeSuffix'),
                 ':',
                 true
-            ).$token;
+            ).$token.'?email='.$user->email;
 
             $resetLink = route('backoffice.welcome').'#'.$routeSuffix;
 
