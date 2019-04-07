@@ -6,19 +6,14 @@ services:
             dockerfile: ./.docker/php-fpm/Dockerfile
         image: laravel-react-admin-php-fpm
         container_name: laravel-react-admin-php-fpm
-        restart: unless-stopped
         working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-            - ./.docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+        restart: unless-stopped
         env_file:
             - .env
 
     scheduler:
         image: laravel-react-admin-php-fpm
         container_name: laravel-react-admin-scheduler
-        volumes:
-            - ./:/var/www/html
         depends_on:
             - php-fpm
         command: laravel-scheduler
@@ -28,8 +23,6 @@ services:
     queuer:
         image: laravel-react-admin-php-fpm
         container_name: laravel-react-admin-queuer
-        volumes:
-            - ./:/var/www/html
         depends_on:
             - php-fpm
         command: laravel-queuer
@@ -37,15 +30,12 @@ services:
             - .env
 
     webserver:
-        image: nginx:alpine
+        build:
+            context: .
+            dockerfile: ./.docker/webserver/Dockerfile
         container_name: laravel-react-admin-webserver
+        working_dir: /var/www/html
         restart: unless-stopped
-        ports:
-            - '80:80'
-            - '443:443'
-        volumes:
-            - ./:/var/www/html
-            - ./.docker/webserver/nginx.conf:/etc/nginx/conf.d/nginx.conf
         depends_on:
             - php-fpm
 
@@ -53,12 +43,5 @@ services:
         image: mysql:5.7
         container_name: laravel-react-admin-db
         restart: unless-stopped
-        ports:
-            - '3306:3306'
-        environment:
-            MYSQL_DATABASE: laravel-react-admin
-            MYSQL_ROOT_PASSWORD: secret
-        volumes:
-            - ~/.laravel-react-admin-data:/var/lib/mysql
         depends_on:
             - php-fpm
