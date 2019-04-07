@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, TextField, Button, Link, withStyles } from '@material-ui/core';
+import {
+    Button,
+    Grid,
+    Link,
+    TextField,
+    Typography,
+    withStyles,
+} from '@material-ui/core';
 
 import * as NavigationUtils from '../../../utils/Navigation';
 import * as UrlUtils from '../../../utils/URL';
@@ -43,10 +50,10 @@ class PasswordRequest extends Component {
                     type: 'success',
                     title: 'Link Sent',
                     body: (
-                        <h4>
+                        <Typography>
                             Check your email to reset your account.
                             <br /> Thank you.
-                        </h4>
+                        </Typography>
                     ),
                     action: () => history.push(`/signin?username=${email}`),
                 },
@@ -59,10 +66,10 @@ class PasswordRequest extends Component {
                         type: 'error',
                         title: 'Something went wrong',
                         body: (
-                            <h4>
+                            <Typography>
                                 Oops? Something went wrong here.
                                 <br /> Please try again.
-                            </h4>
+                            </Typography>
                         ),
                         action: () => window.location.reload(),
                     },

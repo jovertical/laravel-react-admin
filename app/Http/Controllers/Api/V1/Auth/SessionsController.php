@@ -103,11 +103,7 @@ class SessionsController extends Controller
 
         $this->saveAuthToken($authToken, $user);
 
-        return response()->json([
-            'auth_token' => $authToken,
-            'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
-        ]);
+        return response()->json(_token_payload($authToken));
     }
 
     /**

@@ -25,7 +25,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
             Route::name('password.')->prefix('password')->group(function () {
                 Route::post('request', 'ForgotPasswordController@sendResetLinkEmail')->name('request');
-                Route::post('reset/{token}', 'ResetPasswordController@reset')->name('reset');
+                Route::patch('reset/{token}', 'ResetPasswordController@reset')->name('reset');
             });
         });
 

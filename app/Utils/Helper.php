@@ -18,6 +18,24 @@ if (! function_exists('_asset')) {
     }
 }
 
+if (! function_exists('_token_payload')) {
+    /**
+     * Get the token bearer payload.
+     *
+     * @param string $authToken
+     *
+     * @return array
+     */
+    function _token_payload(string $authToken) : array
+    {
+        return [
+            'auth_token' => $authToken,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60
+        ];
+    }
+}
+
 if (! function_exists('_test_user')) {
     /**
      * Login and get the then authenticated user.
@@ -40,7 +58,7 @@ if (! function_exists('_keyword_to_sql_operator')) {
      *
      * @return string $operator
      */
-    function _to_sql_operator($keyword)
+    function _to_sql_operator($keyword) : string
     {
         switch ($keyword) {
             case 'eqs':

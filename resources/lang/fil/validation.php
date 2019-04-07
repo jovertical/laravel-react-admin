@@ -92,6 +92,7 @@ return [
     'not_regex' => 'The :attribute format is invalid.',
     'numeric' => 'The :attribute must be a number.',
     'present' => 'The :attribute field must be present.',
+    'pwned' => 'The :attribute is weak, please enter a strong password.',
     'regex' => 'The :attribute format is invalid.',
     'required' => 'The :attribute field is required.',
     'required_if' => 'The :attribute field is required when :other is :value.',

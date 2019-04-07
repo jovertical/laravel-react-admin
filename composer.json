@@ -20,7 +20,8 @@
         "laravel/framework": "5.8.*",
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
-        "tymon/jwt-auth": "dev-develop#34d8e48 as 1.0.0-rc.3.2"
+        "tymon/jwt-auth": "dev-develop#34d8e48 as 1.0.0-rc.3.2",
+        "valorin/pwned-validator": "^1.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

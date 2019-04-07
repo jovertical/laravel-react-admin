@@ -12,10 +12,10 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_list_users()
     {
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), []);
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
 
-        $this->get(route('api.v1.users.index'), $payload)->assertStatus(200);
+        $this->get(route('api.v1.users.index'), $body)->assertStatus(200);
     }
 
     /** @test */
@@ -36,13 +36,13 @@ class UsersTest extends BaseTest
             'username' => $this->faker->userName,
         ];
 
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), []);
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
 
         // Assuming that the user is created through the test data,
         // It must return a 201 response status and then,
         // It must return a response body consisting our test data, if not all.
-        $this->post(route('api.v1.users.store'), array_merge($attributes, $payload))
+        $this->post(route('api.v1.users.store'), array_merge($attributes, $body))
             ->assertStatus(201)
             ->assertJson($attributes);
 
@@ -56,16 +56,16 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_view_a_user()
     {
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), []);
-
         // The user to be shown.
         $user = User::first();
+
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
 
         // Assuming that a user is found,
         // It must return a 200 response status and then,
         // It must be found as is in the JSON response.
-        $this->get(route('api.v1.users.show', $user), $payload)
+        $this->get(route('api.v1.users.show', $user), $body)
             ->assertStatus(200)
             ->assertExactJson($user->toArray());
     }
@@ -73,18 +73,18 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_update_a_user()
     {
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), []);
-
         // The user to be updated.
         $user = User::first();
         $user->address = $this->faker->address;
         $user->update();
 
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
+
         // Assuming that the user is updated,
         // It must return a 200 response status and then,
         // It must be found as is in the JSON response.
-        $this->patch(route('api.v1.users.update', $user), $payload)
+        $this->patch(route('api.v1.users.update', $user), $body)
             ->assertStatus(200)
             ->assertExactJson($user->toArray());
     }
@@ -92,11 +92,11 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_delete_a_user()
     {
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), []);
-
         // The user to be deleted.
         $user = User::latest()->first();
+
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
 
         // Decremented counter.
         $decremented =  User::count() - 1;
@@ -104,7 +104,7 @@ class UsersTest extends BaseTest
         // Assuming that the API will delete one,
         // It must return a 200 response status and then,
         // It must equal this decremented counter.
-        $this->delete(route('api.v1.users.destroy', $user))
+        $this->delete(route('api.v1.users.destroy', $user), $body)
             ->assertStatus(200)
             ->assertJsonFragment([
                 'total' => $decremented
@@ -114,8 +114,6 @@ class UsersTest extends BaseTest
     /** @test */
     public function a_user_can_restore_a_user()
     {
-        $payload = array_merge($this->getDefaultPayload(), []);
-
         // Delete a user, it will then be restored.
         $deletedUser = User::latest()->first();
         $deletedUser->delete();
@@ -126,10 +124,13 @@ class UsersTest extends BaseTest
         // Get the deleted user.
         $recoverableUser = User::withTrashed()->find($deletedUser->id);
 
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), []);
+
         // Assuming that the users count is decremented after deleting one,
         // It must return a 200 response status and then,
         // It must equal this incremented counter.
-        $this->patch(route('api.v1.users.restore', $recoverableUser))
+        $this->patch(route('api.v1.users.restore', $recoverableUser), $body)
             ->assertStatus(200)
             ->assertJsonFragment([
                 'total' => $incremented
@@ -162,14 +163,14 @@ class UsersTest extends BaseTest
         // Fake an upload so that we could destroy it.
         $response = $this->storeAvatar($user);
 
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload());
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload());
 
         // Assuming that the user's avatar is removed,
         // It must return a 200 response status and then,
         // It must return a response with a user containing
         // null upload attributes to indicate that it was completely destroyed.
-        $response = $this->delete(route('api.v1.users.avatar.destroy', $user), $payload)
+        $response = $this->delete(route('api.v1.users.avatar.destroy', $user), $body)
             ->assertStatus(200)
             ->assertJsonFragment(
                 array_fill_keys($user->getUploadAttributes(), null)
@@ -190,13 +191,18 @@ class UsersTest extends BaseTest
      */
     protected function storeAvatar(User $user) : TestResponse
     {
-        // The payload that should be sent alongside the request.
-        $payload = array_merge($this->getDefaultPayload(), [
+        // The response body that should be sent alongside the request.
+        $body = array_merge($this->getDefaultPayload(), [
             'avatar' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
+        // Assuming that the fake file has been uploaded,
+        // It must return a 200 response status and then,
+        // It must return a response with a user containing
+        // non-null upload attributes.
         return $this->post(
-            route('api.v1.users.avatar.store', $user), $payload
+            route('api.v1.users.avatar.store', $user),
+            $body
         )
             ->assertStatus(200)
             ->assertJsonMissing(

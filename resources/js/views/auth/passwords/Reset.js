@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Formik, Form, withFormik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import {
@@ -26,6 +26,7 @@ class PasswordReset extends Component {
     state = {
         loading: false,
         message: {},
+        email: '',
         showPassword: false,
         showPasswordConfirmation: false,
     };
@@ -52,21 +53,59 @@ class PasswordReset extends Component {
      *
      * @return {undefined}
      */
-    handleSubmit = async (values, { setSubmitting }) => {
+    handleSubmit = async (values, { setSubmitting, setErrors }) => {
         setSubmitting(false);
+
+        this.setState({ loading: true });
+
+        try {
+            const { match, pageProps } = this.props;
+            const { token } = match.params;
+
+            const response = await axios.patch(
+                `api/v1/auth/password/reset/${token}`,
+                values,
+            );
+
+            await pageProps.authenticate(JSON.stringify(response.data));
+
+            this.setState({ loading: false });
+        } catch (error) {
+            if (!error.response) {
+                throw new Error('Unknown error');
+            }
+
+            const { errors } = error.response.data;
+
+            if (errors) {
+                setErrors(errors);
+            }
+
+            this.setState({ loading: false });
+        }
     };
 
+    componentDidMount() {
+        const { location } = this.props;
+
+        const queryParams = UrlUtils._queryParams(location.search);
+
+        if (!queryParams.hasOwnProperty('email')) {
+            return;
+        }
+
+        this.setState({
+            email: queryParams.email,
+        });
+    }
+
     render() {
-        const { classes, location } = this.props;
-        const email = UrlUtils._queryParams(location.search).hasOwnProperty(
-            'email',
-        )
-            ? UrlUtils._queryParams(location.search).email
-            : '';
+        const { classes } = this.props;
 
         const {
             loading,
             message,
+            email,
             showPassword,
             showPasswordConfirmation,
         } = this.state;
@@ -265,4 +304,4 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(withFormik({})(PasswordReset));
+export default withStyles(styles)(PasswordReset);
