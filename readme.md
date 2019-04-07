@@ -38,7 +38,17 @@ You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 ## Using Docker
 
 If you prefer [Docker](https://www.docker.com), there is a working setup provided to get you started in no time.
-Check your local setup to make sure that running this app in docker will work correctly.
+Check your local setup to make sure that running this app in docker will work correctly:
+
+### For Unix Based Operating Systems, Give It Proper Permissions
+
+If you are a **Linux** / **Mac** user, make sure to give the application proper _file permissions_. The _php-fpm_ image uses `www-data` as its default user:
+
+```
+cd ~/your_projects_folder
+
+sudo chown ${USER}:www-data -R laravel-react-admin
+```
 
 ### Localhost Should Be Freed
 
