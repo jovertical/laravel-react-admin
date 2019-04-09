@@ -72,7 +72,18 @@ class PasswordReset extends Component {
             this.setState({ loading: false });
         } catch (error) {
             if (!error.response) {
-                throw new Error('Unknown error');
+                this.setState({
+                    loading: false,
+                    message: {
+                        type: 'error',
+                        title: 'Something went wrong',
+                        body:
+                            'Oops? Something went wrong here. Please try again.',
+                        action: () => window.location.reload(),
+                    },
+                });
+
+                return;
             }
 
             const { errors } = error.response.data;
@@ -159,7 +170,13 @@ class PasswordReset extends Component {
                             ),
                     })}
                 >
-                    {({ values, handleChange, errors, isSubmitting }) => (
+                    {({
+                        values,
+                        handleChange,
+                        errors,
+                        submitCount,
+                        isSubmitting,
+                    }) => (
                         <Form>
                             <Grid container direction="column">
                                 <Grid item className={classes.formGroup}>
@@ -173,10 +190,12 @@ class PasswordReset extends Component {
                                         onChange={handleChange}
                                         variant="outlined"
                                         fullWidth
-                                        error={errors.hasOwnProperty(
-                                            'password',
-                                        )}
+                                        error={
+                                            submitCount > 0 &&
+                                            errors.hasOwnProperty('password')
+                                        }
                                         helperText={
+                                            submitCount > 0 &&
                                             errors.hasOwnProperty('password') &&
                                             errors.password
                                         }
@@ -216,13 +235,18 @@ class PasswordReset extends Component {
                                         onChange={handleChange}
                                         variant="outlined"
                                         fullWidth
-                                        error={errors.hasOwnProperty(
-                                            'password_confirmation',
-                                        )}
-                                        helperText={
+                                        error={
+                                            submitCount > 0 &&
                                             errors.hasOwnProperty(
                                                 'password_confirmation',
-                                            ) && errors.password_confirmation
+                                            )
+                                        }
+                                        helperText={
+                                            submitCount > 0 &&
+                                            errors.hasOwnProperty(
+                                                'password_confirmation',
+                                            ) &&
+                                            errors.password_confirmation
                                         }
                                         InputProps={{
                                             endAdornment: (
@@ -281,7 +305,8 @@ class PasswordReset extends Component {
                                         disabled={
                                             (errors &&
                                                 Object.keys(errors).length >
-                                                    0) ||
+                                                    0 &&
+                                                submitCount > 0) ||
                                             isSubmitting
                                         }
                                     >

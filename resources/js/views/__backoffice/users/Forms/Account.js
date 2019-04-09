@@ -32,7 +32,7 @@ const Account = props => {
             onSubmit={handleSubmit}
             validateOnBlur={false}
         >
-            {({ values, handleChange, errors, isSubmitting }) => (
+            {({ values, handleChange, errors, submitCount, isSubmitting }) => (
                 <Form>
                     <Typography variant="h6" gutterBottom>
                         Account Settings
@@ -42,7 +42,10 @@ const Account = props => {
                         <Grid item xs={12} sm={12}>
                             <FormControl
                                 className={classes.formControl}
-                                error={errors.hasOwnProperty('type')}
+                                error={
+                                    submitCount > 0 &&
+                                    errors.hasOwnProperty('type')
+                                }
                             >
                                 <InputLabel htmlFor="type">
                                     Type{' '}
@@ -68,11 +71,12 @@ const Account = props => {
                                     <MenuItem value="user">User</MenuItem>
                                 </Select>
 
-                                {errors.hasOwnProperty('type') && (
-                                    <FormHelperText>
-                                        {errors.type}
-                                    </FormHelperText>
-                                )}
+                                {submitCount > 0 &&
+                                    errors.hasOwnProperty('type') && (
+                                        <FormHelperText>
+                                            {errors.type}
+                                        </FormHelperText>
+                                    )}
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -81,7 +85,10 @@ const Account = props => {
                         <Grid item xs={12} sm={6}>
                             <FormControl
                                 className={classes.formControl}
-                                error={errors.hasOwnProperty('email')}
+                                error={
+                                    submitCount > 0 &&
+                                    errors.hasOwnProperty('email')
+                                }
                             >
                                 <InputLabel htmlFor="email">
                                     Email{' '}
@@ -95,18 +102,23 @@ const Account = props => {
                                     onChange={handleChange}
                                     fullWidth
                                 />
-                                {errors.hasOwnProperty('email') && (
-                                    <FormHelperText>
-                                        {errors.email}
-                                    </FormHelperText>
-                                )}
+
+                                {submitCount > 0 &&
+                                    errors.hasOwnProperty('email') && (
+                                        <FormHelperText>
+                                            {errors.email}
+                                        </FormHelperText>
+                                    )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
                             <FormControl
                                 className={classes.formControl}
-                                error={errors.hasOwnProperty('username')}
+                                error={
+                                    submitCount > 0 &&
+                                    errors.hasOwnProperty('username')
+                                }
                             >
                                 <InputLabel htmlFor="username">
                                     Username
@@ -119,11 +131,13 @@ const Account = props => {
                                     onChange={handleChange}
                                     fullWidth
                                 />
-                                {errors.hasOwnProperty('username') && (
-                                    <FormHelperText>
-                                        {errors.username}
-                                    </FormHelperText>
-                                )}
+
+                                {submitCount > 0 &&
+                                    errors.hasOwnProperty('username') && (
+                                        <FormHelperText>
+                                            {errors.username}
+                                        </FormHelperText>
+                                    )}
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -145,7 +159,8 @@ const Account = props => {
                                 color="primary"
                                 disabled={
                                     (errors &&
-                                        Object.keys(errors).length > 0) ||
+                                        Object.keys(errors).length > 0 &&
+                                        submitCount > 0) ||
                                     isSubmitting
                                 }
                             >

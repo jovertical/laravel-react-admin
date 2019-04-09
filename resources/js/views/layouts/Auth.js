@@ -50,11 +50,7 @@ const Auth = props => (
                                     : props.title}
                             </Typography>
 
-                            <Typography
-                                variant="h6"
-                                component="h4"
-                                color="textSecondary"
-                            >
+                            <Typography color="textSecondary">
                                 {props.message.hasOwnProperty('body')
                                     ? props.message.body
                                     : props.subTitle}

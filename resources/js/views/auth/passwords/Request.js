@@ -49,12 +49,7 @@ class PasswordRequest extends Component {
                 message: {
                     type: 'success',
                     title: 'Link Sent',
-                    body: (
-                        <Typography>
-                            Check your email to reset your account.
-                            <br /> Thank you.
-                        </Typography>
-                    ),
+                    body: `Check your email to reset your account. Thank you.`,
                     action: () => history.push(`/signin?username=${email}`),
                 },
             });
@@ -65,12 +60,7 @@ class PasswordRequest extends Component {
                     message: {
                         type: 'error',
                         title: 'Something went wrong',
-                        body: (
-                            <Typography>
-                                Oops? Something went wrong here.
-                                <br /> Please try again.
-                            </Typography>
-                        ),
+                        body: `Oops? Something went wrong here. Please try again.`,
                         action: () => window.location.reload(),
                     },
                 });
@@ -126,7 +116,13 @@ class PasswordRequest extends Component {
                         ),
                     })}
                 >
-                    {({ values, handleChange, errors, isSubmitting }) => (
+                    {({
+                        values,
+                        handleChange,
+                        errors,
+                        submitCount,
+                        isSubmitting,
+                    }) => (
                         <Form>
                             <Grid container direction="column">
                                 <Grid item className={classes.formGroup}>
@@ -138,8 +134,12 @@ class PasswordRequest extends Component {
                                         onChange={handleChange}
                                         variant="outlined"
                                         fullWidth
-                                        error={errors.hasOwnProperty('email')}
+                                        error={
+                                            submitCount > 0 &&
+                                            errors.hasOwnProperty('email')
+                                        }
                                         helperText={
+                                            submitCount > 0 &&
                                             errors.hasOwnProperty('email') &&
                                             errors.email
                                         }
@@ -180,7 +180,8 @@ class PasswordRequest extends Component {
                                         disabled={
                                             (errors &&
                                                 Object.keys(errors).length >
-                                                    0) ||
+                                                    0 &&
+                                                submitCount > 0) ||
                                             isSubmitting
                                         }
                                     >

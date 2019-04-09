@@ -17,7 +17,7 @@
     },
     "plugins": ["react"],
     "rules": {
-        "indent": ["warn", "4"],
+        "indent": ["warn", 4],
         "linebreak-style": ["warn", "unix"],
         "quotes": ["warn", "single"],
         "semi": ["warn", "always"],
