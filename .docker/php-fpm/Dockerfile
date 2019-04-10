@@ -7,21 +7,22 @@ RUN ln -snf /usr/share/zoneinfo/${MASTER_TZ} /etc/localtime && echo ${MASTER_TZ}
 
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
+    curl \
     git \
-    curl
+    jpegoptim optipng pngquant gifsicle \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    locales \
+    mysql-client \
+    unzip \
+    vim \
+    zip
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install bcmath pdo_mysql mbstring zip exif pcntl && \
+RUN docker-php-ext-install bcmath exif mbstring pcnt pdo_mysqll zip && \
     docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ && \
     docker-php-ext-install gd
 

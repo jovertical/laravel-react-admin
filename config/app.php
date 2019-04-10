@@ -172,6 +172,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Spatie\Backup\BackupServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 

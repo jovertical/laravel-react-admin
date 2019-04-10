@@ -68,11 +68,11 @@ You can now run the _image_ using the `docker-compose up` and optionally pass th
 
 ### Installing PHP & NPM dependencies
 
-In development, do note that all files inside this app is _bind-mounted_ into the container, **docker** will just use the existing directories, in our concern the `vendor` and `node_modules`. Here is an example of running a composer install command: `docker container exec -it lra-php composer install --no-interaction --no-plugins --no-scripts`.
+In development, do note that all files inside this app is _bind-mounted_ into the container, **docker** will just use the existing directories, in our concern the `vendor` and `node_modules`. Here is an example of running a composer install command: `docker container exec -it laravel-react-admin-php-fpm composer install --no-interaction --no-plugins --no-scripts`.
 
 ### Running Artisan Commands
 
-You can run any artisan commands directly into the `lra-php` container. Here is an example of a migration command: `docker container exec -it lra-php php artisan migrate:fresh --seed`.
+You can run any artisan commands directly into the `laravel-react-admin-php-fpm` container. Here is an example of a migration command: `docker container exec -it laravel-react-admin-php-fpm php artisan migrate:fresh --seed`.
 
 ### What about webpack?
 
