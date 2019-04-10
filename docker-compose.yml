@@ -45,3 +45,12 @@ services:
         restart: unless-stopped
         depends_on:
             - php-fpm
+
+    db-admin:
+        image: phpmyadmin/phpmyadmin
+        container_name: laravel-react-admin-db-admin
+        restart: unless-stopped
+        depends_on:
+            - db
+        links:
+            - db

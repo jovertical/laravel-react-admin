@@ -74,9 +74,21 @@ In development, do note that all files inside this app is _bind-mounted_ into th
 
 You can run any artisan commands directly into the `laravel-react-admin-php-fpm` container. Here is an example of a migration command: `docker container exec -it laravel-react-admin-php-fpm php artisan migrate:fresh --seed`.
 
-### What about webpack?
+### What about Browsersync?
 
 As we are bundling frontend assets with [webpack](https://webpack.js.org/) under the hood, you must specify the custom host address where the application runs in docker so that webpack can proxy that to be able to develop using docker. You can pass a `--env.proxy` flag when running for example the `npm run watch` command: `npm run watch -- --env.proxy=http:your_custom_host_address`.
+
+### Using PhpMyAdmin
+
+You could use **PhpMyAdmin** to browse your MySql database as it is included in this **Docker** integration. Just add a _Virtual Host_ that points to `127.0.0.1` & the _Domain_ should be the same with your custom host address:
+
+```
+// /etc/hosts
+
+127.0.0.1    phpmyadmin.your_custom_host_address
+```
+
+You could then visit **PhpMyAdmin** here: phpmyadmin.your_custom_host_address
 
 ---
 

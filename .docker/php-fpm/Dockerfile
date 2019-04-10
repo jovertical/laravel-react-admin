@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install bcmath exif mbstring pcnt pdo_mysqll zip && \
+RUN docker-php-ext-install bcmath exif mbstring pcntl pdo_mysql zip && \
     docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ && \
     docker-php-ext-install gd
 
