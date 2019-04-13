@@ -26,10 +26,14 @@ class PasswordRequest extends Component {
      * Event listener that is triggered when the password request form is submitted.
      *
      * @param {object} event
+     * @param {object} form
      *
      * @return {undefined}
      */
-    handleRequestPasswordSubmit = async (values, { setSubmitting }) => {
+    handleRequestPasswordSubmit = async (
+        values,
+        { setSubmitting, setErrors },
+    ) => {
         setSubmitting(false);
 
         try {
@@ -69,7 +73,6 @@ class PasswordRequest extends Component {
             }
 
             const { errors } = error.response.data;
-            const { setErrors } = this.props;
 
             setErrors(errors);
 
@@ -124,7 +127,7 @@ class PasswordRequest extends Component {
                         submitCount,
                         isSubmitting,
                     }) => (
-                        <Form>
+                        <Form autoComplete="off">
                             <Grid container direction="column">
                                 <Grid item className={classes.formGroup}>
                                     <TextField

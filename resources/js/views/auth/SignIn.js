@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Formik, Form, withFormik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import {
@@ -64,10 +64,11 @@ class SignIn extends Component {
      * This should send an API request to identify the user.
      *
      * @param {string} username
+     * @param {object} form
      *
      * @return {undefined}
      */
-    identify = async (username = null) => {
+    identify = async (username = null, form = {}) => {
         this.setState({ loading: true });
 
         try {
@@ -96,9 +97,10 @@ class SignIn extends Component {
             }
 
             const { errors } = error.response.data;
-            const { setErrors } = this.props;
 
-            setErrors(errors);
+            if (errors) {
+                form.setErrors(errors);
+            }
 
             this.setState({ loading: false });
         }
@@ -109,10 +111,11 @@ class SignIn extends Component {
      * Reload if authenticated.
      *
      * @param {object} values
+     * @param {object} form
      *
      * @return {undefined}
      */
-    signin = async values => {
+    signin = async (values, form = {}) => {
         this.setState({ loading: true });
 
         try {
@@ -138,9 +141,10 @@ class SignIn extends Component {
             }
 
             const { errors } = error.response.data;
-            const { setErrors } = this.props;
 
-            setErrors(errors);
+            if (errors) {
+                form.setErrors(errors);
+            }
 
             this.setState({ loading: false });
         }
@@ -149,21 +153,24 @@ class SignIn extends Component {
     /**
      * Event listener that is triggered when the sign in form is submitted.
      *
+     * @param {object} event
+     * @param {object} form
+     *
      * @return {undefined}
      */
-    handleSigninSubmit = async (values, { setSubmitting }) => {
-        setSubmitting(false);
+    handleSigninSubmit = async (values, form) => {
+        form.setSubmitting(false);
 
         try {
             const { identified } = this.state;
 
             if (!identified) {
-                await this.identify(values.username);
+                await this.identify(values.username, form);
 
                 return;
             }
 
-            await this.signin(values);
+            await this.signin(values, form);
         } catch (error) {
             this.setState({
                 loading: false,
@@ -242,7 +249,7 @@ class SignIn extends Component {
                     })}
                 >
                     {({ values, handleChange, errors, isSubmitting }) => (
-                        <Form>
+                        <Form autoComplete="off">
                             <Grid container direction="column">
                                 {!identified ? (
                                     <>
@@ -395,6 +402,4 @@ const styles = theme => ({
     },
 });
 
-const Styled = withStyles(styles)(SignIn);
-
-export default withFormik({})(Styled);
+export default withStyles(styles)(SignIn);

@@ -50,6 +50,7 @@ class PasswordReset extends Component {
      * Handle Password Reset submission.
      *
      * @param {object} event
+     * @param {object} form
      *
      * @return {undefined}
      */
@@ -177,7 +178,7 @@ class PasswordReset extends Component {
                         submitCount,
                         isSubmitting,
                     }) => (
-                        <Form>
+                        <Form autoComplete="off">
                             <Grid container direction="column">
                                 <Grid item className={classes.formGroup}>
                                     <TextField
