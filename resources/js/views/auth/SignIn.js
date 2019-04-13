@@ -170,12 +170,7 @@ class SignIn extends Component {
                 message: {
                     type: 'error',
                     title: 'Something went wrong',
-                    body: (
-                        <h4>
-                            Oops? Something went wrong here.
-                            <br /> Please try again.
-                        </h4>
-                    ),
+                    body: 'Oops? Something went wrong here. Please try again.',
                     action: () => window.location.reload(),
                 },
             });
@@ -196,7 +191,7 @@ class SignIn extends Component {
     }
 
     render() {
-        const { classes, setErrors, errors: formErrors } = this.props;
+        const { classes, ...other } = this.props;
 
         const {
             loading,
@@ -208,7 +203,7 @@ class SignIn extends Component {
 
         return (
             <AuthLayout
-                {...this.props}
+                {...other}
                 title={
                     identified
                         ? Lang.get('navigation.signin_identified_title')
@@ -236,9 +231,6 @@ class SignIn extends Component {
                         password: '',
                     }}
                     onSubmit={this.handleSigninSubmit}
-                    validate={values => {
-                        setErrors({});
-                    }}
                     validationSchema={Yup.object().shape({
                         [!identified
                             ? 'username'
@@ -249,153 +241,147 @@ class SignIn extends Component {
                         ),
                     })}
                 >
-                    {({ values, handleChange, errors, isSubmitting }) => {
-                        if (formErrors && Object.keys(formErrors).length > 0) {
-                            errors = formErrors;
-                        }
-
-                        return (
-                            <Form>
-                                <Grid container direction="column">
-                                    {!identified ? (
-                                        <>
-                                            <Grid
-                                                item
-                                                className={classes.formGroup}
-                                            >
-                                                <TextField
-                                                    id="username"
-                                                    name="username"
-                                                    label="Username"
-                                                    placeholder="jovert123"
-                                                    value={values.username}
-                                                    onChange={handleChange}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    error={errors.hasOwnProperty(
-                                                        'username',
-                                                    )}
-                                                    helperText={
-                                                        errors.hasOwnProperty(
-                                                            'username',
-                                                        ) && errors.username
-                                                    }
-                                                />
-                                            </Grid>
-
-                                            <Grid
-                                                item
-                                                className={classes.formGroup}
-                                            >
-                                                <Link to="#">
-                                                    {Lang.get(
-                                                        'navigation.forgot_email',
-                                                    )}
-                                                </Link>
-                                            </Grid>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Grid
-                                                item
-                                                className={classes.formGroup}
-                                            >
-                                                <TextField
-                                                    type={
-                                                        showPassword
-                                                            ? 'text'
-                                                            : 'password'
-                                                    }
-                                                    id="password"
-                                                    name="password"
-                                                    label="Password"
-                                                    placeholder="secret"
-                                                    value={values.password}
-                                                    onChange={handleChange}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    error={errors.hasOwnProperty(
-                                                        'password',
-                                                    )}
-                                                    helperText={
-                                                        errors.hasOwnProperty(
-                                                            'password',
-                                                        ) && errors.password
-                                                    }
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <InputAdornment position="end">
-                                                                <IconButton
-                                                                    aria-label="Toggle password visibility"
-                                                                    onClick={
-                                                                        this
-                                                                            .handleShowPasswordClick
-                                                                    }
-                                                                >
-                                                                    {showPassword ? (
-                                                                        <VisibilityOffIcon />
-                                                                    ) : (
-                                                                        <VisibilityIcon />
-                                                                    )}
-                                                                </IconButton>
-                                                            </InputAdornment>
-                                                        ),
-                                                    }}
-                                                />
-                                            </Grid>
-
-                                            <Grid
-                                                item
-                                                className={classes.formGroup}
-                                            >
-                                                <Link
-                                                    component={props => (
-                                                        <RouterLink
-                                                            {...props}
-                                                            to={{
-                                                                search: UrlUtils._queryString(
-                                                                    {
-                                                                        username,
-                                                                    },
-                                                                ),
-                                                                pathname: NavigationUtils._route(
-                                                                    'auth.passwords.request',
-                                                                ),
-                                                            }}
-                                                        />
-                                                    )}
-                                                >
-                                                    {Lang.get(
-                                                        'navigation.forgot_password',
-                                                    )}
-                                                </Link>
-                                            </Grid>
-                                        </>
-                                    )}
-                                </Grid>
-
-                                <Grid container justify="space-between">
-                                    <Grid item />
-
-                                    <Grid item className={classes.formGroup}>
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            disabled={
-                                                (errors &&
-                                                    Object.keys(errors).length >
-                                                        0) ||
-                                                isSubmitting
-                                            }
+                    {({ values, handleChange, errors, isSubmitting }) => (
+                        <Form>
+                            <Grid container direction="column">
+                                {!identified ? (
+                                    <>
+                                        <Grid
+                                            item
+                                            className={classes.formGroup}
                                         >
-                                            {Lang.get('navigation.next')}
-                                        </Button>
-                                    </Grid>
+                                            <TextField
+                                                id="username"
+                                                name="username"
+                                                label="Username"
+                                                placeholder="jovert123"
+                                                value={values.username}
+                                                onChange={handleChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                error={errors.hasOwnProperty(
+                                                    'username',
+                                                )}
+                                                helperText={
+                                                    errors.hasOwnProperty(
+                                                        'username',
+                                                    ) && errors.username
+                                                }
+                                            />
+                                        </Grid>
+
+                                        <Grid
+                                            item
+                                            className={classes.formGroup}
+                                        >
+                                            <Link to="#">
+                                                {Lang.get(
+                                                    'navigation.forgot_email',
+                                                )}
+                                            </Link>
+                                        </Grid>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Grid
+                                            item
+                                            className={classes.formGroup}
+                                        >
+                                            <TextField
+                                                type={
+                                                    showPassword
+                                                        ? 'text'
+                                                        : 'password'
+                                                }
+                                                id="password"
+                                                name="password"
+                                                label="Password"
+                                                placeholder="secret"
+                                                value={values.password}
+                                                onChange={handleChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                error={errors.hasOwnProperty(
+                                                    'password',
+                                                )}
+                                                helperText={
+                                                    errors.hasOwnProperty(
+                                                        'password',
+                                                    ) && errors.password
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="Toggle password visibility"
+                                                                onClick={
+                                                                    this
+                                                                        .handleShowPasswordClick
+                                                                }
+                                                            >
+                                                                {showPassword ? (
+                                                                    <VisibilityOffIcon />
+                                                                ) : (
+                                                                    <VisibilityIcon />
+                                                                )}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+
+                                        <Grid
+                                            item
+                                            className={classes.formGroup}
+                                        >
+                                            <Link
+                                                component={props => (
+                                                    <RouterLink
+                                                        {...props}
+                                                        to={{
+                                                            search: UrlUtils._queryString(
+                                                                {
+                                                                    username,
+                                                                },
+                                                            ),
+                                                            pathname: NavigationUtils._route(
+                                                                'auth.passwords.request',
+                                                            ),
+                                                        }}
+                                                    />
+                                                )}
+                                            >
+                                                {Lang.get(
+                                                    'navigation.forgot_password',
+                                                )}
+                                            </Link>
+                                        </Grid>
+                                    </>
+                                )}
+                            </Grid>
+
+                            <Grid container justify="space-between">
+                                <Grid item />
+
+                                <Grid item className={classes.formGroup}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={
+                                            (errors &&
+                                                Object.keys(errors).length >
+                                                    0) ||
+                                            isSubmitting
+                                        }
+                                    >
+                                        {Lang.get('navigation.next')}
+                                    </Button>
                                 </Grid>
-                            </Form>
-                        );
-                    }}
+                            </Grid>
+                        </Form>
+                    )}
                 </Formik>
             </AuthLayout>
         );

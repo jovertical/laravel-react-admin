@@ -111,7 +111,7 @@ class PasswordReset extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, ...other } = this.props;
 
         const {
             loading,
@@ -123,7 +123,7 @@ class PasswordReset extends Component {
 
         return (
             <AuthLayout
-                {...this.props}
+                {...other}
                 title={Lang.get('navigation.password_reset_title')}
                 subTitle={Lang.get('navigation.password_reset_subtitle')}
                 loading={loading}

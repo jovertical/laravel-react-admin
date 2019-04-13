@@ -39,7 +39,7 @@ class PasswordRequest extends Component {
             const { email } = values;
             const routeSuffix = NavigationUtils._route('auth.passwords.reset');
 
-            const response = await axios.post('api/v1/auth/password/request', {
+            await axios.post('api/v1/auth/password/request', {
                 email,
                 routeSuffix,
             });
@@ -90,12 +90,13 @@ class PasswordRequest extends Component {
     }
 
     render() {
-        const { classes, location } = this.props;
+        const { classes, ...other } = this.props;
+        const { location } = this.props;
         const { loading, message, email } = this.state;
 
         return (
             <AuthLayout
-                {...this.props}
+                {...other}
                 title={Lang.get('navigation.password_request_title')}
                 subTitle={Lang.get('navigation.password_request_subtitle')}
                 loading={loading}

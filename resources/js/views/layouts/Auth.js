@@ -1,16 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-    Grid,
-    Card,
-    Typography,
-    Button,
-    LinearProgress,
-    withStyles,
-} from '@material-ui/core';
+import { Grid, Card, Typography, Button, withStyles } from '@material-ui/core';
 
+import { LinearIndeterminate } from '../../ui/Loaders';
 import logoLight from '../../../img/logos/short-light.svg';
 import logoDark from '../../../img/logos/short-dark.svg';
+
+/**
+ * Format a given title
+ *
+ * @param {string} title The data that may need transformation
+ */
+const formattedTitle = title => {
+    if (typeof title === 'string') {
+        return (
+            <Typography variant="h5" component="h3">
+                {title}
+            </Typography>
+        );
+    }
+
+    return title;
+};
+
+/**
+ * Format a given subTitle
+ *
+ * @param {string} subTitle The data that may need transformation
+ */
+const formattedSubTitle = subTitle => {
+    if (typeof subTitle === 'string') {
+        return <Typography color="textSecondary">{subTitle}</Typography>;
+    }
+
+    return subTitle;
+};
 
 const Auth = props => (
     <Grid
@@ -21,11 +45,7 @@ const Auth = props => (
     >
         <Grid item className={props.classes.content}>
             <>
-                {props.loading && (
-                    <span>
-                        <LinearProgress className={props.classes.progress} />
-                    </span>
-                )}
+                {props.loading && <LinearIndeterminate />}
 
                 <Card className={props.classes.form}>
                     <Grid
@@ -44,17 +64,13 @@ const Auth = props => (
 
                     <Grid container direction="column" justify="space-between">
                         <Grid item className={props.classes.heading}>
-                            <Typography variant="h5" component="h3">
-                                {props.message.hasOwnProperty('title')
-                                    ? props.message.title
-                                    : props.title}
-                            </Typography>
+                            {props.message.hasOwnProperty('title')
+                                ? formattedTitle(props.message.title)
+                                : formattedTitle(props.title)}
 
-                            <Typography color="textSecondary">
-                                {props.message.hasOwnProperty('body')
-                                    ? props.message.body
-                                    : props.subTitle}
-                            </Typography>
+                            {props.message.hasOwnProperty('body')
+                                ? formattedSubTitle(props.message.body)
+                                : formattedSubTitle(props.subTitle)}
                         </Grid>
 
                         {props.message.hasOwnProperty('type') ? (
@@ -98,22 +114,15 @@ const styles = theme => ({
     },
 
     content: {
-        width: '32rem',
+        width: 512,
     },
 
     form: {
-        padding: '1rem',
+        padding: 16,
         [theme.breakpoints.up('sm')]: {
-            padding: '2rem',
+            padding: 32,
             minHeight: '75vh',
         },
-    },
-
-    progress: {
-        margin: '0 0.5rem',
-        minHeight: '0.5rem',
-        borderTopRightRadius: '100%',
-        borderTopLeftRadius: '100%',
     },
 
     logoContainer: {
@@ -121,12 +130,12 @@ const styles = theme => ({
     },
 
     logo: {
-        width: '5rem',
-        height: '5rem',
+        width: 80,
+        height: 80,
     },
 
     heading: {
-        margin: '2.5rem 0rem',
+        margin: '40px 0px',
         textAlign: 'center',
     },
 
