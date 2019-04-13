@@ -9,6 +9,7 @@
     "type": "project",
     "require": {
         "php": "^7.3",
+        "ext-bcmath": "*",
         "ext-gd": "*",
         "ext-json": "*",
         "ext-mbstring": "*",

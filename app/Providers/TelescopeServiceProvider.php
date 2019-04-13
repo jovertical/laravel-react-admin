@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Laravel\Telescope\Telescope;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
@@ -16,7 +17,10 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     public function register()
     {
-        // Telescope::night();
+        // This will turn on night mode when past 05:30pm
+        if (now()->greaterThan(Carbon::createFromTime(17, 30, 00))) {
+            Telescope::night();
+        }
 
         $this->hideSensitiveRequestDetails();
 
