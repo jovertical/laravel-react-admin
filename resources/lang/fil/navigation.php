@@ -26,6 +26,8 @@ return [
     'send_link' => 'I-send ang Link',
     'reset' => 'I-reset',
 
+    'monitoring' => 'Pagsubaybay',
+
     'notifications' => 'Mga Abiso',
 
     'locale' => 'Lokal',

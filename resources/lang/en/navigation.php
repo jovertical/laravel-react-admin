@@ -26,6 +26,8 @@ return [
     'send_link' => 'Send Link',
     'reset' => 'Reset',
 
+    'monitoring' => 'Monitoring',
+
     'notifications' => 'Notifications',
 
     'locale' => 'Locale',

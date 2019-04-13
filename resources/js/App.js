@@ -17,9 +17,25 @@ class App extends Component {
         user: {},
         username: '',
 
-        errorResponse: {},
-        successfulResponse: {},
+        monitoringEnabled: false,
         responseInterceptor: null,
+    };
+
+    /**
+     * Determine if monitoring is enabled.
+     *
+     * @return {undefined}
+     */
+    monitoringEnabled = () => {
+        const configItem = document.querySelector(
+            'meta[name=TELESCOPE_ENABLED]',
+        );
+
+        if (configItem) {
+            this.setState({
+                monitoringEnabled: Boolean(configItem.content),
+            });
+        }
     };
 
     /**
@@ -101,7 +117,9 @@ class App extends Component {
                     user: {},
                 });
             }
-        } catch (error) {}
+        } catch (error) {
+            //
+        }
     };
 
     /**
@@ -230,10 +248,15 @@ class App extends Component {
             });
 
             return response.data;
-        } catch (error) {}
+        } catch (error) {
+            //
+        }
     };
 
     async componentDidMount() {
+        // Toggle monitoring.
+        this.monitoringEnabled();
+
         // Listen for all API responses.
         this.addResponseInterceptor();
 

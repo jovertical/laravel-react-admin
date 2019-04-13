@@ -35,6 +35,7 @@ import {
     Menu as MenuIcon,
     Notifications as NotificationsIcon,
     Settings as SettingsIcon,
+    Update as UpdateIcon,
 } from '@material-ui/icons';
 
 import * as RandomUtils from '../../../utils/Random';
@@ -231,7 +232,12 @@ const Header = props => {
         accountMenuOpen,
     } = props;
 
-    const { user, nightMode, handleNightmodeToggled } = pageProps;
+    const {
+        user,
+        monitoringEnabled,
+        nightMode,
+        handleNightmodeToggled,
+    } = pageProps;
 
     const skeletonProps = {
         color: colors.grey[400],
@@ -431,6 +437,23 @@ const Header = props => {
                                 Github Link
                             </Typography>
                         </Grid>
+
+                        {monitoringEnabled && (
+                            <Grid item>
+                                <Tooltip
+                                    title={Lang.get('navigation.monitoring')}
+                                >
+                                    <IconButton
+                                        href="/telescope"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        color="inherit"
+                                    >
+                                        <UpdateIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        )}
 
                         <Grid item>
                             <Tooltip
