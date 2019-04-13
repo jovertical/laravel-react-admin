@@ -4,8 +4,6 @@ This is a scaffolding project that comes with authentication &
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
----
-
 ## Features
 
 -   Progressive Web App (PWA)
@@ -15,14 +13,11 @@ in the frontend & [Laravel](https://laravel.com) in the backend.
 -   Undo common actions
 -   [Docker](https://www.docker.com) ready
 -   [Image Intervention](http://image.intervention.io/) integration for image uploads
-
----
+-   Drag & drop file uploads.
 
 ## Preview
 
 You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
-
----
 
 ## Quick Start
 
@@ -32,8 +27,6 @@ You can check out the [live preview](https://laravel-react-admin.herokuapp.com)
 4. Copy the `env.example` file into a `.env` file and then configure based on your local setup.
 5. Installation is done, you can now run: `php artisan serve` then `npm run watch`.
 6. The project will run in this URL: (http://localhost:3000).
-
----
 
 ## Using Docker
 
@@ -90,38 +83,34 @@ You could use **PhpMyAdmin** to browse your MySql database as it is included in 
 
 You could then visit **PhpMyAdmin** here: phpmyadmin.your_custom_host_address
 
----
+## Testing
+
+Run the tests with:
+
+```
+// If you have installed composer globally
+composer test
+
+// This should also work
+./vendor/bin/composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](https://github.com/palonponjovertlota/laravel-react-admin/blob/master/CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [Contributing](https://github.com/palonponjovertlota/laravel-react-admin/blob/master/Contributing.md) for more details.
+
+## Security
+
+If you discover any security-related issues, please email [palonponjovertlota@gmail.com](mailto:palonponjovertlota@gmail.com) instead of using the issue tracker.
 
 ## Credits
 
-Without open source, this project will not come this far. Below are the list of technologies that the project uses:
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/laravel.svg" width="120">](https://laravel.com)
-
-The application use it as its backend framework.
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/react.svg" width="120">](https://reactjs.org)
-
-The application use it as its frontend framework.
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/webpack.svg" width="120">](https://webpack.js.org)
-
-The application uses it in bundling up different assets such as JavaScript, Sass, images, fonts and more.
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/material-ui.svg" width="120">](https://material-ui.com)
-
-The frontend of the application is designed using this UI kit.
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/docker.svg" width="120">](https://www.docker.com)
-
-Used in deploying the application in multiple environments (development and production).
-
-[<img src="https://laravel-react-admin.herokuapp.com/credits/nginx.svg" width="120">](https://www.nginx.com)
-
-Used as the application's http webserver both in development & production.
-
----
-
-## Special Thanks
-
 -   [@reeshkeed](https://github.com/reeshkeed) for designing the logo & design ideas.
+
+## License
+
+The MIT License (MIT). Please see [License File](https://github.com/palonponjovertlota/laravel-react-admin/blob/master/LICENSE) for more information.
