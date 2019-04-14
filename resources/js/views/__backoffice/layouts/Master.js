@@ -22,16 +22,32 @@ import * as StringUtils from '../../../utils/String';
 import * as UrlUtils from '../../../utils/URL';
 import { Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
-import { Header, Sidebar } from '../partials';
+import { Footer, Header, Sidebar } from '../partials';
 
 class Master extends Component {
     state = {
         mobileOpen: false,
         localeMenuOpen: false,
-        localeMenuEl: null,
         accountMenuOpen: false,
-        accountMenuEl: null,
         message: {},
+    };
+
+    /**
+     * Toggles Locale Menu
+     *
+     * @return {undefined}
+     */
+    handleLocaleMenuToggled = () => {
+        this.handleNavLinkMenuToggled('localeMenuOpen');
+    };
+
+    /**
+     * Toggles Account Menu
+     *
+     * @return {undefined}
+     */
+    handleAccountMenuToggled = () => {
+        this.handleNavLinkMenuToggled('accountMenuOpen');
     };
 
     /**
@@ -236,7 +252,8 @@ class Master extends Component {
                             {...this.state}
                             loading={loading}
                             onDrawerToggle={this.handleDrawerToggled}
-                            onNavLinkMenuToggle={this.handleNavLinkMenuToggled}
+                            onAccountMenuToggle={this.handleAccountMenuToggled}
+                            onLocaleMenuToggle={this.handleLocaleMenuToggled}
                         />
 
                         {showBreadcrumbs && renderBreadcrumbs}
@@ -249,18 +266,7 @@ class Master extends Component {
                             )}
                         </main>
 
-                        <footer className={classes.footer}>
-                            <Typography>
-                                {Lang.get('navigation.citation')}{' '}
-                                <Link
-                                    href="https://github.com/palonponjovertlota"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    @palonponjovertlota
-                                </Link>
-                            </Typography>
-                        </footer>
+                        <Footer />
                     </div>
                 </div>
 
@@ -280,24 +286,26 @@ class Master extends Component {
     }
 }
 
-Master.defaultProps = {
-    loading: false,
-    tabs: [],
-    showBreadcrumbs: true,
-    message: {},
-    alert: {},
-};
-
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
+    loading: PropTypes.bool,
+
     primaryAction: PropTypes.object,
     tabs: PropTypes.array,
     showBreadcrumbs: PropTypes.bool,
     message: PropTypes.object,
     alert: PropTypes.object,
+};
+
+Master.defaultProps = {
+    loading: false,
+
+    tabs: [],
+    showBreadcrumbs: true,
+    message: {},
+    alert: {},
 };
 
 const drawerWidth = 256;
@@ -357,15 +365,6 @@ const styles = theme => ({
 
     loadingContainer: {
         minHeight: '100%',
-    },
-
-    footer: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        left: 0,
-        padding: theme.spacing.unit * 4,
-        textAlign: 'center',
     },
 });
 

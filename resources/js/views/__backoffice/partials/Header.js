@@ -75,12 +75,11 @@ UserAvatar.propTypes = {
 };
 
 const LocaleMenu = props => {
-    const { classes, localeMenuOpen, localeMenuEl } = props;
+    const { classes, localeMenuOpen, onLocaleMenuToggle } = props;
 
     return (
         <Popper
             open={localeMenuOpen}
-            anchorEl={localeMenuEl}
             className={classes.navLinkMenu}
             transition
             disablePortal
@@ -96,11 +95,7 @@ const LocaleMenu = props => {
                     }}
                 >
                     <Paper>
-                        <ClickAwayListener
-                            onClickAway={() =>
-                                props.onNavLinkMenuToggle('localeMenuOpen')
-                            }
-                        >
+                        <ClickAwayListener onClickAway={onLocaleMenuToggle}>
                             <MenuList>
                                 <MenuItem
                                     onClick={() => {
@@ -158,17 +153,18 @@ const AccountMenu = props => {
     const {
         history,
         classes,
-        accountMenuOpen,
-        accountMenuEl,
         pageProps,
+
+        accountMenuOpen,
+        onAccountMenuToggle,
     } = props;
     const { user, handleLock, handleSignout } = pageProps;
+
     const navigate = path => history.push(path);
 
     return (
         <Popper
             open={accountMenuOpen}
-            anchorEl={accountMenuEl}
             className={classes.navLinkMenu}
             transition
             disablePortal
@@ -184,11 +180,7 @@ const AccountMenu = props => {
                     }}
                 >
                     <Paper>
-                        <ClickAwayListener
-                            onClickAway={() =>
-                                props.onNavLinkMenuToggle('accountMenuOpen')
-                            }
-                        >
+                        <ClickAwayListener onClickAway={onAccountMenuToggle}>
                             <MenuList>
                                 <MenuItem style={{ height: 50 }}>
                                     <ListItemAvatar
@@ -267,14 +259,19 @@ const AccountMenu = props => {
 const Header = props => {
     const {
         classes,
-        loading,
-        onDrawerToggle,
         pageProps,
         pageTitle,
+        loading,
+
+        variant,
         primaryAction,
         tabs,
         localeMenuOpen,
         accountMenuOpen,
+
+        onDrawerToggle,
+        onLocaleMenuToggle,
+        onAccountMenuToggle,
     } = props;
 
     const {
@@ -289,31 +286,37 @@ const Header = props => {
         highlightColor: colors.grey[200],
     };
 
+    const renderDrawerButtonNavigating = (
+        <Grid item>
+            <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                className={classes.menuButton}
+            >
+                <Skeleton {...skeletonProps} height={25} width={25} />
+            </IconButton>
+        </Grid>
+    );
+
     const renderNavigating = (
         <>
             <AppBar
                 color="primary"
                 position="sticky"
                 elevation={0}
-                className={classes.primaryBar}
+                className={
+                    variant === 'slim'
+                        ? classes.primaryBarSlim
+                        : classes.primaryBar
+                }
             >
                 <Toolbar>
                     <Grid container spacing={8} alignItems="center">
-                        <Hidden smUp>
-                            <Grid item>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="Open drawer"
-                                    className={classes.menuButton}
-                                >
-                                    <Skeleton
-                                        {...skeletonProps}
-                                        height={25}
-                                        width={25}
-                                    />
-                                </IconButton>
-                            </Grid>
-                        </Hidden>
+                        {variant === 'slim' ? (
+                            renderDrawerButtonNavigating
+                        ) : (
+                            <Hidden smUp>{renderDrawerButtonNavigating}</Hidden>
+                        )}
 
                         <Grid item xs />
 
@@ -331,76 +334,11 @@ const Header = props => {
                                 <Skeleton
                                     {...skeletonProps}
                                     circle
-                                    height={30}
-                                    width={30}
+                                    height={25}
+                                    width={25}
                                 />
                             </IconButton>
                         </Grid>
-
-                        <Grid item>
-                            <IconButton color="inherit">
-                                <Skeleton
-                                    {...skeletonProps}
-                                    circle
-                                    height={30}
-                                    width={30}
-                                />
-                            </IconButton>
-                        </Grid>
-
-                        <Grid item>
-                            <IconButton color="inherit">
-                                <Skeleton
-                                    {...skeletonProps}
-                                    circle
-                                    height={30}
-                                    width={30}
-                                />
-                            </IconButton>
-                        </Grid>
-
-                        <Grid item>
-                            <IconButton color="inherit">
-                                <Skeleton
-                                    {...skeletonProps}
-                                    circle
-                                    height={30}
-                                    width={30}
-                                />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                </Toolbar>
-            </AppBar>
-
-            <AppBar
-                component="div"
-                className={classes.secondaryBar}
-                color="primary"
-                position="static"
-                elevation={0}
-            >
-                <Toolbar>
-                    <Grid container alignItems="center" spacing={8}>
-                        <Grid item xs>
-                            <Skeleton
-                                height={30}
-                                width={100 + pageTitle.length * 2}
-                                {...skeletonProps}
-                                className={classes.button}
-                            />
-                        </Grid>
-
-                        {primaryAction && (
-                            <Grid item>
-                                <Skeleton
-                                    {...skeletonProps}
-                                    height={30}
-                                    width={50 + primaryAction.text.length * 2}
-                                    className={classes.button}
-                                />
-                            </Grid>
-                        )}
 
                         <Grid item>
                             <IconButton color="inherit">
@@ -412,34 +350,134 @@ const Header = props => {
                                 />
                             </IconButton>
                         </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={25}
+                                    width={25}
+                                />
+                            </IconButton>
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={25}
+                                    width={25}
+                                />
+                            </IconButton>
+                        </Grid>
+
+                        <Grid item>
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={30}
+                                    width={30}
+                                />
+                            </IconButton>
+                        </Grid>
                     </Grid>
                 </Toolbar>
             </AppBar>
 
-            <AppBar
-                component="div"
-                className={classes.secondaryBar}
-                color="primary"
-                position="static"
-                elevation={0}
-            >
-                <Tabs value={0} textColor="inherit">
-                    {tabs.map((tab, key) => (
-                        <Tab
-                            key={key}
-                            textColor="inherit"
-                            label={
-                                <Skeleton
-                                    {...skeletonProps}
-                                    height={20}
-                                    width={30 + tab.name.length * 2}
-                                />
-                            }
-                        />
-                    ))}
-                </Tabs>
-            </AppBar>
+            {variant === 'full' && (
+                <>
+                    <AppBar
+                        component="div"
+                        className={classes.secondaryBar}
+                        color="primary"
+                        position="static"
+                        elevation={0}
+                    >
+                        <Toolbar>
+                            <Grid container alignItems="center" spacing={8}>
+                                <Grid item xs>
+                                    <Skeleton
+                                        height={25}
+                                        width={100 + pageTitle.length * 2}
+                                        {...skeletonProps}
+                                        className={classes.button}
+                                    />
+                                </Grid>
+
+                                {Object.keys(primaryAction) > 0 && (
+                                    <Grid item>
+                                        <Skeleton
+                                            {...skeletonProps}
+                                            height={25}
+                                            width={
+                                                50 +
+                                                primaryAction.text.length * 2
+                                            }
+                                            className={classes.button}
+                                        />
+                                    </Grid>
+                                )}
+
+                                <Grid item>
+                                    <IconButton color="inherit">
+                                        <Skeleton
+                                            {...skeletonProps}
+                                            circle
+                                            height={25}
+                                            width={25}
+                                        />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        </Toolbar>
+                    </AppBar>
+
+                    {tabs.length > 0 && (
+                        <AppBar
+                            component="div"
+                            className={classes.secondaryBar}
+                            color="primary"
+                            position="static"
+                            elevation={0}
+                        >
+                            <Tabs value={0} textColor="inherit">
+                                {tabs.map((tab, key) => (
+                                    <Tab
+                                        key={key}
+                                        textColor="inherit"
+                                        label={
+                                            <Skeleton
+                                                {...skeletonProps}
+                                                height={20}
+                                                width={25 + tab.name.length * 2}
+                                            />
+                                        }
+                                    />
+                                ))}
+                            </Tabs>
+                        </AppBar>
+                    )}
+                </>
+            )}
         </>
+    );
+
+    const renderDrawerButton = (
+        <Grid item>
+            <Tooltip title={Lang.get('navigation.open_drawer')}>
+                <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={onDrawerToggle}
+                    className={classes.menuButton}
+                >
+                    <MenuIcon />
+                </IconButton>
+            </Tooltip>
+        </Grid>
     );
 
     const renderNavigated = (
@@ -448,26 +486,19 @@ const Header = props => {
                 color="primary"
                 position="sticky"
                 elevation={0}
-                className={classes.primaryBar}
+                className={
+                    variant === 'slim'
+                        ? classes.primaryBarSlim
+                        : classes.primaryBar
+                }
             >
                 <Toolbar>
                     <Grid container spacing={8} alignItems="center">
-                        <Hidden smUp>
-                            <Grid item>
-                                <Tooltip
-                                    title={Lang.get('navigation.open_drawer')}
-                                >
-                                    <IconButton
-                                        color="inherit"
-                                        aria-label="Open drawer"
-                                        onClick={onDrawerToggle}
-                                        className={classes.menuButton}
-                                    >
-                                        <MenuIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                        </Hidden>
+                        {variant === 'slim' ? (
+                            renderDrawerButton
+                        ) : (
+                            <Hidden smUp>{renderDrawerButton}</Hidden>
+                        )}
 
                         <Grid item xs />
 
@@ -525,11 +556,7 @@ const Header = props => {
                                             localeMenuOpen && 'material-appbar'
                                         }
                                         aria-haspopup="true"
-                                        onClick={() =>
-                                            props.onNavLinkMenuToggle(
-                                                'localeMenuOpen',
-                                            )
-                                        }
+                                        onClick={onLocaleMenuToggle}
                                         color="inherit"
                                     >
                                         <LanguageIcon />
@@ -569,11 +596,7 @@ const Header = props => {
                                             accountMenuOpen && 'material-appbar'
                                         }
                                         aria-haspopup="true"
-                                        onClick={() =>
-                                            props.onNavLinkMenuToggle(
-                                                'accountMenuOpen',
-                                            )
-                                        }
+                                        onClick={onAccountMenuToggle}
                                         color="inherit"
                                     >
                                         {user.hasOwnProperty(
@@ -589,64 +612,70 @@ const Header = props => {
                 </Toolbar>
             </AppBar>
 
-            <AppBar
-                component="div"
-                className={classes.secondaryBar}
-                color="primary"
-                position="static"
-                elevation={0}
-            >
-                <Toolbar>
-                    <Grid container alignItems="center" spacing={8}>
-                        <Grid item xs>
-                            <Typography color="inherit" variant="h5">
-                                {pageTitle}
-                            </Typography>
-                        </Grid>
+            {variant === 'full' && (
+                <>
+                    <AppBar
+                        component="div"
+                        className={classes.secondaryBar}
+                        color="primary"
+                        position="static"
+                        elevation={0}
+                    >
+                        <Toolbar>
+                            <Grid container alignItems="center" spacing={8}>
+                                <Grid item xs>
+                                    <Typography color="inherit" variant="h5">
+                                        {pageTitle}
+                                    </Typography>
+                                </Grid>
 
-                        {primaryAction && (
-                            <Grid item>
-                                <Button
-                                    className={classes.button}
-                                    variant="outlined"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={primaryAction.clicked}
-                                >
-                                    {primaryAction.text}
-                                </Button>
+                                {Object.keys(primaryAction) > 0 && (
+                                    <Grid item>
+                                        <Button
+                                            className={classes.button}
+                                            variant="outlined"
+                                            color="inherit"
+                                            size="small"
+                                            onClick={primaryAction.clicked}
+                                        >
+                                            {primaryAction.text}
+                                        </Button>
+                                    </Grid>
+                                )}
+
+                                <Grid item>
+                                    <Tooltip
+                                        title={Lang.get('navigation.help')}
+                                    >
+                                        <IconButton color="inherit">
+                                            <HelpIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
                             </Grid>
-                        )}
+                        </Toolbar>
+                    </AppBar>
 
-                        <Grid item>
-                            <Tooltip title={Lang.get('navigation.help')}>
-                                <IconButton color="inherit">
-                                    <HelpIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                    </Grid>
-                </Toolbar>
-            </AppBar>
-
-            {tabs.length > 0 && (
-                <AppBar
-                    component="div"
-                    className={classes.secondaryBar}
-                    color="primary"
-                    position="static"
-                    elevation={0}
-                >
-                    <Tabs value={0} textColor="inherit">
-                        {tabs.map((tab, key) => (
-                            <Tab
-                                key={key}
-                                textColor="inherit"
-                                label={tab.name}
-                            />
-                        ))}
-                    </Tabs>
-                </AppBar>
+                    {tabs.length > 0 && (
+                        <AppBar
+                            component="div"
+                            className={classes.secondaryBar}
+                            color="primary"
+                            position="static"
+                            elevation={0}
+                        >
+                            <Tabs value={0} textColor="inherit">
+                                {tabs.map((tab, key) => (
+                                    <Tab
+                                        key={key}
+                                        textColor="inherit"
+                                        label={tab.name}
+                                    />
+                                ))}
+                            </Tabs>
+                        </AppBar>
+                    )}
+                </>
             )}
         </>
     );
@@ -656,13 +685,40 @@ const Header = props => {
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
+    pageTitle: PropTypes.string.isRequired,
+    loading: PropTypes.bool,
+
+    variant: PropTypes.oneOf(['full', 'slim']),
+    primaryAction: PropTypes.object,
+    tabs: PropTypes.array,
+    localeMenuOpen: PropTypes.bool,
+    accountMenuOpen: PropTypes.bool,
+    onDrawerToggle: PropTypes.func,
+    onLocaleMenuToggle: PropTypes.func,
+    onAccountMenuToggle: PropTypes.func,
+};
+
+Header.defaultProps = {
+    loading: false,
+
+    variant: 'full',
+    primaryAction: {},
+    tabs: [],
+    localeMenuOpen: false,
+    accountMenuOpen: false,
 };
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = theme => ({
     primaryBar: {
-        paddingTop: '0.25rem',
+        paddingTop: 8,
+    },
+
+    primaryBarSlim: {
+        paddingTop: 8,
+        paddingBottom: 8,
     },
 
     navLinkMenuWrapper: {
@@ -672,13 +728,13 @@ const styles = theme => ({
 
     navLinkMenu: {
         position: 'absolute',
-        padding: '0.5rem 1.25rem',
+        padding: '8px 20px',
         right: 0,
         zIndex: 9999,
     },
 
     navLinkMenuItemIcon: {
-        marginRight: '1rem',
+        marginRight: 16,
     },
 
     secondaryBar: {

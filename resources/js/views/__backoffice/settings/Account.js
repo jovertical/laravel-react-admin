@@ -1,14 +1,16 @@
 import React from 'react';
 
-import { Master as MasterLayout } from '../layouts';
+import { Typography } from '@material-ui/core';
+
+import { Clean as CleanLayout } from '../layouts';
 
 function Account(props) {
     const { classes, ...other } = props;
 
     return (
-        <MasterLayout {...other} pageTitle="Account" showBreadcrumbs={false}>
-            Account Page
-        </MasterLayout>
+        <CleanLayout {...other} pageTitle="Account" loading={false}>
+            <Typography>Account Page</Typography>
+        </CleanLayout>
     );
 }
 
