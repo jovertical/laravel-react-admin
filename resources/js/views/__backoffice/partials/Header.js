@@ -179,7 +179,7 @@ const AccountMenu = props => {
                                 : 'center bottom',
                     }}
                 >
-                    <Paper>
+                    <Paper style={{ marginTop: -3 }}>
                         <ClickAwayListener onClickAway={onAccountMenuToggle}>
                             <MenuList>
                                 <MenuItem style={{ height: 50 }}>
@@ -318,6 +318,19 @@ const Header = props => {
                             <Hidden smUp>{renderDrawerButtonNavigating}</Hidden>
                         )}
 
+                        <Hidden smDown>
+                            {variant === 'slim' && (
+                                <Grid item>
+                                    <Skeleton
+                                        {...skeletonProps}
+                                        height={30}
+                                        width={75 + pageTitle.length * 2}
+                                        className={classes.link}
+                                    />
+                                </Grid>
+                            )}
+                        </Hidden>
+
                         <Grid item xs />
 
                         <Grid item>
@@ -400,8 +413,8 @@ const Header = props => {
                             <Grid container alignItems="center" spacing={8}>
                                 <Grid item xs>
                                     <Skeleton
-                                        height={25}
-                                        width={100 + pageTitle.length * 2}
+                                        height={30}
+                                        width={75 + pageTitle.length * 2}
                                         {...skeletonProps}
                                         className={classes.button}
                                     />
@@ -499,6 +512,16 @@ const Header = props => {
                         ) : (
                             <Hidden smUp>{renderDrawerButton}</Hidden>
                         )}
+
+                        <Hidden smDown>
+                            {variant === 'slim' && (
+                                <Grid item>
+                                    <Typography color="inherit" variant="h5">
+                                        {pageTitle}
+                                    </Typography>
+                                </Grid>
+                            )}
+                        </Hidden>
 
                         <Grid item xs />
 
