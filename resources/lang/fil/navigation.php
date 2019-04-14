@@ -38,7 +38,6 @@ return [
     'nightmode_off' => 'I-Off ang Night Mode',
 
     'account' => 'Account',
-    'profile' => 'Profile',
     'settings' => 'Mga Setting',
     'lock' => 'I-lock',
     'signout' => 'Mag-sign out',

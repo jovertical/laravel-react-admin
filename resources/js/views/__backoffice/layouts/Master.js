@@ -96,7 +96,7 @@ class Master extends Component {
     }
 
     render() {
-        const { classes, ...childProps } = this.props;
+        const { classes, showBreadcrumbs, ...other } = this.props;
 
         const {
             children,
@@ -130,6 +130,76 @@ class Master extends Component {
             </Grid>
         );
 
+        const renderBreadcrumbs = (
+            <AppBar
+                component="div"
+                color="inherit"
+                position="static"
+                elevation={0}
+                className={classes.breadcrumbBar}
+                style={{
+                    backgroundColor: nightMode ? '#303030' : '#FAFAFA',
+                }}
+            >
+                <div className={classes.breadcrumbWrapper}>
+                    <Breadcrumbs arial-label="Breadcrumb">
+                        {segments.length > 0 ? (
+                            <Link
+                                color="inherit"
+                                component={linkProps => (
+                                    <RouterLink
+                                        {...linkProps}
+                                        to={NavigationUtils._route(
+                                            'backoffice.home',
+                                        )}
+                                    />
+                                )}
+                                className={classes.breadcrumbItem}
+                            >
+                                <HomeIcon
+                                    className={classes.breadcrumbItemIcon}
+                                />
+                            </Link>
+                        ) : (
+                            <HomeIcon className={classes.breadcrumbItemIcon} />
+                        )}
+
+                        {segments.map((segment, key) => {
+                            if (key + 1 === segments.length) {
+                                return (
+                                    <Typography
+                                        key={key}
+                                        className={classes.breadcrumbItem}
+                                    >
+                                        {StringUtils._uppercaseFirst(segment)}
+                                    </Typography>
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={key}
+                                    color="inherit"
+                                    component={linkProps => (
+                                        <RouterLink
+                                            {...linkProps}
+                                            to={
+                                                '/' +
+                                                segment.split('/').join('.')
+                                            }
+                                        />
+                                    )}
+                                    className={classes.breadcrumbItem}
+                                >
+                                    {StringUtils._uppercaseFirst(segment)}
+                                </Link>
+                            );
+                        })}
+                    </Breadcrumbs>
+                </div>
+            </AppBar>
+        );
+
         return (
             <>
                 {loading && <LinearDeterminate className={classes.loader} />}
@@ -140,7 +210,7 @@ class Master extends Component {
                     <nav className={classes.drawer}>
                         <Hidden smUp implementation="js">
                             <Sidebar
-                                {...childProps}
+                                {...other}
                                 loading={loading}
                                 navigate={path => history.push(path)}
                                 variant="temporary"
@@ -152,7 +222,7 @@ class Master extends Component {
 
                         <Hidden xsDown implementation="css">
                             <Sidebar
-                                {...childProps}
+                                {...other}
                                 loading={loading}
                                 navigate={path => history.push(path)}
                                 PaperProps={{ style: { width: drawerWidth } }}
@@ -162,98 +232,14 @@ class Master extends Component {
 
                     <div className={classes.contentWrapper}>
                         <Header
-                            {...childProps}
+                            {...other}
                             {...this.state}
                             loading={loading}
                             onDrawerToggle={this.handleDrawerToggled}
                             onNavLinkMenuToggle={this.handleNavLinkMenuToggled}
                         />
 
-                        <AppBar
-                            component="div"
-                            color="inherit"
-                            position="static"
-                            elevation={0}
-                            className={classes.breadcrumbBar}
-                            style={{
-                                backgroundColor: nightMode
-                                    ? '#303030'
-                                    : '#FAFAFA',
-                            }}
-                        >
-                            <div className={classes.breadcrumbWrapper}>
-                                <Breadcrumbs arial-label="Breadcrumb">
-                                    {segments.length > 0 ? (
-                                        <Link
-                                            color="inherit"
-                                            component={linkProps => (
-                                                <RouterLink
-                                                    {...linkProps}
-                                                    to={NavigationUtils._route(
-                                                        'backoffice.home',
-                                                    )}
-                                                />
-                                            )}
-                                            className={classes.breadcrumbItem}
-                                        >
-                                            <HomeIcon
-                                                className={
-                                                    classes.breadcrumbItemIcon
-                                                }
-                                            />
-                                        </Link>
-                                    ) : (
-                                        <HomeIcon
-                                            className={
-                                                classes.breadcrumbItemIcon
-                                            }
-                                        />
-                                    )}
-
-                                    {segments.map((segment, key) => {
-                                        if (key + 1 === segments.length) {
-                                            return (
-                                                <Typography
-                                                    key={key}
-                                                    className={
-                                                        classes.breadcrumbItem
-                                                    }
-                                                >
-                                                    {StringUtils._uppercaseFirst(
-                                                        segment,
-                                                    )}
-                                                </Typography>
-                                            );
-                                        }
-
-                                        return (
-                                            <Link
-                                                key={key}
-                                                color="inherit"
-                                                component={linkProps => (
-                                                    <RouterLink
-                                                        {...linkProps}
-                                                        to={
-                                                            '/' +
-                                                            segment
-                                                                .split('/')
-                                                                .join('.')
-                                                        }
-                                                    />
-                                                )}
-                                                className={
-                                                    classes.breadcrumbItem
-                                                }
-                                            >
-                                                {StringUtils._uppercaseFirst(
-                                                    segment,
-                                                )}
-                                            </Link>
-                                        );
-                                    })}
-                                </Breadcrumbs>
-                            </div>
-                        </AppBar>
+                        {showBreadcrumbs && renderBreadcrumbs}
 
                         <main className={classes.content}>
                             {loading ? (
@@ -294,6 +280,14 @@ class Master extends Component {
     }
 }
 
+Master.defaultProps = {
+    loading: false,
+    tabs: [],
+    showBreadcrumbs: true,
+    message: {},
+    alert: {},
+};
+
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
     loading: PropTypes.bool,
@@ -301,6 +295,7 @@ Master.propTypes = {
     pageTitle: PropTypes.string.isRequired,
     primaryAction: PropTypes.object,
     tabs: PropTypes.array,
+    showBreadcrumbs: PropTypes.bool,
     message: PropTypes.object,
     alert: PropTypes.object,
 };

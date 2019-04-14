@@ -13,6 +13,8 @@ import {
     Grow,
     Hidden,
     IconButton,
+    ListItemAvatar,
+    ListItemText,
     ListItemIcon,
     MenuList,
     MenuItem,
@@ -27,7 +29,6 @@ import {
 } from '@material-ui/core';
 
 import {
-    AccountCircle as AccountCircleIcon,
     ExitToApp as ExitToAppIcon,
     Help as HelpIcon,
     Language as LanguageIcon,
@@ -38,6 +39,7 @@ import {
     Update as UpdateIcon,
 } from '@material-ui/icons';
 
+import * as NavigationUtils from '../../../utils/Navigation';
 import * as RandomUtils from '../../../utils/Random';
 import {
     LightbulbOff as LightbulbOffIcon,
@@ -45,6 +47,32 @@ import {
 } from '../../../icons/1x1';
 import { Ph as PhIcon, Us as UsIcon } from '../../../icons/flags/4x3';
 import { Skeleton } from '../../../ui';
+
+const UserAvatar = props => {
+    const { user } = props;
+
+    return user.thumbnail_url !== null ? (
+        <Avatar alt={user.name} src={user.thumbnail_url} />
+    ) : (
+        <Avatar
+            style={{
+                fontSize: 17,
+                backgroundColor: RandomUtils._color(
+                    user.firstname.length -
+                        user.created_at.charAt(user.created_at.length - 2),
+                ),
+            }}
+        >
+            <Typography>
+                {`${user.firstname.charAt(0)}${user.lastname.charAt(0)}`}
+            </Typography>
+        </Avatar>
+    );
+};
+
+UserAvatar.propTypes = {
+    user: PropTypes.object.isRequired,
+};
 
 const LocaleMenu = props => {
     const { classes, localeMenuOpen, localeMenuEl } = props;
@@ -127,8 +155,15 @@ const LocaleMenu = props => {
 };
 
 const AccountMenu = props => {
-    const { classes, accountMenuOpen, accountMenuEl, pageProps } = props;
+    const {
+        history,
+        classes,
+        accountMenuOpen,
+        accountMenuEl,
+        pageProps,
+    } = props;
     const { user, handleLock, handleSignout } = pageProps;
+    const navigate = path => history.push(path);
 
     return (
         <Popper
@@ -155,23 +190,33 @@ const AccountMenu = props => {
                             }
                         >
                             <MenuList>
-                                <MenuItem
-                                    onClick={() =>
-                                        alert(`Hello ${user.firstname}!`)
-                                    }
-                                >
-                                    <ListItemIcon
+                                <MenuItem style={{ height: 50 }}>
+                                    <ListItemAvatar
                                         className={classes.navLinkMenuItemIcon}
                                     >
-                                        <AccountCircleIcon />
-                                    </ListItemIcon>
+                                        <UserAvatar user={user} />
+                                    </ListItemAvatar>
 
-                                    <Typography>
-                                        {Lang.get('navigation.profile')}
-                                    </Typography>
+                                    <ListItemText>
+                                        <Typography>
+                                            {pageProps.user.name}
+                                        </Typography>
+
+                                        <Typography color="textSecondary">
+                                            {pageProps.user.email}
+                                        </Typography>
+                                    </ListItemText>
                                 </MenuItem>
 
-                                <MenuItem>
+                                <MenuItem
+                                    onClick={() =>
+                                        navigate(
+                                            NavigationUtils._route(
+                                                'backoffice.settings.profile',
+                                            ),
+                                        )
+                                    }
+                                >
                                     <ListItemIcon
                                         className={classes.navLinkMenuItemIcon}
                                     >
@@ -531,34 +576,9 @@ const Header = props => {
                                         }
                                         color="inherit"
                                     >
-                                        {user.hasOwnProperty('thumbnail_url') &&
-                                        user.thumbnail_url !== null ? (
-                                            <Avatar
-                                                alt={user.name}
-                                                src={user.thumbnail_url}
-                                            />
-                                        ) : (
-                                            <Avatar
-                                                style={{
-                                                    fontSize: 17,
-                                                    backgroundColor: RandomUtils._color(
-                                                        user.firstname.length -
-                                                            user.created_at.charAt(
-                                                                user.created_at
-                                                                    .length - 2,
-                                                            ),
-                                                    ),
-                                                }}
-                                            >
-                                                <Typography>
-                                                    {`${user.firstname.charAt(
-                                                        0,
-                                                    )}${user.lastname.charAt(
-                                                        0,
-                                                    )}`}
-                                                </Typography>
-                                            </Avatar>
-                                        )}
+                                        {user.hasOwnProperty(
+                                            'thumbnail_url',
+                                        ) && <UserAvatar user={user} />}
                                     </IconButton>
 
                                     <AccountMenu {...props} />
@@ -609,19 +629,25 @@ const Header = props => {
                 </Toolbar>
             </AppBar>
 
-            <AppBar
-                component="div"
-                className={classes.secondaryBar}
-                color="primary"
-                position="static"
-                elevation={0}
-            >
-                <Tabs value={0} textColor="inherit">
-                    {tabs.map((tab, key) => (
-                        <Tab key={key} textColor="inherit" label={tab.name} />
-                    ))}
-                </Tabs>
-            </AppBar>
+            {tabs.length > 0 && (
+                <AppBar
+                    component="div"
+                    className={classes.secondaryBar}
+                    color="primary"
+                    position="static"
+                    elevation={0}
+                >
+                    <Tabs value={0} textColor="inherit">
+                        {tabs.map((tab, key) => (
+                            <Tab
+                                key={key}
+                                textColor="inherit"
+                                label={tab.name}
+                            />
+                        ))}
+                    </Tabs>
+                </AppBar>
+            )}
         </>
     );
 

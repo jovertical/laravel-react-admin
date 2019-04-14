@@ -38,7 +38,6 @@ return [
     'nightmode_off' => 'Toggle Night Mode Off',
 
     'account' => 'Account',
-    'profile' => 'Profile',
     'settings' => 'Settings',
     'lock' => 'Lock',
     'signout' => 'Sign out',
