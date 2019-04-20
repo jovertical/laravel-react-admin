@@ -35,6 +35,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
                 Route::prefix('account')->name('account.')->group(function () {
                     Route::patch('password', 'AccountController@updatePassword')->name('password');
+                    Route::patch('credentials', 'AccountController@updateCredentials')->name('credentials');
                 });
             });
 

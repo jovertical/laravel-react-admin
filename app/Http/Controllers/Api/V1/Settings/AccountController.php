@@ -11,6 +11,42 @@ use Illuminate\Validation\ValidationException;
 class AccountController extends Controller
 {
     /**
+     * @var App\User
+     */
+    protected $user;
+
+    /**
+     * Create a new AccountController
+     */
+    public function __construct()
+    {
+        $this->user = auth()->guard('api')->user();
+    }
+
+    /**
+     * Update User's login credentials
+     *
+     * @param Illuminate\Http\Request $request
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function updateCredentials(Request $request) : JsonResponse
+    {
+        $request->validate([
+            'username' =>
+                "required|string|unique:users,username,{$this->user->id},id,deleted_at,NULL",
+            'email' =>
+                "required|email|unique:users,email,{$this->user->id},id,deleted_at,NULL"
+        ]);
+
+        $this->user->username = $request->input('username');
+        $this->user->email = $request->input('email');
+        $this->user->update();
+
+        return response()->json($this->user);
+    }
+
+    /**
      * Update User's password
      *
      * @param Illuminate\Http\Request $request
@@ -24,9 +60,7 @@ class AccountController extends Controller
             'password' => 'required|string|confirmed|min:8|pwned:100'
         ]);
 
-        $user = auth()->guard('api')->user();
-
-        if (! Hash::check($request->input('old_password'), $user->password)) {
+        if (! Hash::check($request->input('old_password'), $this->user->password)) {
             throw ValidationException::withMessages([
                 'old_password' => [trans('auth.password_mismatch')]
             ]);
@@ -34,8 +68,8 @@ class AccountController extends Controller
             return response()->json('Password was not Changed!', 422);
         }
 
-        $user->password = bcrypt($request->input('password'));
-        $user->update();
+        $this->user->password = bcrypt($request->input('password'));
+        $this->user->update();
 
         return response()->json('Password Changed!');
     }
