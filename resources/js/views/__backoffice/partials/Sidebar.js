@@ -6,6 +6,7 @@ import {
     colors,
     Divider,
     Drawer,
+    IconButton,
     List,
     ListItem,
     ListItemIcon,
@@ -14,6 +15,7 @@ import {
 } from '@material-ui/core';
 
 import {
+    ChevronLeft as ChevronLeftIcon,
     Dashboard as DashboardIcon,
     People as PeopleIcon,
 } from '@material-ui/icons';
@@ -36,6 +38,7 @@ const Sidebar = props => {
         navigate,
         ...other
     } = props;
+    const { variant, onClose } = props;
     const { nightMode } = pageProps;
 
     const homeLink = {
@@ -57,7 +60,7 @@ const Sidebar = props => {
         },
     ];
 
-    const renderLoading = (
+    const renderNavigating = (
         <List disablePadding className={classes.links}>
             <ListItem
                 className={classNames(
@@ -66,12 +69,23 @@ const Sidebar = props => {
                     classes.linkGroup,
                     classes.brandLoading,
                 )}
+                style={{ paddingTop: 25 }}
             >
                 <Skeleton
-                    width={100}
+                    width={175}
                     color={nightMode && colors.grey['A700']}
                     highlightColor={nightMode && colors.grey['A400']}
                 />
+
+                {variant === 'persistent' && (
+                    <Skeleton
+                        circle
+                        width={30}
+                        height={30}
+                        color={nightMode && colors.grey['A700']}
+                        highlightColor={nightMode && colors.grey['A400']}
+                    />
+                )}
             </ListItem>
 
             <Divider className={classes.topDivider} />
@@ -171,6 +185,12 @@ const Sidebar = props => {
                     alt="company-logo"
                     className={classes.brandLogo}
                 />
+
+                {variant === 'persistent' && (
+                    <IconButton onClick={onClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                )}
             </ListItem>
 
             <Divider className={classes.topDivider} />
@@ -243,7 +263,7 @@ const Sidebar = props => {
 
     return (
         <Drawer variant="permanent" {...other}>
-            {loading ? renderLoading : renderNavigated}
+            {loading ? renderNavigating : renderNavigated}
         </Drawer>
     );
 };
@@ -265,13 +285,15 @@ const styles = theme => ({
     },
 
     brand: {
+        display: 'flex',
+        justifyContent: 'space-between',
         fontSize: 24,
         fontFamily: theme.typography.fontFamily,
         color: theme.palette.common.white,
     },
 
     brandLogo: {
-        width: 230,
+        width: 175,
     },
 
     linkGroupHeader: {
@@ -342,11 +364,11 @@ const styles = theme => ({
     },
 
     brandLoading: {
-        padding: '1rem 0.75rem',
+        padding: '16px 12px',
     },
 
     linkLoading: {
-        padding: '0.75rem',
+        padding: 12,
         display: 'flex',
         flexDirection: 'row',
     },

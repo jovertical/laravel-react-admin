@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'password_mismatch' => 'Ang password na iyong nailagay ay mali.',
     'failed' => 'Paumanhin na hindi ito gumagana. Ulitin mo ulit.',
     'throttle' =>
         'Masyadong maraming mga pagtatangka sa pag-login. Pakisubukang muli pagkatapos ng :seconds segundo.',

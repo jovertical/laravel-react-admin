@@ -22,16 +22,32 @@ import * as StringUtils from '../../../utils/String';
 import * as UrlUtils from '../../../utils/URL';
 import { Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
-import { Header, Sidebar } from '../partials';
+import { Footer, Header, Sidebar } from '../partials';
 
 class Master extends Component {
     state = {
         mobileOpen: false,
         localeMenuOpen: false,
-        localeMenuEl: null,
         accountMenuOpen: false,
-        accountMenuEl: null,
         message: {},
+    };
+
+    /**
+     * Toggles Locale Menu
+     *
+     * @return {undefined}
+     */
+    handleLocaleMenuToggled = () => {
+        this.handleNavLinkMenuToggled('localeMenuOpen');
+    };
+
+    /**
+     * Toggles Account Menu
+     *
+     * @return {undefined}
+     */
+    handleAccountMenuToggled = () => {
+        this.handleNavLinkMenuToggled('accountMenuOpen');
     };
 
     /**
@@ -96,7 +112,7 @@ class Master extends Component {
     }
 
     render() {
-        const { classes, ...childProps } = this.props;
+        const { classes, showBreadcrumbs, ...other } = this.props;
 
         const {
             children,
@@ -130,6 +146,76 @@ class Master extends Component {
             </Grid>
         );
 
+        const renderBreadcrumbs = (
+            <AppBar
+                component="div"
+                color="inherit"
+                position="static"
+                elevation={0}
+                className={classes.breadcrumbBar}
+                style={{
+                    backgroundColor: nightMode ? '#303030' : '#FAFAFA',
+                }}
+            >
+                <div className={classes.breadcrumbWrapper}>
+                    <Breadcrumbs arial-label="Breadcrumb">
+                        {segments.length > 0 ? (
+                            <Link
+                                color="inherit"
+                                component={linkProps => (
+                                    <RouterLink
+                                        {...linkProps}
+                                        to={NavigationUtils._route(
+                                            'backoffice.home',
+                                        )}
+                                    />
+                                )}
+                                className={classes.breadcrumbItem}
+                            >
+                                <HomeIcon
+                                    className={classes.breadcrumbItemIcon}
+                                />
+                            </Link>
+                        ) : (
+                            <HomeIcon className={classes.breadcrumbItemIcon} />
+                        )}
+
+                        {segments.map((segment, key) => {
+                            if (key + 1 === segments.length) {
+                                return (
+                                    <Typography
+                                        key={key}
+                                        className={classes.breadcrumbItem}
+                                    >
+                                        {StringUtils._uppercaseFirst(segment)}
+                                    </Typography>
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={key}
+                                    color="inherit"
+                                    component={linkProps => (
+                                        <RouterLink
+                                            {...linkProps}
+                                            to={
+                                                '/' +
+                                                segment.split('/').join('.')
+                                            }
+                                        />
+                                    )}
+                                    className={classes.breadcrumbItem}
+                                >
+                                    {StringUtils._uppercaseFirst(segment)}
+                                </Link>
+                            );
+                        })}
+                    </Breadcrumbs>
+                </div>
+            </AppBar>
+        );
+
         return (
             <>
                 {loading && <LinearDeterminate className={classes.loader} />}
@@ -140,7 +226,7 @@ class Master extends Component {
                     <nav className={classes.drawer}>
                         <Hidden smUp implementation="js">
                             <Sidebar
-                                {...childProps}
+                                {...other}
                                 loading={loading}
                                 navigate={path => history.push(path)}
                                 variant="temporary"
@@ -152,7 +238,7 @@ class Master extends Component {
 
                         <Hidden xsDown implementation="css">
                             <Sidebar
-                                {...childProps}
+                                {...other}
                                 loading={loading}
                                 navigate={path => history.push(path)}
                                 PaperProps={{ style: { width: drawerWidth } }}
@@ -162,98 +248,15 @@ class Master extends Component {
 
                     <div className={classes.contentWrapper}>
                         <Header
-                            {...childProps}
+                            {...other}
                             {...this.state}
                             loading={loading}
                             onDrawerToggle={this.handleDrawerToggled}
-                            onNavLinkMenuToggle={this.handleNavLinkMenuToggled}
+                            onAccountMenuToggle={this.handleAccountMenuToggled}
+                            onLocaleMenuToggle={this.handleLocaleMenuToggled}
                         />
 
-                        <AppBar
-                            component="div"
-                            color="inherit"
-                            position="static"
-                            elevation={0}
-                            className={classes.breadcrumbBar}
-                            style={{
-                                backgroundColor: nightMode
-                                    ? '#303030'
-                                    : '#FAFAFA',
-                            }}
-                        >
-                            <div className={classes.breadcrumbWrapper}>
-                                <Breadcrumbs arial-label="Breadcrumb">
-                                    {segments.length > 0 ? (
-                                        <Link
-                                            color="inherit"
-                                            component={linkProps => (
-                                                <RouterLink
-                                                    {...linkProps}
-                                                    to={NavigationUtils._route(
-                                                        'backoffice.home',
-                                                    )}
-                                                />
-                                            )}
-                                            className={classes.breadcrumbItem}
-                                        >
-                                            <HomeIcon
-                                                className={
-                                                    classes.breadcrumbItemIcon
-                                                }
-                                            />
-                                        </Link>
-                                    ) : (
-                                        <HomeIcon
-                                            className={
-                                                classes.breadcrumbItemIcon
-                                            }
-                                        />
-                                    )}
-
-                                    {segments.map((segment, key) => {
-                                        if (key + 1 === segments.length) {
-                                            return (
-                                                <Typography
-                                                    key={key}
-                                                    className={
-                                                        classes.breadcrumbItem
-                                                    }
-                                                >
-                                                    {StringUtils._uppercaseFirst(
-                                                        segment,
-                                                    )}
-                                                </Typography>
-                                            );
-                                        }
-
-                                        return (
-                                            <Link
-                                                key={key}
-                                                color="inherit"
-                                                component={linkProps => (
-                                                    <RouterLink
-                                                        {...linkProps}
-                                                        to={
-                                                            '/' +
-                                                            segment
-                                                                .split('/')
-                                                                .join('.')
-                                                        }
-                                                    />
-                                                )}
-                                                className={
-                                                    classes.breadcrumbItem
-                                                }
-                                            >
-                                                {StringUtils._uppercaseFirst(
-                                                    segment,
-                                                )}
-                                            </Link>
-                                        );
-                                    })}
-                                </Breadcrumbs>
-                            </div>
-                        </AppBar>
+                        {showBreadcrumbs && renderBreadcrumbs}
 
                         <main className={classes.content}>
                             {loading ? (
@@ -263,18 +266,7 @@ class Master extends Component {
                             )}
                         </main>
 
-                        <footer className={classes.footer}>
-                            <Typography>
-                                {Lang.get('navigation.citation')}{' '}
-                                <Link
-                                    href="https://github.com/palonponjovertlota"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    @palonponjovertlota
-                                </Link>
-                            </Typography>
-                        </footer>
+                        <Footer />
                     </div>
                 </div>
 
@@ -296,13 +288,24 @@ class Master extends Component {
 
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
     pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
+    loading: PropTypes.bool,
+
     primaryAction: PropTypes.object,
     tabs: PropTypes.array,
+    showBreadcrumbs: PropTypes.bool,
     message: PropTypes.object,
     alert: PropTypes.object,
+};
+
+Master.defaultProps = {
+    loading: false,
+
+    tabs: [],
+    showBreadcrumbs: true,
+    message: {},
+    alert: {},
 };
 
 const drawerWidth = 256;
@@ -362,15 +365,6 @@ const styles = theme => ({
 
     loadingContainer: {
         minHeight: '100%',
-    },
-
-    footer: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        left: 0,
-        padding: theme.spacing.unit * 4,
-        textAlign: 'center',
     },
 });
 

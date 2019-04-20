@@ -11,6 +11,8 @@ return [
     |
     */
 
+    'back' => 'Bumalik',
+    'next' => 'Susunod',
     'confirm' => 'I-Confirm',
     'cancel' => 'I-cancel',
     'continue' => 'Ituloy',
