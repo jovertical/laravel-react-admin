@@ -13,6 +13,6 @@ return [
 
     'profile_updated' => 'Profile successfully updated!',
     'profile_not_updated' => 'Profile was not updated!',
-    'account_updated' => 'Account successfully updated!',
-    'account_not_updated' => 'Account was not updated!',
+    'account_password_updated' => 'Account Password successfully updated!',
+    'account_password_not_updated' => 'Account Password was not updated!',
 ];

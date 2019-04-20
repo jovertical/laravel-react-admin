@@ -30,10 +30,10 @@ Route::namespace('Api')->name('api.')->group(function () {
         });
 
         Route::middleware('auth:api')->group(function () {
-            Route::namespace('Settings')->prefix('settings')->name('settings.')->group(function() {
+            Route::namespace('Settings')->prefix('settings')->name('settings.')->group(function () {
                 Route::patch('profile', 'ProfileController@update')->name('profile');
 
-                Route::prefix('account')->name('account.')->group(function() {
+                Route::prefix('account')->name('account.')->group(function () {
                     Route::patch('password', 'AccountController@updatePassword')->name('password');
                 });
             });

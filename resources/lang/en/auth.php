@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'password_mismatch' => 'The password you entered is incorrect.',
     'failed' => "Sorry that didn't work. Please try again.",
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 

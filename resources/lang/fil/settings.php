@@ -13,6 +13,7 @@ return [
 
     'profile_updated' => 'Ang iyong Profile ay nabago!',
     'profile_not_updated' => 'Ang iyong Profile ay hindi nabago!',
-    'account_updated' => 'Ang iyong Account ay nabago!',
-    'account_not_updated' => 'Ang iyong Account ay hindi nabago!',
+    'account_password_updated' => 'Ang Password ng iyong Account ay nabago!',
+    'account_password_not_updated' =>
+        'Ang Password ng iyong Account ay hindi nabago!',
 ];

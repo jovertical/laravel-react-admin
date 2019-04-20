@@ -47,7 +47,7 @@ function Profile(props) {
      *
      * @return {undefined}
      */
-    const handleSubmit = async (values, { setSubmitting }) => {
+    const handleSubmit = async (values, { setSubmitting, setErrors }) => {
         setSubmitting(false);
 
         const updateProfile = () =>
@@ -66,13 +66,23 @@ function Profile(props) {
 
             setLoading(false);
         } catch (error) {
-            setMessage({
-                type: 'error',
-                body: Lang.get('settings.profile_not_updated'),
-                closed: () => setMessage({}),
-                actionText: Lang.get('actions.retry'),
-                action: async () => await updateProfile(),
-            });
+            if (!error.response) {
+                return;
+            }
+
+            const { errors } = error.response.data;
+
+            if (errors) {
+                setErrors(errors);
+            } else {
+                setMessage({
+                    type: 'error',
+                    body: Lang.get('settings.profile_not_updated'),
+                    closed: () => setMessage({}),
+                    actionText: Lang.get('actions.retry'),
+                    action: async () => await updateProfile(),
+                });
+            }
 
             setLoading(false);
         }
