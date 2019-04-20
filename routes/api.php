@@ -30,6 +30,14 @@ Route::namespace('Api')->name('api.')->group(function () {
         });
 
         Route::middleware('auth:api')->group(function () {
+            Route::namespace('Settings')->prefix('settings')->name('settings.')->group(function() {
+                Route::patch('profile', 'ProfileController@update')->name('profile');
+
+                Route::prefix('account')->name('account.')->group(function() {
+                    Route::patch('password', 'AccountController@updatePassword')->name('password');
+                });
+            });
+
             Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);
             Route::prefix('users')->name('users.')->group(function () {
                 Route::patch('{user}/restore', 'UsersController@restore')->name('restore');

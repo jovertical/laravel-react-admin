@@ -11,6 +11,8 @@ return [
     |
     */
 
+    'back' => 'Back',
+    'next' => 'Next',
     'confirm' => 'Confirm',
     'cancel' => 'Cancel',
     'continue' => 'Continue',

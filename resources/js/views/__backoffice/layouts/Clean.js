@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import { CssBaseline, Hidden, withStyles } from '@material-ui/core';
+import {
+    CircularProgress,
+    CssBaseline,
+    Grid,
+    Hidden,
+    withStyles,
+} from '@material-ui/core';
 import classNames from 'classnames';
 
+import { Snackbar } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
 
 function Clean(props) {
     const { classes, ...other } = props;
-    const { history, loading } = props;
+    const { history, loading, message } = props;
 
     const [drawerOpen, setDrawer] = useState(false);
     const [localeMenuOpen, setLocaleMenu] = useState(false);
@@ -20,6 +28,19 @@ function Clean(props) {
         open: drawerOpen,
         onClose: () => setDrawer(!drawerOpen),
     });
+
+    const renderLoading = (
+        <Grid
+            container
+            className={classes.root}
+            justify="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <CircularProgress color="primary" />
+            </Grid>
+        </Grid>
+    );
 
     return (
         <>
@@ -59,15 +80,37 @@ function Clean(props) {
                             [classes.contentShift]: drawerOpen,
                         })}
                     >
-                        {props.children}
+                        {loading ? renderLoading : props.children}
                     </main>
                 </div>
 
                 <Footer />
             </div>
+
+            {message && message.hasOwnProperty('type') && (
+                <Snackbar {...message} />
+            )}
         </>
     );
 }
+
+Clean.propTypes = {
+    classes: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
+
+    pageTitle: PropTypes.string,
+    loading: PropTypes.bool,
+    message: PropTypes.object,
+};
+
+Clean.defaultProps = {
+    pageTitle: '',
+    loading: false,
+    message: {},
+};
 
 const drawerWidth = 256;
 

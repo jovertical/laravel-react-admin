@@ -325,7 +325,6 @@ const Header = props => {
                                         {...skeletonProps}
                                         height={30}
                                         width={75 + pageTitle.length * 2}
-                                        className={classes.link}
                                     />
                                 </Grid>
                             )}
