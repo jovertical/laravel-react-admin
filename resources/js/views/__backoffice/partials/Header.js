@@ -419,7 +419,7 @@ const Header = props => {
                                     />
                                 </Grid>
 
-                                {Object.keys(primaryAction) > 0 && (
+                                {Object.keys(primaryAction).length > 0 && (
                                     <Grid item>
                                         <Skeleton
                                             {...skeletonProps}
@@ -651,7 +651,7 @@ const Header = props => {
                                     </Typography>
                                 </Grid>
 
-                                {Object.keys(primaryAction) > 0 && (
+                                {Object.keys(primaryAction).length > 0 && (
                                     <Grid item>
                                         <Button
                                             className={classes.button}
