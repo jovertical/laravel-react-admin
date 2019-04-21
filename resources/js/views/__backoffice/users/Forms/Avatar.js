@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 
 import { Dropzone } from '../../../../ui';
 
-class Avatar extends Component {
-    state = {
-        files: [], // An item's format must comply to the File Object's.
-    };
+function Avatar(props) {
+    const [files, setFiles] = useState([]);
 
     /**
      * Initial files to be fed to dropzone.
      *
      * @return {array}
      */
-    loadFiles = (reset = false) => {
-        const { user } = this.props;
+    const loadFiles = (reset = false) => {
+        const { user } = props;
 
         if (!user.hasOwnProperty('filename')) {
             return;
@@ -36,9 +34,7 @@ class Avatar extends Component {
             },
         ];
 
-        this.setState({
-            files,
-        });
+        setFiles(files);
     };
 
     /**
@@ -49,8 +45,8 @@ class Avatar extends Component {
      *
      * @return {undefined}
      */
-    handleFileRemoved = async (file, removed) => {
-        const { user } = this.props;
+    const handleFileRemoved = async (file, removed) => {
+        const { user } = props;
 
         try {
             const response = await axios.delete(
@@ -83,8 +79,8 @@ class Avatar extends Component {
      *
      * @return {undefined}
      */
-    handleUpload = async (file, done) => {
-        const { user } = this.props;
+    const handleUpload = async (file, done) => {
+        const { user } = props;
 
         try {
             const formData = new FormData();
@@ -117,44 +113,45 @@ class Avatar extends Component {
         }
     };
 
-    componentDidMount() {
-        this.loadFiles();
-    }
+    useEffect(() => {
+        if (files.length > 0) {
+            return;
+        }
 
-    render() {
-        const { classes, handleSkip } = this.props;
-        const { files } = this.state;
+        loadFiles();
+    });
 
-        return (
-            <>
-                <Typography variant="h6" gutterBottom>
-                    Avatar Upload
-                </Typography>
+    const { classes, handleSkip } = props;
 
-                <Dropzone
-                    initialFiles={files}
-                    maxFiles={1}
-                    maxFileSize={25}
-                    handleUpload={this.handleUpload}
-                    handleFileRemoved={this.handleFileRemoved}
-                />
+    return (
+        <>
+            <Typography variant="h6" gutterBottom>
+                Avatar Upload
+            </Typography>
 
-                <div className={classes.sectionSpacer} />
+            <Dropzone
+                initialFiles={files}
+                maxFiles={1}
+                maxFileSize={25}
+                handleUpload={handleUpload}
+                handleFileRemoved={handleFileRemoved}
+            />
 
-                <Grid container spacing={24} justify="flex-end">
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSkip}
-                        >
-                            Finish
-                        </Button>
-                    </Grid>
+            <div className={classes.sectionSpacer} />
+
+            <Grid container spacing={24} justify="flex-end">
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSkip}
+                    >
+                        Finish
+                    </Button>
                 </Grid>
-            </>
-        );
-    }
+            </Grid>
+        </>
+    );
 }
 
 Avatar.propTypes = {
