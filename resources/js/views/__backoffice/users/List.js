@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
     Avatar,
@@ -21,19 +21,16 @@ import { Table } from '../../../ui';
 import { Master as MasterLayout } from '../layouts';
 import { User } from '../../../models';
 
-class List extends Component {
-    state = {
-        loading: false,
-        pagination: {},
-        sorting: {
-            by: 'name',
-            type: 'asc',
-        },
-        filters: {},
-        selectedResources: [],
-        message: {},
-        alert: {},
-    };
+function List(props) {
+    const [loading, setLoading] = useState(false);
+    const [pagination, setPagination] = useState({});
+    const [sorting, setSorting] = useState({
+        by: 'name',
+        type: 'asc',
+    });
+    const [filters, setFilters] = useState({});
+    const [message, setMessage] = useState({});
+    const [alert, setAlert] = useState({});
 
     /**
      * Event listener that is triggered when a resource delete button is clicked.
@@ -43,124 +40,228 @@ class List extends Component {
      *
      * @return {undefined}
      */
-    handleDeleteClick = resourceId => {
-        this.setState({
-            alert: {
-                type: 'confirmation',
-                title: Lang.get('resources.delete_confirmation_title', {
-                    name: 'User',
-                }),
-                body: Lang.get('resources.delete_confirmation_body', {
-                    name: 'User',
-                }),
-                confirmText: Lang.get('actions.continue'),
-                confirmed: async () => await this.deleteUser(resourceId),
-                cancelled: () => this.setState({ alert: {} }),
-            },
+    const handleDeleteClick = resourceId => {
+        setAlert({
+            type: 'confirmation',
+            title: Lang.get('resources.delete_confirmation_title', {
+                name: 'User',
+            }),
+            body: Lang.get('resources.delete_confirmation_body', {
+                name: 'User',
+            }),
+            confirmText: Lang.get('actions.continue'),
+            confirmed: async () => await deleteUser(resourceId),
+            cancelled: () => setAlert({}),
         });
     };
 
     /**
      * Event listener that is triggered when a filter is removed.
-     * This should re-fetch the resource & also update the queryString.
+     * This should re-fetch the resource.
      *
      * @param {string} key
      *
      * @return {undefined}
      */
-    handleFilterRemove = async key => {
-        const { filters: prevFilters } = this.state;
+    const handleFilterRemove = async key => {
+        const newFilters = { ...filters };
+        delete newFilters[key];
 
-        const filters = { ...prevFilters };
-        delete filters[key];
-
-        await this.fetchUsers({
-            ...this.defaultQueryString(),
-            filters,
+        await fetchUsers({
+            ...defaultQueryString(),
+            filters: newFilters,
         });
-
-        this.updateQueryString();
     };
 
     /**
      * Event listener that is triggered when the filter form is submitted.
-     * This should re-fetch the resource & also update the queryString.
+     * This should re-fetch the resource.
      *
      * @param {object} values
      * @param {object} form
      *
      * @return {undefined}
      */
-    handleFiltering = async (values, { setSubmitting }) => {
+    const handleFiltering = async (values, { setSubmitting }) => {
         setSubmitting(false);
 
-        const { filters: prevFilters } = this.state;
-
-        const filters = {
-            ...prevFilters,
+        const newFilters = {
+            ...filters,
             [`${values.filterBy}[${values.filterType}]`]: values.filterValue,
         };
 
-        await this.fetchUsers({
-            ...this.defaultQueryString(),
-            filters,
+        await fetchUsers({
+            ...defaultQueryString(),
+            filters: newFilters,
         });
+    };
 
-        this.updateQueryString();
+    /**
+     * Event listener that is triggered when a sortable TableCell is clicked.
+     * This should re-fetch the resource.
+     *
+     * @param {string} column
+     *
+     * @return {undefined}
+     */
+    const handleSorting = async (sortBy, sortType) => {
+        await fetchUsers({
+            ...defaultQueryString(),
+            sortBy,
+            sortType,
+        });
     };
 
     /**
      * Event listener that is triggered when a Table Component's Page is changed.
-     * This should re-fetch the resource & also update the queryString.
+     * This should re-fetch the resource.
      *
      * @param {number} page
      *
      * @return {undefined}
      */
-    handlePageChange = async page => {
-        await this.fetchUsers({
-            ...this.defaultQueryString(),
+    const handlePageChange = async page => {
+        await fetchUsers({
+            ...defaultQueryString(),
             page,
         });
-
-        this.updateQueryString();
     };
 
     /**
      * Event listener that is triggered when a Table Component's Per Page is changed.
-     * This should re-fetch the resource & also update the queryString.
+     * This should re-fetch the resource.
      *
      * @param {number} perPage
      * @param {number} page
      *
      * @return {undefined}
      */
-    handlePerPageChange = async (perPage, page) => {
-        await this.fetchUsers({
-            ...this.defaultQueryString(),
+    const handlePerPageChange = async (perPage, page) => {
+        await fetchUsers({
+            ...defaultQueryString(),
             perPage,
             page,
         });
-
-        this.updateQueryString();
     };
 
     /**
-     * Event listener that is triggered when a sortable TableCell is clicked.
-     * This should re-fetch the resource & also update the queryString.
+     * This should send an API request to restore a deleted resource.
      *
-     * @param {string} column
+     * @param {string} resourceId
      *
      * @return {undefined}
      */
-    handleSorting = async (sortBy, sortType) => {
-        await this.fetchUsers({
-            ...this.defaultQueryString(),
-            sortBy,
-            sortType,
-        });
+    const restoreUser = async resourceId => {
+        setLoading(true);
 
-        this.updateQueryString();
+        try {
+            const pagination = await User.restore(resourceId);
+
+            setLoading(false);
+            setPagination(pagination);
+            setAlert({});
+            setMessage({
+                type: 'success',
+                body: Lang.get('resources.restored', {
+                    name: 'User',
+                }),
+                closed: () => setMessage({}),
+            });
+        } catch (error) {
+            setLoading(false);
+            setAlert({});
+            setMessage({
+                type: 'error',
+                body: Lang.get('resources.not_restored', {
+                    name: 'User',
+                }),
+                closed: () => setMessage({}),
+                actionText: Lang.get('actions.retry'),
+                action: () => restoreUser(resourceId),
+            });
+        }
+    };
+
+    /**
+     * This should send an API request to delete a resource.
+     *
+     * @param {string} resourceId
+     *
+     * @return {undefined}
+     */
+    const deleteUser = async resourceId => {
+        setLoading(true);
+
+        try {
+            const pagination = await User.delete(resourceId);
+
+            setLoading(false);
+            setPagination(pagination);
+            setAlert({});
+            setMessage({
+                type: 'success',
+                body: Lang.get('resources.deleted', {
+                    name: 'User',
+                }),
+                closed: () => setMessage({}),
+                actionText: Lang.get('actions.undo'),
+                action: () => restoreUser(resourceId),
+            });
+        } catch (error) {
+            setLoading(false);
+            setAlert({});
+            setMessage({
+                type: 'error',
+                body: Lang.get('resources.not_deleted', {
+                    name: 'User',
+                }),
+                closed: () => setMessage({}),
+                actionText: Lang.get('actions.retry'),
+                action: () => deleteUser(resourceId),
+            });
+        }
+    };
+
+    /**
+     * This should send an API request to fetch all resource.
+     *
+     * @param {object} params
+     *
+     * @return {undefined}
+     */
+    const fetchUsers = async (params = {}) => {
+        setLoading(true);
+
+        try {
+            const {
+                page,
+                perPage,
+                sortBy,
+                sortType,
+                filters: newFilters,
+            } = params;
+
+            const queryParams = {
+                page,
+                perPage,
+                sortBy,
+                sortType,
+                ...newFilters,
+            };
+
+            const pagination = await User.paginated(queryParams);
+
+            setLoading(false);
+            setSorting({
+                by: sortBy ? sortBy : sorting.by,
+                type: sortType ? sortType : sorting.type,
+            });
+            setFilters(newFilters ? newFilters : filters);
+            setPagination(pagination);
+            setMessage({});
+        } catch (error) {
+            setLoading(false);
+        }
     };
 
     /**
@@ -168,10 +269,9 @@ class List extends Component {
      *
      * @return {object}
      */
-    defaultQueryString() {
-        const { sortBy, sortType } = this.state.sorting;
-        const { current_page: page, per_page: perPage } = this.state.pagination;
-        const { filters } = this.state;
+    const defaultQueryString = () => {
+        const { sortBy, sortType } = sorting;
+        const { current_page: page, per_page: perPage } = pagination;
 
         return {
             sortBy,
@@ -180,16 +280,15 @@ class List extends Component {
             page,
             filters,
         };
-    }
+    };
 
     /**
      * This will update the URL query string via history API.
      *
      * @return {undefined}
      */
-    updateQueryString() {
-        const { history, location } = this.props;
-        const { pagination, sorting, filters } = this.state;
+    const updateQueryString = () => {
+        const { history, location } = props;
         const { current_page: page, per_page: perPage } = pagination;
         const { by: sortBy, type: sortType } = sorting;
 
@@ -202,348 +301,222 @@ class List extends Component {
         });
 
         history.push(`${location.pathname}${queryString}`);
-    }
-
-    /**
-     * This should send an API request to restore a deleted resource.
-     *
-     * @param {string} resourceId
-     *
-     * @return {undefined}
-     */
-    restoreUser = async resourceId => {
-        this.setState({ loading: true });
-
-        try {
-            const pagination = await User.restore(resourceId);
-
-            this.setState({
-                loading: false,
-                pagination,
-                alert: {},
-                message: {
-                    type: 'success',
-                    body: Lang.get('resources.restored', {
-                        name: 'User',
-                    }),
-                    closed: () => this.setState({ message: {} }),
-                },
-            });
-        } catch (error) {
-            this.setState({
-                loading: false,
-                alert: {},
-                message: {
-                    type: 'error',
-                    body: Lang.get('resources.not_restored', {
-                        name: 'User',
-                    }),
-                    closed: () => this.setState({ message: {} }),
-                    actionText: Lang.get('actions.retry'),
-                    action: async () => await this.restoreUser(resourceId),
-                },
-            });
-        }
     };
 
     /**
-     * This should send an API request to delete a resource.
-     *
-     * @param {string} resourceId
-     *
-     * @return {undefined}
+     * Fetch data on initialize.
      */
-    deleteUser = async resourceId => {
-        this.setState({ loading: true });
+    useEffect(() => {
+        if (pagination.hasOwnProperty('data')) {
+            updateQueryString();
 
-        try {
-            const pagination = await User.delete(resourceId);
-
-            this.setState({
-                loading: false,
-                pagination,
-                alert: {},
-                message: {
-                    type: 'success',
-                    body: Lang.get('resources.deleted', {
-                        name: 'User',
-                    }),
-                    closed: () => this.setState({ message: {} }),
-                    actionText: Lang.get('actions.undo'),
-                    action: async () => this.restoreUser(resourceId),
-                },
-            });
-        } catch (error) {
-            this.setState({
-                loading: false,
-                alert: {},
-                message: {
-                    type: 'error',
-                    body: Lang.get('resources.not_deleted', {
-                        name: 'User',
-                    }),
-                    closed: () => this.setState({ message: {} }),
-                    actionText: Lang.get('actions.retry'),
-                    action: async () => await this.deleteUser(resourceId),
-                },
-            });
+            return;
         }
-    };
 
-    /**
-     * This should send an API request to fetch all resource.
-     *
-     * @param {object} params
-     * @return {undefined}
-     */
-    fetchUsers = async (params = {}) => {
-        this.setState({ loading: true });
-
-        try {
-            const { page, perPage, sortBy, sortType, filters } = params;
-
-            const queryParams = {
-                page,
-                perPage,
-                sortBy,
-                sortType,
-                ...filters,
-            };
-
-            const pagination = await User.paginated(queryParams);
-
-            this.setState(prevState => {
-                return {
-                    loading: false,
-                    pagination,
-                    sorting: {
-                        by: sortBy ? sortBy : prevState.sorting.by,
-                        type: sortType ? sortType : prevState.sorting.type,
-                    },
-                    filters: filters ? filters : prevState.filters,
-                    message: {},
-                };
-            });
-        } catch (error) {
-            this.setState({ loading: false });
-        }
-    };
-
-    async componentDidMount() {
-        const { location } = this.props;
-        const queryParams = (location, 'search')
+        const { location } = props;
+        const queryParams = location.search
             ? UrlUtils._queryParams(location.search)
             : {};
 
-        const filters = {};
+        const prevFilters = {};
         const queryParamValues = Object.values(queryParams);
 
         Object.keys(queryParams).forEach((param, key) => {
             if (param.search(/\[*]/) > -1 && param.indexOf('_') < 0) {
-                filters[param] = queryParamValues[key];
+                prevFilters[param] = queryParamValues[key];
             }
         });
 
-        await this.fetchUsers({
+        fetchUsers({
             ...queryParams,
-            filters,
+            filters: prevFilters,
         });
-    }
+    }, [pagination.data]);
 
-    render() {
-        const { ...childProps } = this.props;
+    const { ...childProps } = props;
+    const { history, pageProps } = props;
+    const { user: authUser } = pageProps;
 
-        const { history, pageProps } = this.props;
-        const { user: authUser } = pageProps;
+    const {
+        data: rawData,
+        total,
+        per_page: perPage,
+        current_page: page,
+    } = pagination;
 
-        const { loading, sorting, filters, message, alert } = this.state;
+    const primaryAction = {
+        text: Lang.get('resources.create', {
+            name: 'User',
+        }),
+        clicked: () =>
+            history.push(NavigationUtils._route('backoffice.users.create')),
+    };
 
-        let { pagination } = this.state;
+    const tabs = [
+        {
+            name: 'List',
+            active: true,
+        },
+    ];
 
-        const {
-            data: rawData,
-            total,
-            per_page: perPage,
-            current_page: page,
-        } = pagination;
+    const columns = [
+        { name: 'Type', property: 'type' },
+        { name: 'Name', property: 'name', sort: true },
+        { name: 'Email', property: 'email', sort: true },
+        {
+            name: 'Actions',
+            property: 'actions',
+            filter: false,
+            sort: false,
+        },
+    ];
 
-        const primaryAction = {
-            text: Lang.get('resources.create', {
-                name: 'User',
-            }),
-            clicked: () =>
-                history.push(NavigationUtils._route('backoffice.users.create')),
-        };
-
-        const tabs = [
-            {
-                name: 'List',
-                active: true,
-            },
-        ];
-
-        const columns = [
-            { name: 'Type', property: 'type' },
-            { name: 'Name', property: 'name', sort: true },
-            { name: 'Email', property: 'email', sort: true },
-            {
-                name: 'Actions',
-                property: 'actions',
-                filter: false,
-                sort: false,
-            },
-        ];
-
-        const data =
-            rawData &&
-            rawData.map(user => {
-                return {
-                    type: user.type,
-                    name: (
-                        <Grid
-                            container
-                            direction="row"
-                            alignItems="center"
-                            wrap="nowrap"
-                        >
-                            <Grid item style={{ marginRight: 10 }}>
-                                {user.hasOwnProperty('thumbnail_url') &&
-                                user.thumbnail_url !== null ? (
-                                    <Avatar
-                                        alt={user.name}
-                                        src={user.thumbnail_url}
-                                    />
-                                ) : (
-                                    <Avatar
-                                        style={{
-                                            fontSize: 17,
-                                            backgroundColor: RandomUtils._color(
-                                                user.firstname.length -
-                                                    user.created_at.charAt(
-                                                        user.created_at.length -
-                                                            2,
-                                                    ),
-                                            ),
-                                        }}
-                                    >
-                                        <Typography>
-                                            {`${user.firstname.charAt(
-                                                0,
-                                            )}${user.lastname.charAt(0)}`}
-                                        </Typography>
-                                    </Avatar>
-                                )}
-                            </Grid>
-
-                            <Grid item>{user.name}</Grid>
-                        </Grid>
-                    ),
-                    email: user.email,
-                    actions: (
-                        <div style={{ width: 120, flex: 'no-wrap' }}>
-                            <Tooltip
-                                title={Lang.get('resources.edit_image', {
-                                    name: 'User',
-                                })}
-                            >
-                                <IconButton
-                                    onClick={() =>
-                                        history.push(
-                                            NavigationUtils._route(
-                                                'backoffice.users.edit',
-                                                {
-                                                    id: user.id,
-                                                },
-                                                {
-                                                    step: 2,
-                                                },
-                                            ),
-                                        )
-                                    }
+    const data =
+        rawData &&
+        rawData.map(user => {
+            return {
+                type: user.type,
+                name: (
+                    <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        wrap="nowrap"
+                    >
+                        <Grid item style={{ marginRight: 10 }}>
+                            {user.hasOwnProperty('thumbnail_url') &&
+                            user.thumbnail_url !== null ? (
+                                <Avatar
+                                    alt={user.name}
+                                    src={user.thumbnail_url}
+                                />
+                            ) : (
+                                <Avatar
+                                    style={{
+                                        fontSize: 17,
+                                        backgroundColor: RandomUtils._color(
+                                            user.firstname.length -
+                                                user.created_at.charAt(
+                                                    user.created_at.length - 2,
+                                                ),
+                                        ),
+                                    }}
                                 >
-                                    <ImageIcon />
-                                </IconButton>
-                            </Tooltip>
-
-                            <Tooltip
-                                title={Lang.get('resources.edit', {
-                                    name: 'User',
-                                })}
-                            >
-                                <IconButton
-                                    onClick={() =>
-                                        history.push(
-                                            NavigationUtils._route(
-                                                'backoffice.users.edit',
-                                                {
-                                                    id: user.id,
-                                                },
-                                            ),
-                                        )
-                                    }
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>
-
-                            {authUser.id !== user.id && (
-                                <Tooltip
-                                    title={Lang.get('resources.delete', {
-                                        name: 'User',
-                                    })}
-                                >
-                                    <IconButton
-                                        color="secondary"
-                                        onClick={() =>
-                                            this.handleDeleteClick(user.id)
-                                        }
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                    <Typography>
+                                        {`${user.firstname.charAt(
+                                            0,
+                                        )}${user.lastname.charAt(0)}`}
+                                    </Typography>
+                                </Avatar>
                             )}
-                        </div>
-                    ),
-                };
-            });
+                        </Grid>
 
-        return (
-            <MasterLayout
-                {...childProps}
-                loading={this.state.loading}
-                pageTitle={Lang.get('navigation.users')}
-                primaryAction={primaryAction}
-                tabs={tabs}
-                loading={loading}
-                message={message}
-                alert={alert}
-            >
-                {!loading && data && (
-                    <Table
-                        title={Lang.get('navigation.users')}
-                        data={data}
-                        total={total}
-                        columns={columns}
-                        filters={filters}
-                        sortBy={sorting.by}
-                        sortType={sorting.type}
-                        headerCellClicked={cellName =>
-                            this.handleSorting(
-                                cellName,
-                                sorting.type === 'asc' ? 'desc' : 'asc',
-                            )
-                        }
-                        page={parseInt(page)}
-                        perPage={parseInt(perPage)}
-                        onChangePage={this.handlePageChange}
-                        onChangePerPage={this.handlePerPageChange}
-                        onFilter={this.handleFiltering}
-                        onFilterRemove={this.handleFilterRemove}
-                    />
-                )}
-            </MasterLayout>
-        );
-    }
+                        <Grid item>{user.name}</Grid>
+                    </Grid>
+                ),
+                email: user.email,
+                actions: (
+                    <div style={{ width: 120, flex: 'no-wrap' }}>
+                        <Tooltip
+                            title={Lang.get('resources.edit_image', {
+                                name: 'User',
+                            })}
+                        >
+                            <IconButton
+                                onClick={() =>
+                                    history.push(
+                                        NavigationUtils._route(
+                                            'backoffice.users.edit',
+                                            {
+                                                id: user.id,
+                                            },
+                                            {
+                                                step: 2,
+                                            },
+                                        ),
+                                    )
+                                }
+                            >
+                                <ImageIcon />
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip
+                            title={Lang.get('resources.edit', {
+                                name: 'User',
+                            })}
+                        >
+                            <IconButton
+                                onClick={() =>
+                                    history.push(
+                                        NavigationUtils._route(
+                                            'backoffice.users.edit',
+                                            {
+                                                id: user.id,
+                                            },
+                                        ),
+                                    )
+                                }
+                            >
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+
+                        {authUser.id !== user.id && (
+                            <Tooltip
+                                title={Lang.get('resources.delete', {
+                                    name: 'User',
+                                })}
+                            >
+                                <IconButton
+                                    color="secondary"
+                                    onClick={() => handleDeleteClick(user.id)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </div>
+                ),
+            };
+        });
+
+    return (
+        <MasterLayout
+            {...childProps}
+            loading={loading}
+            pageTitle={Lang.get('navigation.users')}
+            primaryAction={primaryAction}
+            tabs={tabs}
+            loading={loading}
+            message={message}
+            alert={alert}
+        >
+            {!loading && data && (
+                <Table
+                    title={Lang.get('navigation.users')}
+                    data={data}
+                    total={total}
+                    columns={columns}
+                    filters={filters}
+                    sortBy={sorting.by}
+                    sortType={sorting.type}
+                    headerCellClicked={cellName =>
+                        handleSorting(
+                            cellName,
+                            sorting.type === 'asc' ? 'desc' : 'asc',
+                        )
+                    }
+                    page={parseInt(page)}
+                    perPage={parseInt(perPage)}
+                    onChangePage={handlePageChange}
+                    onChangePerPage={handlePerPageChange}
+                    onFilter={handleFiltering}
+                    onFilterRemove={handleFilterRemove}
+                />
+            )}
+        </MasterLayout>
+    );
 }
 
 export default List;
