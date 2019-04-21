@@ -26,7 +26,7 @@ import { Skeleton } from '../../../ui';
 import brandLogoLight from '../../../../img/logos/full-light.svg';
 import brandLogoDark from '../../../../img/logos/full-dark.svg';
 
-const Sidebar = props => {
+function Sidebar(props) {
     const {
         classes,
         location,
@@ -266,7 +266,7 @@ const Sidebar = props => {
             {loading ? renderNavigating : renderNavigated}
         </Drawer>
     );
-};
+}
 
 Sidebar.propTypes = {
     open: PropTypes.bool,

@@ -257,7 +257,7 @@ const AccountMenu = props => {
     );
 };
 
-const Header = props => {
+function Header(props) {
     const {
         classes,
         pageProps,
@@ -707,7 +707,7 @@ const Header = props => {
     );
 
     return <>{loading ? renderNavigating : renderNavigated}</>;
-};
+}
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired,
