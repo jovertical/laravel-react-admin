@@ -186,7 +186,7 @@ function SignIn(props) {
         if (q.hasOwnProperty('username') && q.username !== '') {
             identify(q.username, {});
         }
-    });
+    }, [identified]);
 
     const { classes, ...other } = props;
 
