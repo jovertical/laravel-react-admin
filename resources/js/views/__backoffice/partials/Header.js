@@ -42,6 +42,7 @@ import {
 import * as NavigationUtils from '../../../utils/Navigation';
 import * as RandomUtils from '../../../utils/Random';
 import {
+    GitHub as GitHubIcon,
     LightbulbOff as LightbulbOffIcon,
     LightbulbOn as LightbulbOnIcon,
 } from '../../../icons/1x1';
@@ -333,12 +334,14 @@ const Header = props => {
                         <Grid item xs />
 
                         <Grid item>
-                            <Skeleton
-                                {...skeletonProps}
-                                height={20}
-                                width={70}
-                                className={classes.link}
-                            />
+                            <IconButton color="inherit">
+                                <Skeleton
+                                    {...skeletonProps}
+                                    circle
+                                    height={25}
+                                    width={25}
+                                />
+                            </IconButton>
                         </Grid>
 
                         <Grid item>
@@ -525,15 +528,16 @@ const Header = props => {
                         <Grid item xs />
 
                         <Grid item>
-                            <Typography
-                                className={classes.link}
-                                component="a"
-                                href="https://github.com/palonponjovertlota/lra"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                Github Link
-                            </Typography>
+                            <Tooltip title={Lang.get('navigation.github')}>
+                                <IconButton
+                                    href="https://github.com/palonponjovertlota/lra"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    color="inherit"
+                                >
+                                    <GitHubIcon />
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
 
                         {monitoringEnabled && (
@@ -769,14 +773,6 @@ const styles = theme => ({
 
     iconButtonAvatar: {
         padding: 4,
-    },
-
-    link: {
-        textDecoration: 'none',
-        color: lightColor,
-        '&:hover': {
-            color: theme.palette.common.white,
-        },
     },
 
     button: {

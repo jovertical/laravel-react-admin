@@ -26,6 +26,8 @@ return [
     'send_link' => 'I-send ang Link',
     'reset' => 'I-reset',
 
+    'github' => 'Repository sa GitHub',
+
     'monitoring' => 'Pagsubaybay',
 
     'notifications' => 'Mga Abiso',

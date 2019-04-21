@@ -26,6 +26,8 @@ return [
     'send_link' => 'Send Link',
     'reset' => 'Reset',
 
+    'github' => 'GitHub Repository',
+
     'monitoring' => 'Monitoring',
 
     'notifications' => 'Notifications',
