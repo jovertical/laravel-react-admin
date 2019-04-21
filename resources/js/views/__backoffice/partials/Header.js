@@ -159,7 +159,7 @@ const AccountMenu = props => {
         accountMenuOpen,
         onAccountMenuToggle,
     } = props;
-    const { user, handleLock, handleSignout } = pageProps;
+    const { user, handleLock, handleSignOut } = pageProps;
 
     const navigate = path => history.push(path);
 
@@ -237,7 +237,7 @@ const AccountMenu = props => {
                                     </Typography>
                                 </MenuItem>
 
-                                <MenuItem onClick={handleSignout}>
+                                <MenuItem onClick={handleSignOut}>
                                     <ListItemIcon
                                         className={classes.navLinkMenuItemIcon}
                                     >
@@ -257,7 +257,7 @@ const AccountMenu = props => {
     );
 };
 
-const Header = props => {
+function Header(props) {
     const {
         classes,
         pageProps,
@@ -279,7 +279,7 @@ const Header = props => {
         user,
         monitoringEnabled,
         nightMode,
-        handleNightmodeToggled,
+        handleNightModeToggled,
     } = pageProps;
 
     const skeletonProps = {
@@ -603,7 +603,7 @@ const Header = props => {
                             >
                                 <IconButton
                                     color="inherit"
-                                    onClick={handleNightmodeToggled}
+                                    onClick={handleNightModeToggled}
                                 >
                                     {nightMode ? (
                                         <LightbulbOnIcon />
@@ -707,7 +707,7 @@ const Header = props => {
     );
 
     return <>{loading ? renderNavigating : renderNavigated}</>;
-};
+}
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired,

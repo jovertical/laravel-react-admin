@@ -20,7 +20,7 @@ import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 
 const Profile = props => {
-    const { classes, values, errors: apiErrors, handleSubmit } = props;
+    const { classes, values, handleSubmit } = props;
 
     return (
         <Formik
@@ -262,6 +262,8 @@ const Profile = props => {
                                     value={values.address}
                                     onChange={handleChange}
                                     fullWidth
+                                    multiline
+                                    rows={3}
                                 />
 
                                 {submitCount > 0 &&
@@ -301,7 +303,6 @@ const Profile = props => {
 
 Profile.propTypes = {
     values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
 };
 

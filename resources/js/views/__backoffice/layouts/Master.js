@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -19,17 +19,29 @@ import { Home as HomeIcon } from '@material-ui/icons';
 
 import * as NavigationUtils from '../../../utils/Navigation';
 import * as StringUtils from '../../../utils/String';
-import * as UrlUtils from '../../../utils/URL';
 import { Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
 
-class Master extends Component {
-    state = {
-        mobileOpen: false,
-        localeMenuOpen: false,
-        accountMenuOpen: false,
-        message: {},
+function Master(props) {
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
+    const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+
+    /**
+     * Called when a nav link menu is clicked.
+     *
+     * @param {function} set The callback function to be called
+     * @param {string} indicator The flag that will be toggled
+     *
+     * @return {undefined}
+     */
+    const handleNavLinkMenuToggled = (set, indicator) => {
+        setLocaleMenuOpen(false);
+        setAccountMenuOpen(false);
+        setMobileOpen(false);
+
+        set(!indicator);
     };
 
     /**
@@ -37,8 +49,8 @@ class Master extends Component {
      *
      * @return {undefined}
      */
-    handleLocaleMenuToggled = () => {
-        this.handleNavLinkMenuToggled('localeMenuOpen');
+    const handleLocaleMenuToggled = () => {
+        handleNavLinkMenuToggled(setLocaleMenuOpen, localeMenuOpen);
     };
 
     /**
@@ -46,250 +58,189 @@ class Master extends Component {
      *
      * @return {undefined}
      */
-    handleAccountMenuToggled = () => {
-        this.handleNavLinkMenuToggled('accountMenuOpen');
+    const handleAccountMenuToggled = () => {
+        handleNavLinkMenuToggled(setAccountMenuOpen, accountMenuOpen);
     };
 
     /**
-     * Event listener that is triggered when the a nav link menu is clicked.
-     *
-     * @param {string} statusIndicator
+     * Called when mobile drawer button is clicked.
      *
      * @return {undefined}
      */
-    handleNavLinkMenuToggled = statusIndicator => {
-        this.setState(prevState => {
-            return {
-                localeMenuOpen: false,
-                accountMenuOpen: false,
-                mobileOpen: false,
-                [statusIndicator]: !prevState[statusIndicator],
-            };
-        });
+    const handleDrawerToggled = () => {
+        setMobileOpen(!mobileOpen);
     };
 
-    /**
-     * Event listener that is triggered when the the mobile drawer toggle is clicked.
-     *
-     * @return {undefined}
-     */
-    handleDrawerToggled = () => {
-        this.setState(prevState => ({ mobileOpen: !prevState.mobileOpen }));
-    };
+    useEffect(() => {
+        //
+    });
 
-    /**
-     * This will setup a global message into the state coming from the URL
-     * passed message parameters. Useful when attempting to notify actions after
-     * a redirect by React's router.
-     *
-     * @return {undefined}
-     */
-    setGlobalMessage = () => {
-        const { history, location } = this.props;
+    const { classes, showBreadcrumbs, ...other } = props;
 
-        const queryParams = UrlUtils._queryParams(location.search);
-        const messageKeys = Object.keys(queryParams).filter(
-            key => key.indexOf('_message') > -1,
-        );
+    const {
+        children,
+        history,
+        location,
+        pageTitle,
+        pageProps,
+        loading,
+        message,
+        alert,
+    } = props;
+    const { nightMode } = pageProps;
 
-        const message = {};
+    const segments = location.pathname
+        .split('/')
+        .splice(1)
+        .filter(segment => segment.length > 0);
 
-        messageKeys.forEach(key => {
-            message[key.match(/\[(.*)\]/).pop()] = queryParams[key];
-        });
-
-        message.closed = () => {
-            this.setState({ message: {} });
-
-            history.push(location.pathname);
-        };
-
-        this.setState({ message });
-    };
-
-    componentDidMount() {
-        this.setGlobalMessage();
-    }
-
-    render() {
-        const { classes, showBreadcrumbs, ...other } = this.props;
-
-        const {
-            children,
-            history,
-            location,
-            pageTitle,
-            pageProps,
-            loading,
-            message,
-            alert,
-        } = this.props;
-        const { nightMode } = pageProps;
-
-        const { mobileOpen, message: globalMessage } = this.state;
-
-        const segments = location.pathname
-            .split('/')
-            .splice(1)
-            .filter(segment => segment.length > 0);
-
-        const renderLoading = (
-            <Grid
-                container
-                className={classes.loadingContainer}
-                justify="center"
-                alignItems="center"
-            >
-                <Grid item>
-                    <CircularProgress color="primary" />
-                </Grid>
+    const renderLoading = (
+        <Grid
+            container
+            className={classes.loadingContainer}
+            justify="center"
+            alignItems="center"
+        >
+            <Grid item>
+                <CircularProgress color="primary" />
             </Grid>
-        );
+        </Grid>
+    );
 
-        const renderBreadcrumbs = (
-            <AppBar
-                component="div"
-                color="inherit"
-                position="static"
-                elevation={0}
-                className={classes.breadcrumbBar}
-                style={{
-                    backgroundColor: nightMode ? '#303030' : '#FAFAFA',
-                }}
-            >
-                <div className={classes.breadcrumbWrapper}>
-                    <Breadcrumbs arial-label="Breadcrumb">
-                        {segments.length > 0 ? (
+    const renderBreadcrumbs = (
+        <AppBar
+            component="div"
+            color="inherit"
+            position="static"
+            elevation={0}
+            className={classes.breadcrumbBar}
+            style={{
+                backgroundColor: nightMode ? '#303030' : '#FAFAFA',
+            }}
+        >
+            <div className={classes.breadcrumbWrapper}>
+                <Breadcrumbs arial-label="Breadcrumb">
+                    {segments.length > 0 ? (
+                        <Link
+                            color="inherit"
+                            component={linkProps => (
+                                <RouterLink
+                                    {...linkProps}
+                                    to={NavigationUtils._route(
+                                        'backoffice.home',
+                                    )}
+                                />
+                            )}
+                            className={classes.breadcrumbItem}
+                        >
+                            <HomeIcon className={classes.breadcrumbItemIcon} />
+                        </Link>
+                    ) : (
+                        <HomeIcon className={classes.breadcrumbItemIcon} />
+                    )}
+
+                    {segments.map((segment, key) => {
+                        if (key + 1 === segments.length) {
+                            return (
+                                <Typography
+                                    key={key}
+                                    className={classes.breadcrumbItem}
+                                >
+                                    {StringUtils._uppercaseFirst(segment)}
+                                </Typography>
+                            );
+                        }
+
+                        return (
                             <Link
+                                key={key}
                                 color="inherit"
                                 component={linkProps => (
                                     <RouterLink
                                         {...linkProps}
-                                        to={NavigationUtils._route(
-                                            'backoffice.home',
-                                        )}
+                                        to={'/' + segment.split('/').join('.')}
                                     />
                                 )}
                                 className={classes.breadcrumbItem}
                             >
-                                <HomeIcon
-                                    className={classes.breadcrumbItemIcon}
-                                />
+                                {StringUtils._uppercaseFirst(segment)}
                             </Link>
-                        ) : (
-                            <HomeIcon className={classes.breadcrumbItemIcon} />
-                        )}
+                        );
+                    })}
+                </Breadcrumbs>
+            </div>
+        </AppBar>
+    );
 
-                        {segments.map((segment, key) => {
-                            if (key + 1 === segments.length) {
-                                return (
-                                    <Typography
-                                        key={key}
-                                        className={classes.breadcrumbItem}
-                                    >
-                                        {StringUtils._uppercaseFirst(segment)}
-                                    </Typography>
-                                );
-                            }
+    return (
+        <>
+            {loading && <LinearDeterminate className={classes.loader} />}
 
-                            return (
-                                <Link
-                                    key={key}
-                                    color="inherit"
-                                    component={linkProps => (
-                                        <RouterLink
-                                            {...linkProps}
-                                            to={
-                                                '/' +
-                                                segment.split('/').join('.')
-                                            }
-                                        />
-                                    )}
-                                    className={classes.breadcrumbItem}
-                                >
-                                    {StringUtils._uppercaseFirst(segment)}
-                                </Link>
-                            );
-                        })}
-                    </Breadcrumbs>
-                </div>
-            </AppBar>
-        );
+            <div className={classes.root}>
+                <CssBaseline />
 
-        return (
-            <>
-                {loading && <LinearDeterminate className={classes.loader} />}
-
-                <div className={classes.root}>
-                    <CssBaseline />
-
-                    <nav className={classes.drawer}>
-                        <Hidden smUp implementation="js">
-                            <Sidebar
-                                {...other}
-                                loading={loading}
-                                navigate={path => history.push(path)}
-                                variant="temporary"
-                                open={mobileOpen}
-                                onClose={this.handleDrawerToggled}
-                                PaperProps={{ style: { width: drawerWidth } }}
-                            />
-                        </Hidden>
-
-                        <Hidden xsDown implementation="css">
-                            <Sidebar
-                                {...other}
-                                loading={loading}
-                                navigate={path => history.push(path)}
-                                PaperProps={{ style: { width: drawerWidth } }}
-                            />
-                        </Hidden>
-                    </nav>
-
-                    <div className={classes.contentWrapper}>
-                        <Header
+                <nav className={classes.drawer}>
+                    <Hidden smUp implementation="js">
+                        <Sidebar
                             {...other}
-                            {...this.state}
                             loading={loading}
-                            onDrawerToggle={this.handleDrawerToggled}
-                            onAccountMenuToggle={this.handleAccountMenuToggled}
-                            onLocaleMenuToggle={this.handleLocaleMenuToggled}
+                            navigate={path => history.push(path)}
+                            variant="temporary"
+                            open={mobileOpen}
+                            onClose={handleDrawerToggled}
+                            PaperProps={{ style: { width: drawerWidth } }}
                         />
+                    </Hidden>
 
-                        {showBreadcrumbs && renderBreadcrumbs}
+                    <Hidden xsDown implementation="css">
+                        <Sidebar
+                            {...other}
+                            loading={loading}
+                            navigate={path => history.push(path)}
+                            PaperProps={{ style: { width: drawerWidth } }}
+                        />
+                    </Hidden>
+                </nav>
 
-                        <main className={classes.content}>
-                            {loading ? (
-                                renderLoading
-                            ) : (
-                                <Grid container>{children}</Grid>
-                            )}
-                        </main>
+                <div className={classes.contentWrapper}>
+                    <Header
+                        {...other}
+                        mobileOpen={mobileOpen}
+                        accountMenuOpen={accountMenuOpen}
+                        localeMenuOpen={localeMenuOpen}
+                        loading={loading}
+                        onDrawerToggle={handleDrawerToggled}
+                        onAccountMenuToggle={handleAccountMenuToggled}
+                        onLocaleMenuToggle={handleLocaleMenuToggled}
+                    />
 
-                        <Footer />
-                    </div>
+                    {showBreadcrumbs && renderBreadcrumbs}
+
+                    <main className={classes.content}>
+                        {loading ? (
+                            renderLoading
+                        ) : (
+                            <Grid container>{children}</Grid>
+                        )}
+                    </main>
+
+                    <Footer />
                 </div>
+            </div>
 
-                {globalMessage && globalMessage.hasOwnProperty('type') > 0 && (
-                    <Snackbar {...globalMessage} />
-                )}
+            {message && message.hasOwnProperty('type') > 0 && (
+                <Snackbar {...message} />
+            )}
 
-                {message && message.hasOwnProperty('type') > 0 && (
-                    <Snackbar {...message} />
-                )}
-
-                {alert && alert.hasOwnProperty('type') > 0 && (
-                    <Modal {...alert} />
-                )}
-            </>
-        );
-    }
+            {alert && alert.hasOwnProperty('type') > 0 && <Modal {...alert} />}
+        </>
+    );
 }
 
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
-    pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
+    pageProps: PropTypes.object.isRequired,
     loading: PropTypes.bool,
 
     primaryAction: PropTypes.object,

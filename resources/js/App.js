@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -8,33 +8,29 @@ import { Navigator } from './core';
 import { ROUTES } from './config';
 import { Loading } from './views';
 
-class App extends Component {
-    state = {
-        loading: true,
-        authenticated: false,
-        nightMode: false,
-        token: {},
-        user: {},
-        username: '',
-
-        monitoringEnabled: false,
-        responseInterceptor: null,
-    };
+function App(props) {
+    const [initialized, setInitialized] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [nightMode, setNightMode] = useState(false);
+    const [token, setToken] = useState({});
+    const [user, setUser] = useState({});
+    const [username, setUsername] = useState('');
+    const [monitoringEnabled, setMonitoringEnabled] = useState(false);
+    const [responseInterceptor, setResponseInterceptor] = useState(null);
 
     /**
      * Determine if monitoring is enabled.
      *
      * @return {undefined}
      */
-    monitoringEnabled = () => {
+    const monitor = () => {
         const configItem = document.querySelector(
             'meta[name=TELESCOPE_ENABLED]',
         );
 
         if (configItem) {
-            this.setState({
-                monitoringEnabled: Boolean(configItem.content),
-            });
+            setMonitoringEnabled(Boolean(configItem.content));
         }
     };
 
@@ -45,7 +41,7 @@ class App extends Component {
      *
      * @param {undefined}
      */
-    removeResponseInterceptor = interceptor => {
+    const removeResponseInterceptor = interceptor => {
         axios.interceptors.response.eject(interceptor);
     };
 
@@ -56,7 +52,7 @@ class App extends Component {
      *
      * @param {undefined}
      */
-    addResponseInterceptor = () => {
+    const addResponseInterceptor = () => {
         const responseInterceptor = axios.interceptors.response.use(
             response => {
                 return response;
@@ -66,16 +62,14 @@ class App extends Component {
                 // In occasions of Unauthorized requests (401),
                 // Remove the stored tokens.
                 if (error.response.status === 401) {
-                    this.removeToken();
+                    removeToken();
                 }
 
                 return Promise.reject(error);
             },
         );
 
-        this.setState({
-            responseInterceptor,
-        });
+        setResponseInterceptor(responseInterceptor);
     };
 
     /**
@@ -85,16 +79,16 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    authenticate = async tokenString => {
+    const authenticate = async tokenString => {
         const token = JSON.parse(tokenString);
 
         if (token === {}) {
             return;
         }
 
-        this.setToken(token);
+        storeToken(token);
 
-        await this.fetchUser();
+        await fetchUser();
     };
 
     /**
@@ -102,40 +96,32 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    signout = async () => {
-        this.setState({ loading: true });
+    const signOut = async () => {
+        setLoading(true);
 
         try {
-            const response = await axios.post('/api/v1/auth/signout');
+            await axios.post('/api/v1/auth/signout');
 
-            if (response.status === 200) {
-                this.removeToken();
+            removeToken();
 
-                this.setState({
-                    loading: false,
-                    authenticated: false,
-                    user: {},
-                });
-            }
+            setLoading(false);
+            setAuthenticated(false);
+            setUser({});
         } catch (error) {
             //
         }
     };
 
     /**
-     * Handle nightmode toggle.
+     * Handle nightMode toggle.
      * Store boolean value in persistent storage.
      *
      * @return {undefined}
      */
-    handleNightmodeToggled = () => {
-        this.setState(prevState => {
-            return {
-                nightMode: !prevState.nightMode,
-            };
-        });
+    const handleNightModeToggled = () => {
+        setNightMode(!nightMode);
 
-        if (!this.state.nightMode) {
+        if (!nightMode) {
             window.localStorage.setItem('nightMode', true);
         } else {
             window.localStorage.removeItem('nightMode');
@@ -149,12 +135,10 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    handleLock = async username => {
-        await this.setState({
-            username,
-        });
+    const handleLock = username => {
+        setUsername(username);
 
-        await this.signout();
+        signOut();
     };
 
     /**
@@ -162,21 +146,19 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    handleSignout = async () => {
-        await this.signout();
+    const handleSignOut = () => {
+        signOut();
     };
 
     /**
-     * Set nightmode based on stored value in persistent storage.
+     * Set nightMode based on stored value in persistent storage.
      *
      * @return {undefined}
      */
-    setNightMode = () => {
+    const night = () => {
         const nightMode = window.localStorage.getItem('nightMode');
 
-        this.setState({
-            nightMode: nightMode ? true : false,
-        });
+        setNightMode(nightMode ? true : false);
     };
 
     /**
@@ -184,7 +166,7 @@ class App extends Component {
      *
      * @return {object}
      */
-    token = () => {
+    const getToken = () => {
         const tokenString = window.localStorage.getItem('token');
 
         if (!tokenString) {
@@ -193,7 +175,7 @@ class App extends Component {
 
         const token = JSON.parse(tokenString);
 
-        this.setState({ token });
+        setToken(token);
 
         return token;
     };
@@ -205,7 +187,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    setToken = token => {
+    const storeToken = token => {
         // We will set a default Authorization header, this will
         // eliminate the need to include the Authorization header
         // for almost every AJAX requests.
@@ -222,7 +204,7 @@ class App extends Component {
      *
      * @return {undefined}
      */
-    removeToken = () => {
+    const removeToken = () => {
         localStorage.removeItem('token');
     };
 
@@ -231,21 +213,15 @@ class App extends Component {
      *
      * @return {any}
      */
-    fetchUser = async () => {
-        this.setState({ loading: true });
+    const fetchUser = async () => {
+        setLoading(true);
 
         try {
             const response = await axios.post('/api/v1/auth/user');
 
-            if (response.status !== 200) {
-                return;
-            }
-
-            this.setState({
-                loading: false,
-                authenticated: true,
-                user: response.data,
-            });
+            setAuthenticated(true);
+            setUser(response.data);
+            setLoading(false);
 
             return response.data;
         } catch (error) {
@@ -253,66 +229,72 @@ class App extends Component {
         }
     };
 
-    async componentDidMount() {
-        // Toggle monitoring.
-        this.monitoringEnabled();
-
-        // Listen for all API responses.
-        this.addResponseInterceptor();
-
-        // Setup Night Mode via Persistent Storage.
-        this.setNightMode();
-
-        // Authenticate via Persistent Storage.
-        const token = this.token();
-
-        if (Object.keys(token).length > 0) {
-            await this.authenticate(JSON.stringify(token));
+    useEffect(() => {
+        if (initialized) {
+            return;
         }
 
-        this.setState({ loading: false });
-    }
+        monitor();
 
-    componentWillUnmount() {
-        const { responseInterceptor } = this.state;
+        addResponseInterceptor();
 
-        this.removeResponseInterceptor(responseInterceptor);
-    }
+        night();
 
-    render() {
-        const { width, environment, darkTheme, lightTheme } = this.props;
-        const { loading, nightMode } = this.state;
+        const token = getToken();
 
-        return (
-            <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
-                <CssBaseline />
+        if (Object.keys(token).length > 0) {
+            authenticate(JSON.stringify(token));
+        } else {
+            setLoading(false);
+        }
 
-                {loading ? (
-                    <Loading
+        if (responseInterceptor !== null) {
+            removeResponseInterceptor(responseInterceptor);
+        }
+
+        setInitialized(true);
+    }, [initialized]);
+
+    const { width, environment, darkTheme, lightTheme } = props;
+
+    const pageProps = {
+        loading,
+        authenticated,
+        nightMode,
+        user,
+        token,
+        username,
+        monitoringEnabled,
+    };
+
+    return (
+        <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
+            <CssBaseline />
+
+            {loading ? (
+                <Loading
+                    pageProps={{
+                        ...pageProps,
+                    }}
+                />
+            ) : (
+                <Router>
+                    <Navigator
                         pageProps={{
-                            ...this.state,
+                            ...pageProps,
+                            width,
+                            environment: environment,
+                            routes: ROUTES,
+                            handleNightModeToggled: handleNightModeToggled,
+                            authenticate: authenticate,
+                            handleLock: handleLock,
+                            handleSignOut: handleSignOut,
                         }}
                     />
-                ) : (
-                    <Router>
-                        <Navigator
-                            pageProps={{
-                                ...this.state,
-                                width,
-                                environment: environment,
-                                routes: ROUTES,
-                                handleNightmodeToggled: this
-                                    .handleNightmodeToggled,
-                                authenticate: this.authenticate,
-                                handleLock: this.handleLock,
-                                handleSignout: this.handleSignout,
-                            }}
-                        />
-                    </Router>
-                )}
-            </MuiThemeProvider>
-        );
-    }
+                </Router>
+            )}
+        </MuiThemeProvider>
+    );
 }
 
 App.propTypes = {

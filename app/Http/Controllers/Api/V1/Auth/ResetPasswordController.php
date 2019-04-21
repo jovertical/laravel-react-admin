@@ -36,7 +36,7 @@ class ResetPasswordController extends Controller
 
         $user = User::where('email', $password_reset->email)->first();
 
-        if (! $password_reset) {
+        if (! $user) {
             return response()->json('User does not exist!', 422);
         }
 

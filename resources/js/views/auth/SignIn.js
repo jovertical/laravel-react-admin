@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -25,24 +25,23 @@ import * as UrlUtils from '../../utils/URL';
 import * as NavigationUtils from '../../utils/Navigation';
 import { Auth as AuthLayout } from '../layouts';
 
-class SignIn extends Component {
-    state = {
-        loading: false,
-        identified: false,
-        showPassword: false,
-        username: '',
-        message: {},
-    };
+function SignIn(props) {
+    const [loading, setLoading] = useState(false);
+    const [identified, setIdentified] = useState(false);
+    const [passwordVisible, setPasswordVisibility] = useState(false);
+    const [username, setUsername] = useState('');
+    const [message, setMessage] = useState({});
 
     /**
      * Event listener that is called on usernameChip clicked.
      *
      * @return {undefined}
      */
-    handleUsernameChipClicked = () => {
-        this.setState({ username: '', identified: false });
+    const handleUsernameChipClicked = () => {
+        setUsername('');
+        setIdentified(false);
 
-        const { history, location } = this.props;
+        const { history, location } = props;
 
         history.push(`${location.pathname}`);
     };
@@ -52,12 +51,8 @@ class SignIn extends Component {
      *
      * @return {undefined}
      */
-    handleShowPasswordClick = () => {
-        this.setState(prevState => {
-            return {
-                showPassword: !prevState.showPassword,
-            };
-        });
+    const handlePasswordVisibilityToggle = () => {
+        setPasswordVisibility(!passwordVisible);
     };
 
     /**
@@ -68,29 +63,29 @@ class SignIn extends Component {
      *
      * @return {undefined}
      */
-    identify = async (username = null, form = {}) => {
-        this.setState({ loading: true });
+    const identify = async (username = null, { setErrors }) => {
+        setLoading(true);
 
         try {
             const response = await axios.post('/api/v1/auth/identify', {
                 username,
             });
 
-            if (response.status === 200) {
-                const { history, location } = this.props;
+            const { history, location } = props;
 
-                this.setState({
-                    loading: false,
-                    identified: true,
-                    username: response.data,
-                });
+            setIdentified(true);
+            setUsername(response.data);
+            setLoading(false);
 
-                const queryString = UrlUtils._queryString({
-                    username: response.data,
-                });
+            const queryString = UrlUtils._queryString({
+                username: response.data,
+            });
 
-                history.push(`${location.pathname}${queryString}`);
+            if (queryString === location.search) {
+                return;
             }
+
+            history.push(`${location.pathname}${queryString}`);
         } catch (error) {
             if (!error.response) {
                 throw new Error('Unknown error');
@@ -99,10 +94,10 @@ class SignIn extends Component {
             const { errors } = error.response.data;
 
             if (errors) {
-                form.setErrors(errors);
+                setErrors(errors);
             }
 
-            this.setState({ loading: false });
+            setLoading(false);
         }
     };
 
@@ -115,12 +110,11 @@ class SignIn extends Component {
      *
      * @return {undefined}
      */
-    signin = async (values, form = {}) => {
-        this.setState({ loading: true });
+    const signIn = async (values, form = {}) => {
+        setLoading(true);
 
         try {
-            const { pageProps } = this.props;
-            const { username } = this.state;
+            const { pageProps } = props;
             const { password } = values;
 
             const response = await axios.post('/api/v1/auth/signin', {
@@ -128,13 +122,9 @@ class SignIn extends Component {
                 password,
             });
 
-            if (response.status !== 200) {
-                return;
-            }
-
             pageProps.authenticate(JSON.stringify(response.data));
 
-            this.setState({ loading: false });
+            setLoading(false);
         } catch (error) {
             if (!error.response) {
                 throw new Error('Unknown error');
@@ -146,7 +136,7 @@ class SignIn extends Component {
                 form.setErrors(errors);
             }
 
-            this.setState({ loading: false });
+            setLoading(false);
         }
     };
 
@@ -158,241 +148,218 @@ class SignIn extends Component {
      *
      * @return {undefined}
      */
-    handleSigninSubmit = async (values, form) => {
+    const handleSignInSubmit = async (values, form) => {
         form.setSubmitting(false);
 
         try {
-            const { identified } = this.state;
-
             if (!identified) {
-                await this.identify(values.username, form);
+                await identify(values.username, form);
 
                 return;
             }
 
-            await this.signin(values, form);
+            await signIn(values, form);
         } catch (error) {
-            this.setState({
-                loading: false,
-                message: {
-                    type: 'error',
-                    title: 'Something went wrong',
-                    body: 'Oops? Something went wrong here. Please try again.',
-                    action: () => window.location.reload(),
-                },
+            setLoading(false);
+
+            setMessage({
+                type: 'error',
+                title: 'Something went wrong',
+                body: 'Oops? Something went wrong here. Please try again.',
+                action: () => window.location.reload(),
             });
         }
     };
 
-    async componentDidMount() {
-        const { location } = this.props;
-
-        const queryParams = UrlUtils._queryParams(location.search);
-
-        if (
-            queryParams.hasOwnProperty('username') &&
-            queryParams.username !== ''
-        ) {
-            await this.identify(queryParams.username);
+    /**
+     * Identify here after component mounts.
+     */
+    useEffect(() => {
+        if (identified) {
+            return;
         }
-    }
 
-    render() {
-        const { classes, ...other } = this.props;
+        const { location } = props;
 
-        const {
-            loading,
-            identified,
-            showPassword,
-            username,
-            message,
-        } = this.state;
+        const q = UrlUtils._queryParams(location.search);
 
-        return (
-            <AuthLayout
-                {...other}
-                title={
-                    identified
-                        ? Lang.get('navigation.signin_identified_title')
-                        : Lang.get('navigation.signin_guest_title')
-                }
-                subTitle={
-                    identified ? (
-                        <Chip
-                            label={username}
-                            variant="outlined"
-                            icon={<AccountCircleIcon color="primary" />}
-                            onDelete={this.handleUsernameChipClicked}
-                            deleteIcon={<ExpandMoreIcon />}
-                        />
-                    ) : (
-                        Lang.get('navigation.signin_guest_subtitle')
-                    )
-                }
-                loading={loading}
-                message={message}
+        if (q.hasOwnProperty('username') && q.username !== '') {
+            identify(q.username, {});
+        }
+    }, [identified]);
+
+    const { classes, ...other } = props;
+
+    return (
+        <AuthLayout
+            {...other}
+            title={
+                identified
+                    ? Lang.get('navigation.signin_identified_title')
+                    : Lang.get('navigation.signin_guest_title')
+            }
+            subTitle={
+                identified ? (
+                    <Chip
+                        label={username}
+                        variant="outlined"
+                        icon={<AccountCircleIcon color="primary" />}
+                        onDelete={handleUsernameChipClicked}
+                        deleteIcon={<ExpandMoreIcon />}
+                    />
+                ) : (
+                    Lang.get('navigation.signin_guest_subtitle')
+                )
+            }
+            loading={loading}
+            message={message}
+        >
+            <Formik
+                initialValues={{
+                    username,
+                    password: '',
+                }}
+                onSubmit={handleSignInSubmit}
+                validationSchema={Yup.object().shape({
+                    [!identified
+                        ? 'username'
+                        : 'password']: Yup.string().required(
+                        `The ${
+                            !identified ? 'username' : 'password'
+                        } field is required`,
+                    ),
+                })}
             >
-                <Formik
-                    initialValues={{
-                        username,
-                        password: '',
-                    }}
-                    onSubmit={this.handleSigninSubmit}
-                    validationSchema={Yup.object().shape({
-                        [!identified
-                            ? 'username'
-                            : 'password']: Yup.string().required(
-                            `The ${
-                                !identified ? 'username' : 'password'
-                            } field is required`,
-                        ),
-                    })}
-                >
-                    {({ values, handleChange, errors, isSubmitting }) => (
-                        <Form autoComplete="off">
-                            <Grid container direction="column">
-                                {!identified ? (
-                                    <>
-                                        <Grid
-                                            item
-                                            className={classes.formGroup}
-                                        >
-                                            <TextField
-                                                id="username"
-                                                name="username"
-                                                label="Username"
-                                                placeholder="jovert123"
-                                                value={values.username}
-                                                onChange={handleChange}
-                                                variant="outlined"
-                                                fullWidth
-                                                error={errors.hasOwnProperty(
+                {({ values, handleChange, errors, isSubmitting }) => (
+                    <Form autoComplete="off">
+                        <Grid container direction="column">
+                            {!identified ? (
+                                <>
+                                    <Grid item className={classes.formGroup}>
+                                        <TextField
+                                            id="username"
+                                            name="username"
+                                            label="Username"
+                                            placeholder="jovert123"
+                                            value={values.username}
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            fullWidth
+                                            error={errors.hasOwnProperty(
+                                                'username',
+                                            )}
+                                            helperText={
+                                                errors.hasOwnProperty(
                                                     'username',
-                                                )}
-                                                helperText={
-                                                    errors.hasOwnProperty(
-                                                        'username',
-                                                    ) && errors.username
-                                                }
-                                            />
-                                        </Grid>
+                                                ) && errors.username
+                                            }
+                                        />
+                                    </Grid>
 
-                                        <Grid
-                                            item
-                                            className={classes.formGroup}
-                                        >
-                                            <Link to="#">
-                                                {Lang.get(
-                                                    'navigation.forgot_email',
-                                                )}
-                                            </Link>
-                                        </Grid>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Grid
-                                            item
-                                            className={classes.formGroup}
-                                        >
-                                            <TextField
-                                                type={
-                                                    showPassword
-                                                        ? 'text'
-                                                        : 'password'
-                                                }
-                                                id="password"
-                                                name="password"
-                                                label="Password"
-                                                placeholder="secret"
-                                                value={values.password}
-                                                onChange={handleChange}
-                                                variant="outlined"
-                                                fullWidth
-                                                error={errors.hasOwnProperty(
+                                    <Grid item className={classes.formGroup}>
+                                        <Link to="#">
+                                            {Lang.get(
+                                                'navigation.forgot_email',
+                                            )}
+                                        </Link>
+                                    </Grid>
+                                </>
+                            ) : (
+                                <>
+                                    <Grid item className={classes.formGroup}>
+                                        <TextField
+                                            type={
+                                                passwordVisible
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
+                                            id="password"
+                                            name="password"
+                                            label="Password"
+                                            placeholder="secret"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            fullWidth
+                                            error={errors.hasOwnProperty(
+                                                'password',
+                                            )}
+                                            helperText={
+                                                errors.hasOwnProperty(
                                                     'password',
-                                                )}
-                                                helperText={
-                                                    errors.hasOwnProperty(
-                                                        'password',
-                                                    ) && errors.password
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="Toggle password visibility"
-                                                                onClick={
-                                                                    this
-                                                                        .handleShowPasswordClick
-                                                                }
-                                                            >
-                                                                {showPassword ? (
-                                                                    <VisibilityOffIcon />
-                                                                ) : (
-                                                                    <VisibilityIcon />
-                                                                )}
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
+                                                ) && errors.password
+                                            }
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="Toggle password visibility"
+                                                            onClick={
+                                                                handlePasswordVisibilityToggle
+                                                            }
+                                                        >
+                                                            {passwordVisible ? (
+                                                                <VisibilityOffIcon />
+                                                            ) : (
+                                                                <VisibilityIcon />
+                                                            )}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </Grid>
 
-                                        <Grid
-                                            item
-                                            className={classes.formGroup}
+                                    <Grid item className={classes.formGroup}>
+                                        <Link
+                                            component={props => (
+                                                <RouterLink
+                                                    {...props}
+                                                    to={{
+                                                        search: UrlUtils._queryString(
+                                                            {
+                                                                username,
+                                                            },
+                                                        ),
+                                                        pathname: NavigationUtils._route(
+                                                            'auth.passwords.request',
+                                                        ),
+                                                    }}
+                                                />
+                                            )}
                                         >
-                                            <Link
-                                                component={props => (
-                                                    <RouterLink
-                                                        {...props}
-                                                        to={{
-                                                            search: UrlUtils._queryString(
-                                                                {
-                                                                    username,
-                                                                },
-                                                            ),
-                                                            pathname: NavigationUtils._route(
-                                                                'auth.passwords.request',
-                                                            ),
-                                                        }}
-                                                    />
-                                                )}
-                                            >
-                                                {Lang.get(
-                                                    'navigation.forgot_password',
-                                                )}
-                                            </Link>
-                                        </Grid>
-                                    </>
-                                )}
-                            </Grid>
+                                            {Lang.get(
+                                                'navigation.forgot_password',
+                                            )}
+                                        </Link>
+                                    </Grid>
+                                </>
+                            )}
+                        </Grid>
 
-                            <Grid container justify="space-between">
-                                <Grid item />
+                        <Grid container justify="space-between">
+                            <Grid item />
 
-                                <Grid item className={classes.formGroup}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={
-                                            (errors &&
-                                                Object.keys(errors).length >
-                                                    0) ||
-                                            isSubmitting
-                                        }
-                                    >
-                                        {Lang.get('navigation.next')}
-                                    </Button>
-                                </Grid>
+                            <Grid item className={classes.formGroup}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={
+                                        (errors &&
+                                            Object.keys(errors).length > 0) ||
+                                        isSubmitting
+                                    }
+                                >
+                                    {Lang.get('navigation.next')}
+                                </Button>
                             </Grid>
-                        </Form>
-                    )}
-                </Formik>
-            </AuthLayout>
-        );
-    }
+                        </Grid>
+                    </Form>
+                )}
+            </Formik>
+        </AuthLayout>
+    );
 }
 
 const styles = theme => ({
