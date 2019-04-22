@@ -11,6 +11,8 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Tooltip,
+    Typography,
     withStyles,
 } from '@material-ui/core';
 
@@ -20,11 +22,12 @@ import {
     People as PeopleIcon,
 } from '@material-ui/icons';
 
+import { APP } from '../../../config';
 import * as NavigationUtils from '../../../utils/Navigation';
 import { Skeleton } from '../../../ui';
 
-import brandLogoLight from '../../../../img/logos/full-light.svg';
-import brandLogoDark from '../../../../img/logos/full-dark.svg';
+import brandLogoLight from '../../../../img/logos/short-light.svg';
+import brandLogoDark from '../../../../img/logos/short-dark.svg';
 
 function Sidebar(props) {
     const {
@@ -77,6 +80,8 @@ function Sidebar(props) {
                     highlightColor={nightMode && colors.grey['A400']}
                 />
 
+                <div className={classes.grow} />
+
                 {variant === 'persistent' && (
                     <Skeleton
                         circle
@@ -94,7 +99,6 @@ function Sidebar(props) {
                 className={classNames(
                     classes.link,
                     classes.linkGroup,
-                    classes.linkActionable,
                     classes.linkLoading,
                 )}
             >
@@ -137,7 +141,6 @@ function Sidebar(props) {
                             key={name}
                             className={classNames(
                                 classes.link,
-                                classes.linkActionable,
                                 classes.linkLoading,
                             )}
                         >
@@ -186,10 +189,18 @@ function Sidebar(props) {
                     className={classes.brandLogo}
                 />
 
+                <Typography color="inherit" variant="h6">
+                    {APP.name}
+                </Typography>
+
+                <div className={classes.grow} />
+
                 {variant === 'persistent' && (
-                    <IconButton onClick={onClose}>
-                        <ChevronLeftIcon />
-                    </IconButton>
+                    <Tooltip title={Lang.get('navigation.close_drawer')}>
+                        <IconButton onClick={onClose}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </Tooltip>
                 )}
             </ListItem>
 
@@ -201,7 +212,6 @@ function Sidebar(props) {
                 className={classNames(
                     classes.link,
                     classes.linkGroup,
-                    classes.linkActionable,
                     location.pathname === homeLink.path && classes.linkActive,
                 )}
                 onClick={() => navigate(homeLink.path)}
@@ -236,7 +246,6 @@ function Sidebar(props) {
                             key={name}
                             className={classNames(
                                 classes.link,
-                                classes.linkActionable,
                                 location.pathname === path &&
                                     classes.linkActive,
                             )}
@@ -276,24 +285,26 @@ Sidebar.propTypes = {
     pageProps: PropTypes.object.isRequired,
 };
 
+const drawerWidth = 256;
+
 const styles = theme => ({
     links: {
         [theme.breakpoints.up('sm')]: {
-            width: 256,
+            width: drawerWidth,
             flexShrink: 0,
         },
     },
 
     brand: {
         display: 'flex',
-        justifyContent: 'space-between',
         fontSize: 24,
         fontFamily: theme.typography.fontFamily,
         color: theme.palette.common.white,
     },
 
     brandLogo: {
-        width: 175,
+        width: 25,
+        marginRight: 10,
     },
 
     linkGroupHeader: {
@@ -331,18 +342,12 @@ const styles = theme => ({
         },
     },
 
-    linkActionable: {
-        '&:hover': {
-            color:
-                theme.palette.type === 'dark'
-                    ? theme.palette.text.primary
-                    : theme.palette.text.secondary,
-        },
+    linkActive: {
+        color: theme.palette.primary.main,
     },
 
-    linkActive: {
-        color: theme.palette.common.white,
-        backgroundColor: theme.palette.primary.main,
+    grow: {
+        flexGrow: 1,
     },
 
     textDense: {},
@@ -362,6 +367,8 @@ const styles = theme => ({
                 ? theme.palette.grey['700']
                 : theme.palette.grey['200'],
     },
+
+    bottomControls: {},
 
     brandLoading: {
         padding: '16px 12px',
