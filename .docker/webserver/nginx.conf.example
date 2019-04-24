@@ -26,7 +26,7 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name phpmyadmin.laravel-react-admin.test;
+    server_name phpmyadmin.example.com;
     location / {
         proxy_set_header    Host $host;
         proxy_set_header    X-Real-IP $remote_addr;
