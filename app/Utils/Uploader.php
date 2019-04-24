@@ -38,14 +38,28 @@ class Uploader
                 Storage::makeDirectory($thumbnailDirectory);
             }
 
-            $fileSystemRoot = config("filesystems.disks.{$disk}.root");
-            $fullPath = "{$fileSystemRoot}/{$path}";
-            $fullThumbnailPath =
-                "{$fileSystemRoot}/{$thumbnailDirectory}/{$filename}";
+            switch ($disk) {
+                case 's3':
+                    $fullThumbnailPath = "{$thumbnailDirectory}/{$filename}";
 
-            $image = Image::make($fullPath)
-                ->fit(240)
-                ->save($fullThumbnailPath, 95);
+                    $image = Image::make($url)
+                        ->fit(240)
+                        ->stream();
+
+                    Storage::put($fullThumbnailPath, $image->__toString());
+                break;
+
+                default:
+                    $fileSystemRoot = config("filesystems.disks.{$disk}.root");
+                    $fullPath = "{$fileSystemRoot}/{$path}";
+                    $fullThumbnailPath =
+                        "{$fileSystemRoot}/{$thumbnailDirectory}/{$filename}";
+
+                    Image::make($fullPath)
+                        ->fit(240)
+                        ->save($fullThumbnailPath, 95);
+                break;
+            }
 
             $thumbnail_filesize = Storage::size($thumbnailPath);
             $thumbnail_url = Storage::url($thumbnailPath);
