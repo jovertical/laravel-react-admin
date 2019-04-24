@@ -40,12 +40,15 @@ COPY database ${MASTER_DIR}/database
 RUN composer install --no-interaction --no-plugins --no-scripts
 
 COPY . ${MASTER_DIR}
-COPY ./.docker/scripts/queuer.sh /usr/local/bin/laravel-queuer
-COPY ./.docker/scripts/scheduler.sh /usr/local/bin/laravel-scheduler
+COPY ./.docker/php-fpm/init.sh /usr/local/bin/init
+COPY ./.docker/php-fpm/after.sh /usr/local/bin/after
+COPY ./.docker/queuer/init.sh /usr/local/bin/laravel-queuer
+COPY ./.docker/scheduler/init.sh /usr/local/bin/laravel-scheduler
 
-RUN chmod -R 775 /var/www/html/storage
+RUN chmod -R 775 ${MASTER_DIR}/storage ${MASTER_DIR}/bootstrap/cache
+RUN chmod u+x /usr/local/bin/init
+RUN chmod u+x /usr/local/bin/after
 RUN chmod u+x /usr/local/bin/laravel-queuer
 RUN chmod u+x /usr/local/bin/laravel-scheduler
 
-EXPOSE 9000
-CMD ["php-fpm"]
+ENTRYPOINT ["init", "--port", "9000"]
