@@ -301,7 +301,7 @@ const styles = theme => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        overflowX: 'scroll',
+        overflowX: 'auto',
     },
 
     content: {
@@ -309,7 +309,6 @@ const styles = theme => ({
         padding: `0 ${theme.spacing.unit}px`,
         marginBottom: 75,
         [theme.breakpoints.up('sm')]: {
-            marginBottom: 50,
             padding: `${theme.spacing.unit}px ${theme.spacing.unit * 3}px`,
         },
     },

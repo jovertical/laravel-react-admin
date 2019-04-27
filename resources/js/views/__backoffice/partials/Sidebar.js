@@ -6,6 +6,7 @@ import {
     colors,
     Divider,
     Drawer,
+    Grid,
     IconButton,
     List,
     ListItem,
@@ -175,7 +176,7 @@ function Sidebar(props) {
     );
 
     const renderNavigated = (
-        <List disablePadding className={classes.links}>
+        <List className={classes.links}>
             <ListItem
                 className={classNames(
                     classes.brand,
@@ -267,12 +268,16 @@ function Sidebar(props) {
                     <Divider className={classes.divider} />
                 </React.Fragment>
             ))}
+
+            <div style={{ height: 700 }} />
         </List>
     );
 
     return (
         <Drawer variant="permanent" {...other}>
-            {loading ? renderNavigating : renderNavigated}
+            <Grid container>
+                {loading ? renderNavigating : renderNavigated}
+            </Grid>
         </Drawer>
     );
 }
@@ -285,13 +290,12 @@ Sidebar.propTypes = {
     pageProps: PropTypes.object.isRequired,
 };
 
-const drawerWidth = 256;
+const drawerWidth = 255;
 
 const styles = theme => ({
     links: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
-            flexShrink: 0,
         },
     },
 
@@ -361,14 +365,15 @@ const styles = theme => ({
     },
 
     topDivider: {
-        marginBottom: theme.spacing.unit * 2,
         backgroundColor:
             theme.palette.type === 'dark'
                 ? theme.palette.grey['700']
                 : theme.palette.grey['200'],
     },
 
-    bottomControls: {},
+    footer: {
+        position: 'relative',
+    },
 
     brandLoading: {
         padding: '16px 12px',
