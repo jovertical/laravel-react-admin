@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -57,11 +57,14 @@ function Sidebar(props) {
     const linkGroups = [
         {
             name: Lang.get('navigation.resources'),
+            id: 'resources',
             links: [
                 {
                     name: Lang.get('navigation.users'),
                     icon: <PeopleIcon />,
-                    path: NavigationUtils._route('backoffice.users.index'),
+                    path: NavigationUtils._route(
+                        'backoffice.resources.users.index',
+                    ),
                 },
 
                 {
@@ -74,6 +77,7 @@ function Sidebar(props) {
 
         {
             name: 'Analytics',
+            id: 'analytics',
             links: [
                 {
                     name: 'Traffic',
@@ -83,6 +87,21 @@ function Sidebar(props) {
             ],
         },
     ];
+
+    useEffect(() => {
+        const groupId = location.pathname.split('/')[1];
+        const groupIndex = linkGroups.findIndex(lg => lg.id === groupId);
+
+        if (groupId === '') {
+            return;
+        }
+
+        if (groupIndex === activeLinkGroup) {
+            return;
+        }
+
+        setActiveLinkGroup(groupIndex);
+    });
 
     const renderNavigating = 'Loading...';
 

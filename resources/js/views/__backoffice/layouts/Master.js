@@ -94,6 +94,8 @@ function Master(props) {
         .splice(1)
         .filter(segment => segment.length > 0);
 
+    const segmentBlacklist = ['resources', 'analytics'];
+
     const renderLoading = (
         <Grid
             container
@@ -140,15 +142,25 @@ function Master(props) {
                     )}
 
                     {segments.map((segment, key) => {
+                        const renderText = (
+                            <Typography
+                                key={key}
+                                className={classes.breadcrumbItem}
+                            >
+                                {StringUtils._uppercaseFirst(segment)}
+                            </Typography>
+                        );
+
+                        if (segmentBlacklist.indexOf(segment) > -1) {
+                            return renderText;
+                        }
+
                         if (key + 1 === segments.length) {
-                            return (
-                                <Typography
-                                    key={key}
-                                    className={classes.breadcrumbItem}
-                                >
-                                    {StringUtils._uppercaseFirst(segment)}
-                                </Typography>
-                            );
+                            return renderText;
+                        }
+
+                        if (!isNaN(parseInt(segment))) {
+                            return null;
                         }
 
                         return (
