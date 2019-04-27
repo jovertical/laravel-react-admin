@@ -47,6 +47,7 @@ function Sidebar(props) {
     const { nightMode } = pageProps;
 
     const [activeLinkGroup, setActiveLinkGroup] = useState(-1);
+    const [initialized, setInitialized] = useState(false);
 
     const homeLink = {
         name: Lang.get('navigation.dashboard'),
@@ -89,6 +90,10 @@ function Sidebar(props) {
     ];
 
     useEffect(() => {
+        if (initialized) {
+            return;
+        }
+
         const groupId = location.pathname.split('/')[1];
         const groupIndex = linkGroups.findIndex(lg => lg.id === groupId);
 
@@ -101,6 +106,8 @@ function Sidebar(props) {
         }
 
         setActiveLinkGroup(groupIndex);
+
+        setInitialized(true);
     });
 
     const renderNavigating = 'Loading...';
