@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
+import classNames from 'classnames';
 import {
     AppBar,
     CircularProgress,
@@ -24,6 +25,7 @@ import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
 
 function Master(props) {
+    const [minimized, setMinimized] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -191,7 +193,11 @@ function Master(props) {
             <div className={classes.root}>
                 <CssBaseline />
 
-                <nav className={classes.drawer}>
+                <nav
+                    className={classNames(classes.drawer, {
+                        [classes.minimized]: minimized,
+                    })}
+                >
                     <Hidden smUp implementation="js">
                         <Sidebar
                             {...other}
@@ -199,7 +205,6 @@ function Master(props) {
                             navigate={path => history.push(path)}
                             variant="temporary"
                             open={mobileOpen}
-                            onClose={handleDrawerToggled}
                             PaperProps={{ style: { width: drawerWidth } }}
                         />
                     </Hidden>
@@ -209,7 +214,12 @@ function Master(props) {
                             {...other}
                             loading={loading}
                             navigate={path => history.push(path)}
-                            PaperProps={{ style: { width: drawerWidth } }}
+                            setClosed={handleDrawerToggled}
+                            minimized={minimized}
+                            setMinimized={setMinimized}
+                            PaperProps={{
+                                style: { width: minimized ? 70 : drawerWidth },
+                            }}
                         />
                     </Hidden>
                 </nav>
@@ -290,6 +300,10 @@ const styles = theme => ({
             width: drawerWidth,
             flexShrink: 0,
         },
+    },
+
+    minimized: {
+        width: 70,
     },
 
     breadcrumbBar: {
