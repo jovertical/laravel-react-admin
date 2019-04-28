@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
+import classNames from 'classnames';
 import {
     AppBar,
     CircularProgress,
@@ -24,6 +25,7 @@ import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
 
 function Master(props) {
+    const [minimized, setMinimized] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -94,6 +96,8 @@ function Master(props) {
         .splice(1)
         .filter(segment => segment.length > 0);
 
+    const segmentBlacklist = ['resources', 'analytics'];
+
     const renderLoading = (
         <Grid
             container
@@ -140,15 +144,25 @@ function Master(props) {
                     )}
 
                     {segments.map((segment, key) => {
+                        const renderText = (
+                            <Typography
+                                key={key}
+                                className={classes.breadcrumbItem}
+                            >
+                                {StringUtils._uppercaseFirst(segment)}
+                            </Typography>
+                        );
+
+                        if (segmentBlacklist.indexOf(segment) > -1) {
+                            return renderText;
+                        }
+
                         if (key + 1 === segments.length) {
-                            return (
-                                <Typography
-                                    key={key}
-                                    className={classes.breadcrumbItem}
-                                >
-                                    {StringUtils._uppercaseFirst(segment)}
-                                </Typography>
-                            );
+                            return renderText;
+                        }
+
+                        if (!isNaN(parseInt(segment))) {
+                            return null;
                         }
 
                         return (
@@ -179,7 +193,11 @@ function Master(props) {
             <div className={classes.root}>
                 <CssBaseline />
 
-                <nav className={classes.drawer}>
+                <nav
+                    className={classNames(classes.drawer, {
+                        [classes.minimized]: minimized,
+                    })}
+                >
                     <Hidden smUp implementation="js">
                         <Sidebar
                             {...other}
@@ -197,7 +215,11 @@ function Master(props) {
                             {...other}
                             loading={loading}
                             navigate={path => history.push(path)}
-                            PaperProps={{ style: { width: drawerWidth } }}
+                            minimized={minimized}
+                            setMinimized={setMinimized}
+                            PaperProps={{
+                                style: { width: minimized ? 70 : drawerWidth },
+                            }}
                         />
                     </Hidden>
                 </nav>
@@ -278,7 +300,15 @@ const styles = theme => ({
             width: drawerWidth,
             flexShrink: 0,
         },
+
+        '&$minimized': {
+            [theme.breakpoints.up('sm')]: {
+                width: 70,
+            },
+        },
     },
+
+    minimized: {},
 
     breadcrumbBar: {
         zIndex: 0,
@@ -301,7 +331,7 @@ const styles = theme => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        overflowX: 'scroll',
+        overflowX: 'auto',
     },
 
     content: {
@@ -309,7 +339,6 @@ const styles = theme => ({
         padding: `0 ${theme.spacing.unit}px`,
         marginBottom: 75,
         [theme.breakpoints.up('sm')]: {
-            marginBottom: 50,
             padding: `${theme.spacing.unit}px ${theme.spacing.unit * 3}px`,
         },
     },

@@ -349,7 +349,9 @@ function List(props) {
             name: 'User',
         }),
         clicked: () =>
-            history.push(NavigationUtils._route('backoffice.users.create')),
+            history.push(
+                NavigationUtils._route('backoffice.resources.users.create'),
+            ),
     };
 
     const tabs = [
@@ -426,7 +428,7 @@ function List(props) {
                                 onClick={() =>
                                     history.push(
                                         NavigationUtils._route(
-                                            'backoffice.users.edit',
+                                            'backoffice.resources.users.edit',
                                             {
                                                 id: user.id,
                                             },
@@ -450,7 +452,7 @@ function List(props) {
                                 onClick={() =>
                                     history.push(
                                         NavigationUtils._route(
-                                            'backoffice.users.edit',
+                                            'backoffice.resources.users.edit',
                                             {
                                                 id: user.id,
                                             },

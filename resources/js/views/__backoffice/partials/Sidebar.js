@@ -1,30 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import {
-    colors,
     Divider,
     Drawer,
     IconButton,
+    Hidden,
     List,
     ListItem,
     ListItemIcon,
     ListItemText,
+    Tooltip,
+    Typography,
     withStyles,
 } from '@material-ui/core';
 
 import {
     ChevronLeft as ChevronLeftIcon,
+    ChevronRight as ChevronRightIcon,
     Dashboard as DashboardIcon,
+    ExpandLess as ExpandLessIcon,
     People as PeopleIcon,
+    Security as SecurityIcon,
+    ShowChart as ShowChartIcon,
 } from '@material-ui/icons';
 
+import { APP } from '../../../config';
 import * as NavigationUtils from '../../../utils/Navigation';
-import { Skeleton } from '../../../ui';
+import * as StringUtils from '../../../utils/String';
 
-import brandLogoLight from '../../../../img/logos/full-light.svg';
-import brandLogoDark from '../../../../img/logos/full-dark.svg';
+import brandLogoLight from '../../../../img/logos/short-light.svg';
+import brandLogoDark from '../../../../img/logos/short-dark.svg';
 
 function Sidebar(props) {
     const {
@@ -34,352 +41,500 @@ function Sidebar(props) {
         pageTitle, // Never used here.
         primaryAction, // Never used here.
         staticContext, // Never used here.
+
         loading,
         navigate,
+        minimized,
+        setMinimized,
+
         ...other
     } = props;
+
     const { variant, onClose } = props;
     const { nightMode } = pageProps;
 
+    const [activeLinkGroup, setActiveLinkGroup] = useState(-1);
+    const [initialized, setInitialized] = useState(false);
+
     const homeLink = {
         name: Lang.get('navigation.dashboard'),
-        icon: <DashboardIcon />,
+        icon: (
+            <Tooltip title={minimized ? Lang.get('navigation.dashboard') : ''}>
+                <DashboardIcon />
+            </Tooltip>
+        ),
         path: NavigationUtils._route('backoffice.home'),
     };
 
     const linkGroups = [
         {
             name: Lang.get('navigation.resources'),
+            id: 'resources',
             links: [
                 {
                     name: Lang.get('navigation.users'),
-                    icon: <PeopleIcon />,
-                    path: NavigationUtils._route('backoffice.users.index'),
+                    icon: (
+                        <Tooltip
+                            title={
+                                minimized ? Lang.get('navigation.users') : ''
+                            }
+                        >
+                            <PeopleIcon />
+                        </Tooltip>
+                    ),
+                    path: NavigationUtils._route(
+                        'backoffice.resources.users.index',
+                    ),
+                },
+
+                {
+                    name: Lang.get('navigation.roles'),
+                    icon: (
+                        <Tooltip
+                            title={
+                                minimized ? Lang.get('navigation.roles') : ''
+                            }
+                        >
+                            <SecurityIcon />
+                        </Tooltip>
+                    ),
+                    path: null,
+                },
+            ],
+        },
+
+        {
+            name: 'Analytics',
+            id: 'analytics',
+            links: [
+                {
+                    name: 'Traffic',
+                    icon: <ShowChartIcon />,
+                    path: null,
                 },
             ],
         },
     ];
 
-    const renderNavigating = (
-        <List disablePadding className={classes.links}>
-            <ListItem
-                className={classNames(
-                    classes.brand,
-                    classes.link,
-                    classes.linkGroup,
-                    classes.brandLoading,
-                )}
-                style={{ paddingTop: 25 }}
-            >
-                <Skeleton
-                    width={175}
-                    color={nightMode && colors.grey['A700']}
-                    highlightColor={nightMode && colors.grey['A400']}
-                />
+    useEffect(() => {
+        if (initialized) {
+            return;
+        }
 
-                {variant === 'persistent' && (
-                    <Skeleton
-                        circle
-                        width={30}
-                        height={30}
-                        color={nightMode && colors.grey['A700']}
-                        highlightColor={nightMode && colors.grey['A400']}
-                    />
-                )}
-            </ListItem>
+        const groupId = location.pathname.split('/')[1];
+        const groupIndex = linkGroups.findIndex(lg => lg.id === groupId);
 
-            <Divider className={classes.topDivider} />
+        if (groupId === '') {
+            return;
+        }
 
-            <ListItem
-                className={classNames(
-                    classes.link,
-                    classes.linkGroup,
-                    classes.linkActionable,
-                    classes.linkLoading,
-                )}
-            >
-                <span className={classes.linkIconLoading}>
-                    <Skeleton
-                        circle
-                        width={25}
-                        height={25}
-                        color={nightMode && colors.grey['A700']}
-                        highlightColor={nightMode && colors.grey['A400']}
-                    />
-                </span>
+        if (groupIndex === activeLinkGroup) {
+            return;
+        }
 
-                <span className={classes.linkTextLoading}>
-                    <Skeleton
-                        width={100}
-                        color={nightMode && colors.grey['A700']}
-                        highlightColor={nightMode && colors.grey['A400']}
-                    />
-                </span>
-            </ListItem>
+        setActiveLinkGroup(groupIndex);
 
-            {linkGroups.map(({ name, links }) => (
-                <React.Fragment key={name}>
-                    <ListItem
-                        className={classNames(
-                            classes.linkGroupHeader,
-                            classes.linkLoading,
-                        )}
-                    >
-                        <Skeleton
-                            width={100}
-                            color={nightMode && colors.grey['A700']}
-                            highlightColor={nightMode && colors.grey['A400']}
-                        />
-                    </ListItem>
+        setInitialized(true);
+    });
 
-                    {links.map(({ name }) => (
-                        <ListItem
-                            key={name}
-                            className={classNames(
-                                classes.link,
-                                classes.linkActionable,
-                                classes.linkLoading,
-                            )}
+    const renderHeader = (
+        <ListItem className={classNames(classes.header, classes.link)}>
+            <img
+                src={nightMode ? brandLogoDark : brandLogoLight}
+                alt="company-logo"
+                className={classNames(classes.logo, {
+                    [classes.center]: minimized,
+                })}
+            />
+
+            {!minimized && (
+                <>
+                    <Typography className={classes.text} variant="h6">
+                        {APP.name}
+                    </Typography>
+
+                    <div className={classes.grow} />
+
+                    {variant === 'persistent' && (
+                        <Tooltip title={Lang.get('navigation.close_drawer')}>
+                            <IconButton onClick={onClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+                </>
+            )}
+        </ListItem>
+    );
+
+    const renderLinkGroups = (
+        <List disablePadding className={classes.linkGroups}>
+            {linkGroups
+                .filter(linkGroup => linkGroup.links.length > 0)
+                .filter((linkGroup, i) =>
+                    !minimized ? linkGroup : i === activeLinkGroup,
+                )
+                .map(({ name, links }, key) => (
+                    <React.Fragment key={key}>
+                        <div
+                            className={classNames(classes.linkGroup, {
+                                [classes.opened]: key === activeLinkGroup,
+                                [classes.closed]: key !== activeLinkGroup,
+                            })}
+                            onClick={() =>
+                                key !== activeLinkGroup &&
+                                setActiveLinkGroup(key)
+                            }
                         >
-                            <span className={classes.linkIconLoading}>
-                                <Skeleton
-                                    circle
-                                    width={25}
-                                    height={25}
-                                    color={nightMode && colors.grey['A700']}
-                                    highlightColor={
-                                        nightMode && colors.grey['A400']
-                                    }
-                                />
-                            </span>
+                            {!minimized ? (
+                                <ListItem
+                                    onClick={() => setActiveLinkGroup(-1)}
+                                    className={classNames(
+                                        classes.linkGroupHeader,
+                                        {
+                                            [classes.opened]:
+                                                key === activeLinkGroup,
+                                        },
+                                    )}
+                                >
+                                    <ListItemText
+                                        classes={{
+                                            primary: classes.text,
+                                        }}
+                                    >
+                                        {name}
+                                    </ListItemText>
 
-                            <span className={classes.linkTextLoading}>
-                                <Skeleton
-                                    width={100}
-                                    color={nightMode && colors.grey['A700']}
-                                    highlightColor={
-                                        nightMode && colors.grey['A400']
-                                    }
-                                />
-                            </span>
-                        </ListItem>
-                    ))}
+                                    {key === activeLinkGroup && (
+                                        <ListItemIcon className={classes.text}>
+                                            <ExpandLessIcon />
+                                        </ListItemIcon>
+                                    )}
+                                </ListItem>
+                            ) : (
+                                <div className={classes.linkGroupHeader} />
+                            )}
 
-                    <Divider className={classes.divider} />
-                </React.Fragment>
-            ))}
+                            {key === activeLinkGroup || minimized ? (
+                                <>
+                                    {links.map(({ name, icon, path }) => (
+                                        <ListItem
+                                            button
+                                            dense
+                                            key={name}
+                                            className={classNames(
+                                                classes.link,
+                                                classes.grouped,
+                                                {
+                                                    [classes.active]:
+                                                        location.pathname ===
+                                                        path,
+                                                    [classes.center]: minimized,
+                                                },
+                                            )}
+                                            onClick={() => navigate(path)}
+                                        >
+                                            <ListItemIcon>{icon}</ListItemIcon>
+
+                                            {!minimized && (
+                                                <ListItemText
+                                                    classes={{
+                                                        primary:
+                                                            classes.linkText,
+                                                        textDense:
+                                                            classes.textDense,
+                                                    }}
+                                                >
+                                                    {name}
+                                                </ListItemText>
+                                            )}
+                                        </ListItem>
+                                    ))}
+                                </>
+                            ) : (
+                                <ListItem>
+                                    <Typography noWrap color="textSecondary">
+                                        {StringUtils._limit(
+                                            links
+                                                .map(link => link.name)
+                                                .join(', '),
+                                            30,
+                                        )}
+                                    </Typography>
+                                </ListItem>
+                            )}
+
+                            <div className={classes.linkGroupSpacer} />
+                        </div>
+
+                        <Divider className={classes.divider} />
+                    </React.Fragment>
+                ))}
         </List>
     );
 
-    const renderNavigated = (
-        <List disablePadding className={classes.links}>
-            <ListItem
-                className={classNames(
-                    classes.brand,
-                    classes.link,
-                    classes.linkGroup,
-                )}
-            >
-                <img
-                    src={nightMode ? brandLogoDark : brandLogoLight}
-                    alt="company-logo"
-                    className={classes.brandLogo}
-                />
-
-                {variant === 'persistent' && (
-                    <IconButton onClick={onClose}>
-                        <ChevronLeftIcon />
-                    </IconButton>
-                )}
-            </ListItem>
-
-            <Divider className={classes.topDivider} />
-
+    const renderLinks = (
+        <List
+            className={classNames(classes.links, {
+                [classes.minimized]: minimized,
+            })}
+            disablePadding
+        >
             <ListItem
                 button
                 dense
-                className={classNames(
-                    classes.link,
-                    classes.linkGroup,
-                    classes.linkActionable,
-                    location.pathname === homeLink.path && classes.linkActive,
-                )}
+                className={classNames(classes.link, {
+                    [classes.active]: location.pathname === homeLink.path,
+                    [classes.center]: minimized,
+                })}
                 onClick={() => navigate(homeLink.path)}
             >
                 <ListItemIcon>{homeLink.icon}</ListItemIcon>
 
-                <ListItemText
-                    classes={{
-                        primary: classes.linkText,
-                    }}
-                >
-                    {homeLink.name}
-                </ListItemText>
+                {!minimized && (
+                    <ListItemText
+                        classes={{
+                            primary: classes.linkText,
+                        }}
+                    >
+                        {homeLink.name}
+                    </ListItemText>
+                )}
             </ListItem>
 
-            {linkGroups.map(({ name, links }) => (
-                <React.Fragment key={name}>
-                    <ListItem className={classes.linkGroupHeader}>
-                        <ListItemText
-                            classes={{
-                                primary: classes.linkGroupHeaderPrimary,
-                            }}
-                        >
-                            {name}
-                        </ListItemText>
-                    </ListItem>
+            <Divider className={classes.divider} />
 
-                    {links.map(({ name, icon, path }) => (
-                        <ListItem
-                            button
-                            dense
-                            key={name}
-                            className={classNames(
-                                classes.link,
-                                classes.linkActionable,
-                                location.pathname === path &&
-                                    classes.linkActive,
-                            )}
-                            onClick={() => navigate(path)}
-                        >
-                            <ListItemIcon>{icon}</ListItemIcon>
-
-                            <ListItemText
-                                classes={{
-                                    primary: classes.linkText,
-                                    textDense: classes.textDense,
-                                }}
-                            >
-                                {name}
-                            </ListItemText>
-                        </ListItem>
-                    ))}
-
-                    <Divider className={classes.divider} />
-                </React.Fragment>
-            ))}
+            {renderLinkGroups}
         </List>
+    );
+
+    const renderFooter = (
+        <ListItem className={classes.footer}>
+            {!minimized && <div className={classes.grow} />}
+
+            <ListItemIcon
+                color="inherit"
+                onClick={() => setMinimized(!minimized)}
+            >
+                <Tooltip
+                    title={
+                        minimized
+                            ? Lang.get('navigation.maximize_drawer')
+                            : Lang.get('navigation.minimize_drawer')
+                    }
+                >
+                    <IconButton>
+                        {!minimized ? (
+                            <ChevronLeftIcon />
+                        ) : (
+                            <ChevronRightIcon />
+                        )}
+                    </IconButton>
+                </Tooltip>
+            </ListItemIcon>
+        </ListItem>
     );
 
     return (
         <Drawer variant="permanent" {...other}>
-            {loading ? renderNavigating : renderNavigated}
+            <div
+                className={classNames(classes.nav, {
+                    [classes.minimized]: minimized,
+                })}
+            >
+                {renderHeader}
+
+                <Divider className={classes.divider} />
+
+                <div className={classes.linksWrapper}>{renderLinks}</div>
+
+                <Hidden xsDown>
+                    {variant !== 'persistent' && (
+                        <>
+                            {!minimized && (
+                                <Divider className={classes.divider} />
+                            )}
+
+                            {renderFooter}
+                        </>
+                    )}
+                </Hidden>
+            </div>
         </Drawer>
     );
 }
 
 Sidebar.propTypes = {
-    open: PropTypes.bool,
-    onClose: PropTypes.func,
     PaperProps: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired,
+
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
+    minimized: PropTypes.bool,
+    setMinimized: PropTypes.func,
 };
 
-const styles = theme => ({
-    links: {
-        [theme.breakpoints.up('sm')]: {
-            width: 256,
-            flexShrink: 0,
+const drawerWidth = 255;
+
+const styles = theme => {
+    const primaryAccent =
+        theme.palette.type === 'dark'
+            ? theme.palette.grey[700]
+            : theme.palette.grey[200];
+
+    const activeAccent =
+        theme.palette.type === 'dark'
+            ? theme.palette.grey['A400']
+            : theme.palette.grey['A100'];
+
+    const defaultAccent =
+        theme.palette.type === 'dark'
+            ? theme.palette.grey[800]
+            : theme.palette.common.white;
+
+    return {
+        nav: {
+            [theme.breakpoints.up('sm')]: {
+                width: drawerWidth,
+                overflow: 'hidden',
+            },
+
+            '&$minimized': {
+                [theme.breakpoints.up('sm')]: {
+                    width: 69,
+                },
+            },
         },
-    },
 
-    brand: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        fontSize: 24,
-        fontFamily: theme.typography.fontFamily,
-        color: theme.palette.common.white,
-    },
+        minimized: {},
 
-    brandLogo: {
-        width: 175,
-    },
-
-    linkGroupHeader: {
-        paddingTop: 16,
-        paddingBottom: 16,
-    },
-
-    linkGroupHeaderPrimary: {
-        color:
-            theme.palette.type === 'dark'
-                ? theme.palette.text.primary
-                : theme.palette.text.secondary,
-    },
-
-    link: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        color: theme.palette.text.secondary,
-    },
-
-    linkGroup: {
-        backgroundColor:
-            theme.palette.type === 'dark'
-                ? theme.palette.grey[800]
-                : theme.palette.common.white,
-        paddingTop: 16,
-        paddingBottom: 16,
-    },
-
-    linkText: {
-        color: 'inherit',
-        fontSize: theme.typography.fontSize,
-        '&$textDense': {
-            fontSize: theme.typography.fontSize,
+        header: {
+            height: '10vh',
+            fontSize: 24,
+            fontFamily: theme.typography.fontFamily,
+            color: theme.palette.common.white,
         },
-    },
 
-    linkActionable: {
-        '&:hover': {
+        logo: {
+            width: 25,
+            marginRight: 15,
+            '&$center': {
+                marginLeft: 7,
+            },
+        },
+
+        linksWrapper: {
+            overflowY: 'auto',
+            '&::-webkit-scrollbar': {
+                backgroundColor: defaultAccent,
+                width: 8,
+            },
+
+            '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#8a9bb2',
+                borderRadius: 8,
+                border: `2px solid ${defaultAccent}`,
+            },
+        },
+
+        links: {
+            height: '80vh',
+            '&$minimized': {
+                height: '100%',
+            },
+        },
+
+        link: {
+            backgroundColor: defaultAccent,
+            color: theme.palette.text.secondary,
+            paddingBottom: 16,
+            paddingTop: 16,
+            '&$active': {
+                color: theme.palette.primary.main,
+            },
+            '&$grouped': {
+                backgroundColor: activeAccent,
+                paddingBottom: 4,
+                paddingTop: 4,
+                '&:hover': {
+                    backgroundColor: primaryAccent,
+                },
+            },
+        },
+
+        active: {},
+        grouped: {},
+
+        linkGroups: {},
+
+        linkGroup: {
+            '&$closed': {
+                '&:hover': {
+                    cursor: 'pointer',
+                    backgroundColor: primaryAccent,
+                },
+            },
+
+            '&$opened': {
+                backgroundColor: activeAccent,
+            },
+        },
+
+        closed: {},
+        opened: {},
+
+        linkGroupHeader: {
+            paddingTop: 16,
+            paddingBottom: 0,
+            '&$opened': {
+                paddingBottom: 16,
+            },
+            '&:hover': {
+                cursor: 'pointer',
+            },
+        },
+
+        linkGroupSpacer: {
+            paddingBottom: theme.spacing.unit * 2,
+        },
+
+        text: {
             color:
                 theme.palette.type === 'dark'
                     ? theme.palette.text.primary
                     : theme.palette.text.secondary,
         },
-    },
 
-    linkActive: {
-        color: theme.palette.common.white,
-        backgroundColor: theme.palette.primary.main,
-    },
+        linkText: {
+            color: 'inherit',
+            fontSize: theme.typography.fontSize,
+            '&$textDense': {
+                fontSize: theme.typography.fontSize,
+            },
+        },
 
-    textDense: {},
+        textDense: {},
 
-    divider: {
-        marginTop: theme.spacing.unit * 2,
-        backgroundColor:
-            theme.palette.type === 'dark'
-                ? theme.palette.grey['700']
-                : theme.palette.grey['200'],
-    },
+        center: {
+            display: 'flex',
+            justifyContent: 'center',
+        },
 
-    topDivider: {
-        marginBottom: theme.spacing.unit * 2,
-        backgroundColor:
-            theme.palette.type === 'dark'
-                ? theme.palette.grey['700']
-                : theme.palette.grey['200'],
-    },
+        grow: {
+            flexGrow: 1,
+        },
 
-    brandLoading: {
-        padding: '16px 12px',
-    },
+        divider: {
+            backgroundColor: primaryAccent,
+        },
 
-    linkLoading: {
-        padding: 12,
-        display: 'flex',
-        flexDirection: 'row',
-    },
-
-    linkIconLoading: {
-        marginRight: theme.spacing.unit * 2,
-    },
-
-    linkTextLoading: {
-        marginTop: theme.spacing.unit / 2,
-    },
-});
+        footer: {
+            display: 'flex',
+            justifyContent: 'center',
+            height: '10vh',
+        },
+    };
+};
 
 export default withStyles(styles)(Sidebar);

@@ -208,7 +208,7 @@ function Edit(props) {
                         handleSkip={() =>
                             history.push(
                                 NavigationUtils._route(
-                                    'backoffice.users.index',
+                                    'backoffice.resources.users.index',
                                 ),
                             )
                         }

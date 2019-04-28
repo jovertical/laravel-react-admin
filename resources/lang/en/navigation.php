@@ -46,13 +46,17 @@ return [
 
     'help' => 'Help',
 
+    'search' => 'Search',
+
     'open_drawer' => 'Open Drawer',
     'close_drawer' => 'Close Drawer',
-    'search' => 'Search',
+    'minimize_drawer' => 'Minimize Drawer',
+    'maximize_drawer' => 'Maximize Drawer',
 
     'dashboard' => 'Dashboard',
     'resources' => 'Resources',
     'users' => 'Users',
+    'roles' => 'Roles',
 
     'citation' => 'Built with ❤️ by'
 ];
