@@ -66,7 +66,7 @@ const NotFound = ({ classes }) => (
         <Grid className={classes.break} item />
 
         <Grid item>
-            <Link href="/">Go Home</Link>
+            <Link href="#">Go Home</Link>
         </Grid>
     </ErrorLayout>
 );
