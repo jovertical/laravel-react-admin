@@ -300,11 +300,13 @@ const styles = theme => ({
             width: drawerWidth,
             flexShrink: 0,
         },
+
+        '&$minimized': {
+            width: 70,
+        },
     },
 
-    minimized: {
-        width: 70,
-    },
+    minimized: {},
 
     breadcrumbBar: {
         zIndex: 0,

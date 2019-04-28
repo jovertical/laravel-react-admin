@@ -253,7 +253,12 @@ function Sidebar(props) {
     );
 
     const renderLinks = (
-        <List className={classes.links} disablePadding>
+        <List
+            className={classNames(classes.links, {
+                [classes.minimized]: minimized,
+            })}
+            disablePadding
+        >
             <ListItem
                 button
                 dense
@@ -312,7 +317,7 @@ function Sidebar(props) {
 
                 {variant !== 'persistent' && (
                     <>
-                        <Divider className={classes.divider} />
+                        {!minimized && <Divider className={classes.divider} />}
 
                         {renderFooter}
                     </>
@@ -392,6 +397,9 @@ const styles = theme => {
 
         links: {
             height: '80vh',
+            '&$minimized': {
+                height: '100%',
+            },
         },
 
         link: {
