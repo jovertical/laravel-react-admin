@@ -8,7 +8,7 @@ import * as UrlUtils from '../utils/URL';
  * @param {object} segmentParams
  * @param {object} queryParams
  */
-export function _route(name, segmentParams = {}, queryParams = {}) {
+export function route(name, segmentParams = {}, queryParams = {}) {
     const i = ROUTES.findIndex(route => route.name === name);
 
     if (i < 0) {
@@ -31,7 +31,7 @@ export function _route(name, segmentParams = {}, queryParams = {}) {
 
     // We will append a query string if there are query parameters provided.
     if (segmentParams && Object.values(segmentParams).length > 0) {
-        routePath = `${routePath}${UrlUtils._queryString(queryParams)}`;
+        routePath = `${routePath}${UrlUtils.queryString(queryParams)}`;
     }
 
     return routePath;

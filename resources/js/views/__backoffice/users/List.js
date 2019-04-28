@@ -292,7 +292,7 @@ function List(props) {
         const { current_page: page, per_page: perPage } = pagination;
         const { by: sortBy, type: sortType } = sorting;
 
-        const queryString = UrlUtils._queryString({
+        const queryString = UrlUtils.queryString({
             page,
             perPage,
             sortBy,
@@ -315,7 +315,7 @@ function List(props) {
 
         const { location } = props;
         const queryParams = location.search
-            ? UrlUtils._queryParams(location.search)
+            ? UrlUtils.queryParams(location.search)
             : {};
 
         const prevFilters = {};
@@ -350,7 +350,7 @@ function List(props) {
         }),
         clicked: () =>
             history.push(
-                NavigationUtils._route('backoffice.resources.users.create'),
+                NavigationUtils.route('backoffice.resources.users.create'),
             ),
     };
 
@@ -396,7 +396,7 @@ function List(props) {
                                 <Avatar
                                     style={{
                                         fontSize: 17,
-                                        backgroundColor: RandomUtils._color(
+                                        backgroundColor: RandomUtils.color(
                                             user.firstname.length -
                                                 user.created_at.charAt(
                                                     user.created_at.length - 2,
@@ -427,7 +427,7 @@ function List(props) {
                             <IconButton
                                 onClick={() =>
                                     history.push(
-                                        NavigationUtils._route(
+                                        NavigationUtils.route(
                                             'backoffice.resources.users.edit',
                                             {
                                                 id: user.id,
@@ -451,7 +451,7 @@ function List(props) {
                             <IconButton
                                 onClick={() =>
                                     history.push(
-                                        NavigationUtils._route(
+                                        NavigationUtils.route(
                                             'backoffice.resources.users.edit',
                                             {
                                                 id: user.id,

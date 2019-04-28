@@ -132,7 +132,7 @@ function Edit(props) {
         const { params } = props.match;
         const { location } = props;
 
-        const queryParams = UrlUtils._queryParams(location.search);
+        const queryParams = UrlUtils.queryParams(location.search);
 
         if (queryParams.hasOwnProperty('step')) {
             setActiveStep(parseInt(queryParams.step));
@@ -207,7 +207,7 @@ function Edit(props) {
                         user={user}
                         handleSkip={() =>
                             history.push(
-                                NavigationUtils._route(
+                                NavigationUtils.route(
                                     'backoffice.resources.users.index',
                                 ),
                             )

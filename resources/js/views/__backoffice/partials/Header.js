@@ -58,7 +58,7 @@ const UserAvatar = props => {
         <Avatar
             style={{
                 fontSize: 17,
-                backgroundColor: RandomUtils._color(
+                backgroundColor: RandomUtils.color(
                     user.firstname.length -
                         user.created_at.charAt(user.created_at.length - 2),
                 ),
@@ -204,7 +204,7 @@ const AccountMenu = props => {
                                 <MenuItem
                                     onClick={() =>
                                         navigate(
-                                            NavigationUtils._route(
+                                            NavigationUtils.route(
                                                 'backoffice.settings.profile',
                                             ),
                                         )
