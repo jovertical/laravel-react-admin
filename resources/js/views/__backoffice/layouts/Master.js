@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
 
 import classNames from 'classnames';
 import {
@@ -9,18 +8,10 @@ import {
     CssBaseline,
     Grid,
     Hidden,
-    Link,
-    Typography,
     withStyles,
 } from '@material-ui/core';
 
-import { Breadcrumbs } from '@material-ui/lab';
-
-import { Home as HomeIcon } from '@material-ui/icons';
-
-import * as NavigationUtils from '../../../utils/Navigation';
-import * as StringUtils from '../../../utils/String';
-import { Snackbar, Modal } from '../../../ui';
+import { Breadcrumbs, Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
 
@@ -91,13 +82,6 @@ function Master(props) {
     } = props;
     const { nightMode } = pageProps;
 
-    const segments = location.pathname
-        .split('/')
-        .splice(1)
-        .filter(segment => segment.length > 0);
-
-    const segmentBlacklist = ['resources', 'analytics'];
-
     const renderLoading = (
         <Grid
             container
@@ -123,65 +107,13 @@ function Master(props) {
             }}
         >
             <div className={classes.breadcrumbWrapper}>
-                <Breadcrumbs arial-label="Breadcrumb">
-                    {segments.length > 0 ? (
-                        <Link
-                            color="inherit"
-                            component={linkProps => (
-                                <RouterLink
-                                    {...linkProps}
-                                    to={NavigationUtils.route(
-                                        'backoffice.home',
-                                    )}
-                                />
-                            )}
-                            className={classes.breadcrumbItem}
-                        >
-                            <HomeIcon className={classes.breadcrumbItemIcon} />
-                        </Link>
-                    ) : (
-                        <HomeIcon className={classes.breadcrumbItemIcon} />
-                    )}
-
-                    {segments.map((segment, key) => {
-                        const renderText = (
-                            <Typography
-                                key={key}
-                                className={classes.breadcrumbItem}
-                            >
-                                {StringUtils.uppercaseFirst(segment)}
-                            </Typography>
-                        );
-
-                        if (segmentBlacklist.indexOf(segment) > -1) {
-                            return renderText;
-                        }
-
-                        if (key + 1 === segments.length) {
-                            return renderText;
-                        }
-
-                        if (!isNaN(parseInt(segment))) {
-                            return null;
-                        }
-
-                        return (
-                            <Link
-                                key={key}
-                                color="inherit"
-                                component={linkProps => (
-                                    <RouterLink
-                                        {...linkProps}
-                                        to={'/' + segment.split('/').join('.')}
-                                    />
-                                )}
-                                className={classes.breadcrumbItem}
-                            >
-                                {StringUtils.uppercaseFirst(segment)}
-                            </Link>
-                        );
-                    })}
-                </Breadcrumbs>
+                <Breadcrumbs
+                    segments={location.pathname
+                        .split('/')
+                        .splice(1)
+                        .filter(segment => segment.length > 0)}
+                    blacklistedSegments={['resources', 'analytics']}
+                />
             </div>
         </AppBar>
     );
@@ -316,15 +248,6 @@ const styles = theme => ({
 
     breadcrumbWrapper: {
         padding: theme.spacing.unit * 3,
-    },
-
-    breadcrumbItemIcon: {
-        marginRight: theme.spacing.unit / 2,
-        width: 20,
-    },
-
-    breadcrumbItem: {
-        display: 'flex',
     },
 
     contentWrapper: {

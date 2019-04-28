@@ -372,7 +372,7 @@ function Dropzone(props) {
                                             classes.fileName,
                                         )}
                                     >
-                                        {StringUtils._limit(file.name, 10)}
+                                        {StringUtils.limit(file.name, 10)}
                                     </Typography>
 
                                     <Tooltip
