@@ -215,7 +215,7 @@ function Sidebar(props) {
                                 <div className={classes.linkGroupHeader} />
                             )}
 
-                            {key === activeLinkGroup ? (
+                            {key === activeLinkGroup || minimized ? (
                                 <>
                                     {links.map(({ name, icon, path }) => (
                                         <ListItem
