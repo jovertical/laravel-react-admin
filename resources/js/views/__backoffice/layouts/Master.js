@@ -205,6 +205,7 @@ function Master(props) {
                             navigate={path => history.push(path)}
                             variant="temporary"
                             open={mobileOpen}
+                            onClose={handleDrawerToggled}
                             PaperProps={{ style: { width: drawerWidth } }}
                         />
                     </Hidden>
@@ -214,7 +215,6 @@ function Master(props) {
                             {...other}
                             loading={loading}
                             navigate={path => history.push(path)}
-                            setClosed={handleDrawerToggled}
                             minimized={minimized}
                             setMinimized={setMinimized}
                             PaperProps={{
@@ -302,7 +302,9 @@ const styles = theme => ({
         },
 
         '&$minimized': {
-            width: 70,
+            [theme.breakpoints.up('sm')]: {
+                width: 70,
+            },
         },
     },
 

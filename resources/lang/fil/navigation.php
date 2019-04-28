@@ -46,13 +46,17 @@ return [
 
     'help' => 'Tulong',
 
+    'search' => 'Maghanap',
+
     'open_drawer' => 'I-bukas ang Drawer',
     'close_drawer' => 'I-sarado ang Drawer',
-    'search' => 'Maghanap',
+    'minimize_drawer' => 'Paliitin ang Drawer',
+    'maximize_drawer' => 'Palakihin ang Drawer',
 
     'dashboard' => 'Dashboard',
     'resources' => 'Mga mapagkukunan',
     'users' => 'Mga gumagamit',
+    'roles' => 'Mga tungkulin',
 
     'citation' => 'Binuo ng may ❤️ ni'
 ];

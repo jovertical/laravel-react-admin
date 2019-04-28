@@ -6,6 +6,7 @@ import {
     Divider,
     Drawer,
     IconButton,
+    Hidden,
     List,
     ListItem,
     ListItemIcon,
@@ -43,13 +44,13 @@ function Sidebar(props) {
 
         loading,
         navigate,
-        variant,
         minimized,
         setMinimized,
-        setClosed,
 
         ...other
     } = props;
+
+    const { variant, onClose } = props;
     const { nightMode } = pageProps;
 
     const [activeLinkGroup, setActiveLinkGroup] = useState(-1);
@@ -57,7 +58,11 @@ function Sidebar(props) {
 
     const homeLink = {
         name: Lang.get('navigation.dashboard'),
-        icon: <DashboardIcon />,
+        icon: (
+            <Tooltip title={minimized ? Lang.get('navigation.dashboard') : ''}>
+                <DashboardIcon />
+            </Tooltip>
+        ),
         path: NavigationUtils._route('backoffice.home'),
     };
 
@@ -68,15 +73,31 @@ function Sidebar(props) {
             links: [
                 {
                     name: Lang.get('navigation.users'),
-                    icon: <PeopleIcon />,
+                    icon: (
+                        <Tooltip
+                            title={
+                                minimized ? Lang.get('navigation.users') : ''
+                            }
+                        >
+                            <PeopleIcon />
+                        </Tooltip>
+                    ),
                     path: NavigationUtils._route(
                         'backoffice.resources.users.index',
                     ),
                 },
 
                 {
-                    name: 'Roles',
-                    icon: <SecurityIcon />,
+                    name: Lang.get('navigation.roles'),
+                    icon: (
+                        <Tooltip
+                            title={
+                                minimized ? Lang.get('navigation.roles') : ''
+                            }
+                        >
+                            <SecurityIcon />
+                        </Tooltip>
+                    ),
                     path: null,
                 },
             ],
@@ -136,7 +157,7 @@ function Sidebar(props) {
 
                     {variant === 'persistent' && (
                         <Tooltip title={Lang.get('navigation.close_drawer')}>
-                            <IconButton onClick={setClosed}>
+                            <IconButton onClick={onClose}>
                                 <ChevronLeftIcon />
                             </IconButton>
                         </Tooltip>
@@ -295,9 +316,21 @@ function Sidebar(props) {
                 color="inherit"
                 onClick={() => setMinimized(!minimized)}
             >
-                <IconButton>
-                    {!minimized ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
+                <Tooltip
+                    title={
+                        minimized
+                            ? Lang.get('navigation.maximize_drawer')
+                            : Lang.get('navigation.minimize_drawer')
+                    }
+                >
+                    <IconButton>
+                        {!minimized ? (
+                            <ChevronLeftIcon />
+                        ) : (
+                            <ChevronRightIcon />
+                        )}
+                    </IconButton>
+                </Tooltip>
             </ListItemIcon>
         </ListItem>
     );
@@ -315,13 +348,17 @@ function Sidebar(props) {
 
                 <div className={classes.linksWrapper}>{renderLinks}</div>
 
-                {variant !== 'persistent' && (
-                    <>
-                        {!minimized && <Divider className={classes.divider} />}
+                <Hidden xsDown>
+                    {variant !== 'persistent' && (
+                        <>
+                            {!minimized && (
+                                <Divider className={classes.divider} />
+                            )}
 
-                        {renderFooter}
-                    </>
-                )}
+                            {renderFooter}
+                        </>
+                    )}
+                </Hidden>
             </div>
         </Drawer>
     );
@@ -333,7 +370,7 @@ Sidebar.propTypes = {
     pageProps: PropTypes.object.isRequired,
 
     open: PropTypes.bool,
-    setClosed: PropTypes.func,
+    onClose: PropTypes.func,
     minimized: PropTypes.bool,
     setMinimized: PropTypes.func,
 };
@@ -358,13 +395,19 @@ const styles = theme => {
 
     return {
         nav: {
-            width: drawerWidth,
-            overflow: 'hidden',
+            [theme.breakpoints.up('sm')]: {
+                width: drawerWidth,
+                overflow: 'hidden',
+            },
+
+            '&$minimized': {
+                [theme.breakpoints.up('sm')]: {
+                    width: 69,
+                },
+            },
         },
 
-        minimized: {
-            width: 69,
-        },
+        minimized: {},
 
         header: {
             height: '10vh',
