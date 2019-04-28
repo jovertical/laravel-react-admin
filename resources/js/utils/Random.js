@@ -5,7 +5,7 @@
  *
  * @return {string}
  */
-export const _color = key => {
+export const color = key => {
     const colors = [
         'red',
         'pink',

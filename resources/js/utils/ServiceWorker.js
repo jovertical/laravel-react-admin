@@ -1,7 +1,7 @@
 /**
  * Register the service worker file.
  */
-export function _register(serviceWorkerFile) {
+export function register(serviceWorkerFile) {
     if ('serviceWorker' in navigator) {
         if (serviceWorkerFile) {
             navigator.serviceWorker

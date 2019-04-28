@@ -33,7 +33,7 @@ function PasswordRequest(props) {
 
             const { history } = props;
             const { email } = values;
-            const routeSuffix = NavigationUtils._route('auth.passwords.reset');
+            const routeSuffix = NavigationUtils.route('auth.passwords.reset');
 
             await axios.post('api/v1/auth/password/request', {
                 email,
@@ -76,8 +76,8 @@ function PasswordRequest(props) {
         const { location } = props;
 
         setEmail(
-            UrlUtils._queryParams(location.search).hasOwnProperty('username')
-                ? UrlUtils._queryParams(location.search).username
+            UrlUtils.queryParams(location.search).hasOwnProperty('username')
+                ? UrlUtils.queryParams(location.search).username
                 : '',
         );
     });
@@ -96,7 +96,7 @@ function PasswordRequest(props) {
             <Formik
                 initialValues={{
                     email: !email
-                        ? UrlUtils._queryParams(location.search).username
+                        ? UrlUtils.queryParams(location.search).username
                         : email,
                 }}
                 onSubmit={handleRequestPasswordSubmit}
@@ -144,10 +144,10 @@ function PasswordRequest(props) {
                                         <RouterLink
                                             {...props}
                                             to={{
-                                                search: UrlUtils._queryString({
+                                                search: UrlUtils.queryString({
                                                     username: email,
                                                 }),
-                                                pathname: NavigationUtils._route(
+                                                pathname: NavigationUtils.route(
                                                     'auth.signin',
                                                 ),
                                             }}

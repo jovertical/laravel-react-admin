@@ -24,10 +24,10 @@ const Navigator = props => {
                                     return (
                                         <Redirect
                                             to={{
-                                                search: UrlUtils._queryString({
+                                                search: UrlUtils.queryString({
                                                     username,
                                                 }),
-                                                pathname: NavigationUtils._route(
+                                                pathname: NavigationUtils.route(
                                                     'auth.signin',
                                                 ),
                                             }}
@@ -40,7 +40,7 @@ const Navigator = props => {
                                 if (authenticated) {
                                     return (
                                         <Redirect
-                                            to={NavigationUtils._route(
+                                            to={NavigationUtils.route(
                                                 `${environment}.home`,
                                             )}
                                         />

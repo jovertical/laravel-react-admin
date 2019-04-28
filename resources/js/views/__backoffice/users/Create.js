@@ -146,7 +146,7 @@ function Create(props) {
                         user={user}
                         handleSkip={() =>
                             history.push(
-                                NavigationUtils._route(
+                                NavigationUtils.route(
                                     'backoffice.resources.users.index',
                                 ),
                             )

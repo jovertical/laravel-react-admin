@@ -5,7 +5,7 @@
  *
  * @return {object}
  */
-export function _queryParams(queryString) {
+export function queryParams(queryString) {
     let pairs = queryString
         .substring(1)
         .replace(/&$/, '')
@@ -29,7 +29,7 @@ export function _queryParams(queryString) {
  *
  * @return {string}
  */
-export function _queryString(queryParams) {
+export function queryString(queryParams) {
     var paramString = '?';
 
     for (let param in queryParams) {

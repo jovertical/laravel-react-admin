@@ -108,7 +108,7 @@ function PasswordReset(props) {
 
         const { location } = props;
 
-        const queryParams = UrlUtils._queryParams(location.search);
+        const queryParams = UrlUtils.queryParams(location.search);
 
         if (!queryParams.hasOwnProperty('email')) {
             return;
@@ -269,10 +269,10 @@ function PasswordReset(props) {
                                         <RouterLink
                                             {...props}
                                             to={{
-                                                search: UrlUtils._queryString({
+                                                search: UrlUtils.queryString({
                                                     username: email,
                                                 }),
-                                                pathname: NavigationUtils._route(
+                                                pathname: NavigationUtils.route(
                                                     'auth.signin',
                                                 ),
                                             }}

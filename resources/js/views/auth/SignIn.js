@@ -77,7 +77,7 @@ function SignIn(props) {
             setUsername(response.data);
             setLoading(false);
 
-            const queryString = UrlUtils._queryString({
+            const queryString = UrlUtils.queryString({
                 username: response.data,
             });
 
@@ -181,7 +181,7 @@ function SignIn(props) {
 
         const { location } = props;
 
-        const q = UrlUtils._queryParams(location.search);
+        const q = UrlUtils.queryParams(location.search);
 
         if (q.hasOwnProperty('username') && q.username !== '') {
             identify(q.username, {});
@@ -316,12 +316,12 @@ function SignIn(props) {
                                                 <RouterLink
                                                     {...props}
                                                     to={{
-                                                        search: UrlUtils._queryString(
+                                                        search: UrlUtils.queryString(
                                                             {
                                                                 username,
                                                             },
                                                         ),
-                                                        pathname: NavigationUtils._route(
+                                                        pathname: NavigationUtils.route(
                                                             'auth.passwords.request',
                                                         ),
                                                     }}

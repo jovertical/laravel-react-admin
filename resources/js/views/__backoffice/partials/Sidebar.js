@@ -63,7 +63,7 @@ function Sidebar(props) {
                 <DashboardIcon />
             </Tooltip>
         ),
-        path: NavigationUtils._route('backoffice.home'),
+        path: NavigationUtils.route('backoffice.home'),
     };
 
     const linkGroups = [
@@ -82,7 +82,7 @@ function Sidebar(props) {
                             <PeopleIcon />
                         </Tooltip>
                     ),
-                    path: NavigationUtils._route(
+                    path: NavigationUtils.route(
                         'backoffice.resources.users.index',
                     ),
                 },
@@ -254,7 +254,7 @@ function Sidebar(props) {
                             ) : (
                                 <ListItem>
                                     <Typography noWrap color="textSecondary">
-                                        {StringUtils._limit(
+                                        {StringUtils.limit(
                                             links
                                                 .map(link => link.name)
                                                 .join(', '),

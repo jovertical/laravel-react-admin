@@ -130,7 +130,7 @@ function Master(props) {
                             component={linkProps => (
                                 <RouterLink
                                     {...linkProps}
-                                    to={NavigationUtils._route(
+                                    to={NavigationUtils.route(
                                         'backoffice.home',
                                     )}
                                 />
@@ -149,7 +149,7 @@ function Master(props) {
                                 key={key}
                                 className={classes.breadcrumbItem}
                             >
-                                {StringUtils._uppercaseFirst(segment)}
+                                {StringUtils.uppercaseFirst(segment)}
                             </Typography>
                         );
 
@@ -177,7 +177,7 @@ function Master(props) {
                                 )}
                                 className={classes.breadcrumbItem}
                             >
-                                {StringUtils._uppercaseFirst(segment)}
+                                {StringUtils.uppercaseFirst(segment)}
                             </Link>
                         );
                     })}

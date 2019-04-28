@@ -89,7 +89,7 @@ function Profile(props) {
     };
 
     useEffect(() => {
-        const queryParams = UrlUtils._queryParams(location.search);
+        const queryParams = UrlUtils.queryParams(location.search);
 
         if (queryParams.hasOwnProperty('visible')) {
             setFormVisibility(true);
