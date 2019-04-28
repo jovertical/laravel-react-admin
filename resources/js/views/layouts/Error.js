@@ -1,14 +1,16 @@
 import React from 'react';
 import { withStyles, Grid } from '@material-ui/core';
 
-const Error = props => (
+const Error = ({ classes, children }) => (
     <Grid
+        className={classes.root}
         container
+        direction="column"
         justify="center"
         alignItems="center"
-        className={props.classes.root}
+        spacing={4}
     >
-        <Grid item>{props.children}</Grid>
+        {children}
     </Grid>
 );
 
