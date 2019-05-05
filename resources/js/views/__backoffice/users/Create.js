@@ -9,7 +9,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import * as NavigationUtils from '../../../utils/Navigation';
+import * as NavigationUtils from '../../../helpers/Navigation';
 import { User } from '../../../models';
 import { LinearIndeterminate } from '../../../ui/Loaders';
 import { Master as MasterLayout } from '../layouts';

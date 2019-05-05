@@ -11,8 +11,8 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import * as UrlUtils from '../../../utils/URL';
-import * as NavigationUtils from '../../../utils/Navigation';
+import * as UrlUtils from '../../../helpers/URL';
+import * as NavigationUtils from '../../../helpers/Navigation';
 import { User } from '../../../models';
 import { LinearIndeterminate } from '../../../ui/Loaders';
 import { Master as MasterLayout } from '../layouts';

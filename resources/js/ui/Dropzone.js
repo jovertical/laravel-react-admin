@@ -20,7 +20,7 @@ import {
     Queue as QueueIcon,
 } from '@material-ui/icons';
 
-import * as StringUtils from '../utils/String';
+import * as StringUtils from '../helpers/String';
 import { LinearDeterminate } from './Loaders';
 
 const getFileStatusClass = status => {

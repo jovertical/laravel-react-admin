@@ -5,7 +5,7 @@
  *
  * @return {string}
  */
-export const color = key => {
+export function color(key) {
     const colors = [
         'red',
         'pink',
@@ -29,4 +29,4 @@ export const color = key => {
     ];
 
     return colors[key > colors.length - 1 ? 2 : key];
-};
+}

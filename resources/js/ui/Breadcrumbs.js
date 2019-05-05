@@ -8,8 +8,8 @@ import { Breadcrumbs as MuiBreadcrumbs } from '@material-ui/lab';
 
 import { Home as HomeIcon } from '@material-ui/icons';
 
-import * as NavigationUtils from '../utils/Navigation';
-import * as StringUtils from '../utils/String';
+import * as NavigationUtils from '../helpers/Navigation';
+import * as StringUtils from '../helpers/String';
 
 function Breadcrumbs(props) {
     const { classes, segments, blacklistedSegments, ...other } = props;

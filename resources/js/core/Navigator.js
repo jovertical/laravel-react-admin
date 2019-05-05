@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import * as NavigationUtils from '../utils/Navigation';
-import * as UrlUtils from '../utils/URL';
+import * as NavigationUtils from '../helpers/Navigation';
+import * as UrlUtils from '../helpers/URL';
 import { AppContext } from '../AppContext';
 
 const Navigator = props => {

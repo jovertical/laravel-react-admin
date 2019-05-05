@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 
 import { Button, Grid, Link, TextField, withStyles } from '@material-ui/core';
 
-import * as NavigationUtils from '../../../utils/Navigation';
-import * as UrlUtils from '../../../utils/URL';
+import * as NavigationUtils from '../../../helpers/Navigation';
+import * as UrlUtils from '../../../helpers/URL';
 import { Auth as AuthLayout } from '../../layouts';
 
 function PasswordRequest(props) {

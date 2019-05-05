@@ -39,8 +39,8 @@ import {
     Update as UpdateIcon,
 } from '@material-ui/icons';
 
-import * as NavigationUtils from '../../../utils/Navigation';
-import * as RandomUtils from '../../../utils/Random';
+import * as NavigationUtils from '../../../helpers/Navigation';
+import * as RandomUtils from '../../../helpers/Random';
 import {
     GitHub as GitHubIcon,
     LightbulbOff as LightbulbOffIcon,

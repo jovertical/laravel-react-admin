@@ -14,9 +14,9 @@ import {
     Image as ImageIcon,
 } from '@material-ui/icons';
 
-import * as RandomUtils from '../../../utils/Random';
-import * as NavigationUtils from '../../../utils/Navigation';
-import * as UrlUtils from '../../../utils/URL';
+import * as RandomUtils from '../../../helpers/Random';
+import * as NavigationUtils from '../../../helpers/Navigation';
+import * as UrlUtils from '../../../helpers/URL';
 import { Table } from '../../../ui';
 import { Master as MasterLayout } from '../layouts';
 import { User } from '../../../models';

@@ -22,7 +22,7 @@ import {
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 
-import * as UrlUtils from '../../../utils/URL';
+import * as UrlUtils from '../../../helpers/URL';
 import {
     Clean as CleanLayout,
     Settings as SettingsLayout,
