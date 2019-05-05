@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
+import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
 
 import { Navigator } from './core';
 import { ROUTES } from './config';
@@ -256,11 +256,10 @@ function App(props) {
         setInitialized(true);
     }, [initialized]);
 
-    const { width, environment, darkTheme, lightTheme } = props;
+    const { environment, darkTheme, lightTheme } = props;
 
     const pageProps = {
         // Props
-        width,
         environment,
         routes: ROUTES,
 
@@ -303,4 +302,4 @@ App.propTypes = {
     lightTheme: PropTypes.object.isRequired,
 };
 
-export default withWidth()(App);
+export default App;
