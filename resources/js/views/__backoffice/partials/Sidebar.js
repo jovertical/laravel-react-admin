@@ -27,8 +27,8 @@ import {
 } from '@material-ui/icons';
 
 import { APP } from '../../../config';
-import * as NavigationUtils from '../../../utils/Navigation';
-import * as StringUtils from '../../../utils/String';
+import * as NavigationUtils from '../../../helpers/Navigation';
+import * as StringUtils from '../../../helpers/String';
 
 import brandLogoLight from '../../../../img/logos/short-light.svg';
 import brandLogoDark from '../../../../img/logos/short-dark.svg';

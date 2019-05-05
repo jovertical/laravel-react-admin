@@ -3,7 +3,7 @@ import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { register as registerServiceWorker } from './utils/ServiceWorker';
+import { register as registerServiceWorker } from './helpers/ServiceWorker';
 import App from './App';
 import { dark as darkTheme, light as lightTheme } from './themes/backoffice';
 

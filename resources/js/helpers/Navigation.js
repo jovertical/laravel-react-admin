@@ -1,5 +1,5 @@
 import { ROUTES } from '../config';
-import * as UrlUtils from '../utils/URL';
+import * as UrlUtils from '../helpers/URL';
 
 /**
  * Find the route by its name.

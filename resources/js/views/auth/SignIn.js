@@ -21,8 +21,8 @@ import {
     VisibilityOff as VisibilityOffIcon,
 } from '@material-ui/icons';
 
-import * as UrlUtils from '../../utils/URL';
-import * as NavigationUtils from '../../utils/Navigation';
+import * as UrlUtils from '../../helpers/URL';
+import * as NavigationUtils from '../../helpers/Navigation';
 import { Auth as AuthLayout } from '../layouts';
 import { AppContext } from '../../AppContext';
 

@@ -20,7 +20,7 @@ import {
     VisibilityOff as VisibilityOffIcon,
 } from '@material-ui/icons';
 
-import * as UrlUtils from '../../../utils/URL';
+import * as UrlUtils from '../../../helpers/URL';
 import {
     Clean as CleanLayout,
     Settings as SettingsLayout,
