@@ -1,12 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import * as NavigationUtils from '../utils/Navigation';
 import * as UrlUtils from '../utils/URL';
+import { AppContext } from '../AppContext';
 
 const Navigator = props => {
-    const { authenticated, username, environment, routes } = props.pageProps;
+    const { environment, routes, authenticated, username } = useContext(
+        AppContext,
+    );
 
     return (
         <Switch>
@@ -55,10 +57,6 @@ const Navigator = props => {
             })}
         </Switch>
     );
-};
-
-Navigator.propTypes = {
-    pageProps: PropTypes.object.isRequired,
 };
 
 export default withRouter(Navigator);

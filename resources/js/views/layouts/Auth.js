@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Card, Typography, Button, withStyles } from '@material-ui/core';
 
 import { LinearIndeterminate } from '../../ui/Loaders';
 import logoLight from '../../../img/logos/short-light.svg';
 import logoDark from '../../../img/logos/short-dark.svg';
+import { AppContext } from '../../AppContext';
 
 /**
  * Format a given title
@@ -36,67 +37,76 @@ const formattedSubTitle = subTitle => {
     return subTitle;
 };
 
-const Auth = props => (
-    <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={props.classes.container}
-    >
-        <Grid item className={props.classes.content}>
-            <>
-                {props.loading && <LinearIndeterminate />}
+const Auth = props => {
+    const { nightMode } = useContext(AppContext);
 
-                <Card className={props.classes.form}>
-                    <Grid
-                        container
-                        className={props.classes.logoContainer}
-                        justify="center"
-                    >
-                        <img
-                            src={
-                                props.pageProps.nightMode ? logoDark : logoLight
-                            }
-                            alt="company-logo"
-                            className={props.classes.logo}
-                        />
-                    </Grid>
+    return (
+        <Grid
+            container
+            justify="center"
+            alignItems="center"
+            className={props.classes.container}
+        >
+            <Grid item className={props.classes.content}>
+                <>
+                    {props.loading && <LinearIndeterminate />}
 
-                    <Grid container direction="column" justify="space-between">
-                        <Grid item className={props.classes.heading}>
-                            {props.message.hasOwnProperty('title')
-                                ? formattedTitle(props.message.title)
-                                : formattedTitle(props.title)}
-
-                            {props.message.hasOwnProperty('body')
-                                ? formattedSubTitle(props.message.body)
-                                : formattedSubTitle(props.subTitle)}
+                    <Card className={props.classes.form}>
+                        <Grid
+                            container
+                            className={props.classes.logoContainer}
+                            justify="center"
+                        >
+                            <img
+                                src={nightMode ? logoDark : logoLight}
+                                alt="company-logo"
+                                className={props.classes.logo}
+                            />
                         </Grid>
 
-                        {props.message.hasOwnProperty('type') ? (
-                            <Grid container justify="space-between">
-                                <Grid item />
+                        <Grid
+                            container
+                            direction="column"
+                            justify="space-between"
+                        >
+                            <Grid item className={props.classes.heading}>
+                                {props.message.hasOwnProperty('title')
+                                    ? formattedTitle(props.message.title)
+                                    : formattedTitle(props.title)}
 
-                                <Grid item className={props.classes.formGroup}>
-                                    <Button
-                                        type="button"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={props.message.action}
-                                    >
-                                        Next
-                                    </Button>
-                                </Grid>
+                                {props.message.hasOwnProperty('body')
+                                    ? formattedSubTitle(props.message.body)
+                                    : formattedSubTitle(props.subTitle)}
                             </Grid>
-                        ) : (
-                            <Grid item>{props.children}</Grid>
-                        )}
-                    </Grid>
-                </Card>
-            </>
+
+                            {props.message.hasOwnProperty('type') ? (
+                                <Grid container justify="space-between">
+                                    <Grid item />
+
+                                    <Grid
+                                        item
+                                        className={props.classes.formGroup}
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={props.message.action}
+                                        >
+                                            Next
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Grid item>{props.children}</Grid>
+                            )}
+                        </Grid>
+                    </Card>
+                </>
+            </Grid>
         </Grid>
-    </Grid>
-);
+    );
+};
 
 Auth.propTypes = {
     loading: PropTypes.bool,

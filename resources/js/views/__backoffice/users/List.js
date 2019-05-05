@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import {
     Avatar,
@@ -20,6 +20,7 @@ import * as UrlUtils from '../../../utils/URL';
 import { Table } from '../../../ui';
 import { Master as MasterLayout } from '../layouts';
 import { User } from '../../../models';
+import { AppContext } from '../../../AppContext';
 
 function List(props) {
     const [loading, setLoading] = useState(false);
@@ -333,9 +334,9 @@ function List(props) {
         });
     }, [pagination.data]);
 
+    const { user: authUser } = useContext(AppContext);
     const { ...childProps } = props;
-    const { history, pageProps } = props;
-    const { user: authUser } = pageProps;
+    const { history } = props;
 
     const {
         data: rawData,

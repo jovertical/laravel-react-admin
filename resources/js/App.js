@@ -7,6 +7,7 @@ import { withWidth, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 import { Navigator } from './core';
 import { ROUTES } from './config';
 import { Loading } from './views';
+import { AppProvider } from './AppContext';
 
 function App(props) {
     const [initialized, setInitialized] = useState(false);
@@ -258,6 +259,12 @@ function App(props) {
     const { width, environment, darkTheme, lightTheme } = props;
 
     const pageProps = {
+        // Props
+        width,
+        environment,
+        routes: ROUTES,
+
+        // State
         loading,
         authenticated,
         nightMode,
@@ -265,34 +272,27 @@ function App(props) {
         token,
         username,
         monitoringEnabled,
+
+        // Methods
+        handleNightModeToggled,
+        authenticate,
+        handleLock,
+        handleSignOut,
     };
 
     return (
         <MuiThemeProvider theme={nightMode ? darkTheme : lightTheme}>
             <CssBaseline />
 
-            {loading ? (
-                <Loading
-                    pageProps={{
-                        ...pageProps,
-                    }}
-                />
-            ) : (
-                <Router>
-                    <Navigator
-                        pageProps={{
-                            ...pageProps,
-                            width,
-                            environment: environment,
-                            routes: ROUTES,
-                            handleNightModeToggled: handleNightModeToggled,
-                            authenticate: authenticate,
-                            handleLock: handleLock,
-                            handleSignOut: handleSignOut,
-                        }}
-                    />
-                </Router>
-            )}
+            <AppProvider {...pageProps}>
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <Router>
+                        <Navigator />
+                    </Router>
+                )}
+            </AppProvider>
         </MuiThemeProvider>
     );
 }

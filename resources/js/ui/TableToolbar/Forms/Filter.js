@@ -292,7 +292,7 @@ Filter = withStyles(
 
         input: {
             margin: theme.spacing.unit,
-            minWidth: '12.5rem',
+            minWidth: 200,
         },
     }),
     { withTheme: true },

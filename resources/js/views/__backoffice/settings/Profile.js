@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -28,11 +28,12 @@ import {
     Settings as SettingsLayout,
     Slave as SlaveLayout,
 } from '../layouts';
+import { AppContext } from '../../../AppContext';
 
 function Profile(props) {
+    const { user } = useContext(AppContext);
     const { classes, ...other } = props;
-    const { location, pageProps } = props;
-    const { user } = pageProps;
+    const { location } = props;
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({});

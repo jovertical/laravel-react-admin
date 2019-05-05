@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -21,6 +21,7 @@ import {
 import * as NavigationUtils from '../../../utils/Navigation';
 import * as UrlUtils from '../../../utils/URL';
 import { Auth as AuthLayout } from '../../layouts';
+import { AppContext } from '../../../AppContext';
 
 function PasswordReset(props) {
     const [loading, setLoading] = useState(false);
@@ -64,7 +65,8 @@ function PasswordReset(props) {
         setLoading(true);
 
         try {
-            const { match, pageProps } = props;
+            const { authenticate } = useContext(AppContext);
+            const { match } = props;
             const { token } = match.params;
 
             const response = await axios.patch(
@@ -72,7 +74,7 @@ function PasswordReset(props) {
                 values,
             );
 
-            await pageProps.authenticate(JSON.stringify(response.data));
+            await authenticate(JSON.stringify(response.data));
 
             setLoading(false);
         } catch (error) {

@@ -204,7 +204,7 @@ export default withStyles(
 
         filterMenu: {
             position: 'absolute',
-            padding: '1rem',
+            padding: 16,
             right: 0,
             zIndex: 999,
         },
@@ -218,7 +218,7 @@ export default withStyles(
         },
 
         filterName: {
-            marginRight: '0.25rem',
+            marginRight: 4,
         },
     }),
     { withTheme: true },

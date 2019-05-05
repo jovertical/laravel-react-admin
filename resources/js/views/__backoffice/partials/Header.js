@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -48,6 +48,7 @@ import {
 } from '../../../icons/1x1';
 import { Ph as PhIcon, Us as UsIcon } from '../../../icons/flags/4x3';
 import { Skeleton } from '../../../ui';
+import { AppContext } from '../../../AppContext';
 
 const UserAvatar = props => {
     const { user } = props;
@@ -151,15 +152,15 @@ const LocaleMenu = props => {
 };
 
 const AccountMenu = props => {
+    const { user, handleLock, handleSignOut } = useContext(AppContext);
+
     const {
         history,
         classes,
-        pageProps,
 
         accountMenuOpen,
         onAccountMenuToggle,
     } = props;
-    const { user, handleLock, handleSignOut } = pageProps;
 
     const navigate = path => history.push(path);
 
@@ -191,12 +192,10 @@ const AccountMenu = props => {
                                     </ListItemAvatar>
 
                                     <ListItemText>
-                                        <Typography>
-                                            {pageProps.user.name}
-                                        </Typography>
+                                        <Typography>{user.name}</Typography>
 
                                         <Typography color="textSecondary">
-                                            {pageProps.user.email}
+                                            {user.email}
                                         </Typography>
                                     </ListItemText>
                                 </MenuItem>
@@ -260,7 +259,6 @@ const AccountMenu = props => {
 function Header(props) {
     const {
         classes,
-        pageProps,
         pageTitle,
         loading,
 
@@ -277,10 +275,11 @@ function Header(props) {
 
     const {
         user,
+
         monitoringEnabled,
         nightMode,
         handleNightModeToggled,
-    } = pageProps;
+    } = useContext(AppContext);
 
     const skeletonProps = {
         color: colors.grey[400],
@@ -711,7 +710,6 @@ function Header(props) {
 
 Header.propTypes = {
     classes: PropTypes.object.isRequired,
-    pageProps: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
     loading: PropTypes.bool,
 

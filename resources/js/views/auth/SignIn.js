@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -24,8 +24,11 @@ import {
 import * as UrlUtils from '../../utils/URL';
 import * as NavigationUtils from '../../utils/Navigation';
 import { Auth as AuthLayout } from '../layouts';
+import { AppContext } from '../../AppContext';
 
 function SignIn(props) {
+    const { authenticate } = useContext(AppContext);
+
     const [loading, setLoading] = useState(false);
     const [identified, setIdentified] = useState(false);
     const [passwordVisible, setPasswordVisibility] = useState(false);
@@ -114,7 +117,6 @@ function SignIn(props) {
         setLoading(true);
 
         try {
-            const { pageProps } = props;
             const { password } = values;
 
             const response = await axios.post('/api/v1/auth/signin', {
@@ -122,7 +124,7 @@ function SignIn(props) {
                 password,
             });
 
-            pageProps.authenticate(JSON.stringify(response.data));
+            authenticate(JSON.stringify(response.data));
 
             setLoading(false);
         } catch (error) {
