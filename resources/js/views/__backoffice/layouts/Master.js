@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
@@ -14,6 +14,7 @@ import {
 import { Breadcrumbs, Snackbar, Modal } from '../../../ui';
 import { LinearDeterminate } from '../../../ui/Loaders';
 import { Footer, Header, Sidebar } from '../partials';
+import { AppContext } from '../../../AppContext';
 
 function Master(props) {
     const [minimized, setMinimized] = useState(false);
@@ -68,6 +69,8 @@ function Master(props) {
         //
     });
 
+    const { nightMode } = useContext(AppContext);
+
     const { classes, showBreadcrumbs, ...other } = props;
 
     const {
@@ -75,12 +78,10 @@ function Master(props) {
         history,
         location,
         pageTitle,
-        pageProps,
         loading,
         message,
         alert,
     } = props;
-    const { nightMode } = pageProps;
 
     const renderLoading = (
         <Grid
@@ -194,7 +195,6 @@ function Master(props) {
 Master.propTypes = {
     classes: PropTypes.object.isRequired,
     pageTitle: PropTypes.string.isRequired,
-    pageProps: PropTypes.object.isRequired,
     loading: PropTypes.bool,
 
     primaryAction: PropTypes.object,

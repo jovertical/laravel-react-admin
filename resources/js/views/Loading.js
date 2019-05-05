@@ -1,31 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { withStyles, Grid, CircularProgress } from '@material-ui/core';
 
 import darkLogo from '../../img/logos/short-dark.svg';
 import lightLogo from '../../img/logos/short-light.svg';
+import { AppContext } from '../AppContext';
 
-const Loading = props => (
-    <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={props.classes.container}
-    >
-        <Grid item>
-            <Grid item className={props.classes.logoContainer}>
-                <img
-                    src={props.pageProps.nightMode ? darkLogo : lightLogo}
-                    alt="company-logo"
-                    className={props.classes.logo}
-                />
-            </Grid>
+const Loading = props => {
+    const { nightMode } = useContext(AppContext);
 
-            <Grid item className={props.classes.loadingContainer}>
-                <CircularProgress color="primary" />
+    return (
+        <Grid
+            container
+            justify="center"
+            alignItems="center"
+            className={props.classes.container}
+        >
+            <Grid item>
+                <Grid item className={props.classes.logoContainer}>
+                    <img
+                        src={nightMode ? darkLogo : lightLogo}
+                        alt="company-logo"
+                        className={props.classes.logo}
+                    />
+                </Grid>
+
+                <Grid item className={props.classes.loadingContainer}>
+                    <CircularProgress color="primary" />
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
-);
+    );
+};
 
 const styles = theme => ({
     container: {
@@ -33,17 +38,17 @@ const styles = theme => ({
     },
 
     logoContainer: {
-        padding: '0.75rem',
+        padding: 12,
         textAlign: 'center',
     },
 
     logo: {
-        width: '5rem',
-        height: '5rem',
+        width: 80,
+        height: 80,
     },
 
     loadingContainer: {
-        padding: '0.75rem',
+        padding: 12,
         textAlign: 'center',
     },
 });

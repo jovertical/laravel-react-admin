@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -32,12 +32,13 @@ import * as StringUtils from '../../../utils/String';
 
 import brandLogoLight from '../../../../img/logos/short-light.svg';
 import brandLogoDark from '../../../../img/logos/short-dark.svg';
+import { AppContext } from '../../../AppContext';
 
 function Sidebar(props) {
+    const { nightMode } = useContext(AppContext);
     const {
         classes,
         location,
-        pageProps,
         pageTitle, // Never used here.
         primaryAction, // Never used here.
         staticContext, // Never used here.
@@ -51,7 +52,6 @@ function Sidebar(props) {
     } = props;
 
     const { variant, onClose } = props;
-    const { nightMode } = pageProps;
 
     const [activeLinkGroup, setActiveLinkGroup] = useState(-1);
     const [initialized, setInitialized] = useState(false);
@@ -367,7 +367,6 @@ function Sidebar(props) {
 Sidebar.propTypes = {
     PaperProps: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
-    pageProps: PropTypes.object.isRequired,
 
     open: PropTypes.bool,
     onClose: PropTypes.func,
