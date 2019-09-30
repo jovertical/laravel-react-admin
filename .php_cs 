@@ -1,4 +1,4 @@
-
+#!/usr/bin/env php
 <?php
 
 $finder = Symfony\Component\Finder\Finder::create()

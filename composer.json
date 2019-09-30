@@ -1,9 +1,10 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
+    "name": "palonponjovertlota/laravel-react-admin",
+    "description": "A fully featured admin panel.",
     "keywords": [
-        "framework",
-        "laravel"
+        "laravel",
+        "react",
+        "admin"
     ],
     "license": "MIT",
     "type": "project",
@@ -14,26 +15,25 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "beyondcode/laravel-self-diagnosis": "^1.1",
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.4",
         "intervention/image": "^2.4",
-        "laravel/framework": "5.8.*",
+        "laravel/framework": "^6.0",
         "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "spatie/laravel-backup": "^6.1",
-        "tymon/jwt-auth": "dev-develop#34d8e48 as 1.0.0-rc.3.2",
+        "tymon/jwt-auth": "1.0.0-rc.5",
         "valorin/pwned-validator": "^1.2"
     },
     "require-dev": {
-        "beyondcode/laravel-dump-server": "^1.0",
         "codedungeon/phpunit-result-printer": "^0.26.1",
+        "facade/ignition": "^1.9",
         "filp/whoops": "^2.0",
         "friendsofphp/php-cs-fixer": "^2.14",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "classmap": [
