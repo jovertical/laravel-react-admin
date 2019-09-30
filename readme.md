@@ -4,6 +4,10 @@ This is a scaffolding project that comes with authentication &
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
+[![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893634-d9534700-e3da-11e9-84a1-20de8c6b4ced.png)](https://github.com/palonponjovertlota/laravel-react-admin)
+
+[![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893636-d9534700-e3da-11e9-91c1-0d098a5e4301.png)](https://github.com/palonponjovertlota/laravel-react-admin)
+
 ## Features
 
 -   Progressive Web App (PWA)
@@ -14,6 +18,7 @@ in the frontend & [Laravel](https://laravel.com) in the backend.
 -   [Docker](https://www.docker.com) ready
 -   [Image Intervention](http://image.intervention.io/) integration for image uploads
 -   Drag & drop file uploads.
+-   Supports dark mode.
 
 ## Preview
 
