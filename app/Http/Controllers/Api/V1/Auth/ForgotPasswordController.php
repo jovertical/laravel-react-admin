@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPasswordResetRequest;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
@@ -25,7 +26,7 @@ class ForgotPasswordController extends Controller
         ]);
 
         $user = User::where('email', $request->input('email'))->first();
-        $token = str_random(64);
+        $token = Str::random(64);
 
         if ($this->storeResetToken($user, $token)) {
             $routeSuffix = strstr(

@@ -19,7 +19,7 @@ class Uploader
     public static function upload(string $directory, $file)
     {
         $disk = config('filesystems.default');
-        $filename = str_random(64).'.'.$file->getClientOriginalExtension();
+        $filename = Str::random(64).'.'.$file->getClientOriginalExtension();
         $original_filename = $file->getClientOriginalName();
         $filesize = $file->getSize();
         $thumbnail_filesize = null;

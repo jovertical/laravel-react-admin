@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1\Auth;
 
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Tests\Feature\Api\V1\BaseTest;
 
 class ResetPasswordTest extends BaseTest
@@ -17,7 +18,7 @@ class ResetPasswordTest extends BaseTest
         // Create a dummy password reset data
         DB::table('password_resets')->insert([
             'email' => $user->email,
-            'token' => str_random(64),
+            'token' => Str::random(64),
             'created_at' => now()
         ]);
 

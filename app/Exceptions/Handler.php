@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the whoops handler.
-     * 
+     *
      * @return mixed
      */
     protected function whoopsHandler()
