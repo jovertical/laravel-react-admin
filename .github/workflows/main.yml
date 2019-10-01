@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - master
+      - feature/*
 
 jobs:
-  Build:
+  Build & Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -26,11 +27,23 @@ jobs:
       - name: Run the test suite
         run: ./vendor/bin/paratest
 
-      - name: Archive snapshot
-        run: zip -r snapshot.zip ./
-
-      - name: Upload snapshot
-        uses: actions/upload-artifact@master
+      - name: Login
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          name: snapshot
-          path: snapshot.zip
+          args: container:login
+
+      - name: Push
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        with:
+          args: container:push -a laravel-react-admin web
+
+      - name: Release
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        with:
+          args: container:release -a laravel-react-admin web
