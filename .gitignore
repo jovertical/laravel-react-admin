@@ -6,7 +6,6 @@ public/css/*
 public/js/*
 .php_cs.cache
 dump.sql
-nginx.conf
 /node_modules
 /public/hot
 /public/storage
