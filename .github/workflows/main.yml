@@ -38,11 +38,11 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          args: container:push -a laravel-react-admin
+          args: container:push -a laravel-react-admin --recursive
 
       - name: Release
         uses: actions/heroku@master
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          args: container:release -a laravel-react-admin
+          args: container:release -a laravel-react-admin --recursive
