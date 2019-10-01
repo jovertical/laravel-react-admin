@@ -4,6 +4,14 @@ This is a scaffolding project that comes with authentication &
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
+<p align="center">
+    <a href="https://github.com/palonponjovertlota/laravel-react-admin/actions" title="Actions">
+        <img src="https://github.com/palonponjovertlota/laravel-react-admin/workflows/Actions/badge.svg" alt="Build Status">
+    </a>
+</p>
+
+## Screenshots
+
 [![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893634-d9534700-e3da-11e9-84a1-20de8c6b4ced.png)](https://github.com/palonponjovertlota/laravel-react-admin)
 
 [![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893636-d9534700-e3da-11e9-91c1-0d098a5e4301.png)](https://github.com/palonponjovertlota/laravel-react-admin)
@@ -56,10 +64,6 @@ Make sure that the address `127.0.0.1:80` usually `localhost` is available on th
 
 To make this app run on **docker** you must add a custom host address pointing to `localhost` or `127.0.0.1`.
 
-### Add a virtual host
-
-A `nginx.conf.example` file is included inside `.docker/webserver` to help you in configuring a _virtual host_ according to your host setup. It is better to just rename it to `nginx.conf` to avoid the file being included in your version control system. **Nginx** will automatically pick up every changes to this configuration file because it is _bind-mounted_ into its container.
-
 ### You are good to go
 
 You can now run the _image_ using the `docker-compose up` and optionally pass the `--build` flag if you intend to build the image. The app can be visited here `http:your_custom_host_address`.
@@ -74,7 +78,7 @@ You can run any artisan commands directly into the `laravel-react-admin-php-fpm`
 
 ### What about Browsersync?
 
-As we are bundling frontend assets with [webpack](https://webpack.js.org/) under the hood, you must specify the custom host address where the application runs in docker so that webpack can proxy that to be able to develop using docker. You can pass a `--env.proxy` flag when running for example the `npm run watch` command: `npm run watch -- --env.proxy=http:your_custom_host_address`.
+As we are bundling frontend assets with [webpack](https://webpack.js.org/) under the hood, you must specify the custom host address where the application runs in docker so that webpack can proxy that to be able to develop using docker. You can pass a `--env.proxy` flag when running for example the `npm run watch` command: `npm run watch -- --env.proxy=http:laravel-react-admin.test`.
 
 ### Using PhpMyAdmin
 
@@ -83,10 +87,10 @@ You could use **PhpMyAdmin** to browse your MySql database as it is included in 
 ```
 // /etc/hosts
 
-127.0.0.1    phpmyadmin.your_custom_host_address
+127.0.0.1    phpmyadmin.laravel-react-admin.test
 ```
 
-You could then visit **PhpMyAdmin** here: phpmyadmin.your_custom_host_address
+You could then visit **PhpMyAdmin** here: phpmyadmin.laravel-react-admin.test
 
 ## Testing
 
