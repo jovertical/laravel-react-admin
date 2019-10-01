@@ -1,14 +1,12 @@
-name: Pre-Deploy
+name: Actions
 
 on:
   push:
     branches:
-      - "*"
-      - "*/*"
-      - "!master"
+      - master
 
 jobs:
-  Test:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,3 +25,12 @@ jobs:
 
       - name: Run the test suite
         run: ./vendor/bin/paratest
+
+      - name: Archive snapshot
+        run: zip -r snapshot.zip ./
+
+      - name: Upload snapshot
+        uses: actions/upload-artifact@master
+        with:
+          name: snapshot
+          path: snapshot.zip

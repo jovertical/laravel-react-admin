@@ -4,6 +4,14 @@ This is a scaffolding project that comes with authentication &
 users CRUD. It is a Single Page Application (SPA) built on top of [React.js](https://reactjs.org)
 in the frontend & [Laravel](https://laravel.com) in the backend.
 
+<p align="center">
+    <a href="https://github.com/palonponjovertlota/laravel-react-admin/actions" title="Actions">
+        <img src="https://github.com/palonponjovertlota/laravel-react-admin/workflows/Actions/badge.svg" alt="Build Status">
+    </a>
+</p>
+
+## Screenshots
+
 [![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893634-d9534700-e3da-11e9-84a1-20de8c6b4ced.png)](https://github.com/palonponjovertlota/laravel-react-admin)
 
 [![Laravel React Admin](https://user-images.githubusercontent.com/42484695/65893636-d9534700-e3da-11e9-91c1-0d098a5e4301.png)](https://github.com/palonponjovertlota/laravel-react-admin)
