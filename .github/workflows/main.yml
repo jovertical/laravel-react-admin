@@ -39,11 +39,11 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          args: container:push -a laravel-react-admin web sqs
+          args: container:push -a laravel-react-admin web
 
       - name: Release
         uses: actions/heroku@master
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          args: container:release -a laravel-react-admin web sqs
+          args: container:release -a laravel-react-admin web

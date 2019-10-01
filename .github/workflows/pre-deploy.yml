@@ -6,7 +6,6 @@ on:
       - "*"
       - "*/*"
       - "!master"
-      - "!feature/*"
 
 jobs:
   Test:
