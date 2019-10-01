@@ -8,6 +8,12 @@ in the frontend & [Laravel](https://laravel.com) in the backend.
     <a href="https://github.com/palonponjovertlota/laravel-react-admin/actions" title="Actions">
         <img src="https://github.com/palonponjovertlota/laravel-react-admin/workflows/Actions/badge.svg" alt="Build Status">
     </a>
+    <a href="https://github.com/palonponjovertlota/laravel-react-admin/releases" title="Releases">
+        <img src="https://img.shields.io/github/v/release/palonponjovertlota/laravel-react-admin?label=Release" alt="Latest Version">
+    </a>
+    <a href="https://github.com/palonponjovertlota/laravel-react-admin/blob/master/LICENSE" title="License">
+        <img src="https://img.shields.io/github/license/palonponjovertlota/laravel-react-admin?label=License" alt="License">
+    </a>
 </p>
 
 ## Screenshots
